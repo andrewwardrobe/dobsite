@@ -1,0 +1,21 @@
+@(message: String)
+@scripts = {
+<script src='@routes.Assets.at("javascripts/bio.js")'></script>
+}
+
+@content = {
+
+<div class="row">
+
+    <div class="col-md-2 col-md-offset-2 dob-main centered">
+        <table id="dobBioTable" class="table borderless">
+        </table>
+        <table id="mcBioTable" class="table">
+        </table>
+    </div><!-- /.dob-main -->
+
+</div><!-- /.row -->
+
+}
+
+@main("Da Oostin Boyeez")(content)( scripts)

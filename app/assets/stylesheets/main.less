@@ -1,0 +1,200 @@
+@import "lib/bootstrap/less/bootstrap.less";
+
+@body-bg:#000000;
+
+@modal-content-bg:#000000;
+@table-border-color:#000;
+
+@albumWidth:500px;
+@albumHeight:480px;
+
+@thumbWidth:150px;
+@thumbHeight:150px;
+
+@text-color:@gray-lighter;
+
+h1 {
+  color: @font-size-h1;
+}
+
+@font-face {
+	font-family: 'DobScript';
+	src:url('fonts/DobScript.eot?-jkdzgi');
+	src:url('fonts/DobScript.eot?#iefix-jkdzgi') format('embedded-opentype'),
+		url('fonts/DobScript.woff') format('woff'),
+		url('fonts/DobScript.svg?-jkdzgi#DobScript') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-family-sans-serif:DobScript,"Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-family-serif:DobScript,Georgia, "Times New Roman", Times, serif;
+
+@media (min-width: 1200px) {
+  .container {
+    width: 970px;
+  }
+}
+
+.floatLeft{
+    float:left;
+}
+
+.discoImage{
+    width:@albumWidth;
+    height:@albumHeight;
+ }
+
+
+ .discoThumb{
+     width:@thumbWidth;
+     height:@thumbHeight;
+  }
+
+   .bioThumb{
+       width:@thumbWidth;
+       height:@thumbHeight;
+    }
+
+.bioCell{
+    text-align:center;
+    vertical-align: text-top;
+    border-top: #000;
+
+  }
+  .discoCell{
+    text-align:center;
+    vertical-align: text-top;
+    border-top: #000;
+
+  }
+/*
+ * Masthead for nav
+ */
+
+.dob-masthead {
+  /*background-color: #428bca;*/
+  background-color: #000000;
+  -webkit-box-shadow: inset 0 -2px 5px rgba(0,0,0,.1);
+          box-shadow: inset 0 -2px 5px rgba(0,0,0,.1);
+}
+
+/* Nav links */
+.dob-nav-item {
+  position: relative;
+  display: inline-block;
+  padding: 10px;
+  font-weight: 500;
+
+  //color: #cdddeb;
+}
+.dob-nav-item:hover,
+.dob-nav-item:focus {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Active state gets a caret at the bottom */
+.dob-nav .active {
+  color: #000;
+}
+
+.dob-black-bg{
+    background: #000000;
+}
+
+.dob-nav .active:after {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  margin-left: -5px;
+  vertical-align: middle;
+  content: " ";
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid;
+  border-left: 5px solid transparent;
+}
+
+
+/*
+ * dob name and description
+ */
+
+.dob-header {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.dob-title {
+  margin-top: 30px;
+  margin-bottom: 0;
+  font-size: 60px;
+  font-weight: normal;
+}
+.dob-description {
+  font-size: 20px;
+  color: #999;
+}
+
+
+/*
+ * Main column and sidebar layout
+ */
+
+.dob-main {
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+/* Sidebar modules for boxing content */
+.sidebar-module {
+  padding: 15px;
+  margin: 0 -15px 15px;
+}
+.sidebar-module-inset {
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+.sidebar-module-inset p:last-child,
+.sidebar-module-inset ul:last-child,
+.sidebar-module-inset ol:last-child {
+  margin-bottom: 0;
+}
+
+
+
+
+
+/*
+ * dob posts
+ */
+
+.dob-post {
+  margin-bottom: 60px;
+}
+.dob-post-title {
+  margin-bottom: 5px;
+  font-size: 40px;
+}
+.dob-post-meta {
+  margin-bottom: 20px;
+  color: #999;
+}
+
+
+/*
+ * Footer
+ */
+
+.dob-footer {
+  padding: 40px 0;
+  color: #999;
+  text-align: center;
+  background-color: #f9f9f9;
+  border-top: 1px solid #e5e5e5;
+}
+.dob-footer p:last-child {
+  margin-bottom: 0;
+}

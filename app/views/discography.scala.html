@@ -1,0 +1,36 @@
+@(message: String)
+
+@content = {
+
+
+
+
+
+    <div class="row">
+
+        <div class="col-md-2 col-md-offset-2 dob-main centered">
+            <table id="albumThumbsTable" class="table borderless">
+            </table>
+            <table id="singleThumbsTable" class="table">
+            </table>
+            <table id="epThumbsTable" class="table">
+            </table>
+            <table id="otherThumbsTable" class="table">
+            </table>
+        </div><!-- /.dob-main -->
+
+    </div><!-- /.row -->
+
+
+    <div id="modals">
+    </div><!-- /.container -->
+
+}
+
+@scripts ={
+    <script src='@routes.Assets.at("javascripts/disco.js")'></script>
+
+    }
+
+@main("Da Oostin Boyeez")(content)( scripts)
+

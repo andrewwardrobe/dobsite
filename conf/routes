@@ -1,0 +1,35 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index
+GET     /news                           controllers.Application.news
+GET     /discography                controllers.Application.discography
+GET     /biography                controllers.Application.biography
+GET     /biography/:id                controllers.Application.biographyDetail(id: Int)
+POST    /insert                     controllers.Application.insert
+
+
+
+#JSon API
+GET     /json/discography           controllers.JsonApi.getDiscography
+GET     /json/discography/:id           controllers.JsonApi.getRelease(id: Int)
+GET     /json/discography/bytype/:releaseType                controllers.JsonApi.getDiscographyByReleaseType(releaseType :Int)
+GET     /json/biography           controllers.JsonApi.getBiography()
+GET     /json/biography/:id           controllers.JsonApi.getBioById(id: Int)
+GET     /json/biography/bytype/:bioType                controllers.JsonApi.getBioByType(bioType :Int)
+
+GET     /json/tracks/byrelease/:id           controllers.JsonApi.getTracksByReleaseId(id: Int)
+
+GET     /json/all                   controllers.Application.jsonFindAll
+GET     /json/leek                   controllers.Application.leek
+GET     /json/leek2                   controllers.Application.leek2
+
+# Home page
+POST    /json/insert                controllers.Application.jsonInsert
+
+
+GET     /webjars/*file                    controllers.WebJarAssets.at(file)
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)

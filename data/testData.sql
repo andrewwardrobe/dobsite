@@ -1,0 +1,1 @@
+insert into "biography" values (1, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
