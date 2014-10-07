@@ -75,7 +75,7 @@ insert into "tracks" (id, release_id, position, name) values ('34','5',10,'Prefu
 insert into "tracks" (id, release_id, position, name) values ('35','5',11,'Pick Up Da Table');
 
 insert into "tracks" (id, release_id, position, name) values ('36','6',1,'Leeek');
-insert into "tracks" (id, release_id, position, name) values ('37','6',2,'Grab Them WhileTher'ye Hot');
+insert into "tracks" (id, release_id, position, name) values ('37','6',2,'Grab Them WhileTher''ye Hot');
 insert into "tracks" (id, release_id, position, name) values ('38','6',3,'oUCH mY sTRAPP?');
 insert into "tracks" (id, release_id, position, name) values ('39','6',4,'A Half Cut Above The Rest');
 insert into "tracks" (id, release_id, position, name) values ('40','6',5,'U-PVC Boxerz');

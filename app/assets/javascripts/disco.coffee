@@ -21,7 +21,7 @@ doModal = (id, image, title) ->
         btn.attr 'aria-hidden', 'true'
         btn.attr 'type', 'button'
         btn.attr 'data-dismiss','modal'
-        btn.append "&times;";
+        btn.append "X";
         header.append btn
         title = $("<div>")
         title.attr 'class', 'model-title'

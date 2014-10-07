@@ -29,6 +29,10 @@ object Application extends Controller {
     Ok(views.html.news(""))
   }
 
+  def hansUndJorg = Action {
+    Ok(views.html.huj(""))
+  }
+
   def discography = Action {
     Ok(views.html.discography(""))
   }
