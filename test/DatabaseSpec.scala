@@ -20,7 +20,7 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite{
       }
     }
 
-    "Be able ti insert and retrieve news items" in {
+    "Be able to insert and retrieve news items" in {
       database.withSession { implicit session =>
         val newsItem = News(1, "DOB Test News Post",new Date(),"MC Donalds","Some Example content blah blah blah")
         News.insert(newsItem)

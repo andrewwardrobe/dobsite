@@ -32,6 +32,14 @@ object JsonApi extends Controller {
     Ok(toJson(News.get))
   }
 
+  def getNewsById(id: Int) = DBAction { implicit response =>
+    Ok(toJson(News.getById(id)))
+  }
+
+  def getNewsByRange(min: Int, max: Int) = DBAction { implicit response =>
+    Ok(toJson(News.getByRange(min,max)))
+  }
+
   def getDiscography = DBAction { implicit response =>
     Ok(toJson(Discography.get))
   }

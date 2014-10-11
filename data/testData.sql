@@ -1,2 +1,27 @@
 insert into "biography" values (1, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
-insert into "news" values (1, 'Test Post', {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah')
+insert into "biography" values (2, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
+insert into "biography" values (3, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
+insert into "biography" values (4, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
+insert into "biography" values (5, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
+insert into "biography" values (6, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
+insert into "biography" values (7, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
+insert into "biography" values (8, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
+insert into "biography" values (9, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
+insert into "biography" values (10, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
+insert into "biography" values (11, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
+insert into "biography" values (12, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
+insert into "biography" values (13, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
+insert into "biography" values (14, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
+insert into "news" values (1, 'Test Post', {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "news" values (2, 'Test Post 1', {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "news" values (3, 'Test Post 2', {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "news" values (4, 'Test Post 3', {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "news" values (5, 'Test Post 4', {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "news" values (6, 'Test Post 5', {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "news" values (7, 'Test Post 6', {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "news" values (8, 'Test Post 7', {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "news" values (9, 'Test Post 8', {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "news" values (10, 'Test Post 9', {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "news" values (11, 'Test Post 10', {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "news" values (12, 'Test Post 10', {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "news" values (13, 'Test Post 10', {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');

@@ -22,6 +22,8 @@ GET     /json/biography/bytype/:bioType                controllers.JsonApi.getBi
 GET     /json/tracks/byrelease/:id           controllers.JsonApi.getTracksByReleaseId(id: Int)
 
 GET     /json/news           controllers.JsonApi.getNews()
+GET     /json/news/:id           controllers.JsonApi.getNewsById(id: Int)
+GET     /json/news/:min/:max           controllers.JsonApi.getNewsByRange(min: Int, max: Int)
 
 # Home page
 

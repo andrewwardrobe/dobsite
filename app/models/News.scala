@@ -32,6 +32,10 @@ object News{
 
   def get(implicit s: Session) = { news.list }
   def getById(id: Int)(implicit s: Session) = { news.filter(_.id === id).list }
+  def getByRange(minId: Int, maxId: Int)(implicit s: Session) = {
+     news.filter( newsItem =>
+       newsItem.id >= minId && newsItem.id <= maxId).list
+  }
 
   def insert(newsItem: News)(implicit s: Session) = { news.insert(newsItem) }
 
