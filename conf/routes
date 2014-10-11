@@ -9,7 +9,6 @@ GET     /discography                controllers.Application.discography
 GET     /biography                controllers.Application.biography
 GET     /hansundjorg                controllers.Application.hansUndJorg
 GET     /biography/:id                controllers.Application.biographyDetail(id: Int)
-POST    /insert                     controllers.Application.insert
 
 
 
@@ -20,15 +19,11 @@ GET     /json/discography/bytype/:releaseType                controllers.JsonApi
 GET     /json/biography           controllers.JsonApi.getBiography()
 GET     /json/biography/:id           controllers.JsonApi.getBioById(id: Int)
 GET     /json/biography/bytype/:bioType                controllers.JsonApi.getBioByType(bioType :Int)
-
 GET     /json/tracks/byrelease/:id           controllers.JsonApi.getTracksByReleaseId(id: Int)
 
-GET     /json/all                   controllers.Application.jsonFindAll
-GET     /json/leek                   controllers.Application.leek
-GET     /json/leek2                   controllers.Application.leek2
+GET     /json/news           controllers.JsonApi.getNews()
 
 # Home page
-POST    /json/insert                controllers.Application.jsonInsert
 
 
 GET     /webjars/*file                    controllers.WebJarAssets.at(file)

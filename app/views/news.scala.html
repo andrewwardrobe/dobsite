@@ -1,22 +1,25 @@
 @(message: String)
-@scripts = {}
+@scripts = {
+    <script src='@routes.Assets.at("javascripts/news.js")'></script>
+}
 
 @content = {
 
-   <div class="row">
+   <div class="row" >
 
-      <div class="col-sm-8 dob-main">
+      <div  class="col-sm-4  col-sm-offset-2 dob-main">
 
-        <div class="dob-post" id="newsId1">
+           <div id="news" class="centered">
+<!--        <div class="dob-post" id="newsId1">
           <h2 class="dob-post-title">Sample dob post</h2>
           <p class="dob-post-meta">January 1, 2014 by <a href="#">Mark</a></p>
            <p>Here is a  bunch of text leek</p>
         </div><!-- /.dob-post -->
 
-        <div class="dob-post" id="newsId2">
+   <!--     <div class="dob-post" id="newsId2">
 
         </div><!-- /.dob-post -->
-
+        </div>
         <ul class="pager">
           <li><a href="#">Previous</a></li>
           <li><a href="#">Next</a></li>

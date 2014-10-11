@@ -22,9 +22,14 @@ object JsonApi extends Controller {
   implicit val discoFormat =  Json.format[Discography]
   implicit val trackFormat =  Json.format[Track]
   implicit val bioFormat =  Json.format[Biography]
+  implicit val newsFormat =  Json.format[News]
 
   def getDiscographyByReleaseType(_type: Int) = DBAction { implicit response =>
       Ok(toJson(Discography.getByReleaseType(_type)))
+  }
+
+  def getNews = DBAction { implicit response =>
+    Ok(toJson(News.get))
   }
 
   def getDiscography = DBAction { implicit response =>

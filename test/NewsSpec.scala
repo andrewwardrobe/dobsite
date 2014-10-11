@@ -1,3 +1,6 @@
+import java.util.Date
+
+import models.News
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter}
 import org.scalatestplus.play.{FirefoxFactory, OneBrowserPerSuite, OneServerPerSuite, PlaySpec}
 import play.api.db.DB
@@ -36,7 +39,14 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
   }
 
 
-  def dataSetup = {}
+  def dataSetup = {
+    database.withSession { implicit session =>
+      val newsItem = News(1, "DOB Test News Post",new Date(),"MC Donalds","Some Example content blah blah blah")
+      News.insert(newsItem)
+      val result = News.get
+      result.head mustEqual newsItem
+    }
+  }
 
   def dataTearDown = {}
 }
