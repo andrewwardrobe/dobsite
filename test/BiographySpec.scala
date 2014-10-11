@@ -25,7 +25,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
 
 
   after {
-    dataTearDown()
+    dataTearDown
   }
 
 
