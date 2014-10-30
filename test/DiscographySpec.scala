@@ -38,6 +38,7 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
 
     "Render Albums from AJAX calls" in {
+
       go to (s"http://localhost:$port/discography")
       eventually {
         val albumCells = cssSelector("*[id*='alb']").findAllElements

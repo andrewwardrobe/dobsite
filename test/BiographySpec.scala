@@ -19,6 +19,9 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   def database = Database.forDataSource(DB.getDataSource())
 
 
+  import org.scalatest.selenium.WebBrowser.Page
+
+
   before{
     dataSetup
   }
@@ -32,23 +35,26 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   "Biography Pages" must {
 
     "Render A table containing links to available biographies" in {
-      go to (s"http://localhost:$port/biography")
+      implicit val biographyPage = new BiographyPage
+      go to biographyPage
       eventually{
         val biographyCells = cssSelector("td[id*='bioCell']").findAllElements
         biographyCells must not be empty
 
-        val bioLinks = cssSelector("td > a[id*='bioLink']").findAllElements
-        bioLinks must not be empty
 
-        val bioImages = cssSelector("td > img[id*='bioImage']").findAllElements
-        bioImages must not be empty
+        biographyPage.biographyLinks must not be empty
+
+
+        biographyPage.biographyImages must not be empty
 
 
       }
     }
 
     "Display Biography Details" in {
-      go to (s"http://localhost:$port/biography")
+      val biographyPage = new BiographyPage
+      go to biographyPage
+
       eventually{
         click on cssSelector("td > a[id*='bioLink']").findElement.get
       }
@@ -77,5 +83,14 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
         val bio = Biography.getByName("MC Donalds").head
         Biography.delete(bio.id)
     }
+  }
+
+
+  class BiographyPage extends Page {
+    val url = s"localhost:$port/biography"
+
+    def biographyLinks = { cssSelector("td > a[id*='bioLink']").findAllElements }
+    def biographyImages = cssSelector("td > img[id*='bioImage']").findAllElements
+
   }
 }

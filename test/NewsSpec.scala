@@ -2,7 +2,7 @@ import java.util.Date
 
 import models.News
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter}
-import org.scalatestplus.play.{FirefoxFactory, OneBrowserPerSuite, OneServerPerSuite, PlaySpec}
+import org.scalatestplus.play._
 import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
