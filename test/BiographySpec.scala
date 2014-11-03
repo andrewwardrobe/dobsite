@@ -35,7 +35,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   "Biography Pages" must {
 
     "Render A table containing links to available biographies" in {
-      implicit val biographyPage = new BiographyPage
+      val biographyPage = new BiographyPage
       go to biographyPage
       eventually{
         val biographyCells = cssSelector("td[id*='bioCell']").findAllElements

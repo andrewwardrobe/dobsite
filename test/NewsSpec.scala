@@ -17,6 +17,7 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase())
   def database = Database.forDataSource(DB.getDataSource())
 
+  import org.scalatest.selenium.WebBrowser.Page
 
   before{
     dataSetup
@@ -30,10 +31,10 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
   "News Page" must {
 
     "Display a News Item" in {
-      go to(s"http://localhost:$port/news")
+      val newsPage = new NewsPage
+      go to newsPage
       eventually{
-        val newsItems = cssSelector("div[id*='newsId']").findAllElements
-        newsItems must not be empty
+        newsPage.Items must not be empty
       }
     }
   }
@@ -49,4 +50,12 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
   }
 
   def dataTearDown = {}
+
+
+  class NewsPage extends Page {
+    val url = s"localhost:$port/news"
+
+    def Items = cssSelector("div[id*='newsId']").findAllElements
+
+  }
 }
