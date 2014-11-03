@@ -17,7 +17,7 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase())
   def database = Database.forDataSource(DB.getDataSource())
-
+  val discography = new DiscographyPage
 
   before{
     dataSetup
@@ -37,27 +37,27 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
     }
 
 
+
     "Render Albums from AJAX calls" in {
 
-      go to (s"http://localhost:$port/discography")
+      go to discography
       eventually {
-        val albumCells = cssSelector("*[id*='alb']").findAllElements
-        albumCells must not be empty
+        discography.Albums must not be empty
       }
     }
 
     "Render Modals divs" in {
-      go to (s"http://localhost:$port/discography")
+      go to discography
 
       //implicitlyWait(Span(10, Seconds))
 
       eventually {
-        val modals = cssSelector("*[id*='RelIDmodal']").findAllElements
-        modals must not be empty
 
-        val tracks = cssSelector("*[id*='trackRel']").findAllElements
-        tracks must not be empty
-        tracks must have length 3
+        discography.Modals must not be empty
+
+
+        discography.Tracks must not be empty
+        discography.Tracks must have length 3
       }
     }
   }
@@ -84,5 +84,13 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       Discography.delete(disc.id);
       //info(res.head.name)
     }
+  }
+
+  class DiscographyPage extends Page {
+    val url = s"localhost:$port/discography"
+
+    def Albums = cssSelector("*[id*='alb']").findAllElements
+    def Modals = cssSelector("*[id*='RelIDmodal']").findAllElements
+    def Tracks = cssSelector("*[id*='trackRel']").findAllElements
   }
 }
