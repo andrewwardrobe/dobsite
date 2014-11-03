@@ -14,7 +14,11 @@ doPager = (nxt, prev) ->
             itm.attr 'id', 'newsId'+ news.id
             itm.attr 'class', 'dob-post'
             itm.append $("<h2>", {class: 'dob-post-title'}).text news.title
-            info = $("<p>")
+            typ = $("<hidden>")
+            typ.attr 'id', 'typId' + news.id
+            typ.attr 'value', news.postType
+            itm.append typ
+            info = $("<div>")
             dte = new Date(news.dateCreated)
             info.text 'Posted On: ' + dte.toLocaleDateString() + ' ' + dte.toLocaleTimeString() + ' by ' + news.author
             itm.append info

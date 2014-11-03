@@ -1,12 +1,13 @@
 import java.util.Date
 
-import models.News
+import models.Blog
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter}
 import org.scalatestplus.play._
 import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 
+import scala.collection.mutable.ListBuffer
 import scala.slick.jdbc.JdbcBackend._
 
 /**
@@ -23,6 +24,7 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
     dataSetup
   }
 
+  val newsPage = new NewsPage
 
   after {
     dataTearDown
@@ -31,21 +33,29 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
   "News Page" must {
 
     "Display a News Item" in {
-      val newsPage = new NewsPage
+
       go to newsPage
       eventually{
         newsPage.Items must not be empty
       }
     }
-  }
 
+    "Only Display News Posts" in {
+      go to newsPage
+      eventually{
+        newsPage.TypeIds must contain only("1")
+        //newsPage.TypeIds must not be empty
+      }
+    }
+  }
 
   def dataSetup = {
     database.withSession { implicit session =>
-      val newsItem = News(1, "DOB Test News Post",new Date(),"MC Donalds","Some Example content blah blah blah")
-      News.insert(newsItem)
-      val result = News.get
-      result.head mustEqual newsItem
+      val newsItem = Blog(1, "DOB Test News Post",1,new Date(),"MC Donalds","Some Example content blah blah blah")
+      val nonNewsItem =  Blog(1, "DOB Test Music Post",2,new Date(),"MC Donalds","Some cool DoB Music")
+      Blog.insert(newsItem)
+      Blog.insert(nonNewsItem)
+
     }
   }
 
@@ -56,6 +66,14 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
     val url = s"localhost:$port/news"
 
     def Items = cssSelector("div[id*='newsId']").findAllElements
+    def TypeIds = {
+
+      val typeIDList: ListBuffer[String] = new ListBuffer[String]()
+      cssSelector("*[id*='typId']").findAllElements.toList.foreach { element =>
+        typeIDList += element.attribute("value").get.toString
+      }
+      typeIDList.toList
+    }
 
   }
 }
