@@ -22,7 +22,7 @@ object Application extends Controller {
   implicit val personFormat =  Json.format[Person]
 
   def index = Action {
-    Ok(views.html.news(""))
+    Ok(views.html.index(""))
   }
 
   def news = Action {

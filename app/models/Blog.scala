@@ -33,10 +33,18 @@ object Blog{
 
   def get(implicit s: Session) = { blog.list }
   def getById(id: Int)(implicit s: Session) = { blog.filter(_.id === id).list }
-  def getNewsByRange(minId: Int, maxId: Int)(implicit s: Session) = {
+
+  def getXNewsItemsFromId(id: Int, max: Int)(implicit s: Session) = {
      blog.filter( blogPost =>
-       blogPost.id >= minId && blogPost.id <= maxId &&
-       blogPost.postType === 1 ).list
+       blogPost.id <= id &&
+       blogPost.postType === 1
+     ).sortBy(_.id.desc).take(5).list
+  }
+
+  def getXNewsItems(max: Int)(implicit s: Session) = {
+    blog.filter( blogPost =>
+        blogPost.postType === 1
+    ).sortBy(_.id.desc).take(5).list
   }
 
   def getNews(implicit s: Session) = { blog.filter(_.postType === 1).list }

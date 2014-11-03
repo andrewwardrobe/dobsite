@@ -44,7 +44,6 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
       go to newsPage
       eventually{
         newsPage.TypeIds must contain only("1")
-        //newsPage.TypeIds must not be empty
       }
     }
   }

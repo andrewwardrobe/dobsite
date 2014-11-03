@@ -1,14 +1,12 @@
-doPager = (nxt, prev) ->
-    if prev < 1
-        prev = 1
-    more = nxt + 4
-    less = prev + 4
-    $('#Next').attr 'onclick','doNewsWithClear(' +nxt+','+more+')'
-    $('#Prev').attr 'onclick' ,'doNewsWithClear(' + prev + ','+less+')'
+doPager = (nxt) ->
+    if nxt < 0
+        nxt = 0
+    $('#Prev').attr 'onclick','doNews(' +nxt+',5)'
 
-@doNews = (start, end) ->
-	$.get '/json/news/' + start + '/'+ end, (data) ->
-		$.each data, (index, news) ->
+
+@doNews = (start, num) ->
+	  $.get '/json/news/' + start + '/'+ num, (data) ->
+        $.each data, (index, news) ->
             itm = $("<div>")
             $("#news").append itm
             itm.attr 'id', 'newsId'+ news.id
@@ -23,10 +21,12 @@ doPager = (nxt, prev) ->
             info.text 'Posted On: ' + dte.toLocaleDateString() + ' ' + dte.toLocaleTimeString() + ' by ' + news.author
             itm.append info
             itm.append news.content
-    doPager(end+1,start-5);
+            next = news.id - 1
+            doPager(next);
 
 @doNewsWithClear = (start,end) ->
     $('#news').html ''
     doNews(start,end)
 
-doNews(0,5)
+
+doNews(-1,5)
