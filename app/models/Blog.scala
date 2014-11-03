@@ -35,17 +35,26 @@ object Blog{
   def getById(id: Int)(implicit s: Session) = { blog.filter(_.id === id).list }
 
   def getXNewsItemsFromId(id: Int, max: Int)(implicit s: Session) = {
-     blog.filter( blogPost =>
-       blogPost.id <= id &&
-       blogPost.postType === 1
-     ).sortBy(_.id.desc).take(5).list
+    getXItemsFromId(id,max,1)
+  }
+  def getXItemsFromId(id: Int, max: Int, typ: Int)(implicit s: Session) = {
+    blog.filter( blogPost =>
+      blogPost.id <= id &&
+        blogPost.postType === typ
+    ).sortBy(_.id.desc).take(5).list
   }
 
   def getXNewsItems(max: Int)(implicit s: Session) = {
+    getXItems(1,max)
+  }
+
+  def getXItems(typ: Int,max: Int)(implicit s: Session) = {
     blog.filter( blogPost =>
-        blogPost.postType === 1
+      blogPost.postType === typ
     ).sortBy(_.id.desc).take(5).list
   }
+
+
 
   def getNews(implicit s: Session) = { blog.filter(_.postType === 1).list }
 

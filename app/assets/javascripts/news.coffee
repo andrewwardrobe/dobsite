@@ -1,7 +1,7 @@
 doPager = (nxt) ->
     if nxt < 0
         nxt = 0
-    $('#Prev').attr 'onclick','doNews(' +nxt+',5)'
+    $('#Prev').attr 'onclick','doNewsItems(' +nxt+',5)'
 
 
 @doNews = (start, num) ->
@@ -29,4 +29,15 @@ doPager = (nxt) ->
     doNews(start,end)
 
 
-doNews(-1,5)
+@doNewsItems = (start,num) ->
+    if window.loadingNews == 0
+        $('#Prev').attr 'class','btn btn-default'
+        window.loadingNews = 1
+        $('#Prev').text 'Loading ...'
+        doNews(start,num)
+        window.loadingNews = 0
+        $('#Prev').text 'More'
+        $('#Prev').attr 'class','btn btn-primary'
+
+window.loadingNews = 0
+doNewsItems(-1,5)
