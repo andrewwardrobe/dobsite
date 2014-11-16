@@ -13,7 +13,7 @@ insert into "biography" values (12, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg
 insert into "biography" values (13, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
 insert into "biography" values (14, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
 insert into "blog" values (1, 'Test Post',1, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
-insert into "blog" values (2, 'Test Post 1',1, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "blog" values (2, 'Test Post 1',1, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah <div>Blah</div> <script></script> <a href="#">leek</a> Blah');
 insert into "blog" values (3, 'Test Post 2',1, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
 insert into "blog" values (4, 'Test Post 3',1, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
 insert into "blog" values (5, 'Test Post 4',1, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
@@ -28,4 +28,4 @@ insert into "blog" values (13, 'Test Post 10',1, {ts '2012-09-17 18:47:52.69'}, 
 insert into "blog" values (14, 'Test Gaz Three Post 1',3, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
 insert into "blog" values (15, 'Test Music Post 1',2, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
 insert into "blog" values (16, 'Test Music Post 2',2, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
-insert into "blog" values (17, 'Test Gaz Three Post 2',3 {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "blog" values (17, 'Test Gaz Three Post 2',3, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
