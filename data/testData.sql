@@ -1,4 +1,4 @@
-insert into "biography" values (1, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
+insert into "biography" values (1, 'MC Donalds', 0, 'images/crew/donalds_col.png', 'images/crew/donalds_col.png','blah blah');
 insert into "biography" values (2, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
 insert into "biography" values (3, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
 insert into "biography" values (4, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
@@ -20,8 +20,12 @@ insert into "blog" values (5, 'Test Post 4',1, {ts '2012-09-17 18:47:52.69'}, 'M
 insert into "blog" values (6, 'Test Post 5',1, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
 insert into "blog" values (7, 'Test Post 6',1, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
 insert into "blog" values (8, 'Test Post 7',1, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
-insert into "blog" values (9, 'Test Post 8',1, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "blog" values (9, 'Test Post 8',2, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
 insert into "blog" values (10, 'Test Post 9',1, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
 insert into "blog" values (11, 'Test Post 10',1, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
 insert into "blog" values (12, 'Test Post 10',1, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
 insert into "blog" values (13, 'Test Post 10',1, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "blog" values (14, 'Test Gaz Three Post 1',3, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "blog" values (15, 'Test Music Post 1',2, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "blog" values (16, 'Test Music Post 2',2, {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
+insert into "blog" values (17, 'Test Gaz Three Post 2',3 {ts '2012-09-17 18:47:52.69'}, 'MC Donalds', 'Blah Blah');
