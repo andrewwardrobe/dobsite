@@ -10,8 +10,11 @@ import play.api.db.slick._
 import play.api.db.slick.Config.driver.simple._
 import play.api.mvc._
 import play.api.Play.current
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.libs.json.Json._
+
+import scala.collection.mutable.ListBuffer
+import scala.util.parsing.json.JSONArray
 
 
 /**
@@ -29,18 +32,28 @@ object JsonApi extends Controller {
   }
 
   def getNews = DBAction { implicit response =>
-    Ok(toJson(Blog.getNews))
+    val newsList = blogToJson(Blog.getNews)
+    Ok(toJson(newsList))
   }
 
   def getNewsById(id: Int) = DBAction { implicit response =>
-    Ok(toJson(Blog.getById(id)))
+    Ok(toJson(Blog.getById(id).head.json))
+  }
+
+  def blogToJson(blogs :Seq[Blog]) = {
+    val blogsJson = ListBuffer[JsValue]()
+    blogs.foreach(blogsJson += _.json)
+    blogsJson.toList
   }
 
   def getNewsByRange(start: Int, num: Int) = DBAction { implicit response =>
-    if(start != -1)
-      Ok(toJson(Blog.getXNewsItemsFromId(start,num)))
-    else
-      Ok(toJson(Blog.getXNewsItems(num)))
+    if(start != -1) {
+      val newsList = blogToJson(Blog.getXNewsItemsFromId(start, num))
+      Ok(toJson(newsList))
+    }else {
+      val newsList = blogToJson(Blog.getXNewsItems(num))
+      Ok(toJson(newsList))
+    }
   }
 
   def getDiscography = DBAction { implicit response =>

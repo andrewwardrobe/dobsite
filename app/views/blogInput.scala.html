@@ -1,0 +1,74 @@
+@(message: String, form: Form[Blog])
+@scripts = {
+
+}
+
+@content = {
+
+<div class="row" >
+
+    <div  class="col-md-9  col-sm-offset-2 dob-main">
+
+
+        @helper.form(action = routes.Application.submitBlog, 'id -> "blogForm" ){
+        <input type="hidden" name="id" value="-1" />
+        <div class="col-md-7">
+        @helper.inputText(field = form("title"), args = 'class -> "form-control", '_label -> "Title", 'onkeyup -> "updateTitle()", 'id -> "title" )
+        </div>
+        <div class="col-md-2">
+            @helper.select(field = form("postType"), options = List("1" ->"News","2"->"Music","3"->"Gaz Three"),  args = 'class -> "form-control",'_label -> "Post Type" )
+        </div>
+        <input type="hidden" name="dateCreated" id="dateCreated" />
+        <input type="hidden" name="author" id="author" value="MC Donalds" />
+        <!--@helper.inputText(field = form("author"), args = 'class -> "form-control",'_label -> "Author") -->
+
+
+      <div  class="col-md-9  dob-main">
+          @helper.textarea(field = form("content"), args = 'class -> "form-control",'_label -> "Content", 'id -> "content", 'onkeyup -> "updateContent()")
+        <script type="text/javascript" >
+           function submitForm(){
+                var d = new Date()
+                var dtStr = d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate();
+                document.getElementById("dateCreated").value = dtStr;
+                var content = document.getElementById("content").value;
+                document.getElementById("content").value = p(content);
+
+                document.getElementById("blogForm").submit();
+
+            }
+        </script>
+          <input type="button" value="Submit"  onclick="submitForm()" class="btn btn-primary" />
+      </div>
+
+    <div  class="col-md-9  dob-main">
+        <h2 class="dob-post-title" id="postTitle"></h2>
+        <hidden value="1" id="typId1"/>
+        <div></div>
+        <div id="postContent"></div>
+    </div>
+        }
+    </div><!-- /.dob-main -->
+
+</div><!-- /.row -->
+
+
+<script type="text/javascript" >
+            function updateTitle(){
+                var titleContent = document.getElementById("title").value;
+                document.getElementById("postTitle").innerHTML = titleContent;
+            }
+
+            function p(t){
+                t = t.trim();
+                return (t.length>0?'<p>'+t.replace(/[\r\n]+/,'</p><p>')+'</p>':null);
+            }
+
+            function updateContent(){
+                var blogContent = document.getElementById("content").value;
+                document.getElementById("postContent").innerHTML = p(blogContent);
+            }
+
+</script>
+}
+
+@main("Da Oostin Boyeez")(content)( scripts)

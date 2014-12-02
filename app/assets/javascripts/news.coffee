@@ -20,7 +20,10 @@ doPager = (nxt) ->
             dte = new Date(news.dateCreated)
             info.text 'Posted On: ' + dte.toLocaleDateString() + ' ' + dte.toLocaleTimeString() + ' by ' + news.author
             itm.append info
-            itm.append news.content
+            cnt = $("<div>")
+            cnt.attr 'id', 'content'
+            cnt.append news.content
+            itm.append cnt
             next = news.id - 1
             doPager(next);
 

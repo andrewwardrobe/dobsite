@@ -25,6 +25,16 @@ object Application extends Controller {
     Ok(views.html.index(""))
   }
 
+  def blogInput = Action {
+    Ok(views.html.blogInput("",Blog.blogForm))
+  }
+
+  def submitBlog = DBAction { implicit response =>
+    val item = Blog.blogForm.bindFromRequest().get
+    Blog.insert(item)
+    Ok(views.html.index(""))
+  }
+
   def news = Action {
     Ok(views.html.news(""))
   }

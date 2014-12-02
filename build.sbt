@@ -19,5 +19,6 @@ libraryDependencies ++= Seq(
   "org.webjars" %% "webjars-play" % "2.3.0",
   "org.webjars" % "bootstrap" % "3.1.1-2",
   "org.scalatestplus" %% "play" % "1.1.0" % "test",
-  "org.seleniumhq.selenium" % "selenium-java" % "2.44.0" % "test"
+  "org.seleniumhq.selenium" % "selenium-java" % "2.44.0" % "test",
+  "org.jsoup" % "jsoup" % "1.7.2"
 )

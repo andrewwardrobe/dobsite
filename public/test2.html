@@ -1,0 +1,173 @@
+<html>
+<head>
+    <title>HTML5 File example</title>
+
+    <STYLE TYPE="text/css">
+        <!--
+        TD{font-family: Arial, Helvetica, sans-serif; font-size: 8pt;}
+        --->
+    </STYLE>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="jquery.ui-contextmenu.js" type="text/javascript"></script>
+
+
+    <style type="text/css">
+        <!--
+
+
+        .tableheader {
+            background-color: #FFFFFF;
+            background-image: url(http://www.ibm.com/i/v16/t/sprites-t1.gif);
+            background-repeat: repeat-x;
+            background-position: 0px -545px;
+            padding-left: 10px;
+            font-weight: bold;
+            border-top-width: 0px;
+            border-right-width: 0px;
+            border-bottom-width: 1px;
+            border-left-width: 0px;
+            border-top-style: none;
+            border-right-style: none;
+            border-bottom-style: solid;
+            border-left-style: none;
+            border-top-color: #FFFFFF;
+            border-bottom-color: #cccccc;
+            font-size: 12px;
+        }
+        .tablepadding {
+            margin: 0px;
+            padding-top: 0px;
+            padding-right: 10px;
+            padding-bottom: 0px;
+            padding-left: 10px;
+            border-top-width: 0px;
+            border-right-width: 0px;
+            border-bottom-width: 0px;
+            border-left-width: 0px;
+            border-top-style: none;
+            border-right-style: none;
+            border-bottom-style: none;
+            border-left-style: none;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+        }
+
+        .tableborder {
+            border: 1px solid #cccccc;
+        }
+
+
+        .images {
+                height:75px;
+                width:75px;
+                border:0px;
+                margin:15px 15px 0 0;
+        }
+        -->
+        /* Optionally define a fixed width for menus */
+        .ui-menu {
+        width: 220px;
+        }
+        /* Allow to use <kbd> elements inside the title to define shortcut hints. */
+        .ui-menu kbd {
+        padding-left: 1em;
+        float: right;
+        }
+
+        /* Define a custom icon */
+        .ui-icon.custom-icon-firefox {
+        background-image: url(application_firefox.gif);
+        background-position: 0 0;
+        }
+    </style>
+
+    <style type="text/css">
+
+        table, td
+        {
+        border-color: #e6e6e6;
+        border-style: solid;
+        }
+    </style>
+
+    <script>
+
+function imagesSelected(myFiles, target) {
+  var count = 1;
+  for (var i = 0, f; f = myFiles[i]; i++) {
+    var imageReader = new FileReader();
+    imageReader.onload = (function(aFile) {
+      return function(e) {
+	var imgName = "myImg" + (count++);
+        var span = document.createElement('img');
+        span.setAttribute('id',imgName);
+        span.setAttribute('class', 'images');
+        span.setAttribute('src',e.target.result);
+        span.setAttribute('title',aFile.name);
+       
+	//span.innerHTML = ['<img class="images" src="', e.target.result,'" title="', aFile.name, '"/>'].join('');
+        document.getElementById(target).insertBefore(span, null);
+         $(document).contextmenu({
+	  delegate: "#"+imgName,
+	  menu: [
+	    {title:"Left",action: function(event,ui){ $("#"+imgName).attr('class','pull-left'); }},
+	    {title:"Right",action: function(event,ui){ $("#"+imgName).attr('class','pull-right'); }},
+	  ]
+        });
+      };
+    })(f);
+    imageReader.readAsDataURL(f);
+  }
+}
+
+function dropIt(e) {  
+
+	var target = e.target || e.srcElement;
+   imagesSelected(e.dataTransfer.files, target.id); 
+   e.stopPropagation();  
+   e.preventDefault(); 
+
+}  
+
+
+	
+</script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<menu type="context" id="menu" >
+    <menuitem label="leek" onclick="alert('hello')" />
+</menu>
+<center>
+    <table width="485" border="1" cellspacing=0 cellpadding=5 contextmenu="menu">
+        <tr bgcolor="#F2F2F2">
+            <td class="tableheader" align="left">
+                <p>Thumbnail palette</p>
+            </td>
+        </tr>
+        <tr>
+            <td align="left" height="105">
+                <output id="thumbs">leeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeek</output>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <p>Drag & drop or choose images from your local file system: <input type="file" id="input" size="10" multiple="true" onchange="imagesSelected(this.files)" /></p>
+            </td>
+        </tr>
+    </table>
+</center>
+<div id="leek" style="min-height: 100px; border:2px solid;" onClick="this.contentEditable='true';" ondragenter="return false" ondragover="return false" ondrop="dropIt(event)">
+    <p id="leekPara">lorem ipsum dolor lorem ipsum dolorlorem ipsum dolor</p>
+</div>
+</body>
+</html>

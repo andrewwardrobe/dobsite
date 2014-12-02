@@ -1,14 +1,31 @@
 package models
 
 import java.util.Date
+import org.jsoup._
+import org.jsoup.safety.Whitelist
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.db.slick._
 import play.api.db.slick.Config.driver.simple._
+import play.api.libs.json.{JsString, Json, JsValue, JsObject, JsNumber}
+
 /**
  * Created by andrew on 11/10/14.
  */
-case class Blog(id: Int, title: String,postType: Int, dateCreated: Date, author: String,content: String )
+case class Blog(id: Int, title: String,postType: Int, dateCreated: Date, author: String,content: String ) {
+
+  val json: JsValue = Json.obj(
+     "id" -> id,
+      "title" -> title,
+    "postType" -> postType,
+    "dateCreated" -> dateCreated,
+    "author" -> author,
+   "content" -> JsString(Jsoup.clean(content,Whitelist.basicWithImages()))
+
+  )
+
+
+}
 
 object Blog{
   class BlogTable(tag:Tag) extends Table[Blog](tag,"blog"){
@@ -60,4 +77,14 @@ object Blog{
 
   def insert(newsItem: Blog)(implicit s: Session) = { blog.insert(newsItem) }
 
+  val blogForm: Form[Blog] = Form {
+    mapping (
+      "id" -> number,
+      "title" -> text,
+      "postType" -> number,
+      "dateCreated" -> date,
+      "author" ->text,
+      "content" -> text
+    )(Blog.apply)(Blog.unapply _)
+  }
 }
