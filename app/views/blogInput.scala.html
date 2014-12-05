@@ -1,6 +1,8 @@
 @(message: String, form: Form[Blog])
 @scripts = {
-
+<script src="http://code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/jquery.ui-contextmenu.js")" type="text/javascript"></script>
 }
 
 @content = {
@@ -43,8 +45,10 @@
     <div  class="col-md-9  dob-main">
         <h2 class="dob-post-title" id="postTitle"></h2>
         <hidden value="1" id="typId1"/>
-        <div></div>
-        <div id="postContent"></div>
+        <div ></div>
+        <div id="postContent" onclick="this.contentEditable='true';" onkeyup="updateContentBox()"ondragenter="return false" ondragover="return false" ondrop="dropIt(event)">
+
+        </div>
     </div>
         }
     </div><!-- /.dob-main -->
@@ -67,6 +71,48 @@
                 var blogContent = document.getElementById("content").value;
                 document.getElementById("postContent").innerHTML = p(blogContent);
             }
+
+            function updateContentBox(){
+                var blogContent = document.getElementById("postContent").innerHTML;
+                document.getElementById("content").value = blogContent;
+            }
+
+            function imagesSelected(myFiles, target) {
+  var count = 1;
+  for (var i = 0, f; f = myFiles[i]; i++) {
+    var imageReader = new FileReader();
+    imageReader.onload = (function(aFile) {
+      return function(e) {
+	var imgName = "myImg" + (count++);
+        var span = document.createElement('img');
+        span.setAttribute('id',imgName);
+        span.setAttribute('class', 'images');
+        span.setAttribute('src',e.target.result);
+        span.setAttribute('title',aFile.name);
+
+	//span.innerHTML = ['<img class="images" src="', e.target.result,'" title="', aFile.name, '"/>'].join('');
+        document.getElementById(target).insertBefore(span, null);
+         $(document).contextmenu({
+	  delegate: "#"+imgName,
+	  menu: [
+	    {title:"Left",action: function(event,ui){ $("#"+imgName).attr('class','pull-left'); }},
+	    {title:"Right",action: function(event,ui){ $("#"+imgName).attr('class','pull-right'); }},
+	  ]
+        });
+      };
+    })(f);
+    imageReader.readAsDataURL(f);
+  }
+}
+
+function dropIt(e) {
+
+	var target = e.target || e.srcElement;
+   imagesSelected(e.dataTransfer.files, target.id);
+   e.stopPropagation();
+   e.preventDefault();
+
+}
 
 </script>
 }
