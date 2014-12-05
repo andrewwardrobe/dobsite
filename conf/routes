@@ -7,6 +7,7 @@ GET     /                           controllers.Application.index
 GET     /news                           controllers.Application.news
 GET     /blog                           controllers.Application.blogInput
 POST     /blog                           controllers.Application.submitBlog
+POST    /upload          controllers.Application.upload()
 GET     /discography                controllers.Application.discography
 GET     /biography                controllers.Application.biography
 GET     /hansundjorg                controllers.Application.hansUndJorg

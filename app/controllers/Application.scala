@@ -1,6 +1,11 @@
 package controllers
 
 
+import java.io._
+import java.net.URLConnection
+import java.nio.file.{Path, Files}
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
 import models._
 import play.api._
@@ -33,6 +38,23 @@ object Application extends Controller {
     val item = Blog.blogForm.bindFromRequest().get
     Blog.insert(item)
     Ok(views.html.index(""))
+  }
+
+  def upload = Action(parse.temporaryFile) { request =>
+    request.body.moveTo(new File("/tmp/dob.jpg"))
+    val baseDir = "public/images/uploaded"
+
+    val is = new BufferedInputStream(new FileInputStream(request.body.file))
+    val mimetype = URLConnection.guessContentTypeFromStream(is);
+    is.close();
+
+    val dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS")
+    val df = dateFormat.format(Calendar.getInstance().getTime())
+
+    val filename = baseDir + "/upload-"+ df + "." + mimetype.split("/")(1)
+    request.body.moveTo(new File(filename))
+
+    Ok(filename.replace("public","assets"))
   }
 
   def news = Action {

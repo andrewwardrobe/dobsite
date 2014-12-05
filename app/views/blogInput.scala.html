@@ -43,6 +43,9 @@
       </div>
 
     <div  class="col-md-9  dob-main">
+        <div id="result">
+
+        </div>
         <h2 class="dob-post-title" id="postTitle"></h2>
         <hidden value="1" id="typId1"/>
         <div ></div>
@@ -78,31 +81,57 @@
             }
 
             function imagesSelected(myFiles, target) {
-  var count = 1;
-  for (var i = 0, f; f = myFiles[i]; i++) {
-    var imageReader = new FileReader();
-    imageReader.onload = (function(aFile) {
-      return function(e) {
-	var imgName = "myImg" + (count++);
-        var span = document.createElement('img');
-        span.setAttribute('id',imgName);
-        span.setAttribute('class', 'images');
-        span.setAttribute('src',e.target.result);
-        span.setAttribute('title',aFile.name);
 
-	//span.innerHTML = ['<img class="images" src="', e.target.result,'" title="', aFile.name, '"/>'].join('');
-        document.getElementById(target).insertBefore(span, null);
-         $(document).contextmenu({
-	  delegate: "#"+imgName,
-	  menu: [
-	    {title:"Left",action: function(event,ui){ $("#"+imgName).attr('class','pull-left'); }},
-	    {title:"Right",action: function(event,ui){ $("#"+imgName).attr('class','pull-right'); }},
-	  ]
-        });
-      };
-    })(f);
-    imageReader.readAsDataURL(f);
-  }
+            if(target == ""){
+                alert('missed dropzone');
+                return;
+            }
+
+            var count = 1;
+
+          for (var i = 0, f; f = myFiles[i]; i++) {
+
+            var imageReader = new FileReader();
+            imageReader.onload = (function(aFile) {
+              return function(e) {
+            var imgName = "myImg" + (count++);
+            var divName = div+imgName
+                var div = document.createElement('div');
+                div.setAttribute('id',divName);
+                var span = document.createElement('img');
+                span.setAttribute('id',imgName);
+                span.setAttribute('class', 'images');
+                span.setAttribute('src',e.target.result);
+                span.setAttribute('title',aFile.name);
+                div.appendChild(span);
+                $.ajax({
+                    url: "/upload",
+                    type: 'POST',
+                    processData: false,
+                    contentType: false,
+                    data: aFile
+                }).done(function (data) {
+                    $("#result").html(data);
+                    alert(data);
+                    $("#"+imgName).attr('src',data);
+                    }).fail(function(){
+                        $("#result").html("Upload Failed");
+                    });
+            //span.innerHTML = ['<img class="images" src="', e.target.result,'" title="', aFile.name, '"/>'].join('');
+
+                document.getElementById(target).insertBefore(div, null);
+                 $(document).contextmenu({
+
+              delegate: "#"+divName,
+              menu: [
+                {title:"Left",action: function(event,ui){ $("#"+imgName).attr('class','pull-left'); }},
+                {title:"Right",action: function(event,ui){ $("#"+imgName).attr('class','pull-right'); }},
+              ]
+                });
+              };
+            })(f);
+            imageReader.readAsDataURL(f);
+          }
 }
 
 function dropIt(e) {
