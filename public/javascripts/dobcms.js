@@ -50,7 +50,7 @@ function imagesSelected(myFiles, target) {
     imageReader.onload = (function(aFile) {
       return function(e) {
     var imgName = imageId();
-    var divName = div+imgName
+    var divName = "div"+imgName
         var div = document.createElement('div');
         div.setAttribute('id',divName);
         var span = document.createElement('img');
@@ -58,6 +58,7 @@ function imagesSelected(myFiles, target) {
         span.setAttribute('class', 'images');
         span.setAttribute('src',e.target.result);
         span.setAttribute('title',aFile.name);
+
         div.appendChild(span);
         $.ajax({
             url: "/upload",
@@ -73,8 +74,10 @@ function imagesSelected(myFiles, target) {
                 $("#result").html(data);
             });
     //span.innerHTML = ['<img class="images" src="', e.target.result,'" title="', aFile.name, '"/>'].join('');
-
         document.getElementById(target).insertBefore(div, null);
+
+
+
          $(document).contextmenu({
 
       delegate: "#"+divName,
@@ -83,9 +86,12 @@ function imagesSelected(myFiles, target) {
         {title:"Right",action: function(event,ui){ $("#"+imgName).attr('class','pull-right'); }},
       ]
         });
+
       };
     })(f);
+
     imageReader.readAsDataURL(f);
+
   }
 }
 
