@@ -1,8 +1,8 @@
 @(message: String, form: Form[Blog])
 @scripts = {
-<script src="http://code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
 <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js" type="text/javascript"></script>
 <script src="@routes.Assets.at("javascripts/jquery.ui-contextmenu.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/dobcms.js")" type="text/javascript"></script>
 }
 
 @content = {
@@ -15,7 +15,10 @@
         @helper.form(action = routes.Application.submitBlog, 'id -> "blogForm" ){
         <input type="hidden" name="id" value="-1" />
         <div class="col-md-7">
-        @helper.inputText(field = form("title"), args = 'class -> "form-control", '_label -> "Title", 'onkeyup -> "updateTitle()", 'id -> "title" )
+        <input type="hidden" name="title" id="title" />
+        <h2 class="dob-post-title" id="postTitle" onkeyup="updateTitleBox()" contenteditable="true">Dob Post Title</h2>
+        <input type="hidden" value="1" id="typId1" />
+        <input type="hidden" value="1" id="typId1" />
         </div>
         <div class="col-md-2">
             @helper.select(field = form("postType"), options = List("1" ->"News","2"->"Music","3"->"Gaz Three"),  args = 'class -> "form-control",'_label -> "Post Type" )
@@ -26,14 +29,21 @@
 
 
       <div  class="col-md-9  dob-main">
-          @helper.textarea(field = form("content"), args = 'class -> "form-control",'_label -> "Content", 'id -> "content", 'onkeyup -> "updateContent()")
+          <input type="hidden" name="content" id="content" />
+          <div id="postContent" onclick="this.contentEditable='true';" ontentEditable="true" onkeyup="updateContentBox()" ondragenter="return false" ondragover="return false" ondrop="dropIt(event)" onload="doElements()">
+              <p>Start Typing you post content here</p>
+          </div>
+
         <script type="text/javascript" >
            function submitForm(){
                 var d = new Date()
                 var dtStr = d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate();
                 document.getElementById("dateCreated").value = dtStr;
-                var content = document.getElementById("content").value;
-                document.getElementById("content").value = p(content);
+                var title = document.getElementById("postTitle").innerText ||
+                        document.getElementById("postTitle").textContent;
+                document.getElementById("title").value = title;
+                var content = document.getElementById("postContent").innerHTML;
+                document.getElementById("content").value = content;
 
                 document.getElementById("blogForm").submit();
 
@@ -46,104 +56,15 @@
         <div id="result">
 
         </div>
-        <h2 class="dob-post-title" id="postTitle"></h2>
-        <hidden value="1" id="typId1"/>
-        <div ></div>
-        <div id="postContent" onclick="this.contentEditable='true';" onkeyup="updateContentBox()"ondragenter="return false" ondragover="return false" ondrop="dropIt(event)">
 
-        </div>
+
+
     </div>
         }
     </div><!-- /.dob-main -->
 
 </div><!-- /.row -->
 
-
-<script type="text/javascript" >
-            function updateTitle(){
-                var titleContent = document.getElementById("title").value;
-                document.getElementById("postTitle").innerHTML = titleContent;
-            }
-
-            function p(t){
-                t = t.trim();
-                return (t.length>0?'<p>'+t.replace(/[\r\n]+/,'</p><p>')+'</p>':null);
-            }
-
-            function updateContent(){
-                var blogContent = document.getElementById("content").value;
-                document.getElementById("postContent").innerHTML = p(blogContent);
-            }
-
-            function updateContentBox(){
-                var blogContent = document.getElementById("postContent").innerHTML;
-                document.getElementById("content").value = blogContent;
-            }
-
-            function imagesSelected(myFiles, target) {
-
-            if(target == ""){
-                alert('missed dropzone');
-                return;
-            }
-
-            var count = 1;
-
-          for (var i = 0, f; f = myFiles[i]; i++) {
-
-            var imageReader = new FileReader();
-            imageReader.onload = (function(aFile) {
-              return function(e) {
-            var imgName = "myImg" + (count++);
-            var divName = div+imgName
-                var div = document.createElement('div');
-                div.setAttribute('id',divName);
-                var span = document.createElement('img');
-                span.setAttribute('id',imgName);
-                span.setAttribute('class', 'images');
-                span.setAttribute('src',e.target.result);
-                span.setAttribute('title',aFile.name);
-                div.appendChild(span);
-                $.ajax({
-                    url: "/upload",
-                    type: 'POST',
-                    processData: false,
-                    contentType: false,
-                    data: aFile
-                }).done(function (data) {
-                    $("#result").html(data);
-                    alert(data);
-                    $("#"+imgName).attr('src',data);
-                    }).fail(function(){
-                        $("#result").html("Upload Failed");
-                    });
-            //span.innerHTML = ['<img class="images" src="', e.target.result,'" title="', aFile.name, '"/>'].join('');
-
-                document.getElementById(target).insertBefore(div, null);
-                 $(document).contextmenu({
-
-              delegate: "#"+divName,
-              menu: [
-                {title:"Left",action: function(event,ui){ $("#"+imgName).attr('class','pull-left'); }},
-                {title:"Right",action: function(event,ui){ $("#"+imgName).attr('class','pull-right'); }},
-              ]
-                });
-              };
-            })(f);
-            imageReader.readAsDataURL(f);
-          }
-}
-
-function dropIt(e) {
-
-	var target = e.target || e.srcElement;
-   imagesSelected(e.dataTransfer.files, target.id);
-   e.stopPropagation();
-   e.preventDefault();
-
-}
-
-</script>
 }
 
 @main("Da Oostin Boyeez")(content)( scripts)
