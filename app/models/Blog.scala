@@ -20,8 +20,11 @@ case class Blog(id: Int, title: String,postType: Int, dateCreated: Date, author:
     "postType" -> postType,
     "dateCreated" -> dateCreated,
     "author" -> author,
-   "content" -> JsString(Jsoup.clean(content,"http://localhost:9000/",Whitelist.basicWithImages().preserveRelativeLinks(true)))
-
+   "content" -> JsString(Jsoup.clean(content,"http://localhost:9000/",Whitelist.basicWithImages()
+                                                                      .preserveRelativeLinks(true)
+                                                                      .addAttributes("img","class")
+                                                                      .addAttributes("p","class")
+                                     ))
   )
 
 
