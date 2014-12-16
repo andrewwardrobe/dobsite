@@ -13,6 +13,8 @@ import scala.slick.jdbc.JdbcBackend.Database
 import models._
 
 
+
+
 class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase())
@@ -40,14 +42,8 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
       eventually{
         val biographyCells = cssSelector("td[id*='bioCell']").findAllElements
         biographyCells must not be empty
-
-
         biographyPage.biographyLinks must not be empty
-
-
         biographyPage.biographyImages must not be empty
-
-
       }
     }
 
@@ -88,7 +84,6 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
 
   class BiographyPage extends Page {
     val url = s"localhost:$port/biography"
-
     def biographyLinks = { cssSelector("td > a[id*='bioLink']").findAllElements }
     def biographyImages = cssSelector("td > img[id*='bioImage']").findAllElements
 
