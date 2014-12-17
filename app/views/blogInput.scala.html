@@ -1,4 +1,4 @@
-@(message: String, form: Form[Blog])
+@(message: String, form: Form[Blog], postId: Int)
 @scripts = {
 <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js" type="text/javascript"></script>
 <script src="@routes.Assets.at("javascripts/jquery.ui.position.js")" type="text/javascript"></script>
@@ -16,7 +16,7 @@
 
 
         @helper.form(action = routes.Application.submitBlog, 'id -> "blogForm" ){
-        <input type="hidden" name="id" value="-1" />
+        <input type="hidden" name="id" id="id" value="@postId" />
         <div class="col-md-7">
         <input type="hidden" name="title" id="title" />
         <h2 class="dob-post-title" id="postTitle" onkeyup="updateTitleBox()" contenteditable="true">Dob Post Title</h2>
@@ -27,6 +27,11 @@
             @helper.select(field = form("postType"), options = List("1" ->"News","2"->"Music","3"->"Gaz Three"),  args = 'class -> "form-control dob-control",'_label -> "" )
         </div>
         <input type="hidden" name="dateCreated" id="dateCreated" />
+        <script type="text/javascript">
+            var d = new Date()
+            var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+            document.getElementById("dateCreated").setAttribute('value',dateStr);
+        </script>
         <input type="hidden" name="author" id="author" value="MC Donalds" />
         <!--@helper.inputText(field = form("author"), args = 'class -> "form-control",'_label -> "Author") -->
 <script>
@@ -39,22 +44,7 @@
               <p id="postPara-1" position="1">Start Typing you post content here</p>
           </div>
           <div id="incorrect-word-list"></div>
-        <script type="text/javascript" >
-           function submitForm(){
-                var d = new Date()
-                var dtStr = d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate();
-                document.getElementById("dateCreated").value = dtStr;
-                var title = document.getElementById("postTitle").innerText ||
-                        document.getElementById("postTitle").textContent;
-                document.getElementById("title").value = title;
-                var content = document.getElementById("postContent").innerHTML;
-                document.getElementById("content").value = content;
-
-                document.getElementById("blogForm").submit();
-
-            }
-        </script>
-        </div>
+          </div>
          <div class="col-md-9  dob-main">
             <div>
                 <br/>

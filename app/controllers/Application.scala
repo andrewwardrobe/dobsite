@@ -7,6 +7,7 @@ import java.nio.file.{Path, Files}
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
+import controllers.routes
 import models._
 import play.api._
 import play.api.data.Form
@@ -31,12 +32,22 @@ object Application extends Controller {
   }
 
   def blogInput = Action {
-    Ok(views.html.blogInput("",Blog.blogForm))
+    Ok(views.html.blogInput("",Blog.blogForm,-1))
+  }
+
+  def blogUpdate(id: Int) = Action {
+    Ok(views.html.blogInput("",Blog.blogForm,id))
   }
 
   def submitBlog = DBAction { implicit response =>
     val item = Blog.blogForm.bindFromRequest().get
     Blog.insert(item)
+    Ok(views.html.index(""))
+  }
+
+  def submitBlogUpdate = DBAction { implicit response =>
+    val item = Blog.blogForm.bindFromRequest().get
+    Blog.update(item)
     Ok(views.html.index(""))
   }
 
@@ -89,7 +100,9 @@ object Application extends Controller {
     implicit request =>
 
       Ok(Routes.javascriptRouter("jsRoutes")(
-          routes.javascript.Application.submitBlog
+          routes.javascript.Application.submitBlog,
+          routes.javascript.JsonApi.getPostById,
+        routes.javascript.Application.submitBlogUpdate
         )
       ).as("text/javascript")
   }

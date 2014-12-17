@@ -36,7 +36,7 @@ object JsonApi extends Controller {
     Ok(toJson(newsList))
   }
 
-  def getNewsById(id: Int) = DBAction { implicit response =>
+  def getPostById(id: Int) = DBAction { implicit response =>
     Ok(toJson(Blog.getById(id).head.json))
   }
 

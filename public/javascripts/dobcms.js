@@ -195,24 +195,62 @@ function doPositioning(node, key){
 }
 
 
-$(function(){
+
+
+
+function updatePost(){
   $("#saveButton").click(function submitForm(){
-        var d = new Date()
-        var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+        var dateStr = document.getElementById("dateCreated").value
         var title = document.getElementById("postTitle").innerText ||
                 document.getElementById("postTitle").textContent;
         var content = document.getElementById("postContent").innerHTML;
         var postType = document.getElementById("postType").value
+        var id = document.getElementById("id").value
+        var author = document.getElementById("author").value
 
-
+        jsRoutes.controllers.Application.submitBlogUpdate().ajax({
+            data: {
+                "id": id,
+                "dateCreated": "2014-12-07",
+                "title": title,
+                "content": content,
+                "author": author,
+                "postType": postType
+            },
+            success: function(data){
+                var d = $('<div>')
+               $(d).text("Saved");
+                $(d).attr('class','alert alert-success');
+                $(d).attr('role','alert');
+                $("#result").append(d);
+            },
+            error: function(data){
+                var d = $('<div>')
+                $(d).text("Save Failed"+ data);
+                $(d).attr('class','alert alert-danger');
+                $(d).attr('role','alert');
+                $("#result").append(d);
+            }
+        });
+    });
+}
+function newPost(){
+  $("#saveButton").click(function submitForm(){
+        var dateStr = document.getElementById("dateCreated").value
+        var title = document.getElementById("postTitle").innerText ||
+                document.getElementById("postTitle").textContent;
+        var content = document.getElementById("postContent").innerHTML;
+        var postType = document.getElementById("postType").value
+        var id = document.getElementById("id").value
+        var author = document.getElementById("author").value
 
         jsRoutes.controllers.Application.submitBlog().ajax({
             data: {
-                "id": -1,
+                "id": id,
                 "dateCreated": dateStr,
                 "title": title,
                 "content": content,
-                "author": "MC Donalds",
+                "author": author,
                 "postType": postType
             },
             success: function(data){
@@ -231,7 +269,7 @@ $(function(){
             }
         });
     });
-});
+}
 
 
 $(function(){
@@ -250,4 +288,24 @@ $(function(){
             "quit": {name: "Quit", icon: "quit"}
         }
     });
+});
+
+$(function(){
+    var id = document.getElementById("id").value
+    if(id != -1){
+        $("#saveButton").attr('value',"Update")
+        jsRoutes.controllers.JsonApi.getPostById(id).ajax({
+            success: function (data){
+               $("#postContent").html(data.content)
+               $("#postTitle").text = data.title
+               $("#author").attr('value', data.author)
+               $("#dateCreated").attr('value', data.dateCreated)
+               $("#postType").val(data.postType)
+            }
+        })
+        updatePost();
+    }
+    else{
+        newPost();
+    }
 });
