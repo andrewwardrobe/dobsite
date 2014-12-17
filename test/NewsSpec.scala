@@ -18,13 +18,13 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase())
   def database = Database.forDataSource(DB.getDataSource())
 
-  import org.scalatest.selenium.WebBrowser.Page
+
 
   before{
     dataSetup
   }
 
-  val newsPage = new NewsPage
+  val newsPage = new NewsPage(port)
 
   after {
     dataTearDown
@@ -61,18 +61,5 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
   def dataTearDown = {}
 
 
-  class NewsPage extends Page {
-    val url = s"localhost:$port/news"
 
-    def Items = cssSelector("div[id*='newsId']").findAllElements
-    def TypeIds = {
-
-      val typeIDList: ListBuffer[String] = new ListBuffer[String]()
-      cssSelector("*[id*='typId']").findAllElements.toList.foreach { element =>
-        typeIDList += element.attribute("value").get.toString
-      }
-      typeIDList.toList
-    }
-
-  }
 }

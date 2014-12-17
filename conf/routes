@@ -12,7 +12,7 @@ GET     /discography                controllers.Application.discography
 GET     /biography                controllers.Application.biography
 GET     /hansundjorg                controllers.Application.hansUndJorg
 GET     /biography/:id                controllers.Application.biographyDetail(id: Int)
-
+GET     /javascriptRoutes     controllers.Application.javascriptRoutes
 
 
 #JSon API

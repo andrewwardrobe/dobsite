@@ -1,4 +1,6 @@
 
+import org.hamcrest.core
+import org.hamcrest.core.AllOf
 import org.openqa.selenium.{WebElement, By}
 import org.scalatest.time.{Seconds, Span}
 import org.scalatest._
@@ -21,7 +23,6 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   def database = Database.forDataSource(DB.getDataSource())
 
 
-  import org.scalatest.selenium.WebBrowser.Page
 
 
   before{
@@ -37,31 +38,23 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   "Biography Pages" must {
 
     "Render A table containing links to available biographies" in {
-      val biographyPage = new BiographyPage
+      val biographyPage = new BiographyListPage(port)
       go to biographyPage
       eventually{
-        val biographyCells = cssSelector("td[id*='bioCell']").findAllElements
-        biographyCells must not be empty
+        biographyPage.biographyCells must not be empty
         biographyPage.biographyLinks must not be empty
         biographyPage.biographyImages must not be empty
       }
     }
 
     "Display Biography Details" in {
-      val biographyPage = new BiographyPage
+      val biographyPage = new BiographyListPage(port)
       go to biographyPage
 
       eventually{
-        click on cssSelector("td > a[id*='bioLink']").findElement.get
-      }
-      eventually{
-        val biographyDiv = cssSelector("*[id*='bioText']").findElement
-        biographyDiv must not be empty
-        val biographyText = biographyDiv.get.text
-        biographyText must include ("MC Donalds")
-        biographyText must include ("blah blah")
-        val biographyImage = cssSelector("*[id*='bioText']").findElement
-        biographyDiv must not be empty
+        val biographyDetails = biographyPage.viewBiography("MC Donalds")
+        biographyDetails.text must (include ("MC Donalds") and include ("blah blah"))
+        biographyDetails.image must not be empty
       }
 
     }
@@ -79,13 +72,5 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
         val bio = Biography.getByName("MC Donalds").head
         Biography.delete(bio.id)
     }
-  }
-
-
-  class BiographyPage extends Page {
-    val url = s"localhost:$port/biography"
-    def biographyLinks = { cssSelector("td > a[id*='bioLink']").findAllElements }
-    def biographyImages = cssSelector("td > img[id*='bioImage']").findAllElements
-
   }
 }

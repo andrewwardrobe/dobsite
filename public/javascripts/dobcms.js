@@ -195,6 +195,43 @@ function doPositioning(node, key){
 }
 
 
+$(function(){
+  $("#saveButton").click(function submitForm(){
+        var d = new Date()
+        var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+        var title = document.getElementById("postTitle").innerText ||
+                document.getElementById("postTitle").textContent;
+        var content = document.getElementById("postContent").innerHTML;
+        var postType = document.getElementById("postType").value
+
+
+
+        jsRoutes.controllers.Application.submitBlog().ajax({
+            data: {
+                "id": -1,
+                "dateCreated": dateStr,
+                "title": title,
+                "content": content,
+                "author": "MC Donalds",
+                "postType": postType
+            },
+            success: function(data){
+                var d = $('<div>')
+               $(d).text("Saved");
+                $(d).attr('class','alert alert-success');
+                $(d).attr('role','alert');
+                $("#result").append(d);
+            },
+            error: function(data){
+                var d = $('<div>')
+                $(d).text("Save Failed");
+                $(d).attr('class','alert alert-danger');
+                $(d).attr('role','alert');
+                $("#result").append(d);
+            }
+        });
+    });
+});
 
 
 $(function(){

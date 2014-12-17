@@ -3,6 +3,7 @@
 <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js" type="text/javascript"></script>
 <script src="@routes.Assets.at("javascripts/jquery.ui.position.js")" type="text/javascript"></script>
 <script src="@routes.Assets.at("javascripts/jquery.contextMenu.js")" type="text/javascript"></script>
+<script type="text/javascript" src='@routes.Application.javascriptRoutes()'></script>
 <script src="@routes.Assets.at("javascripts/dobcms.js")" type="text/javascript"></script>
 
 }
@@ -58,7 +59,7 @@
             <div>
                 <br/>
             </div>
-          <input type="button" value="Save"  onclick="submitForm()" class="btn btn-primary" />
+          <input type="button" value="Save" id="saveButton" class="btn btn-primary" />
           <input type="button" id="reposition" value="RePosition"  class="btn btn-primary" />
         </div>
 

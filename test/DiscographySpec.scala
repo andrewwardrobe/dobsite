@@ -17,7 +17,7 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase())
   def database = Database.forDataSource(DB.getDataSource())
-  val discography = new DiscographyPage
+  val discography = new DiscographyPage(port)
 
   before{
     dataSetup
@@ -86,11 +86,4 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
     }
   }
 
-  class DiscographyPage extends Page {
-    val url = s"localhost:$port/discography"
-
-    def Albums = cssSelector("*[id*='alb']").findAllElements
-    def Modals = cssSelector("*[id*='RelIDmodal']").findAllElements
-    def Tracks = cssSelector("*[id*='trackRel']").findAllElements
-  }
-}
+ }

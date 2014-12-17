@@ -85,6 +85,14 @@ object Application extends Controller {
   }
 
 
+  def javascriptRoutes = Action{
+    implicit request =>
+
+      Ok(Routes.javascriptRouter("jsRoutes")(
+          routes.javascript.Application.submitBlog
+        )
+      ).as("text/javascript")
+  }
   def biographies = TODO
 
 }
