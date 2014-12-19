@@ -18,7 +18,7 @@ doPager = (nxt) ->
             itm.append typ
             info = $("<div>")
             dte = new Date(news.dateCreated)
-            info.text 'Posted On: ' + dte.toLocaleDateString() + ' ' + dte.toLocaleTimeString() + ' by ' + news.author
+            info.text 'Posted On: ' + dte.toLocaleDateString() + ' by ' + news.author
             itm.append info
             cnt = $("<div>")
             cnt.attr 'id', 'content'

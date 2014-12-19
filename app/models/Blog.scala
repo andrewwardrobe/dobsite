@@ -24,6 +24,7 @@ case class Blog(id: Int, title: String,postType: Int, dateCreated: Date, author:
                                                                       .preserveRelativeLinks(true)
                                                                       .addAttributes("img","class")
                                                                       .addAttributes("p","class")
+                                                                      .addAttributes("div","align")
                                      ))
   )
 
@@ -46,7 +47,6 @@ object Blog{
       def content = column[String]("CONTENT")
 
       def * = (id,title,postType,dateCreated,author,content) <> ((Blog.apply _).tupled, Blog.unapply)
-
   }
 
   val blog = TableQuery[BlogTable]
@@ -64,6 +64,8 @@ object Blog{
     ).sortBy(_.id.desc).take(5).list
   }
 
+
+
   def getXNewsItems(max: Int)(implicit s: Session) = {
     getXItems(1,max)
   }
@@ -78,7 +80,7 @@ object Blog{
 
   def getNews(implicit s: Session) = { blog.filter(_.postType === 1).list }
 
-  def insert(newsItem: Blog)(implicit s: Session) = { blog.insert(newsItem) }
+  def insert(newsItem: Blog)(implicit s: Session) = { blog returning blog.map(_.id) += newsItem }
 
   def update(post :Blog)(implicit s: Session) = { blog.insertOrUpdate(post) }
 

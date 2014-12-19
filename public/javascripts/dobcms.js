@@ -1,28 +1,3 @@
-function updateTitle(){
-    var titleContent = document.getElementById("title").value;
-    document.getElementById("postTitle").innerHTML = titleContent;
-}
-
-function updateTitleBox(){
-    var titleContent = document.getElementById("postTitle").innerText ||
-        document.getElementById("postTitle").textContent;
-    document.getElementById("title").value = titleContent;
-}
-function p(t){
-    t = t.trim();
-    return (t.length>0?'<p>'+t.replace(/[\r\n]+/,'</p><p>')+'</p>':null);
-}
-
-function updateContent(){
-    var blogContent = document.getElementById("content").value;
-    document.getElementById("postContent").innerHTML = p(blogContent);
-}
-
-function updateContentBox(){
-    var blogContent = document.getElementById("postContent").innerHTML;
-    document.getElementById("content").value = blogContent;
-    document.getElementById("result").textContent = blogContent;
-}
 
 
 function getImageId(){
@@ -114,31 +89,21 @@ function getNodePosition(){
         var pos = parseInt(items[items.length -1].getAttribute('position'))  || 0
         return pos + 1
 }
-
-function doNewNode(){
-    var currPos = getNodePosition();
-    return function(target){
-            console.log("currPos:" +currPos);
-            if(target.getAttribute('position')==undefined
-                    || target.getAttribute('id')==undefined){
-                switch(target.nodeName){
-                    case "P":
-                        var name =  'postPara-'+currPos;
-                        target.setAttribute('position',currPos);
-                        target.setAttribute('id',name);
-                        currPos = currPos + 1;
-                        break;
-                    case "DIV":
-                        target.setAttribute('position',currPos);
-                        currPos = currPos + 1;
-                        target.setAttribute('position','display: inline-block');
-                        break;
-                }
-            }
-    }
-
-}
-
+//
+//function doNewNode(){
+//    var currPos = getNodePosition();
+//    return function(target){
+//            if(target.getAttribute('position')==undefined
+//                    || target.getAttribute('id')==undefined){
+//                switch(target.nodeName){
+//
+//                    break;
+//                }
+//            }
+//    }
+//
+//}
+//var updateNode = doNewNode();
 
 function reposition(){
     var postContent = document.getElementById("postContent")
@@ -161,118 +126,125 @@ function reposition(){
     }
 
 }
-var updateNode = doNewNode();
 
-function disableMenus(){
-    alert($("[id*='postPara']").menu("option","disabled"));
+function addClass(node, cls){
+    var nodeClass = $(node).attr('class');
+    nodeClass.append(" "+cls);
+    $(node).attr('class',nodeClass);
+
 }
 
-$("#reposition").on("click",function(e){reposition()});
+function removeClass(node, cls){
+    var nodeClass = $(node).attr('class');
 
+    var regex = new RegExp(""+cls+"\\s*","g");
+    nodeClass = nodeClass.replace(regex, '');
+    $(node).attr('class',nodeClass);
+
+}
+
+
+//
+//function disableMenus(){
+//    alert($("[id*='postPara']").menu("option","disabled"));
+//}
+//
+//$("#reposition").on("click",function(e){reposition()});
+//
 $("#postContent").on("DOMNodeInserted", function (e) {
       var target = e.target
       updateNode(target)
 });
 
-function doPositioning(node, key){
-    switch(key){
-        case "Left":
-            $(node).attr('class','moveLeft');
-            break;
-        case "Center":
-            $(node).attr('class','moveCenter');
-            break;
-        case "Right":
-            $(node).attr('class','moveRight');
-            break;
-         case "Float Left":
-            $(node).attr('class','pull-left');
-            break;
-        case "Float Right":
-            $(node).attr('class','pull-right');
-            break;
+function doUpdatePost(){
+    var dateStr = document.getElementById("dateCreated").value
+    var title = document.getElementById("postTitle").innerText ||
+            document.getElementById("postTitle").textContent;
+    var content = $('#editor').cleanHtml();
+    alert(content)
+    var postType = document.getElementById("postType").value
+    var id = document.getElementById("id").value
+    var author = document.getElementById("author").value
+
+    alert("using update")
+
+    jsRoutes.controllers.Application.submitBlogUpdate().ajax({
+        data: {
+            "id": id,
+            "dateCreated": "2014-12-07",
+            "title": title,
+            "content": content,
+            "author": author,
+            "postType": postType
+        },
+        success: function(data){
+            var d = $('<div>')
+           $(d).text("Saved");
+            $(d).attr('class','alert alert-success');
+            $(d).attr('role','alert');
+            $("#result").append(d);
+        },
+        error: function(data){
+            var d = $('<div>')
+            $(d).text("Save Failed"+ data);
+            $(d).attr('class','alert alert-danger');
+            $(d).attr('role','alert');
+            $("#result").append(d);
+        }
+    });
+}
+
+function doNewPost(){
+    var dateStr = document.getElementById("dateCreated").value
+    var title = document.getElementById("postTitle").innerText ||
+            document.getElementById("postTitle").textContent;
+    var content =  $('#editor').cleanHtml();
+    var postType = document.getElementById("postType").value
+    var id = document.getElementById("id").value
+    var author = document.getElementById("author").value
+
+    alert("using new")
+    jsRoutes.controllers.Application.submitBlog().ajax({
+        data: {
+            "id": id,
+            "dateCreated": dateStr,
+            "title": title,
+            "content": content,
+            "author": author,
+            "postType": postType
+        },
+        success: function(data){
+            var d = $('<div>')
+           $(d).text("Saved "+data);
+            $(d).attr('class','alert alert-success');
+            $(d).attr('role','alert');
+            $("#id").val(data);
+            $("#result").append(d);
+
+        },
+        error: function(data){
+            var d = $('<div>')
+            $(d).text("Save Failed");
+            $(d).attr('class','alert alert-danger');
+            $(d).attr('role','alert');
+            $("#result").append(d);
+        }
+    });
+}
+
+function save(){
+    var id = document.getElementById("id").value
+    if(id != -1){
+        doUpdatePost()
+    }else{
+        doNewPost()
     }
 }
 
+var listId = window.getSelection().focusNode.parentNode;
+                  $(listId).addClass("oder2");
 
-
-
-
-function updatePost(){
-  $("#saveButton").click(function submitForm(){
-        var dateStr = document.getElementById("dateCreated").value
-        var title = document.getElementById("postTitle").innerText ||
-                document.getElementById("postTitle").textContent;
-        var content = document.getElementById("postContent").innerHTML;
-        var postType = document.getElementById("postType").value
-        var id = document.getElementById("id").value
-        var author = document.getElementById("author").value
-
-        jsRoutes.controllers.Application.submitBlogUpdate().ajax({
-            data: {
-                "id": id,
-                "dateCreated": "2014-12-07",
-                "title": title,
-                "content": content,
-                "author": author,
-                "postType": postType
-            },
-            success: function(data){
-                var d = $('<div>')
-               $(d).text("Saved");
-                $(d).attr('class','alert alert-success');
-                $(d).attr('role','alert');
-                $("#result").append(d);
-            },
-            error: function(data){
-                var d = $('<div>')
-                $(d).text("Save Failed"+ data);
-                $(d).attr('class','alert alert-danger');
-                $(d).attr('role','alert');
-                $("#result").append(d);
-            }
-        });
-    });
-}
-function newPost(){
-  $("#saveButton").click(function submitForm(){
-        var dateStr = document.getElementById("dateCreated").value
-        var title = document.getElementById("postTitle").innerText ||
-                document.getElementById("postTitle").textContent;
-        var content = document.getElementById("postContent").innerHTML;
-        var postType = document.getElementById("postType").value
-        var id = document.getElementById("id").value
-        var author = document.getElementById("author").value
-
-        jsRoutes.controllers.Application.submitBlog().ajax({
-            data: {
-                "id": id,
-                "dateCreated": dateStr,
-                "title": title,
-                "content": content,
-                "author": author,
-                "postType": postType
-            },
-            success: function(data){
-                var d = $('<div>')
-               $(d).text("Saved");
-                $(d).attr('class','alert alert-success');
-                $(d).attr('role','alert');
-                $("#result").append(d);
-            },
-            error: function(data){
-                var d = $('<div>')
-                $(d).text("Save Failed");
-                $(d).attr('class','alert alert-danger');
-                $(d).attr('role','alert');
-                $("#result").append(d);
-            }
-        });
-    });
-}
-
-
-$(function(){
+/*$(function(){
     $(document).contextMenu({
         selector: "[id*='postPara']",
         callback: function(key, options) {
@@ -285,27 +257,57 @@ $(function(){
             "Float Left": {name: "Float Left"},
             "Float Right": {name: "Float Right"},
             "sep1": "---------",
-            "quit": {name: "Quit", icon: "quit"}
+            "Quit": {name: "Quit", icon: "quit"}
         }
     });
 });
-
+*/
 $(function(){
     var id = document.getElementById("id").value
     if(id != -1){
         $("#saveButton").attr('value',"Update")
         jsRoutes.controllers.JsonApi.getPostById(id).ajax({
             success: function (data){
-               $("#postContent").html(data.content)
+               $("#editor").html(data.content)
                $("#postTitle").text = data.title
                $("#author").attr('value', data.author)
                $("#dateCreated").attr('value', data.dateCreated)
                $("#postType").val(data.postType)
             }
         })
-        updatePost();
     }
-    else{
-        newPost();
-    }
+    $("#saveButton").click(function(){ save() });
 });
+
+function doCodeFormat()
+{
+    var coding = 0;
+    return function(){
+        var listId = window.getSelection().focusNode;
+        alert(listId.parentNode.id)
+        if(coding == 0){
+            if(listId.parentNode.id == "editor"){
+
+                coding = 1
+
+                $(listId).wrap('<pre><code class="java"></code></pre>')
+
+                $('pre code').each(function(i, block) {
+                    hljs.highlightBlock(block);
+                });
+                window.getSelection().focusNode = listId;
+            }
+        }else{
+             if(listId.parentNode.parentNode.parentNode.id == "editor"){
+                coding = 0
+
+                $(listId).unwrap().unwrap();
+                window.getSelection().focusNode = listId;
+             }
+        }
+    }
+}
+
+var code = doCodeFormat()
+
+$('#editor').wysiwyg();
