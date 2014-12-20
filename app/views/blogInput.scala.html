@@ -4,11 +4,62 @@
 <script type="text/javascript" src='@routes.Application.javascriptRoutes()'></script>
 <script src="@routes.Assets.at("javascripts/jquery.hotkeys.js")" type="text/javascript"></script>
 <script src="@routes.Assets.at("javascripts/bootstrap-wysiwyg.js")" type="text/javascript"></script>
-
-<script src="@routes.Assets.at("javascripts/highlight.js")" type="text/javascript"></script>
 <script src="@routes.Assets.at("javascripts/dobcms.js")" type="text/javascript"></script>
+
 }
 
+@toolbar = {
+<div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
+    <div class="btn-group">
+        <a class="btn" data-edit="undo" title="Undo (Ctrl/Cmd+Z)"><span class="glyphicon glyphicon-backward"></span ></a>
+        <a class="btn" data-edit="redo" title="Redo (Ctrl/Cmd+Y)"><span class="glyphicon glyphicon-forward"></span ></a>
+    </div>
+    <div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" title="Font Size"><span class="glyphicon glyphicon-text-height"></span >&nbsp;<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a data-edit="fontSize 5"><font size="5">Large</font></a></li>
+            <li><a data-edit="fontSize 3"><font size="3">Normal</font></a></li>
+            <li><a data-edit="fontSize 1"><font size="1">Small</font></a></li>
+        </ul>
+    </div>
+    <div class="btn-group">
+        <a class="btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><span class="glyphicon glyphicon-bold"></span></a>
+        <a class="btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><span class="glyphicon glyphicon-italic"></span ></a>
+        <!-- Cant find a glyph for these so taking he out
+        <a class="btn" data-edit="strikethrough" title="Strikethrough"><span class="glyphicon glyphicon-bold"></span ></a>
+        <a class="btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><span class="glyphicon glyphicon-bold"></span ></a>
+        -->
+    </div>
+    <div class="btn-group">
+        <a class="btn" data-edit="insertunorderedlist" title="Bullet list"><span class="glyphicon glyphicon-list"></span ></a>
+        <a class="btn" data-edit="insertorderedlist" title="Number list"><span class="icon-list-ol"></span ></a>
+        <a class="btn" data-edit="outdent" title="Reduce indent (Shift+Tab)"><span class="glyphicon glyphicon-indent-left"></span ></a>
+        <a class="btn" data-edit="indent" title="Indent (Tab)"><span class="glyphicon glyphicon-indent-right"></span ></a>
+    </div>
+    <div class="btn-group">
+        <a data-edit="justifyleft" class="btn" aria-label="Left Align">
+            <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
+        </a>
+        <a class="btn" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><span class="glyphicon glyphicon-align-center"></span ></a>
+        <a class="btn" data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><span class="glyphicon glyphicon-align-right"></span ></a>
+        <a class="btn" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><span class="glyphicon glyphicon-align-justify"></span ></a>
+    </div>
+    <div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown" title="Hyperlink"><span class="glyphicon glyphicon-hand-up"></span ></a>
+        <div class="dropdown-menu input-append">
+            <input class="span2" placeholder="URL" type="text" data-edit="createLink"/>
+            <button class="btn" type="button">Add</button>
+        </div>
+        <a class="btn" data-edit="unlink" title="Remove Hyperlink"><span class="glyphicon glyphicon-remove"></span ></a>
+    </div>
+
+    <div class="btn-group">
+        <a class="btn" title="Insert picture (or just drag & drop)" id="pictureBtn"><span class="glyphicon glyphicon-picture"></span ></a>
+    </div>
+
+</div>
+
+}
 @content = {
 
 <div class="row" >
@@ -45,57 +96,8 @@
 
           <!-- Start Toolbar
           -->
-        <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
-              <div class="btn-group">
-                  <a class="btn" data-edit="undo" title="Undo (Ctrl/Cmd+Z)"><span class="glyphicon glyphicon-backward"></span ></a>
-                  <a class="btn" data-edit="redo" title="Redo (Ctrl/Cmd+Y)"><span class="glyphicon glyphicon-forward"></span ></a>
-              </div>
-          <div class="btn-group">
-              <a class="btn dropdown-toggle" data-toggle="dropdown" title="Font Size"><span class="glyphicon glyphicon-text-height"></span >&nbsp;<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                  <li><a data-edit="fontSize 5"><font size="5">Large</font></a></li>
-                  <li><a data-edit="fontSize 3"><font size="3">Normal</font></a></li>
-                  <li><a data-edit="fontSize 1"><font size="1">Small</font></a></li>
-              </ul>
-          </div>
-          <div class="btn-group">
-              <a class="btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><span class="glyphicon glyphicon-bold"></span></a>
-              <a class="btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><span class="glyphicon glyphicon-italic"></span ></a>
-              <!-- Cant find a glyph for these so taking he out
-              <a class="btn" data-edit="strikethrough" title="Strikethrough"><span class="glyphicon glyphicon-bold"></span ></a>
-              <a class="btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><span class="glyphicon glyphicon-bold"></span ></a>
-              -->
-          </div>
-          <div class="btn-group">
-              <a class="btn" data-edit="insertunorderedlist" title="Bullet list"><span class="glyphicon glyphicon-list"></span ></a>
-              <a class="btn" data-edit="insertorderedlist" title="Number list"><span class="icon-list-ol"></span ></a>
-              <a class="btn" data-edit="outdent" title="Reduce indent (Shift+Tab)"><span class="glyphicon glyphicon-indent-left"></span ></a>
-              <a class="btn" data-edit="indent" title="Indent (Tab)"><span class="glyphicon glyphicon-indent-right"></span ></a>
-          </div>
-          <div class="btn-group">
-              <a data-edit="justifyleft" class="btn" aria-label="Left Align">
-                  <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
-              </a>
-              <a class="btn" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><span class="glyphicon glyphicon-align-center"></span ></a>
-              <a class="btn" data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><span class="glyphicon glyphicon-align-right"></span ></a>
-              <a class="btn" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><span class="glyphicon glyphicon-align-justify"></span ></a>
-          </div>
-          <div class="btn-group">
-              <a class="btn" onclick="code()" title="Center (Ctrl/Cmd+E)"><span class="glyphicon glyphicon-align-center"></span ></a>
-              <a class="btn dropdown-toggle" data-toggle="dropdown" title="Hyperlink"><span class="glyphicon glyphicon-hand-up"></span ></a>
-              <div class="dropdown-menu input-append">
-                  <input class="span2" placeholder="URL" type="text" data-edit="createLink"/>
-                  <button class="btn" type="button">Add</button>
-              </div>
-              <a class="btn" data-edit="unlink" title="Remove Hyperlink"><span class="glyphicon glyphicon-remove"></span ></a>
-          </div>
-
-          <div class="btn-group">
-              <a class="btn" title="Insert picture (or just drag & drop)" id="pictureBtn"><span class="glyphicon glyphicon-picture"></span ></a>
-          </div>
-
-      </div>
-          <!-- End Tool bar
+          @toolbar
+        <!-- End Tool bar
           -->
           <div id="editor" >
               Start Typing you post content here
@@ -123,6 +125,7 @@
     </div><!-- /.dob-main -->
 
 </div><!-- /.row -->
+
 
 
 }

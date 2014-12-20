@@ -48,7 +48,7 @@ object Application extends Controller {
   def submitBlogUpdate = DBAction { implicit response =>
     val item = Blog.blogForm.bindFromRequest().get
     Blog.update(item)
-    Ok(views.html.index(""))
+    Ok(""+item.id)
   }
 
   def upload = Action(parse.temporaryFile) { request =>

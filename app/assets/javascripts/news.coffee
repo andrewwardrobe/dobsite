@@ -1,14 +1,14 @@
 doPager = (nxt) ->
     if nxt < 0
         nxt = 0
-    $('#Prev').attr 'onclick','doNewsItems(' +nxt+',5)'
+    $('#Prev').attr 'onclick','getPosts(' +nxt+',5,window.dataUrl)'
 
 
-@doNews = (start, num) ->
-	  $.get '/json/news/' + start + '/'+ num, (data) ->
+@doPosts = (start, num) ->
+	  $.get window.dataUrl + '/'+ start + '/'+ num, (data) ->
         $.each data, (index, news) ->
             itm = $("<div>")
-            $("#news").append itm
+            $("#posts").append itm
             itm.attr 'id', 'newsId'+ news.id
             itm.attr 'class', 'dob-post row'
             itm.append $("<h2>", {class: 'dob-post-title'}).text news.title
@@ -27,20 +27,18 @@ doPager = (nxt) ->
             next = news.id - 1
             doPager(next);
 
-@doNewsWithClear = (start,end) ->
-    $('#news').html ''
-    doNews(start,end)
 
 
-@doNewsItems = (start,num) ->
-    if window.loadingNews == 0
-        $('#Prev').attr 'class','btn btn-default'
+
+@getPosts = (start,num,url) ->
+    if window.loadingNews == 0 || window.loadingNews == undefined
+        $('#R').attr 'class','btn btn-default'
         window.loadingNews = 1
+        window.dataUrl = url
         $('#Prev').text 'Loading ...'
-        doNews(start,num)
+        doPosts(start,num)
         window.loadingNews = 0
         $('#Prev').text 'More'
         $('#Prev').attr 'class','btn btn-primary'
 
-window.loadingNews = 0
-doNewsItems(-1,5)
+

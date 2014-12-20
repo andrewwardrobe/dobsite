@@ -1,6 +1,10 @@
 @(message: String)
 @scripts = {
     <script src='@routes.Assets.at("javascripts/news.js")'></script>
+<script type="text/javascript">
+
+    getPosts(-1,5,'/json/news')
+</script>
 }
 
 @content = {
@@ -8,10 +12,10 @@
    <div class="row" >
 
       <div  class="col-md-9  col-sm-offset-1 dob-main">
-       <div id="news" class="centered">
+       <div id="posts" class="centered">
        </div>
 
-          <button id="Prev" class="btn btn-primary" style="width:100%">More</a></li>
+          <button id="pager" class="btn btn-primary" style="width:100%">More</a></li>
 
 
       </div><!-- /.dob-main -->
