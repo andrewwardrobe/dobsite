@@ -1,0 +1,19 @@
+@(form: Form[UserAccount])(implicit session : Session)
+@scripts = {}
+
+@content = {
+
+    @helper.form(action = routes.Auth.register) {
+
+@helper.inputText(field = form("name"),args = 'class -> "form-control dob-control")
+@helper.inputText(field = form("email"),args = 'class -> "form-control dob-control")
+@helper.inputPassword(field = form("password"),args = 'class -> "form-control dob-control")
+
+<input type="hidden" id="id" name="id" value="-1"/>
+<input type="hidden" id="role" name="id" value="NormalUser"/>
+
+<input type="submit" value="signup" class="btn btn-primary" />
+    }
+}
+
+@main("Da Oostin Boyeez")(content)( scripts)

@@ -27,15 +27,15 @@ object Application extends Controller {
 
   implicit val personFormat =  Json.format[Person]
 
-  def index = Action {
+  def index = Action { implicit request =>
     Ok(views.html.index(""))
   }
 
-  def blogInput = Action {
+  def blogInput = Action {  implicit request =>
     Ok(views.html.blogInput("",Blog.blogForm,-1))
   }
 
-  def blogUpdate(id: Int) = Action {
+  def blogUpdate(id: Int) = Action {  implicit request =>
     Ok(views.html.blogInput("",Blog.blogForm,id))
   }
 
@@ -56,8 +56,8 @@ object Application extends Controller {
     val baseDir = "public/images/uploaded"
 
     val is = new BufferedInputStream(new FileInputStream(request.body.file))
-    val mimetype = URLConnection.guessContentTypeFromStream(is);
-    is.close();
+    val mimetype = URLConnection.guessContentTypeFromStream(is)
+    is.close()
 
     val dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS")
     val df = dateFormat.format(Calendar.getInstance().getTime())
@@ -68,19 +68,20 @@ object Application extends Controller {
     Ok(filename.replace("public","assets"))
   }
 
-  def news = Action {
+  def news = Action {  implicit request =>
     Ok(views.html.news(""))
   }
 
-  def hansUndJorg = Action {
+  def hansUndJorg = Action {  implicit request =>
     Ok(views.html.huj(""))
   }
 
-  def discography = Action {
+  def discography = Action { implicit request =>
     Ok(views.html.discography(""))
   }
 
-  def biography = Action { Ok(views.html.biography(""))}
+  def biography = Action {  implicit request =>
+    Ok(views.html.biography(""))}
 
   def biographyDetail(id: Int) = DBAction { implicit resp =>
     val bio = Biography.getById(id)

@@ -1,4 +1,4 @@
-@(message: String)
+@(message: String)(implicit session : Session)
 @scripts = {
     <script src='@routes.Assets.at("javascripts/news.js")'></script>
 <script type="text/javascript">
@@ -24,4 +24,4 @@
 
 }
 
-@main("Da Oostin Boyeez")(content)( scripts)
+@main("news")(content)( scripts)

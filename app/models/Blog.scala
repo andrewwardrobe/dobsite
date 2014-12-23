@@ -84,6 +84,7 @@ object Blog{
 
   def update(post :Blog)(implicit s: Session) = { blog.insertOrUpdate(post) }
 
+
   val blogForm: Form[Blog] = Form {
     mapping (
       "id" -> number,

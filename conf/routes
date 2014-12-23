@@ -4,6 +4,11 @@
 
 # Home page
 GET     /                           controllers.Application.index
+GET     /signout                     controllers.Auth.signout
+GET     /signup                     controllers.Auth.signup
+POST     /signup                     controllers.Auth.register
+GET     /login                           controllers.Auth.login
+POST    /login                           controllers.Auth.authenticate
 GET     /news                           controllers.Application.news
 GET     /blog                           controllers.Application.blogInput
 GET     /blog/:id                           controllers.Application.blogUpdate(id: Int)
@@ -36,3 +41,5 @@ GET     /json/news/:id/:max           controllers.JsonApi.getNewsByRange(id: Int
 GET     /webjars/*file                    controllers.WebJarAssets.at(file)
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+

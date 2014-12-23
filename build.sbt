@@ -28,7 +28,10 @@ libraryDependencies ++= Seq(
   "org.seleniumhq.selenium" % "selenium-java" % "2.44.0" % "test",
   "org.scalatest" % "scalatest_2.11" % "2.2.1" % "test",
   "org.scalatestplus" %% "play" % "1.2.0" % "test",
-  "org.jsoup" % "jsoup" % "1.7.2"
+  "org.jsoup" % "jsoup" % "1.7.2",
+  "jp.t2v" %% "play2-auth"      % "0.13.0",
+  "jp.t2v" %% "play2-auth-test" % "0.13.0" % "test",
+  "org.mindrot" % "jbcrypt" % "0.3m"
 )
 
 unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")

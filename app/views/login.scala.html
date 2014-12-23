@@ -1,0 +1,22 @@
+@(form: Form[Option[models.UserAccount]])(implicit session : Session)
+@scripts = {}
+
+@content = {
+
+<ul>
+    @for(error <- form.globalErrors){
+        <li>@error.message</li>
+    }
+</ul>
+@helper.form(action = routes.Auth.authenticate) {
+
+@helper.inputText(field = form("email"),args = 'class -> "form-control dob-control")
+
+@helper.inputPassword(field = form("password"),args = 'class -> "form-control dob-control")
+
+<input type="submit" value="submit" id="submit" class="btn btn-primary" />
+}
+
+}
+
+@main("Da Oostin Boyeez")(content)( scripts)
