@@ -34,8 +34,11 @@ trait AuthConfigImpl extends AuthConfig {
     Future.successful(UserAccount.findById(id))
   } }
 
-  def loginSucceeded(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] =
+  def loginSucceeded(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] = {
+    val uri = request.session.get("access_uri").getOrElse(routes.Application.index())
     Future.successful(Redirect(routes.Application.index))
+
+  }
 
   def logoutSucceeded(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] =
     Future.successful(Redirect(routes.Application.index))

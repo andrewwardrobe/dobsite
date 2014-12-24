@@ -31,28 +31,9 @@ object Application extends Controller {
     Ok(views.html.index(""))
   }
 
-  def blogInput = Action {  implicit request =>
-    Ok(views.html.blogInput("",Blog.blogForm,-1))
-  }
-
-  def blogUpdate(id: Int) = Action {  implicit request =>
-    Ok(views.html.blogInput("",Blog.blogForm,id))
-  }
-
-  def submitBlog = DBAction { implicit response =>
-    val item = Blog.blogForm.bindFromRequest().get
-    val id = Blog.insert(item)
-    Ok(""+id)
-  }
-
-  def submitBlogUpdate = DBAction { implicit response =>
-    val item = Blog.blogForm.bindFromRequest().get
-    Blog.update(item)
-    Ok(""+item.id)
-  }
 
   def upload = Action(parse.temporaryFile) { request =>
-    request.body.moveTo(new File("/tmp/dob.jpg"))
+
     val baseDir = "public/images/uploaded"
 
     val is = new BufferedInputStream(new FileInputStream(request.body.file))
@@ -101,9 +82,9 @@ object Application extends Controller {
     implicit request =>
 
       Ok(Routes.javascriptRouter("jsRoutes")(
-          routes.javascript.Application.submitBlog,
+          routes.javascript.AuthApplication.submitBlog,
           routes.javascript.JsonApi.getPostById,
-        routes.javascript.Application.submitBlogUpdate
+        routes.javascript.AuthApplication.submitBlogUpdate
         )
       ).as("text/javascript")
   }

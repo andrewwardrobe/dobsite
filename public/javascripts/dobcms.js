@@ -83,11 +83,11 @@ $("#saveButton").click(function(){
     console.log(json)
     if(id == -1){
         console.log("Saving");
-        jsRoutes.controllers.Application.submitBlog().ajax(json);
+        jsRoutes.controllers.AuthApplication.submitBlog().ajax(json);
 
     }else{
         console.log("Updating")
-        jsRoutes.controllers.Application.submitBlogUpdate().ajax(json);
+        jsRoutes.controllers.AuthApplication.submitBlogUpdate().ajax(json);
     }
 
 

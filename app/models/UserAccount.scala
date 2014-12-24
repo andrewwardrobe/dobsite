@@ -54,6 +54,7 @@ object UserAccount {
 
   def authenticate(email: String, password: String)(implicit s: Session): Option[UserAccount] = {
     findByEmail(email).filter { account => BCrypt.checkpw(password, account.password) }
+    //Some(new UserAccount(1,"Test User","None","MC Donalds",UserRole.valueOf("NormalUser")))
   }
 
   def create(userAccount: UserAccount)(implicit s: Session) =  {

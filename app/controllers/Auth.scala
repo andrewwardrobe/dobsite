@@ -55,7 +55,9 @@ object Auth extends Controller with LoginLogout with AuthConfigImpl {
     val submission = loginForm.bindFromRequest()
     submission.fold(
       formWithErrors => Future.successful(BadRequest(views.html.login(formWithErrors))),
-      user => gotoLoginSucceeded(user.get.id)
+      user =>{
+        gotoLoginSucceeded(user.get.id)
+      }
     )
   }
 }

@@ -6,14 +6,15 @@
 GET     /                           controllers.Application.index
 GET     /signout                     controllers.Auth.signout
 GET     /signup                     controllers.Auth.signup
+GET     /leek                     controllers.AuthApplication.leek
 POST     /signup                     controllers.Auth.register
 GET     /login                           controllers.Auth.login
 POST    /login                           controllers.Auth.authenticate
 GET     /news                           controllers.Application.news
-GET     /blog                           controllers.Application.blogInput
-GET     /blog/:id                           controllers.Application.blogUpdate(id: Int)
-POST     /blog                           controllers.Application.submitBlog
-PUT     /blog                           controllers.Application.submitBlogUpdate
+GET     /blog                           controllers.AuthApplication.blogInput
+GET     /blog/:id                           controllers.AuthApplication.blogUpdate(id: Int)
+POST     /blog                           controllers.AuthApplication.submitBlog
+PUT     /blog                           controllers.AuthApplication.submitBlogUpdate
 POST    /upload          controllers.Application.upload()
 GET     /discography                controllers.Application.discography
 GET     /biography                controllers.Application.biography
