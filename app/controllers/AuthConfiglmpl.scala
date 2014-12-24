@@ -35,8 +35,8 @@ trait AuthConfigImpl extends AuthConfig {
   } }
 
   def loginSucceeded(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] = {
-    val uri = request.session.get("access_uri").getOrElse(routes.Application.index())
-    Future.successful(Redirect(routes.Application.index))
+    val uri = request.session.get("access_uri").getOrElse(routes.Application.index()).toString()
+    Future.successful(Redirect(uri).withSession(request.session - "access_uri"))
 
   }
 
@@ -44,12 +44,12 @@ trait AuthConfigImpl extends AuthConfig {
     Future.successful(Redirect(routes.Application.index))
 
   def authenticationFailed(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] =
-    Future.successful(Redirect(routes.Auth.login))
+    Future.successful(Redirect(routes.Auth.login).withSession("access_uri" -> request.uri))
 
 
-  def authorizationFailed(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] =
+  def authorizationFailed(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] = {
     Future.successful(Forbidden("They are no one"))
-
+  }
 
   def authorize(user: User, authority: Authority)(implicit ctx: ExecutionContext): Future[Boolean] = Future.successful {
     (user.role, authority) match {
