@@ -1,9 +1,14 @@
-@(message: String)(implicit session : Session)
+@(user: Option[UserAccount])(implicit session : Session)
+
 @scripts = {}
 
 @content = {
 
-<h1>Coming Soon</h1>
+@user match {
+    case None => { <h1>Coming Soon</h1> }
+    case _ => { <h1>Leeek</h1> }
+}
+
 
 }
 

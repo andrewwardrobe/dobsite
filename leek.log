@@ -7,11 +7,15 @@ Java HotSpot(TM) Server VM warning: ignoring option MaxPermSize=384; support was
 
 ##teamcity[testStarted name='Display a News Item' locationHint='scalatest://LineInFile:NewsSpec:NewsSpec.scala:35TestName:News Page must Display a News Item' captureStandardOutput='true']
 
-##teamcity[testFinished name='Display a News Item' duration='957']
+##teamcity[testIgnored name='Display a News Item' message='Test Canceled']
+
+##teamcity[testFinished name='Display a News Item' duration='0']
 
 ##teamcity[testStarted name='Only Display News Posts' locationHint='scalatest://LineInFile:NewsSpec:NewsSpec.scala:43TestName:News Page must Only Display News Posts' captureStandardOutput='true']
 
-##teamcity[testFinished name='Only Display News Posts' duration='283']
+##teamcity[testIgnored name='Only Display News Posts' message='Test Canceled']
+
+##teamcity[testFinished name='Only Display News Posts' duration='0']
 
 ##teamcity[testSuiteFinished name='News Page']
 

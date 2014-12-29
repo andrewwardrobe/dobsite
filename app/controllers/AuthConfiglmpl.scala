@@ -36,15 +36,17 @@ trait AuthConfigImpl extends AuthConfig {
 
   def loginSucceeded(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] = {
     val uri = request.session.get("access_uri").getOrElse(routes.Application.index()).toString()
-    Future.successful(Redirect(uri).withSession(request.session - "access_uri"))
-
+    database.withSession { implicit s =>
+      val userName = request.session //UserAccount.getUserName(request.body.data(0))
+      Future.successful(Redirect(uri).withSession(request.session - "access_uri"))
+    }
   }
 
   def logoutSucceeded(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] =
     Future.successful(Redirect(routes.Application.index))
 
   def authenticationFailed(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] =
-    Future.successful(Redirect(routes.Auth.login).withSession("access_uri" -> request.uri))
+    Future.successful(Redirect(routes.LoginLogout.login).withSession("access_uri" -> request.uri))
 
 
   def authorizationFailed(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] = {

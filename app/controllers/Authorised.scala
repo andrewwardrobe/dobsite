@@ -18,9 +18,13 @@ import scala.slick.jdbc.JdbcBackend._
 /**
  * Created by andrew on 23/12/14.
  */
-object AuthApplication extends Controller with AuthElement with AuthConfigImpl {
-  def leek = StackAction(AuthorityKey -> NormalUser) { implicit request =>
-    Ok(views.html.index(""))
+object Authorised extends Controller with AuthElement with AuthConfigImpl {
+
+
+  def index = StackAction(AuthorityKey -> NormalUser) { implicit request =>
+    val user = loggedIn
+
+    Ok(views.html.index(Some(user)))
   }
 
   def blogInput = StackAction(AuthorityKey -> NormalUser){  implicit request =>

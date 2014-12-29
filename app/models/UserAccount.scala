@@ -64,6 +64,14 @@ object UserAccount {
     accounts.insert(insertAcc)
   }
 
+  def getUserName(email: String)(implicit s: Session) = {
+    val acc = accounts.filter(_.email === email).list
+    acc match {
+      case Nil => None
+      case _ => Some(acc.head.name)
+    }
+  }
+
   val userRoleMap = new UserRoleMapping()
 
   val signUpForm: Form[UserAccount] = Form {

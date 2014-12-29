@@ -8,7 +8,7 @@
         <li>@error.message</li>
     }
 </ul>
-@helper.form(action = routes.Auth.authenticate) {
+@helper.form(action = routes.LoginLogout.authenticate) {
 
 @helper.inputText(field = form("email"),args = 'class -> "form-control dob-control")
 

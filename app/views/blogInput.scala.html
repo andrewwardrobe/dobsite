@@ -67,8 +67,8 @@
     <div  class="col-md-12  col-sm-offset-1 dob-main">
 
 
-        @helper.form(action = routes.AuthApplication.submitBlog, 'id -> "blogForm" ){
-        <input type="hidden" name="id" id="id" value="@postId" />
+        @helper.form(action = routes.Authorised.submitBlog, 'id -> "blogForm" ){
+        <input type="hidden" name="postId" id="postId" value="@postId" />
         <div class="col-md-7">
         <input type="hidden" name="title" id="title" />
 

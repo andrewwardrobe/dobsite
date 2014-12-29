@@ -67,9 +67,9 @@
                     <ul class="nav navbar-nav navbar-right">
                         @session.get("username") match {
                             case Some(username) => {
-                             <li><a href="@routes.Auth.signout" id="signin">@username</a></li>
+                             <li><a href="@routes.LoginLogout.signout" id="signin">@username</a></li>
                             }
-                            case None => {<li><a href="@routes.Auth.login" id="signin">Sign in</a></li>}
+                            case None => {<li><a href="@routes.LoginLogout.login" id="signin">Sign in</a></li>}
                         }
                     </ul>
                 </div><!--/.nav-collapse -->

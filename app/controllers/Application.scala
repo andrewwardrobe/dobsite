@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 
 import controllers.routes
+import jp.t2v.lab.play2.auth.{OptionalAuthElement, AuthElement}
 import models._
 import play.api._
 import play.api.data.Form
@@ -21,14 +22,16 @@ import play.api.libs.json.Json._
 
 
 
-object Application extends Controller {
+object Application extends Controller  with OptionalAuthElement with AuthConfigImpl{
 
 
 
   implicit val personFormat =  Json.format[Person]
 
-  def index = Action { implicit request =>
-    Ok(views.html.index(""))
+  def index = StackAction { implicit request =>
+    val maybeUser: Option[User] = loggedIn
+
+    Ok(views.html.index(maybeUser))
   }
 
 
@@ -82,9 +85,9 @@ object Application extends Controller {
     implicit request =>
 
       Ok(Routes.javascriptRouter("jsRoutes")(
-          routes.javascript.AuthApplication.submitBlog,
+          routes.javascript.Authorised.submitBlog,
           routes.javascript.JsonApi.getPostById,
-        routes.javascript.AuthApplication.submitBlogUpdate
+        routes.javascript.Authorised.submitBlogUpdate
         )
       ).as("text/javascript")
   }

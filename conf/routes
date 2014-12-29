@@ -4,17 +4,17 @@
 
 # Home page
 GET     /                           controllers.Application.index
-GET     /signout                     controllers.Auth.signout
-GET     /signup                     controllers.Auth.signup
-GET     /leek                     controllers.AuthApplication.leek
-POST     /signup                     controllers.Auth.register
-GET     /login                           controllers.Auth.login
-POST    /login                           controllers.Auth.authenticate
+GET     /signout                     controllers.LoginLogout.signout
+GET     /signup                     controllers.LoginLogout.signup
+GET     /leek                       controllers.Authorised.index
+POST     /signup                     controllers.LoginLogout.register
+GET     /login                           controllers.LoginLogout.login
+POST    /login                           controllers.LoginLogout.authenticate
 GET     /news                           controllers.Application.news
-GET     /blog                           controllers.AuthApplication.blogInput
-GET     /blog/:id                           controllers.AuthApplication.blogUpdate(id: Int)
-POST     /blog                           controllers.AuthApplication.submitBlog
-PUT     /blog                           controllers.AuthApplication.submitBlogUpdate
+GET     /blog                           controllers.Authorised.blogInput
+GET     /blog/:id                           controllers.Authorised.blogUpdate(id: Int)
+POST     /blog                           controllers.Authorised.submitBlog
+PUT     /blog                           controllers.Authorised.submitBlogUpdate
 POST    /upload          controllers.Application.upload()
 GET     /discography                controllers.Application.discography
 GET     /biography                controllers.Application.biography

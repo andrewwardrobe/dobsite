@@ -17,7 +17,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 /**
  * Created by andrew on 21/12/14.
  */
-object Auth extends Controller with LoginLogout with AuthConfigImpl {
+object LoginLogout extends Controller with LoginLogout with AuthConfigImpl {
 
   var loginForm = getForm
 
@@ -29,6 +29,7 @@ object Auth extends Controller with LoginLogout with AuthConfigImpl {
       }
     }
   }
+
 
   def login() = Action{  implicit request =>
     Ok(views.html.login(loginForm))
@@ -43,7 +44,7 @@ object Auth extends Controller with LoginLogout with AuthConfigImpl {
     database.withSession { implicit session =>
       UserAccount.create(newAccount)
     }
-    Redirect(routes.Application.index)
+    Redirect(routes.LoginLogout.login)
   }
 
 
