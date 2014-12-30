@@ -63,6 +63,12 @@
                                 <li><a href="#">Gaz Three</a></li>
                             </ul>
                         </li>
+                        @session.get("username") match {
+                        case Some(username) => {
+                            <li><a href="@routes.Authorised.blogInput" id="contentB">Add Content</a></li>
+                            }
+                        case None => {}
+                        }
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         @session.get("username") match {
