@@ -24,7 +24,7 @@ object UserAccount {
     )
 
     def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
-    def email = column[String]("EMAIL")
+    def email = column[String]("EMAIL",O.NotNull)
     def password = column[String]("PASSWORD")
     def name = column[String]("NAME")
     def role = column[UserRole]("ROLE")
@@ -83,5 +83,13 @@ object UserAccount {
       "role" -> userRoleMap
 
     )(UserAccount.apply)(UserAccount.unapply _)
+  }
+
+  def getUserNameCount(name:String)(implicit s: Session) =  {
+    accounts.filter(_.name === name).list.length
+  }
+
+  def getEmailCount(email:String)(implicit s: Session) =  {
+    accounts.filter(_.email === email).list.length
   }
 }

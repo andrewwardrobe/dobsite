@@ -4,12 +4,15 @@
 
 # Home page
 GET     /                           controllers.Application.index
-GET     /signout                     controllers.LoginLogout.signout
-GET     /signup                     controllers.LoginLogout.signup
+GET     /signout                     controllers.UserServices.signout
+GET     /signup                     controllers.UserServices.signup
+GET     /signedout                     controllers.UserServices.signedout
 GET     /leek                       controllers.Authorised.index
-POST     /signup                     controllers.LoginLogout.register
-GET     /login                           controllers.LoginLogout.login
-POST    /login                           controllers.LoginLogout.authenticate
+GET     /checkname/:name              controllers.UserServices.checkName(name :String)
+GET     /checkemail/:email              controllers.UserServices.checkEmail(email :String)
+POST     /signup                     controllers.UserServices.register
+GET     /login                           controllers.UserServices.login
+POST    /login                           controllers.UserServices.authenticate
 GET     /news                           controllers.Application.news
 GET     /blog                           controllers.Authorised.blogInput
 GET     /blog/:id                           controllers.Authorised.blogUpdate(id: Int)

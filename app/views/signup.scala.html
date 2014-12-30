@@ -1,19 +1,45 @@
 @(form: Form[UserAccount])(implicit session : Session)
-@scripts = {}
+@scripts = {
+<script type="text/javascript" src='@routes.Application.javascriptRoutes()'></script>
+<script src="@routes.Assets.at("javascripts/signup.js")" type="text/javascript"></script>
+}
 
 @content = {
+<div class="col-sm-4 col-sm-offset-4">
+    <div class="img-rounded loginForm">
+        <div align="center">Sign Up</div>
+        <ul id="errors">
+            @for(error <- form.globalErrors){
+            <li>@error.message</li>
+            }
+        </ul>
 
-    @helper.form(action = routes.LoginLogout.register) {
 
-@helper.inputText(field = form("name"),args = 'class -> "form-control dob-control")
-@helper.inputText(field = form("email"),args = 'class -> "form-control dob-control")
-@helper.inputPassword(field = form("password"),args = 'class -> "form-control dob-control")
+        @helper.form(action = routes.UserServices.register, 'id -> "signupForm" ) {
 
-<input type="hidden" id="id" name="id" value="-1"/>
-<input type="hidden" id="role" name="role" value="NormalUser"/>
+        @helper.inputText(field = form("name"),args = 'class -> "form-control dob-control-white", 'id ->"name")
+        @helper.inputText(field = form("email"),args = 'class -> "form-control dob-control-white", 'id -> "email")
 
-<input type="submit" value="signup" class="btn btn-primary" />
-    }
+        @helper.input(form("password"),args = 'class -> "form-control dob-control-white", '_label -> "Password\nConfirm"){ (id, name, value, args) =>
+            <input type="password" name="@name" id="@id" value="" @toHtmlArgs(args)>
+            <input type="password" name="confirm" id="confirm" value="" @toHtmlArgs(args)>
+        }
+
+
+        <input type="hidden" id="id" name="id" value="-1"/>
+        <input type="hidden" id="role" name="role" value="NormalUser"/>
+
+        <input type="submit" value="signup" class="btn btn-primary" />
+        }
+    </div>
+</div>
+<div class="col-sm-2">
+     <div></div>
+    <div id="errors" class="dob_valid">Errors:</div>
+    <div id="nameErrs" class="dob_valid"></div>
+    <div id="emailErrs" class="dob_valid"></div>
+    <div id="passErrs" class="dob_valid"></div>
+</div>
 }
 
 @main("Da Oostin Boyeez")(content)( scripts)

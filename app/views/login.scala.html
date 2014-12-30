@@ -3,19 +3,29 @@
 
 @content = {
 
-<ul>
-    @for(error <- form.globalErrors){
-        <li>@error.message</li>
-    }
-</ul>
-@helper.form(action = routes.LoginLogout.authenticate) {
+<div class="col-sm-4 col-sm-offset-4">
+    <div class="img-rounded loginForm">
+            <div align="center"  >Login</div>
+        <ul>
+            @for(error <- form.globalErrors){
+                <li>@error.message</li>
+            }
+        </ul>
 
-@helper.inputText(field = form("email"),args = 'class -> "form-control dob-control")
 
-@helper.inputPassword(field = form("password"),args = 'class -> "form-control dob-control")
+        @helper.form(action = routes.UserServices.authenticate) {
 
-<input type="submit" value="submit" id="submit" class="btn btn-primary" />
-}
+        @helper.inputText(field = form("email"),args = 'class -> "form-control dob-control-white", '_label -> "Email")
+
+        @helper.inputPassword(field = form("password"),args = 'class -> "form-control dob-control-white", '_label -> "Password")
+
+       <div align="center">
+        <input type="submit" value="Sign In" id="submit" class="btn btn-success" />
+        <a class="btn btn-warning" href="@routes.UserServices.signup">Sign Up</a>
+       </div>
+        }
+    </div>
+</div>
 
 }
 

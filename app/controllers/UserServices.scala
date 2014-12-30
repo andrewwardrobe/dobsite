@@ -6,7 +6,7 @@ import play.api.data.Form
 import play.api.mvc.{Security, Action, Controller}
 import play.api.data.Form
 import play.api.data.Forms._
-import controllers.routes
+
 import scala.concurrent.{Future}
 import play.api.db.DB
 import play.api.db.slick.DBAction
@@ -17,7 +17,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 /**
  * Created by andrew on 21/12/14.
  */
-object LoginLogout extends Controller with LoginLogout with AuthConfigImpl {
+object UserServices extends Controller with LoginLogout with AuthConfigImpl {
 
   var loginForm = getForm
 
@@ -44,12 +44,15 @@ object LoginLogout extends Controller with LoginLogout with AuthConfigImpl {
     database.withSession { implicit session =>
       UserAccount.create(newAccount)
     }
-    Redirect(routes.LoginLogout.login)
+    Redirect(routes.UserServices.login)
   }
 
+def signedout = Action { implicit request =>
+  Ok(views.html.signout("")).removingFromSession("username")
+}
 
-  def signout = Action { implicit request =>
-    Ok(views.html.signout("")).removingFromSession("username")
+  def signout = Action.async { implicit request =>
+    gotoLogoutSucceeded
   }
 
   def authenticate = Action.async { implicit request =>
@@ -60,5 +63,19 @@ object LoginLogout extends Controller with LoginLogout with AuthConfigImpl {
         gotoLoginSucceeded(user.get.id)
       }
     )
+  }
+
+  def checkName(name: String) = Action{ implicit request =>
+    val count = database.withSession { implicit s =>
+      UserAccount.getUserNameCount(name)
+    }
+    Ok(""+count)
+  }
+
+  def checkEmail(email: String) = Action{ implicit request =>
+    val count = database.withSession { implicit s =>
+      UserAccount.getEmailCount(email)
+    }
+    Ok(""+count)
   }
 }

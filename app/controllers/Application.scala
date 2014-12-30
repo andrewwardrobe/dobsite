@@ -7,7 +7,7 @@ import java.nio.file.{Path, Files}
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
-import controllers.routes
+
 import jp.t2v.lab.play2.auth.{OptionalAuthElement, AuthElement}
 import models._
 import play.api._
@@ -87,7 +87,9 @@ object Application extends Controller  with OptionalAuthElement with AuthConfigI
       Ok(Routes.javascriptRouter("jsRoutes")(
           routes.javascript.Authorised.submitBlog,
           routes.javascript.JsonApi.getPostById,
-        routes.javascript.Authorised.submitBlogUpdate
+        routes.javascript.Authorised.submitBlogUpdate,
+        routes.javascript.UserServices.checkEmail,
+        routes.javascript.UserServices.checkName
         )
       ).as("text/javascript")
   }

@@ -21,6 +21,8 @@ import scala.slick.jdbc.JdbcBackend._
 object Authorised extends Controller with AuthElement with AuthConfigImpl {
 
 
+
+
   def index = StackAction(AuthorityKey -> NormalUser) { implicit request =>
     val user = loggedIn
 
@@ -35,15 +37,20 @@ object Authorised extends Controller with AuthElement with AuthConfigImpl {
     Ok(views.html.blogInput("",Blog.blogForm,id))
   }
 
-  def submitBlog = DBAction { implicit response =>
+  def submitBlog = StackAction(AuthorityKey -> NormalUser) { implicit response =>
+
     val item = Blog.blogForm.bindFromRequest().get
-    val id = Blog.insert(item)
+    val id = database.withSession { implicit s =>
+      Blog.insert(item)
+    }
     Ok(""+id)
   }
 
-  def submitBlogUpdate = DBAction { implicit response =>
+  def submitBlogUpdate = StackAction(AuthorityKey -> NormalUser) { implicit response =>
     val item = Blog.blogForm.bindFromRequest().get
-    Blog.update(item)
+    database.withSession { implicit s =>
+      Blog.update(item)
+    }
     Ok(""+item.id)
   }
 

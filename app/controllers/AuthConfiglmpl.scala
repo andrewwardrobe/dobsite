@@ -6,6 +6,7 @@ import models.{UserRole, UserAccount}
 import play.api.db.DB
 import play.api.db.slick.DBAction
 
+
 import scala.concurrent.{ExecutionContext, Future}
 import reflect.ClassTag
 import reflect._
@@ -36,17 +37,24 @@ trait AuthConfigImpl extends AuthConfig {
 
   def loginSucceeded(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] = {
     val uri = request.session.get("access_uri").getOrElse(routes.Application.index()).toString()
-    database.withSession { implicit s =>
-      val userName = request.session //UserAccount.getUserName(request.body.data(0))
-      Future.successful(Redirect(uri).withSession(request.session - "access_uri"))
+    val req = request match {
+      case r:Request[_] => r
     }
+    val email = req.body.asInstanceOf[AnyContentAsFormUrlEncoded].data("email")(0)
+    val user = database.withSession { implicit s =>
+      UserAccount.getUserName(email).get
+    }
+    Future.successful(Redirect(uri).withSession(request.session - "access_uri").withSession("username" -> user))
+
   }
 
+
+
   def logoutSucceeded(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] =
-    Future.successful(Redirect(routes.Application.index))
+    Future.successful(Redirect(routes.UserServices.signedout))
 
   def authenticationFailed(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] =
-    Future.successful(Redirect(routes.LoginLogout.login).withSession("access_uri" -> request.uri))
+    Future.successful(Redirect(routes.UserServices.login).withSession("access_uri" -> request.uri))
 
 
   def authorizationFailed(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] = {

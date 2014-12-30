@@ -10,9 +10,11 @@ class UserRole(role: String){
 object UserRole {
   case object Administrator extends UserRole("Administrator")
   case object NormalUser extends UserRole("NormalUser")
+  case object GuestUser extends UserRole("GuestUser")
   def valueOf(value: String): UserRole = value match {
     case "Administrator" => Administrator
     case "NormalUser" => NormalUser
+    case "GuestUser" => GuestUser
     case _ => throw new IllegalArgumentException()
   }
 }
@@ -38,7 +40,7 @@ class UserRoleMapping(val key: String = "") extends Mapping[UserRole]{
   override def bind(data: Map[String, String]): Either[Seq[FormError], UserRole] = {
     val userType = data.get("role")
     userType match {
-      case Some("NormalUser") => Right(UserRole.valueOf(userType.get))
+      case Some(x) => Right(UserRole.valueOf(userType.get))
       case None => Left(Seq(FormError(key,"Not Found")))
     }
 

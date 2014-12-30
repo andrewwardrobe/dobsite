@@ -57,6 +57,13 @@ user-select: none;
 cursor: pointer;
 }
 
+label {
+float: left;
+width: 4em;
+margin-right: 1em;
+font-weight: normal;
+}
+
 .code {
     font-family-serif:"Times New Roman", Times, serif;
     color:blue;
@@ -64,6 +71,42 @@ cursor: pointer;
 
 h1 {
   color: @font-size-h1;
+}
+
+.dob-control-bad{
+    background-color:@brand-danger ;
+    color:#000000;
+    border:none;
+    text-overflow:'';
+    text-indent:0.01px;
+    cursor:pointer;
+    height: 24px;
+    font-size: 12px;
+    width: 175px;
+}
+
+.dob-control-ok{
+    background-color:@brand-success ;
+    color:#000000;
+    border:none;
+    text-overflow:'';
+    text-indent:0.01px;
+    cursor:pointer;
+    height: 24px;
+    font-size: 12px;
+    width: 175px;
+}
+
+.dob_valid{
+    font-size:12px;
+}
+
+.dob_ok{
+    background-color:@brand-success ;
+}
+
+.dob_bad{
+    background-color:@brand-danger ;
 }
 
 .dob-control{
@@ -76,6 +119,26 @@ h1 {
     text-indent:0.01px;
     cursor:pointer;
 }
+
+.loginForm{
+background-color: #ffffff;
+color:#000000;
+padding:15px;
+box-shadow: 0 0 15px rgba(211, 211, 211, 1);
+}
+
+.dob-control-white{
+    background-color: #ffffff;
+    color:#000000;
+    border:none;
+    text-overflow:'';
+    text-indent:0.01px;
+    cursor:pointer;
+    height: 24px;
+    font-size: 12px;
+    width: 175px;
+}
+
 
 @font-face {
 	font-family: 'DobScript';

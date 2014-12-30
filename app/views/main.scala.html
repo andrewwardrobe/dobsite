@@ -67,9 +67,9 @@
                     <ul class="nav navbar-nav navbar-right">
                         @session.get("username") match {
                             case Some(username) => {
-                             <li><a href="@routes.LoginLogout.signout" id="signin">@username</a></li>
+                             <li><a href="@routes.UserServices.signout" id="signin">@username</a></li>
                             }
-                            case None => {<li><a href="@routes.LoginLogout.login" id="signin">Sign in</a></li>}
+                            case None => {<li><a href="@routes.UserServices.login" id="signin">Sign in</a></li>}
                         }
                     </ul>
                 </div><!--/.nav-collapse -->
@@ -86,7 +86,8 @@
     <script src="https://code.jquery.com/jquery.js"></script>
         <!-- Include all compiled plugins (below), or include individual files
               as needed -->
-    @scripts
     <script src="@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))" ></script>
+    @scripts
+
     </body>
 </html>
