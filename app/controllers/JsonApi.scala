@@ -36,6 +36,10 @@ object JsonApi extends Controller {
     Ok(toJson(newsList))
   }
 
+  def getContentByType(contentType: Int) = DBAction { implicit response =>
+    val newsList = blogToJson(Blog.getByType(contentType))
+    Ok(toJson(newsList))
+  }
   def getPostById(id: Int) = DBAction { implicit response =>
     Ok(toJson(Blog.getById(id).head.json))
   }
@@ -53,6 +57,16 @@ object JsonApi extends Controller {
     }else {
       val newsList = blogToJson(Blog.getXNewsItems(num))
       Ok(toJson(newsList))
+    }
+  }
+
+  def getContentByRange(typ:Int, start: Int, num: Int) = DBAction { implicit response =>
+    if(start != -1) {
+      val content = blogToJson(Blog.getXItemsFromId(typ,start, num))
+      Ok(toJson(content))
+    }else {
+      val content = blogToJson(Blog.getXItems(typ,num))
+      Ok(toJson(content))
     }
   }
 

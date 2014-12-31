@@ -64,6 +64,13 @@ object UserAccount {
     accounts.insert(insertAcc)
   }
 
+  def create(userAccount: UserAccount, userRole:String)(implicit s: Session) =  {
+    import userAccount._
+    val encPass = BCrypt.hashpw(password,BCrypt.gensalt())
+    val insertAcc = new UserAccount(id,email,encPass,name,UserRole.valueOf(userRole))
+    accounts.insert(insertAcc)
+  }
+
   def getUserName(email: String)(implicit s: Session) = {
     val acc = accounts.filter(_.email === email).list
     acc match {

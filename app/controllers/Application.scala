@@ -53,7 +53,7 @@ object Application extends Controller  with OptionalAuthElement with AuthConfigI
   }
 
   def news = Action {  implicit request =>
-    Ok(views.html.news(""))
+    Ok(views.html.contentList(routes.JsonApi.getContentByType(1).url))
   }
 
   def hansUndJorg = Action {  implicit request =>

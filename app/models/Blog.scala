@@ -53,7 +53,7 @@ object Blog{
 
   def get(implicit s: Session) = { blog.list }
   def getById(id: Int)(implicit s: Session) = { blog.filter(_.id === id).list }
-
+  def getByType(typ: Int)(implicit s: Session) = { blog.filter(_.postType === typ).list }
   def getXNewsItemsFromId(id: Int, max: Int)(implicit s: Session) = {
     getXItemsFromId(id,max,1)
   }

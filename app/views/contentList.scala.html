@@ -1,9 +1,8 @@
-@(message: String)(implicit session : Session)
+@(uri: String)(implicit session : Session)
 @scripts = {
     <script src='@routes.Assets.at("javascripts/news.js")'></script>
 <script type="text/javascript">
-
-    getPosts(-1,5,'/json/news')
+    getPosts(-1,5,'@uri')
 </script>
 }
 
