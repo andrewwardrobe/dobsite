@@ -73,8 +73,8 @@ h1 {
   color: @font-size-h1;
 }
 
-.dob-control-bad{
-    background-color:@brand-danger ;
+.dob-control-mix{
+
     color:#000000;
     border:none;
     text-overflow:'';
@@ -83,20 +83,41 @@ h1 {
     height: 24px;
     font-size: 12px;
     width: 175px;
+}
+
+.dob-control-bad{
+    background-color:@brand-danger ;
+    .dob-control-mix;
 }
 
 .dob-control-ok{
     background-color:@brand-success ;
-    color:#000000;
-    border:none;
-    text-overflow:'';
-    text-indent:0.01px;
-    cursor:pointer;
-    height: 24px;
-    font-size: 12px;
-    width: 175px;
+    .dob-control-mix;
 }
 
+.dob-pass-strong{
+    background-color:@brand-success ;
+    .dob-control-mix;
+}
+
+.dob-pass-good{
+    background-color:@brand-success ;
+    .dob-control-mix;
+}
+
+.dob-pass-ok{
+    background-color:@brand-info ;
+    .dob-control-mix;
+}
+
+.dob-pass-weak{
+    background-color:@brand-warning ;
+    .dob-control-mix;
+}
+.dob-pass-vweak{
+    background-color:@brand-danger ;
+    .dob-control-mix;
+}
 .dob_valid{
     font-size:12px;
 }
@@ -108,6 +129,9 @@ h1 {
 .dob_bad{
     background-color:@brand-danger ;
 }
+
+
+
 
 .dob-control{
     -moz-appearance:none;
