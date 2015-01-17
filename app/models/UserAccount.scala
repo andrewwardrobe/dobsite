@@ -3,6 +3,7 @@ package models
 import org.mindrot.jbcrypt.BCrypt
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.data.validation._
 import play.api.db.slick._
 import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
@@ -79,24 +80,12 @@ object UserAccount {
     }
   }
 
-  val userRoleMap = new UserRoleMapping()
-
-  val signUpForm: Form[UserAccount] = Form {
-    mapping (
-      "id" -> number,
-      "email" -> text,
-      "password" -> text,
-      "name" -> text,
-      "role" -> userRoleMap
-
-    )(UserAccount.apply)(UserAccount.unapply _)
-  }
 
   def getUserNameCount(name:String)(implicit s: Session) =  {
-    accounts.filter(_.name === name).list.length
+    accounts.filter(_.name.toLowerCase === name.toLowerCase).list.length
   }
 
   def getEmailCount(email:String)(implicit s: Session) =  {
-    accounts.filter(_.email === email).list.length
+    accounts.filter(_.email.toLowerCase === email.toLowerCase).list.length
   }
 }
