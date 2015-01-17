@@ -61,7 +61,10 @@ object UserAccount {
   def create(userAccount: UserAccount)(implicit s: Session) =  {
     import userAccount._
     val encPass = BCrypt.hashpw(password,BCrypt.gensalt())
-    val insertAcc = new UserAccount(id,email,encPass,name,UserRole.valueOf("NormalUser"))
+    val insertAcc = accounts.length.run match {
+      case 0 => new UserAccount(id, email, encPass, name, UserRole.valueOf("Administrator"))
+      case _ => new UserAccount(id, email, encPass, name, UserRole.valueOf("NormalUser"))
+    }
     accounts.insert(insertAcc)
   }
 

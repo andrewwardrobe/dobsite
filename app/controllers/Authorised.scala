@@ -5,7 +5,7 @@ import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
 import models.Blog
 
-import models.UserRole.NormalUser
+import models.UserRole.{Contributor, NormalUser}
 import play.api.mvc.Controller
 import play.api.db.DB
 import play.api.db.slick.DBAction
@@ -23,21 +23,21 @@ object Authorised extends Controller with AuthElement with AuthConfigImpl {
 
 
 
-  def index = StackAction(AuthorityKey -> NormalUser) { implicit request =>
+  def index = StackAction(AuthorityKey -> Contributor) { implicit request =>
     val user = loggedIn
 
     Ok(views.html.index(Some(user)))
   }
 
-  def blogInput = StackAction(AuthorityKey -> NormalUser){  implicit request =>
+  def blogInput = StackAction(AuthorityKey -> Contributor){  implicit request =>
     Ok(views.html.blogInput("",Blog.blogForm,-1))
   }
 
-  def blogUpdate(id: Int) = StackAction(AuthorityKey -> NormalUser) {  implicit request =>
+  def blogUpdate(id: Int) = StackAction(AuthorityKey -> Contributor) {  implicit request =>
     Ok(views.html.blogInput("",Blog.blogForm,id))
   }
 
-  def submitBlog = StackAction(AuthorityKey -> NormalUser) { implicit response =>
+  def submitBlog = StackAction(AuthorityKey -> Contributor) { implicit response =>
 
     val item = Blog.blogForm.bindFromRequest().get
     val id = database.withSession { implicit s =>
@@ -46,7 +46,7 @@ object Authorised extends Controller with AuthElement with AuthConfigImpl {
     Ok(""+id)
   }
 
-  def submitBlogUpdate = StackAction(AuthorityKey -> NormalUser) { implicit response =>
+  def submitBlogUpdate = StackAction(AuthorityKey -> Contributor) { implicit response =>
     val item = Blog.blogForm.bindFromRequest().get
     database.withSession { implicit s =>
       Blog.update(item)
