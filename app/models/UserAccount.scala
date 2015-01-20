@@ -68,6 +68,24 @@ object UserAccount {
     accounts.insert(insertAcc)
   }
 
+  def update(userAccount: UserAccount)(implicit s: Session) = {
+    accounts.update(userAccount)
+  }
+
+  def newPasswd(userAccount: UserAccount, passwd: String) = {
+    val encPass = BCrypt.hashpw(passwd,BCrypt.gensalt())
+    import userAccount._
+    val updateAcc = new UserAccount(id, email, encPass, name, role)
+    accounts.update(userAccount)
+  }
+
+  def changeRole(userAccount: UserAccount, roleType: String) = {
+    import userAccount._
+    val newRole = UserRole.valueOf(roleType)
+    val updateAcc = new UserAccount(id, email, password, name, newRole)
+    accounts.update(userAccount)
+  }
+
   def create(userAccount: UserAccount, userRole:String)(implicit s: Session) =  {
     import userAccount._
     val encPass = BCrypt.hashpw(password,BCrypt.gensalt())
