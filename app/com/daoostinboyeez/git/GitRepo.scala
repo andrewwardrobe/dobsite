@@ -19,21 +19,20 @@ object GitRepo {
   def getBranch = { repo.getFullBranch()}
 
   def newFile(path:String, fileData:String){
-    val newFile = new File(repo.getDirectory.getParent,path)
-    val writer = new FileWriter(newFile)
-    writer.append(fileData)
-    writer.close()
-    git.add().addFilepattern(path).call()
-    git.commit().setMessage("Added File $path").call()
+    doFile(path, fileData,"Added File $path")
   }
 
   def updateFile(path:String, fileData:String){
+    doFile(path, fileData,"Edited File $path")
+  }
+
+  def doFile(path:String, fileData:String, commitMsg: String){
     val newFile = new File(repo.getDirectory.getParent,path)
     val writer = new FileWriter(newFile)
     writer.append(fileData)
     writer.close()
     git.add().addFilepattern(path).call()
-    git.commit().setMessage("Edited File $path").call()
+    git.commit().setMessage(commitMsg).call()
   }
 
   def getFile(path:String) : String = {
