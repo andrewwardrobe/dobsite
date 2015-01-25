@@ -31,7 +31,8 @@ libraryDependencies ++= Seq(
   "org.jsoup" % "jsoup" % "1.7.2",
   "jp.t2v" %% "play2-auth"      % "0.13.0",
   "jp.t2v" %% "play2-auth-test" % "0.13.0" % "test",
-  "org.mindrot" % "jbcrypt" % "0.3m"
+  "org.mindrot" % "jbcrypt" % "0.3m",
+  "org.eclipse.jgit" % "org.eclipse.jgit" % "3.6.1.201501031845-r"
 )
 
 unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")

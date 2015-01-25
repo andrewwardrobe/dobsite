@@ -72,14 +72,14 @@ object UserAccount {
     accounts.update(userAccount)
   }
 
-  def newPasswd(userAccount: UserAccount, passwd: String) = {
+  def newPasswd(userAccount: UserAccount, passwd: String)(implicit s: Session) = {
     val encPass = BCrypt.hashpw(passwd,BCrypt.gensalt())
     import userAccount._
     val updateAcc = new UserAccount(id, email, encPass, name, role)
     accounts.update(userAccount)
   }
 
-  def changeRole(userAccount: UserAccount, roleType: String) = {
+  def changeRole(userAccount: UserAccount, roleType: String)(implicit s: Session) = {
     import userAccount._
     val newRole = UserRole.valueOf(roleType)
     val updateAcc = new UserAccount(id, email, password, name, newRole)

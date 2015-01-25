@@ -60,7 +60,8 @@ $("#saveButton").click(function(){
                   "title": title,
                   "content": content,
                   "author": author,
-                  "postType": postType
+                  "postType": postType,
+                  "filename": ""
            },
            success: function(data){
                var d = $('<div>');

@@ -1,6 +1,7 @@
 package models
 
 import java.util.Date
+import com.daoostinboyeez.git.GitRepo
 import org.jsoup._
 import org.jsoup.safety.Whitelist
 import play.api.data.Form
@@ -20,7 +21,7 @@ case class Blog(id: Int, title: String,postType: Int, dateCreated: Date, author:
     "postType" -> postType,
     "dateCreated" -> dateCreated,
     "author" -> author,
-   "content" -> JsString(Jsoup.clean(content,"http://localhost:9000/",Whitelist.basicWithImages()
+   "content" -> JsString(Jsoup.clean(getContent(),"http://localhost:9000/",Whitelist.basicWithImages()
                                                                       .preserveRelativeLinks(true)
                                                                       .addAttributes("img","class")
                                                                       .addAttributes("p","class")
@@ -28,7 +29,9 @@ case class Blog(id: Int, title: String,postType: Int, dateCreated: Date, author:
                                      ))
   )
 
-
+  def getContent() = {
+    GitRepo.getFile(content)
+  }
 }
 
 object Blog{
