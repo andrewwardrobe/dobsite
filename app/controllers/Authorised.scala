@@ -3,9 +3,11 @@ package controllers
 import controllers.Application._
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
-import models.Blog
+import models.{UserAccount, Blog}
 
-import models.UserRole.{Contributor, NormalUser}
+import models.UserRole.{Administrator, Contributor, NormalUser}
+import play.api.data.Form
+import play.api.data.Forms._
 import play.api.mvc.Controller
 import play.api.db.DB
 import play.api.db.slick.DBAction
@@ -13,6 +15,7 @@ import play.api.db.slick.DBAction
 import play.api.db.slick._
 import play.api.db.slick.Config.driver.simple._
 import scala.slick.jdbc.JdbcBackend._
+
 
 
 /**
@@ -36,6 +39,7 @@ object Authorised extends Controller with AuthElement with AuthConfigImpl {
   def blogUpdate(id: Int) = StackAction(AuthorityKey -> Contributor) {  implicit request =>
     Ok(views.html.blogInput("",Blog.blogForm,id))
   }
+
 
   def submitBlog = StackAction(AuthorityKey -> Contributor) { implicit response =>
 

@@ -7,14 +7,25 @@ import play.api.data.validation._
 import play.api.db.slick._
 import play.api.db.slick.Config.driver.simple._
 import play.api.Play.current
+import play.api.libs.json.{Json, JsValue}
 import scala.text._
+import scala.util.matching.Regex
 
 /**
  * Created by andrew on 23/12/14.
  */
-case class UserAccount(id: Int, email: String, password: String, name: String, role: UserRole)
+case class UserAccount(id: Int, email: String, password: String, name: String, role: UserRole){
+  val json: JsValue = Json.obj(
+    "id" -> id,
+    "email" -> email,
+    "name" -> name,
+    "role" -> role.name
+  )
+}
 
 object UserAccount {
+
+
 
   class UserAccountTable(tag: Tag) extends Table[UserAccount](tag, "users") {
 
@@ -53,8 +64,23 @@ object UserAccount {
 
   }
 
+  def findByName(name :String)(implicit s: Session): Option[UserAccount] = {
+    val acc = accounts.filter(_.name.toLowerCase === name.toLowerCase).list
+    acc match {
+      case Nil => None
+      case _ => Some(acc.head)
+    }
+
+  }
+
   def authenticate(email: String, password: String)(implicit s: Session): Option[UserAccount] = {
-    findByEmail(email).filter { account => BCrypt.checkpw(password, account.password) }
+
+    email.contains("@") match {
+      case true =>
+        findByEmail(email).filter { account => BCrypt.checkpw(password, account.password)}
+      case false =>
+        findByName(email).filter { account => BCrypt.checkpw(password, account.password)}
+    }
     //Some(new UserAccount(1,"Test User","None","MC Donalds",UserRole.valueOf("NormalUser")))
   }
 
@@ -72,18 +98,30 @@ object UserAccount {
     accounts.update(userAccount)
   }
 
-  def newPasswd(userAccount: UserAccount, passwd: String) = {
+  def newPasswd(userAccount: UserAccount, passwd: String) (implicit s: Session)= {
     val encPass = BCrypt.hashpw(passwd,BCrypt.gensalt())
     import userAccount._
     val updateAcc = new UserAccount(id, email, encPass, name, role)
-    accounts.update(userAccount)
+    accounts.insertOrUpdate(updateAcc)
   }
 
-  def changeRole(userAccount: UserAccount, roleType: String) = {
+  def newEmail(userAccount: UserAccount,newEmail: String) (implicit s: Session)= {
+
+    import userAccount._
+    val updateAcc = new UserAccount(id, newEmail, password, name, role)
+    accounts.insertOrUpdate(updateAcc)
+  }
+
+  def changeRole(userAccount: UserAccount, roleType: String)(implicit s: Session)  = {
     import userAccount._
     val newRole = UserRole.valueOf(roleType)
-    val updateAcc = new UserAccount(id, email, password, name, newRole)
-    accounts.update(userAccount)
+    newRole match {
+      case _:UserRole =>
+        val updateAcc = new UserAccount(id, email, password, name, newRole)
+        accounts.insertOrUpdate(updateAcc)
+        0
+
+    }
   }
 
   def create(userAccount: UserAccount, userRole:String)(implicit s: Session) =  {
@@ -108,5 +146,12 @@ object UserAccount {
 
   def getEmailCount(email:String)(implicit s: Session) =  {
     accounts.filter(_.email.toLowerCase === email.toLowerCase).list.length
+  }
+
+  def getUsersLike(name:String)(implicit s: Session) = {
+    val query = for {
+      account <- accounts if account.name.toLowerCase.startsWith(name.toLowerCase)
+    } yield (account.name)
+    query.list
   }
 }

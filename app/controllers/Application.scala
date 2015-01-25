@@ -88,8 +88,13 @@ object Application extends Controller  with OptionalAuthElement with AuthConfigI
           routes.javascript.Authorised.submitBlog,
           routes.javascript.JsonApi.getPostById,
         routes.javascript.Authorised.submitBlogUpdate,
+        routes.javascript.Admin.changeRole,
         routes.javascript.UserServices.checkEmail,
-        routes.javascript.UserServices.checkName
+        routes.javascript.UserServices.checkName,
+        routes.javascript.Admin.changePassword,
+        routes.javascript.Admin.changeEmail,
+        routes.javascript.AdminJsonApi.getUsers,
+        routes.javascript.AdminJsonApi.getUser
         )
       ).as("text/javascript")
   }

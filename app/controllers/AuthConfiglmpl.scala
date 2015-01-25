@@ -42,7 +42,12 @@ trait AuthConfigImpl extends AuthConfig {
     }
     val email = req.body.asInstanceOf[AnyContentAsFormUrlEncoded].data("email")(0)
     val user = database.withSession { implicit s =>
-      UserAccount.getUserName(email).get
+      email.contains("@") match {
+        case true =>
+          UserAccount.getUserName(email).get
+        case false =>
+          email
+      }
     }
     Future.successful(Redirect(uri).withSession(request.session - "access_uri").withSession("username" -> user))
 

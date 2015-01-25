@@ -1,0 +1,46 @@
+@(title:String)(implicit session : Session)
+
+@scripts = {
+<script type="text/javascript" src='@routes.Application.javascriptRoutes()'></script>
+<script src="@routes.Assets.at("javascripts/admin.js")" type="text/javascript"></script>
+}
+
+@content = {
+<div  class="col-md-12  col-sm-offset-1 dob-main">
+    <form>
+        <table>
+
+            <tr><td>User Name:</td><td><input class="form-control dob-control-white" id="userName" type="text" list="userNameList"></td>
+            <td><a class="btn btn-info" id="btnLoad">Load</a></td><td style="vertical-align:bottom;"><br><div style="vertical-align:bottom;" id="loadErrs"></div></td></tr>
+        </table>
+
+        <h4>User Details</h4>
+        <div  class="col-sm-offset-1 dob-main">
+            <table>
+                <tr><td>Email Address:</td><td><input class="form-control dob-control-white" id="email"></td></tr>
+                <tr><td><a id="btnEmail" class="btn btn-info">Update</a></td><td><div id="emailErrs"></div></td></tr>
+                <tr><td>Role:</td><td><select class="form-control dob-control-white" id="role" type="text">
+                    <option value="Administrator">Administrator</option>
+                    <option value="Contributor">Contributor</option>
+                    <option value="NormalUser">NormalUser</option>
+                    <option value="Guest">Guest</option>
+                </select></td></tr><tr><td><a class="btn btn-info" id="btnRole">Update</a></td><td><div id="roleErrs"></div></td></tr>
+            </table>
+        </div>
+        <br/>
+        <h4>Change Password</h4>
+        <div  class="col-sm-offset-1 dob-main">
+            <table>
+                <tr><td>New Password</td><td><input class="form-control dob-control-white" id="password" type="password"></td></tr>
+                <tr><td>Confirm</td><td><input class="form-control dob-control-white" id="confirm" type="password"></td></tr>
+                <tr><td><a id="btnPass" class="btn btn-danger">Update</a></td><td><div id="passErrs"></div></td></tr>
+            </table>
+        </div>
+    </form>
+</div>
+
+<datalist id="userNameList">
+</datalsit>
+}
+
+@main("Da Oostin Boyeez")(content)( scripts)

@@ -23,7 +23,7 @@ object UserServices extends Controller with LoginLogout with AuthConfigImpl {
   val loginForm = {
     database.withSession { implicit session =>
       Form {
-        mapping("email" -> email, "password" -> text)(UserAccount.authenticate)(_.map(u => (u.email, "")))
+        mapping("email" -> text, "password" -> text)(UserAccount.authenticate)(_.map(u => (u.email, "")))
           .verifying("Invalid email or password", result => result.isDefined)
       }
     }
