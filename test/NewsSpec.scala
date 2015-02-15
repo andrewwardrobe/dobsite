@@ -3,6 +3,7 @@ import java.util.Date
 import models.Blog
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter}
 import org.scalatestplus.play._
+import play.api.{GlobalSettings, Application, Logger}
 import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
@@ -15,7 +16,7 @@ import scala.slick.jdbc.JdbcBackend._
  */
 class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase())
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
 
@@ -46,14 +47,19 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
         newsPage.TypeIds must contain only("1")
       }
     }
+
+    "Display a Post" in {
+      go to newsPage
+      eventually {
+        newsPage.Items(0) must include ("Some Example content blah blah blah")
+      }
+    }
   }
 
   def dataSetup = {
     database.withSession { implicit session =>
-      val newsItem = Blog(1, "DOB Test News Post",1,new Date(),"MC Donalds","Some Example content blah blah blah")
-      val nonNewsItem =  Blog(1, "DOB Test Music Post",2,new Date(),"MC Donalds","Some cool DoB Music")
-      Blog.insert(newsItem)
-      Blog.insert(nonNewsItem)
+      val newsItem = PostHelper.createPost("DOB Test News Post","MC Donalds","Some Example content blah blah blah",1)
+      val nonNewsItem =  PostHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",2)
 
     }
   }
@@ -63,3 +69,4 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
 
 
 }
+

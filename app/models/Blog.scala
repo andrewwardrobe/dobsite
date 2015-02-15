@@ -4,6 +4,7 @@ import java.util.Date
 import com.daoostinboyeez.git.GitRepo
 import org.jsoup._
 import org.jsoup.safety.Whitelist
+import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.db.slick._
@@ -40,7 +41,8 @@ object Blog{
     implicit val JavaUtilDateMapper =
       MappedColumnType .base[java.util.Date, java.sql.Timestamp] (
         d => new java.sql.Timestamp(d.getTime),
-        d => new java.util.Date(d.getTime))
+        d => new java.util.Date(d.getTime)
+      )
 
       def id = column[Int]("ID",O.PrimaryKey,O.AutoInc)
       def title = column[String]("ITEM_TITLE")
@@ -60,6 +62,7 @@ object Blog{
   def getXNewsItemsFromId(id: Int, max: Int)(implicit s: Session) = {
     getXItemsFromId(id,max,1)
   }
+
   def getXItemsFromId(id: Int, max: Int, typ: Int)(implicit s: Session) = {
     blog.filter( blogPost =>
       blogPost.id <= id &&

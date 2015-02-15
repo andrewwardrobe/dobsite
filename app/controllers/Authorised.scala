@@ -48,10 +48,10 @@ object Authorised extends Controller with AuthElement with AuthConfigImpl {
 
     val item = Blog.blogForm.bindFromRequest().get
     val content = item.content
-    val filename = genFileName
+    val filename = GitRepo.createFile(content)
 
     val newItem = new Blog(item.id,item.title,item.postType,item.dateCreated,item.author,filename)
-    GitRepo.newFile(filename,content)
+
     val id = database.withSession { implicit s =>
       Blog.insert(newItem)
     }

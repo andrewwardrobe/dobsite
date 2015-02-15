@@ -1,29 +1,76 @@
 package com.daoostinboyeez.git
 
-import java.io.{FileWriter, File}
+import java.io.{File, FileWriter}
+import java.util.Date
 
+import com.sun.xml.internal.bind.v2.TODO
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.internal.storage.file.FileRepository
-import org.eclipse.jgit.lib.Constants
+import org.eclipse.jgit.lib.{Repository, Constants}
 import org.eclipse.jgit.revwalk.RevWalk
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.eclipse.jgit.treewalk.TreeWalk
+import play.api.{Logger, Play}
+import play.api.Play.current
+
+
 
 /**
  * Created by andrew on 25/01/15.
  */
 object GitRepo {
-  val gitDir = new File("content/.git")
-  val repo = new FileRepository(gitDir)
+  val repoLocation = Play.application.configuration.getString("git.repo.dir").getOrElse("content/.git")
+
+
+  val repo = init
+
+  Logger.info("Repo Location = "  +  Play.application.configuration.getString("git.repo.dir").get)
+
   val git = new Git(repo)
 
-  def getBranch = { repo.getFullBranch()}
 
-  def newFile(path:String, fileData:String){
-    doFile(path, fileData,"Added File $path")
+  def getRepoDir = git.getRepository.getDirectory
+  def getBranch = { git.getRepository.getFullBranch()}
+
+  def newFile(path:String, fileData:String)={
+    doFile(path, fileData,s"Added File $path")
   }
 
-  def updateFile(path:String, fileData:String){
-    doFile(path, fileData,"Edited File $path")
+ def init = {
+   Play.application.configuration.getString("git.repo.testmode").getOrElse("false") match {
+     case "false" =>
+       Logger.info("In Non Test Mode = ")
+       new FileRepository(repoLocation)
+     case "true" =>
+       val gitDir = repoLocation.substring(0,repoLocation.lastIndexOf("/.git"))
+       Logger.info("Git Dir = " +gitDir)
+       val repoDir = new File(gitDir)
+       repoDir.deleteOnExit()
+       Git.init().setDirectory(repoDir).call()
+       val repoFile = new File(repoLocation)
+       repoFile.deleteOnExit()
+       FileRepositoryBuilder.create(repoFile)
+   }
+
+ }
+
+  def updateFile(path:String, fileData:String)={
+    doFile(path, fileData,s"Edited File $path")
+  }
+
+  def createFile(prefix:String, fileData:String) = {
+    val path = prefix + genFileName
+    doFile(path, fileData,s"Created file $path")
+    path
+  }
+
+  def createFile(fileData:String):String = {
+    createFile("",fileData)
+  }
+
+  def genFileName = {
+    val date = new Date()
+    new String(""+date.getTime())
   }
 
   def doFile(path:String, fileData:String, commitMsg: String){

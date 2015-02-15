@@ -35,4 +35,6 @@ libraryDependencies ++= Seq(
   "org.eclipse.jgit" % "org.eclipse.jgit" % "3.6.1.201501031845-r"
 )
 
+Keys.fork in (Test) := false
+
 unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")
