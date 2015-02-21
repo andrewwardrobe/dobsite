@@ -4,14 +4,18 @@ import java.io.{File, FileWriter}
 import java.util.Date
 
 import com.sun.xml.internal.bind.v2.TODO
+import org.apache.commons.io.FileUtils
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.internal.storage.file.FileRepository
 import org.eclipse.jgit.lib.{Repository, Constants}
-import org.eclipse.jgit.revwalk.RevWalk
+import org.eclipse.jgit.revwalk.{RevCommit, RevWalk}
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
 import org.eclipse.jgit.treewalk.TreeWalk
 import play.api.{Logger, Play}
 import play.api.Play.current
+import scala.collection.JavaConversions._
+import scala.collection.mutable.ListBuffer
+import org.apache.commons.io
 
 
 
@@ -20,15 +24,26 @@ import play.api.Play.current
  */
 object GitRepo {
   val repoLocation = Play.application.configuration.getString("git.repo.dir").getOrElse("content/.git")
-
-
   val repo = init
-
-  Logger.info("Repo Location = "  +  Play.application.configuration.getString("git.repo.dir").get)
-
   val git = new Git(repo)
 
+  def find = {
+    val commits = git.log().call()
+    val commitList: ListBuffer[String] = new ListBuffer[String]()
+    commits.foreach{ commit =>
+      commitList += commit.getName()
+    }
+    commitList.toList
+  }
 
+  def find(path:String) = {
+    val commits = git.log().addPath(path).call()
+    val commitList: ListBuffer[String] = new ListBuffer[String]()
+    commits.foreach{ commit =>
+      commitList += commit.getName()
+    }
+    commitList.toList
+  }
   def getRepoDir = git.getRepository.getDirectory
   def getBranch = { git.getRepository.getFullBranch()}
 
@@ -43,7 +58,6 @@ object GitRepo {
        new FileRepository(repoLocation)
      case "true" =>
        val gitDir = repoLocation.substring(0,repoLocation.lastIndexOf("/.git"))
-       Logger.info("Git Dir = " +gitDir)
        val repoDir = new File(gitDir)
        repoDir.deleteOnExit()
        Git.init().setDirectory(repoDir).call()
@@ -53,6 +67,20 @@ object GitRepo {
    }
 
  }
+
+  def refresh = {
+    Play.application.configuration.getString("git.repo.testmode").getOrElse("false") match {
+      case "true" =>
+        val gitDir = repoLocation.substring (0, repoLocation.lastIndexOf ("/.git") )
+        val repoDir = new File (gitDir)
+        FileUtils.deleteDirectory(repoDir)
+        repoDir.deleteOnExit ()
+        Git.init ().setDirectory (repoDir).call ()
+        val repoFile = new File (repoLocation)
+        repoFile.deleteOnExit ()
+        FileRepositoryBuilder.create (repoFile)
+    }
+  }
 
   def updateFile(path:String, fileData:String)={
     doFile(path, fileData,s"Edited File $path")

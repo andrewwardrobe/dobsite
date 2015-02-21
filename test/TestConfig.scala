@@ -1,7 +1,5 @@
 import java.io.File
 
-import play.api.Logger
-
 /**
  * Created by andrew on 15/02/15.
  */

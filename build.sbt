@@ -32,6 +32,7 @@ libraryDependencies ++= Seq(
   "jp.t2v" %% "play2-auth"      % "0.13.0",
   "jp.t2v" %% "play2-auth-test" % "0.13.0" % "test",
   "org.mindrot" % "jbcrypt" % "0.3m",
+  "commons-io" % "commons-io" % "2.4",
   "org.eclipse.jgit" % "org.eclipse.jgit" % "3.6.1.201501031845-r"
 )
 
