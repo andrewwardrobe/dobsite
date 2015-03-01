@@ -7,5 +7,10 @@ import org.scalatest.selenium.WebBrowser
 class SignInPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest.selenium.Page with WebBrowser {
     val url = s"localhost:$port/signin"
 
+    def signin(name:String, password: String) = {
+      textField("email").value = name
+      pwdField("password").value = password
+      submit()
+    }
 
 }

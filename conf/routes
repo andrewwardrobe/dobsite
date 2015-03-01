@@ -14,8 +14,8 @@ POST     /signup                     controllers.UserServices.register
 GET     /login                           controllers.UserServices.login
 POST    /login                           controllers.UserServices.authenticate
 GET     /news                           controllers.Application.news
-GET     /blog                           controllers.Authorised.blogInput
-GET     /blog/:id                           controllers.Authorised.blogUpdate(id: Int)
+GET     /editor                           controllers.Authorised.blogInput
+GET     /editor/:id                           controllers.Authorised.blogUpdate(id: Int)
 POST     /blog                           controllers.Authorised.submitBlog
 PUT     /blog                           controllers.Authorised.submitBlogUpdate
 POST    /upload          controllers.Application.upload()

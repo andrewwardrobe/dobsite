@@ -6,7 +6,7 @@ package controllers
 import controllers.Application._
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
-import models.{UserAccount, Blog}
+import models.{UserAccount, Post$}
 
 import models.UserRole.{Administrator, Contributor, NormalUser}
 import play.api.data.Form

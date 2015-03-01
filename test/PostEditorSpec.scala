@@ -14,10 +14,8 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
-  beforeAll{
-    val signUp = new SignUpPage(port)
-    signUp.signup("andrew","andrew@dob.com","pa$$word")
-  }
+
+  val editorPage = new EditorPage(port)
 
   after{
     
@@ -26,6 +24,12 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   "Post Editor" must {
 
     "Display a List of Revisions" in {
+      val signUp = new SignUpPage(port)
+      val signIn = new SignInPage(port)
+      signUp.signup("andrew","andrew@dob.com","pa$$word")
+      signIn.signin("andrew","pa$$word")
+
+      goTo (editorPage)
 
     }
   }

@@ -1,6 +1,6 @@
 import java.util.Date
 
-import models.Blog
+import models.Post$
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter}
 import org.scalatestplus.play._
 import play.api.{GlobalSettings, Application, Logger}

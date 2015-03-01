@@ -1,6 +1,6 @@
 import java.util.Date
 
-import models.{Blog, Discography}
+import models.{Post, Discography}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB
 import play.api.test.FakeApplication
@@ -23,13 +23,13 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite{
       }
     }
 
-    "Be able to insert and retrieve blog items" in {
+    "Be able to insert and retrieve posts items" in {
       database.withSession { implicit session =>
         val newsItem = PostHelper.createPost("DOB Test News Post","MC Donalds","Some Example content blah blah blah",1)
         val nonNewsItem =  PostHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",2)
 
 
-        val result = Blog.get
+        val result = Post.get
         result.head mustEqual newsItem
       }
     }

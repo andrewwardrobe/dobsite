@@ -25,26 +25,26 @@ object JsonApi extends Controller {
   implicit val discoFormat =  Json.format[Discography]
   implicit val trackFormat =  Json.format[Track]
   implicit val bioFormat =  Json.format[Biography]
-  implicit val newsFormat =  Json.format[Blog]
+  implicit val newsFormat =  Json.format[Post]
 
   def getDiscographyByReleaseType(_type: Int) = DBAction { implicit response =>
       Ok(toJson(Discography.getByReleaseType(_type)))
   }
 
   def getNews = DBAction { implicit response =>
-    val newsList = blogToJson(Blog.getNews)
+    val newsList = blogToJson(Post.getNews)
     Ok(toJson(newsList))
   }
 
   def getContentByType(contentType: Int) = DBAction { implicit response =>
-    val newsList = blogToJson(Blog.getByType(contentType))
+    val newsList = blogToJson(Post.getByType(contentType))
     Ok(toJson(newsList))
   }
   def getPostById(id: Int) = DBAction { implicit response =>
-    Ok(toJson(Blog.getById(id).head.json))
+    Ok(toJson(Post.getById(id).head.json))
   }
 
-  def blogToJson(blogs :Seq[Blog]) = {
+  def blogToJson(blogs :Seq[Post]) = {
     val blogsJson = ListBuffer[JsValue]()
     blogs.foreach(blogsJson += _.json)
     blogsJson.toList
@@ -52,20 +52,20 @@ object JsonApi extends Controller {
 
   def getNewsByRange(start: Int, num: Int) = DBAction { implicit response =>
     if(start != -1) {
-      val newsList = blogToJson(Blog.getXNewsItemsFromId(start, num))
+      val newsList = blogToJson(Post.getXNewsItemsFromId(start, num))
       Ok(toJson(newsList))
     }else {
-      val newsList = blogToJson(Blog.getXNewsItems(num))
+      val newsList = blogToJson(Post.getXNewsItems(num))
       Ok(toJson(newsList))
     }
   }
 
   def getContentByRange(typ:Int, start: Int, num: Int) = DBAction { implicit response =>
     if(start != -1) {
-      val content = blogToJson(Blog.getXItemsFromId(typ,start, num))
+      val content = blogToJson(Post.getXItemsFromId(typ,start, num))
       Ok(toJson(content))
     }else {
-      val content = blogToJson(Blog.getXItems(typ,num))
+      val content = blogToJson(Post.getXItems(typ,num))
       Ok(toJson(content))
     }
   }

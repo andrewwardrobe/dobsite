@@ -6,7 +6,7 @@ import com.daoostinboyeez.git.GitRepo
 import controllers.Application._
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
-import models.{UserAccount, Blog}
+import models.{UserAccount, Post}
 
 import models.UserRole.{Administrator, Contributor, NormalUser}
 import play.api.data.Form
@@ -36,24 +36,24 @@ object Authorised extends Controller with AuthElement with AuthConfigImpl {
   }
 
   def blogInput = StackAction(AuthorityKey -> Contributor){  implicit request =>
-    Ok(views.html.blogInput("",Blog.blogForm,-1))
+    Ok(views.html.blogInput("",Post.blogForm,-1))
   }
 
   def blogUpdate(id: Int) = StackAction(AuthorityKey -> Contributor) {  implicit request =>
-    Ok(views.html.blogInput("",Blog.blogForm,id))
+    Ok(views.html.blogInput("",Post.blogForm,id))
   }
 
 
   def submitBlog = StackAction(AuthorityKey -> Contributor) { implicit response =>
 
-    val item = Blog.blogForm.bindFromRequest().get
+    val item = Post.blogForm.bindFromRequest().get
     val content = item.content
     val filename = GitRepo.createFile(content)
 
-    val newItem = new Blog(item.id,item.title,item.postType,item.dateCreated,item.author,filename)
+    val newItem = new Post(item.id,item.title,item.postType,item.dateCreated,item.author,filename)
 
     val id = database.withSession { implicit s =>
-      Blog.insert(newItem)
+      Post.insert(newItem)
     }
     Ok(""+id)
   }
@@ -65,14 +65,14 @@ object Authorised extends Controller with AuthElement with AuthConfigImpl {
 
 
   def submitBlogUpdate = StackAction(AuthorityKey -> Contributor) { implicit response =>
-    val item = Blog.blogForm.bindFromRequest().get
+    val item = Post.blogForm.bindFromRequest().get
     val content = item.content
 
     database.withSession { implicit s =>
-      val filename = Blog.getById(item.id).head.content
-      val newItem = new Blog(item.id,item.title,item.postType,item.dateCreated,item.author,filename)
+      val filename = Post.getById(item.id).head.content
+      val newItem = new Post(item.id,item.title,item.postType,item.dateCreated,item.author,filename)
       GitRepo.updateFile(filename,content)
-      Blog.update(newItem)
+      Post.update(newItem)
     }
     Ok(""+item.id)
   }
