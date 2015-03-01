@@ -1,6 +1,8 @@
-import org.openqa.selenium.WebDriver
-import org.scalatest.selenium.WebBrowser
 
+import org.openqa.selenium.WebDriver
+import org.openqa.selenium.interactions.Actions
+import org.scalatest.selenium.WebBrowser
+import play.api.Logger
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -23,8 +25,28 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
   }
 
   def save = {
-    submit()
+    click on id("saveButton")
   }
 
+  def saveSuccessful = {
+    if(cssSelector("*[id*='res-success']").findAllElements.toList.length > 0)
+      true
+    else
+      false
+  }
+
+  def highLightText(text:String) = { //Doesnt quite work
+
+    val element = id("editor").webElement
+    val actions = new Actions(driver)
+    val leek= xpath(s"//*[text()[contains(.,'$text')]]").webElement
+    val loc = leek.getLocation
+    val size = leek.getSize()
+    Logger.info(leek.getTagName())
+    Logger.info("x: "+loc.x+ " ,y: "+loc.y)
+    Logger.info("width: "+size.width+ " ,height: "+size.height)
+
+    actions.moveToElement(tagName("body").webElement, loc.x, loc.y).clickAndHold().moveByOffset(size.width,size.height).release().perform
+  }
 
 }

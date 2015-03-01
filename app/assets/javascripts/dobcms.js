@@ -68,6 +68,8 @@ $("#saveButton").click(function(){
               $(d).text("Saved");
                $(d).attr('class','alert alert-success');
                $(d).attr('role','alert');
+               $(d).attr('id','res-success');
+               $("#result").html("");
                $("#result").append(d);
                $("#postId").val(data);
            },
@@ -76,6 +78,8 @@ $("#saveButton").click(function(){
                $(d).text("Save Failed"+ data);
                $(d).attr('class','alert alert-danger');
                $(d).attr('role','alert');
+               $(d).attr('id','res-fail');
+               $("#result").html("");
                $("#result").append(d);
                $("#postId").val(data);
            }

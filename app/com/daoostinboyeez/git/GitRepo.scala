@@ -79,6 +79,7 @@ object GitRepo {
         val repoFile = new File (repoLocation)
         repoFile.deleteOnExit ()
         FileRepositoryBuilder.create (repoFile)
+        createFile("", "Test File")
     }
   }
 

@@ -15,7 +15,7 @@ class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
   "Repository" must {
     "Be able to list all commits" in {
       val commitList = GitRepo.find
-      commitList.length must equal(6)
+      commitList.length must equal(7) //The setup does a commit so this should be 7
     }
 
     "Be able to show the current branch" in {

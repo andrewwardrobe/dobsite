@@ -62,7 +62,6 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
     database.withSession { implicit session =>
       val newsItem = PostHelper.createPost("DOB Test News Post","MC Donalds","Some Example content blah blah blah",1)
       val nonNewsItem =  PostHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",2)
-
     }
   }
 

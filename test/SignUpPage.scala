@@ -15,10 +15,10 @@ class SignUpPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
 
       def signup(name : String, email: String, password:String) = {
         goTo(url)
-        pwdField("confirm").value = password
         textField("name").value = name
         textField("email").value = email
         pwdField("password").value = password
+        pwdField("confirm").value = password
         submit()
       }
 

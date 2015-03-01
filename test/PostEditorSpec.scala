@@ -1,3 +1,4 @@
+import com.daoostinboyeez.git.GitRepo
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter}
 import org.scalatestplus.play.{FirefoxFactory, OneBrowserPerSuite, OneServerPerSuite, PlaySpec}
 import play.api.db.DB
@@ -19,6 +20,7 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   var setupDone: Boolean = false
 
   def setup() = {
+    GitRepo.refresh
     val signUp = new SignUpPage(port)
     val signIn = new SignInPage(port)
     if(!setupDone) {
@@ -33,21 +35,21 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     
   }
 
-
-  
   "Post Editor" must {
-
-
 
     "Display the editor with some initial text" in {
       setup()
       goTo (editorPage)
-      editorPage.editorBoxText must include ("Start Typing you post content here")
+      editorPage.editorBoxText must include ("Typing")
     }
 
-    "Ba able to save a post" in {
+    "Be able to save a post" in {
       setup()
       goTo (editorPage)
+      editorPage.highLightText("Start Typing you post content here")
+      editorPage.highLightText("Typing")
+      editorPage.save
+      eventually{ editorPage.saveSuccessful mustEqual (true) }
     }
 
     "Display a list of revisions when there is some" in {
