@@ -24,8 +24,8 @@ libraryDependencies += "com.typesafe.play" %% "play-slick" % "0.8.0"
 libraryDependencies ++= Seq(
   "org.webjars" %% "webjars-play" % "2.3.0",
   "org.webjars" % "bootstrap" % "3.1.1-2",
-  "org.seleniumhq.selenium" % "selenium-server" % "2.44.0" % "test",
-  "org.seleniumhq.selenium" % "selenium-java" % "2.44.0" % "test",
+  "org.seleniumhq.selenium" % "selenium-server" % "2.45.0" % "test",
+  "org.seleniumhq.selenium" % "selenium-java" % "2.45.0" % "test",
   "org.scalatest" % "scalatest_2.11" % "2.2.1" % "test",
   "org.scalatestplus" %% "play" % "1.2.0" % "test",
   "org.jsoup" % "jsoup" % "1.7.2",

@@ -54,6 +54,8 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
         newsPage.Items(0) must include ("Some Example content blah blah blah")
       }
     }
+
+
   }
 
   def dataSetup = {
