@@ -16,21 +16,45 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
 
   val editorPage = new EditorPage(port)
+  var setupDone: Boolean = false
+
+  def setup() = {
+    val signUp = new SignUpPage(port)
+    val signIn = new SignInPage(port)
+    if(!setupDone) {
+      signUp.signup("andrew", "andrew@dob.com", "pa$$word")
+      signIn.signin("andrew", "pa$$word")
+      setupDone = true
+    }
+
+  }
 
   after{
     
   }
+
+
   
   "Post Editor" must {
 
-    "Display a List of Revisions" in {
-      val signUp = new SignUpPage(port)
-      val signIn = new SignInPage(port)
-      signUp.signup("andrew","andrew@dob.com","pa$$word")
-      signIn.signin("andrew","pa$$word")
 
+
+    "Display the editor with some initial text" in {
+      setup()
       goTo (editorPage)
-
+      editorPage.editorBoxText must include ("Start Typing you post content here")
     }
+
+    "Ba able to save a post" in {
+      setup()
+      goTo (editorPage)
+    }
+
+    "Display a list of revisions when there is some" in {
+      setup()
+      goTo (editorPage)
+      editorPage.revisionList must not be empty
+    }
+
   }
 }
