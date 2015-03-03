@@ -18,6 +18,11 @@ class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
       commitList.length must equal(7) //The setup does a commit so this should be 7
     }
 
+    "Be able to list all commit dates" in {
+      val commitList = GitRepo.find
+      commitList.length must equal(7) //The setup does a commit so this should be 7
+    }
+
     "Be able to show the current branch" in {
       val currBranch = GitRepo.getBranch
       currBranch must equal ("refs/heads/master")
@@ -25,6 +30,11 @@ class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
     "Be able to list all commits for a path" in {
       val commitList = GitRepo.find ("leek")
+      commitList.length must equal(2)
+    }
+
+    "Be able to list all commit dates for a path" in {
+      val commitList = GitRepo.findRevDates ("leek")
       commitList.length must equal(2)
     }
   }

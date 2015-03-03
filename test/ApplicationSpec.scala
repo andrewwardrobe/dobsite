@@ -20,6 +20,16 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
       contentType(home) mustBe Some("text/html")
       contentAsString(home) must include ("Da Oostin Boyeez")
     }
+
+    "Get a list of post revisions" in {
+      val revisions = route(FakeRequest(GET,"/json/content/1/revisions")).get
+      status(revisions) mustBe (OK)
+      contentType(revisions) mustBe Some("application/json")
+    }
+
+    def setup = {
+
+    }
   }
 
 }

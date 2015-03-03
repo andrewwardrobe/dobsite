@@ -37,11 +37,11 @@ object Authorised extends Controller with AuthElement with AuthConfigImpl {
   }
 
   def blogInput = StackAction(AuthorityKey -> Contributor){  implicit request =>
-    Ok(views.html.blogInput("",Post.blogForm,-1))
+    Ok(views.html.editor("",Post.blogForm,-1))
   }
 
   def blogUpdate(id: Int) = StackAction(AuthorityKey -> Contributor) {  implicit request =>
-    Ok(views.html.blogInput("",Post.blogForm,id))
+    Ok(views.html.editor("",Post.blogForm,id))
   }
 
 

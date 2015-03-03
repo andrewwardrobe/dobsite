@@ -16,10 +16,12 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
     box.text
   }
 
+  def post(id:Int) = s"localhost:$port/editor/$id"
+
   def revisionList = {
     val revisions: ListBuffer[String] = new ListBuffer[String]()
     cssSelector("*[id*='revId']").findAllElements.toList.foreach { element =>
-      revisions += element.attribute("value").get.toString
+      revisions += element.text
     }
     revisions.toList
   }
@@ -27,6 +29,8 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
   def save = {
     click on id("saveButton")
   }
+
+
 
   def saveSuccessful = {
     if(cssSelector("*[id*='res-success']").findAllElements.toList.length > 0)

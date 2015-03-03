@@ -96,6 +96,8 @@ $("#saveButton").click(function(){
 
 });
 
+
+
 $(function(){
     var id = $("#postId").val();
     if(id != -1){
@@ -141,10 +143,26 @@ function doCodeFormat()
     };
 }
 
-
-
-$('#editor').wysiwyg();
-
+function getRevisions(){
+    var id = $("#postId").val();
+    var json = {
+               success: function(data){
+                    $.each(data,function(idx,rev){
+                        var revDiv = $("<li>");
+                        revDiv.attr('id','revId1');
+                        revDiv.text(rev);
+                        $("#revisions").append(revDiv);
+                    });
+               },
+               error: function(data){
+                 var revDiv = $("<li>");
+                 revDiv.attr('id','revId1');
+                 revDiv.text("New File");
+                 $("#revisions").append(revDiv);
+               }
+        };
+    jsRoutes.controllers.JsonApi.getRevisions(id).ajax(json);
+}
 
 function doTabIndent(){
     return function(){
@@ -163,3 +181,12 @@ $("#editor").on("DOMNodeInserted",function(event){
             break;
     }
 });
+$('#editor').wysiwyg();
+
+$('#revisions').affix({
+      offset: {
+        top: 350
+      }
+});
+
+getRevisions();

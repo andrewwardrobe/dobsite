@@ -15,6 +15,13 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
+  def extraSetup = {
+    database.withSession { implicit session =>
+
+      val firstFile = PostHelper.createPost("DOB Test News Post","MC Donalds","ah ah blah",1)
+      GitRepo.updateFile(firstFile.content,"Here is some data in a file I just changed")
+    }
+  }
 
   val editorPage = new EditorPage(port)
   var setupDone: Boolean = false
@@ -26,6 +33,7 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     if(!setupDone) {
       signUp.signup("andrew", "andrew@dob.com", "pa$$word")
       signIn.signin("andrew", "pa$$word")
+      extraSetup
       setupDone = true
     }
 
@@ -37,6 +45,13 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
   "Post Editor" must {
 
+    "Display a list of revisions when there is some" in {
+      setup()
+      go to s"localhost:$port"
+      goTo (editorPage.post(1))
+      eventually{editorPage.revisionList.size must be (2)}
+    }
+
     "Display the editor with some initial text" in {
       setup()
       goTo (editorPage)
@@ -46,17 +61,13 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     "Be able to save a post" in {
       setup()
       goTo (editorPage)
-      editorPage.highLightText("Start Typing you post content here")
-      editorPage.highLightText("Typing")
+      //editorPage.highLightText("Start Typing your post content here")
+      //editorPage.highLightText("Typing")
       editorPage.save
       eventually{ editorPage.saveSuccessful mustEqual (true) }
     }
 
-    "Display a list of revisions when there is some" in {
-      setup()
-      goTo (editorPage)
-      editorPage.revisionList must not be empty
-    }
+
 
   }
 }

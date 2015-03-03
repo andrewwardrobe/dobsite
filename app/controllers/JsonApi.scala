@@ -1,7 +1,7 @@
 package controllers
 
 
-
+import com.daoostinboyeez.git.GitRepo
 import models._
 import play.api._
 import play.api.data.Form
@@ -42,6 +42,26 @@ object JsonApi extends Controller {
   }
   def getPostById(id: Int) = DBAction { implicit response =>
     Ok(toJson(Post.getById(id).head.json))
+  }
+
+  def getRevisions(id: Int) =  DBAction { implicit response =>
+    val post = Post.getById(id)
+      post.isEmpty match{
+        case false => {
+          val filename = post.head.content
+          val revisions = GitRepo.find(filename)
+          revisions.isEmpty match {
+            case false => {
+              Ok(toJson(revisions))
+            }
+            case true => {
+              Ok(toJson("None"))
+            }
+          }
+        }
+        case true => Ok(toJson("None"))
+      }
+
   }
 
   def blogToJson(blogs :Seq[Post]) = {

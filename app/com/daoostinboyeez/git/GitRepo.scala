@@ -36,6 +36,15 @@ object GitRepo {
     commitList.toList
   }
 
+  def findRevDates = {
+    val commits = git.log().call()
+    val commitList: ListBuffer[String] = new ListBuffer[String]()
+    commits.foreach{ commit =>
+      commitList += commit.getCommitTime().toString()
+    }
+    commitList.toList
+  }
+
   def find(path:String) = {
     val commits = git.log().addPath(path).call()
     val commitList: ListBuffer[String] = new ListBuffer[String]()
@@ -44,6 +53,16 @@ object GitRepo {
     }
     commitList.toList
   }
+
+  def findRevDates(path:String) = {
+    val commits = git.log().addPath(path).call()
+    val commitList: ListBuffer[String] = new ListBuffer[String]()
+    commits.foreach{ commit =>
+      commitList += commit.getCommitTime().toString()
+    }
+    commitList.toList
+  }
+
   def getRepoDir = git.getRepository.getDirectory
   def getBranch = { git.getRepository.getFullBranch()}
 
