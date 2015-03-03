@@ -1,8 +1,10 @@
+package test.integration.pages
 
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.interactions.Actions
 import org.scalatest.selenium.WebBrowser
 import play.api.Logger
+
 import scala.collection.mutable.ListBuffer
 
 /**

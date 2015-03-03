@@ -1,10 +1,14 @@
+package test.integration
+
 import com.daoostinboyeez.git.GitRepo
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter}
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play.{FirefoxFactory, OneBrowserPerSuite, OneServerPerSuite, PlaySpec}
 import play.api.db.DB
-import play.api.test.{FakeRequest, FakeApplication}
+import play.api.test.FakeApplication
 import play.api.test.Helpers._
-import jp.t2v.lab.play2.auth.test.Helpers._
+import test._
+import test.helpers.PostHelper
+import test.integration.pages.{SignUpPage, SignInPage, EditorPage}
 
 import scala.slick.jdbc.JdbcBackend._
 
@@ -19,7 +23,7 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     database.withSession { implicit session =>
 
       val firstFile = PostHelper.createPost("DOB Test News Post","MC Donalds","ah ah blah",1)
-      GitRepo.updateFile(firstFile.content,"Here is some data in a file I just changed")
+      GitRepo.updateFile(firstFile.content,"Here is some data I just changed")
     }
   }
 

@@ -1,10 +1,11 @@
+package test
+
 /**
  * Created by andrew on 31/12/14.
  */
 
 import java.io.File
 
-import com.daoostinboyeez.git.GitRepo
 import play.api.Play.current
 import play.api._
 

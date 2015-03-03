@@ -1,6 +1,8 @@
+package test.unit
+
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.api.test.{FakeRequest}
 
 /**
  * Created by andrew on 14/09/14.

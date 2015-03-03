@@ -1,14 +1,15 @@
-import java.util.Date
+package test.integration
 
-import models.Post$
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter}
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play._
-import play.api.{GlobalSettings, Application, Logger}
 import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
+import test.helpers.PostHelper
+import test.integration.pages.NewsPage
+import test.{TestConfig, TestGlobal}
 
-import scala.collection.mutable.ListBuffer
+
 import scala.slick.jdbc.JdbcBackend._
 
 /**
@@ -51,7 +52,7 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
     "Display a Post" in {
       go to newsPage
       eventually {
-        newsPage.Items(0) must include ("Some Example content blah blah blah")
+        newsPage.Items(0) must include ("Some Example content blah blah blah 1234567")
       }
     }
 
@@ -60,7 +61,7 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
 
   def dataSetup = {
     database.withSession { implicit session =>
-      val newsItem = PostHelper.createPost("DOB Test News Post","MC Donalds","Some Example content blah blah blah",1)
+      val newsItem = PostHelper.createPost("DOB Test News Post","MC Donalds","Some Example content blah blah blah 1234567",1)
       val nonNewsItem =  PostHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",2)
     }
   }

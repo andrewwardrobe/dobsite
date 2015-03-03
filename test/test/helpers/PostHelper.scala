@@ -1,12 +1,13 @@
+package test.helpers
+
 import java.util.Date
 
 import com.daoostinboyeez.git.GitRepo
 import models.Post
+import play.api.Play.current
 import play.api.db.DB
 
-import play.api.db.slick.Config.driver.simple._
-
-import play.api.Play.current
+import scala.slick.jdbc.JdbcBackend._
 /**
  * Created by andrew on 14/02/15.
  */

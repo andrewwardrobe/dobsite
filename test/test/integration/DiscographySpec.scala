@@ -1,16 +1,14 @@
+package test.integration
 
-import org.openqa.selenium.{WebElement, By}
-import org.scalatest.time.{Seconds, Span}
-import org.scalatest._
-import play.api.test._
-import play.api.test.Helpers._
-import org.scalatestplus.play._
-
-import play.api.Play.current
-import play.api.db.DB
-import play.api.db.slick.Config.driver.simple.Session
-import scala.slick.jdbc.JdbcBackend.Database
 import models._
+import org.scalatest._
+import org.scalatestplus.play._
+import play.api.db.DB
+import play.api.test.Helpers._
+import play.api.test._
+import test.integration.pages.DiscographyPage
+
+import scala.slick.jdbc.JdbcBackend.Database
 
 
 class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {

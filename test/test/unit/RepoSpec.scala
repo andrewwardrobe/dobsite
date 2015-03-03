@@ -1,9 +1,11 @@
+package test.unit
+
 import com.daoostinboyeez.git.GitRepo
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
-import play.api.Logger
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
+import test._
 
 /**
  * Created by andrew on 21/02/15.

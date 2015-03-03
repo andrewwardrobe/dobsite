@@ -1,5 +1,7 @@
+package test.integration.pages
+
 import org.openqa.selenium.WebDriver
-import org.scalatest.selenium.{WebBrowser, Page}
+import org.scalatest.selenium.{Page, WebBrowser}
 
 /**
  * Created by andrew on 17/12/14.

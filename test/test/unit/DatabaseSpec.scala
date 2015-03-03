@@ -1,15 +1,16 @@
-import java.util.Date
+package test.unit
 
 import com.daoostinboyeez.git.GitRepo
-import models.{Post, Discography}
+import models.{Discography, Post}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.Logger
 import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
+import test.helpers.PostHelper
 
 import scala.slick.jdbc.JdbcBackend._
-
+import test._
 class DatabaseSpec extends PlaySpec with OneServerPerSuite{
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
@@ -27,12 +28,12 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite{
 
     "Be able to insert and retrieve posts items" in {
       database.withSession { implicit session =>
-        //GitRepo.refresh
+        GitRepo.refresh
         Logger.info("Cleared Repo")
         Logger.info("Creating post")
-        val newsItem = PostHelper.createPost("DOB Test News Post","MC Donalds","Some Example content blah blah blah",1)
+        val newsItem = PostHelper.createPost("DOB Test News Post","MC Donalds","News Content for db spec",1)
         Logger.info("Creating second post")
-        val nonNewsItem =  PostHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",2)
+        val nonNewsItem =  PostHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music for dbspec",2)
 
         Logger.info("GETTING RESULT ")
         val result = Post.get
