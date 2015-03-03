@@ -150,7 +150,8 @@ function getRevisions(){
                     $.each(data,function(idx,rev){
                         var revDiv = $("<li>");
                         revDiv.attr('id','revId1');
-                        revDiv.text(rev);
+                        var dte = new Date(rev);
+                        revDiv.text(dte.toLocaleString());
                         $("#revisions").append(revDiv);
                     });
                },

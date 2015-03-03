@@ -70,7 +70,7 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
     "Display a list of revisions by dates" in {
       goTo (editorPage.post(1))
-      fail("Not Implemented")
+      eventually{editorPage.revisionList(1) must include regex """\d{2}/\d{2}/\d{4}""".r }
     }
 
     "load the specifed revision when the link is clicked" in {
