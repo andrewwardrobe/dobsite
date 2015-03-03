@@ -49,7 +49,7 @@ object JsonApi extends Controller {
       post.isEmpty match{
         case false => {
           val filename = post.head.content
-          val revisions = GitRepo.find(filename)
+          val revisions = GitRepo.findRevDates(filename)
           revisions.isEmpty match {
             case false => {
               Ok(toJson(revisions))

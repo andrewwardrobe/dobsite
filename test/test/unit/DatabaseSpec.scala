@@ -29,13 +29,8 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite{
     "Be able to insert and retrieve posts items" in {
       database.withSession { implicit session =>
         GitRepo.refresh
-        Logger.info("Cleared Repo")
-        Logger.info("Creating post")
         val newsItem = PostHelper.createPost("DOB Test News Post","MC Donalds","News Content for db spec",1)
-        Logger.info("Creating second post")
         val nonNewsItem =  PostHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music for dbspec",2)
-
-        Logger.info("GETTING RESULT ")
         val result = Post.get
         result.head mustEqual newsItem
       }

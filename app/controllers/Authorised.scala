@@ -50,7 +50,6 @@ object Authorised extends Controller with AuthElement with AuthConfigImpl {
     val item = Post.blogForm.bindFromRequest().get
     val content = item.content
     val filename = GitRepo.createFile(content)
-    Logger.info("Saving file")
     val newItem = new Post(item.id,item.title,item.postType,item.dateCreated,item.author,filename)
 
     val id = database.withSession { implicit s =>
@@ -68,7 +67,6 @@ object Authorised extends Controller with AuthElement with AuthConfigImpl {
   def submitBlogUpdate = StackAction(AuthorityKey -> Contributor) { implicit response =>
     val item = Post.blogForm.bindFromRequest().get
     val content = item.content
-    Logger.info("Updating file")
     database.withSession { implicit s =>
       val filename = Post.getById(item.id).head.content
       val newItem = new Post(item.id,item.title,item.postType,item.dateCreated,item.author,filename)

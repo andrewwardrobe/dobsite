@@ -40,7 +40,7 @@ object GitRepo {
     val commits = git.log().call()
     val commitList: ListBuffer[String] = new ListBuffer[String]()
     commits.foreach{ commit =>
-      commitList += commit.getCommitTime().toString()
+      commitList += commit.getAuthorIdent.getWhen().toString
     }
     commitList.toList
   }
@@ -58,7 +58,7 @@ object GitRepo {
     val commits = git.log().addPath(path).call()
     val commitList: ListBuffer[String] = new ListBuffer[String]()
     commits.foreach{ commit =>
-      commitList += commit.getCommitTime().toString()
+      commitList += commit.getAuthorIdent.getWhen().toString
     }
     commitList.toList
   }

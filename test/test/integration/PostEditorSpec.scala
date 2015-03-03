@@ -31,10 +31,10 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   var setupDone: Boolean = false
 
   def setup() = {
-    GitRepo.refresh
     val signUp = new SignUpPage(port)
     val signIn = new SignInPage(port)
     if(!setupDone) {
+      GitRepo.refresh
       signUp.signup("andrew", "andrew@dob.com", "pa$$word")
       signIn.signin("andrew", "pa$$word")
       extraSetup
@@ -43,35 +43,38 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
   }
 
-  after{
-    
+  before{
+    setup()
   }
 
   "Post Editor" must {
-
-    "Display a list of revisions when there is some" in {
-      setup()
-      go to s"localhost:$port"
-      goTo (editorPage.post(1))
-      eventually{editorPage.revisionList.size must be (2)}
-    }
-
-    "Display the editor with some initial text" in {
-      setup()
+   "Display the editor with some initial text" in {
       goTo (editorPage)
       editorPage.editorBoxText must include ("Typing")
     }
 
     "Be able to save a post" in {
-      setup()
       goTo (editorPage)
       //editorPage.highLightText("Start Typing your post content here")
       //editorPage.highLightText("Typing")
       editorPage.save
       eventually{ editorPage.saveSuccessful mustEqual (true) }
     }
+  }
 
+  "Revision List" must {
+    "Display a list of revisions when there is some" in {
+      goTo (editorPage.post(1))
+      eventually{editorPage.revisionList.size must be (2)}
+    }
 
+    "Display a list of revisions by dates" in {
+      goTo (editorPage.post(1))
+      fail("Not Implemented")
+    }
 
+    "load the specifed revision when the link is clicked" in {
+      fail("Not Implemented")
+    }
   }
 }
