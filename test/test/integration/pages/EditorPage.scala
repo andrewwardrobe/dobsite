@@ -18,6 +18,11 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
     box.text
   }
 
+  def addContent(content: String) = {
+    val box = cssSelector("div[id=editor]").findElement.get
+    box.underlying.sendKeys(content)
+  }
+
   def post(id:Int) = s"localhost:$port/editor/$id"
 
   def revisionListText = {

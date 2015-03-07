@@ -24,6 +24,7 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     database.withSession { implicit session =>
 
       val firstFile = PostHelper.createPost("DOB Test News Post","MC Donalds","ah ah blah",1)
+      PostHelper.createPost("2nd Post","MC Donalds","Jimbo jimbp",1)
       GitRepo.updateFile(firstFile.content,"Here is some data I just changed")
     }
   }
@@ -58,6 +59,13 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
       goTo (editorPage)
       //editorPage.highLightText("Start Typing your post content here")
       //editorPage.highLightText("Typing")
+      editorPage.save
+      eventually{ editorPage.saveSuccessful mustEqual (true) }
+    }
+
+    "Be able to update a post" in {
+      goTo (editorPage.post(2))
+      editorPage.addContent("leek")
       editorPage.save
       eventually{ editorPage.saveSuccessful mustEqual (true) }
     }
