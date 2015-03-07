@@ -10,11 +10,11 @@ import play.api.db.slick._
 import play.api.db.slick.Config.driver.simple._
 import play.api.mvc._
 import play.api.Play.current
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.libs.json.Json._
 
 import scala.collection.mutable.ListBuffer
-import scala.util.parsing.json.JSONArray
+import scala.util.parsing.json.{JSONObject, JSONArray}
 
 
 /**
@@ -26,6 +26,7 @@ object JsonApi extends Controller {
   implicit val trackFormat =  Json.format[Track]
   implicit val bioFormat =  Json.format[Biography]
   implicit val newsFormat =  Json.format[Post]
+  implicit val commitFormat =  Json.format[CommitMeta]
 
   def getDiscographyByReleaseType(_type: Int) = DBAction { implicit response =>
       Ok(toJson(Discography.getByReleaseType(_type)))
@@ -42,6 +43,10 @@ object JsonApi extends Controller {
   }
   def getPostById(id: Int) = DBAction { implicit response =>
     Ok(toJson(Post.getById(id).head.json))
+  }
+
+  def getPostRevisionById(id: Int, revId : String) = DBAction { implicit response =>
+    Ok(toJson(Post.getById(id).head.json(revId)))
   }
 
   def getRevisions(id: Int) =  DBAction { implicit response =>
@@ -61,6 +66,28 @@ object JsonApi extends Controller {
         }
         case true => Ok(toJson("None"))
       }
+
+  }
+
+  def getRevisionsWithDates(id: Int) =  DBAction { implicit response =>
+    val post = Post.getById(id)
+    post.isEmpty match{
+      case false => {
+        val filename = post.head.content
+        val revisions = GitRepo.findWithDate(filename)
+        revisions.isEmpty match {
+          case false => {
+            val json = ListBuffer[JsValue]()
+            revisions.foreach( j => json += toJson(j))
+            Ok(toJson(toJson(json)))
+          }
+          case true => {
+            Ok(toJson("None"))
+          }
+        }
+      }
+      case true => Ok(toJson("None"))
+    }
 
   }
 

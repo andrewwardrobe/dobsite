@@ -20,13 +20,17 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
 
   def post(id:Int) = s"localhost:$port/editor/$id"
 
-  def revisionList = {
+  def revisionListText = {
     val revisions: ListBuffer[String] = new ListBuffer[String]()
     cssSelector("*[id*='revId']").findAllElements.toList.foreach { element =>
       revisions += element.text
     }
     revisions.toList
   }
+
+  def revisionList = cssSelector("*[id*='revId']").findAllElements.toList
+
+  def revisionLinks = cssSelector("*[id*='revLink']").findAllElements.toList
 
   def save = {
     click on id("saveButton")

@@ -4,6 +4,7 @@ import java.io.{File, FileWriter}
 import java.util.Date
 
 import com.sun.xml.internal.bind.v2.TODO
+import models.CommitMeta
 import org.apache.commons.io.FileUtils
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.internal.storage.file.FileRepository
@@ -23,7 +24,8 @@ import org.apache.commons.io
  * Created by andrew on 25/01/15.
  */
 object GitRepo {
-  val repoLocation = Play.application.configuration.getString("git.repo.dir").getOrElse("content/.git")
+
+   val repoLocation = Play.application.configuration.getString("git.repo.dir").getOrElse("content/.git")
   val repo = init
   val git = new Git(repo)
 
@@ -35,6 +37,25 @@ object GitRepo {
     }
     commitList.toList
   }
+
+  def findWithDate(path:String) = {
+    val commits = git.log().addPath(path).call()
+    val commitList: ListBuffer[CommitMeta] = new ListBuffer[CommitMeta]()
+    commits.foreach{ commit =>
+      commitList +=new CommitMeta(commit.getName , commit.getAuthorIdent.getWhen().toString)
+    }
+    commitList.toList
+  }
+
+  def findWithDate = {
+    val commits = git.log().call()
+    val commitList: ListBuffer[CommitMeta] = new ListBuffer[CommitMeta]()
+    commits.foreach{ commit =>
+      commitList +=new CommitMeta(commit.getName , commit.getAuthorIdent.getWhen().toString)
+    }
+    commitList.toList
+  }
+
 
   def findRevDates = {
     val commits = git.log().call()

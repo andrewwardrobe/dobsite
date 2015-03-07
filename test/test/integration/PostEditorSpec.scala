@@ -1,6 +1,7 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
+import org.openqa.selenium.By
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play.{FirefoxFactory, OneBrowserPerSuite, OneServerPerSuite, PlaySpec}
 import play.api.db.DB
@@ -65,16 +66,26 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   "Revision List" must {
     "Display a list of revisions when there is some" in {
       goTo (editorPage.post(1))
-      eventually{editorPage.revisionList.size must be (2)}
+      eventually{editorPage.revisionListText.size must be (2)}
     }
 
     "Display a list of revisions by dates" in {
       goTo (editorPage.post(1))
-      eventually{editorPage.revisionList(1) must include regex """\d{2}/\d{2}/\d{4}""".r }
+      eventually{editorPage.revisionListText(1) must include regex """\d{2}/\d{2}/\d{4}""".r }
     }
 
+    "Display a list of revisions by dates with links to the revision" in {
+      goTo (editorPage.post(1))
+      eventually{editorPage.revisionLinks must not be empty }
+    }
+
+
     "load the specifed revision when the link is clicked" in {
-      fail("Not Implemented")
+      goTo (editorPage.post(1))
+      eventually{
+        click on id(editorPage.revisionLinks(1).attribute("id").get)
+        editorPage.editorBoxText must include ("ah ah blah")
+      }
     }
   }
 }

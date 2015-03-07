@@ -147,12 +147,38 @@ function getRevisions(){
     var id = $("#postId").val();
     var json = {
                success: function(data){
+                    var count = 1;
                     $.each(data,function(idx,rev){
                         var revDiv = $("<li>");
-                        revDiv.attr('id','revId1');
-                        var dte = new Date(rev);
-                        revDiv.text(dte.toLocaleString());
+                        revDiv.attr('id','revId'+count);
+                        var dte = new Date(rev.commitDate);
+                        var link = $("<a>");
+                        var commitId = rev.commitId;
+                        var id = $("#postId").val();
+                        var linkRef = jsRoutes.controllers.JsonApi.getPostRevisionById(id,commitId).url;
+                        link.attr('href','#');
+                        link.attr('id','revLink'+count);
+                        link.text(dte.toLocaleString());
+                        revDiv.append(link);
                         $("#revisions").append(revDiv);
+                        $(revDiv).on('click',function(){
+                            var id = $("#postId").val();
+                            if(id != -1){
+                                $("#saveButton").attr('value',"Update");
+                                jsRoutes.controllers.JsonApi.getPostRevisionById(id,commitId).ajax({
+                                    success: function (data){
+                                       $("#editor").html(data.content);
+                                       $("#postTitle").text = data.title;
+                                       $("#author").attr('value', data.author);
+                                       var d = new Date(data.dateCreated);
+                                       var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+                                       $("#dateCreated").attr('value', dateStr);
+                                       $("#postType").val(data.postType);
+                                    }
+                                });
+                            }
+                         });
+                        count++;
                     });
                },
                error: function(data){
@@ -162,7 +188,7 @@ function getRevisions(){
                  $("#revisions").append(revDiv);
                }
         };
-    jsRoutes.controllers.JsonApi.getRevisions(id).ajax(json);
+    jsRoutes.controllers.JsonApi.getRevisionsWithDates(id).ajax(json);
 }
 
 function doTabIndent(){

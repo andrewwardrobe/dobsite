@@ -16,7 +16,7 @@ import play.api.libs.json.{JsString, Json, JsValue, JsObject, JsNumber}
  */
 case class Post(id: Int, title: String,postType: Int, dateCreated: Date, author: String,content: String ) {
 
-  val json: JsValue = Json.obj(
+  def json: JsValue = Json.obj(
      "id" -> id,
       "title" -> title,
     "postType" -> postType,
@@ -30,8 +30,26 @@ case class Post(id: Int, title: String,postType: Int, dateCreated: Date, author:
                                      ))
   )
 
+  def json(rev :String): JsValue = Json.obj(
+    "id" -> id,
+    "title" -> title,
+    "postType" -> postType,
+    "dateCreated" -> dateCreated,
+    "author" -> author,
+    "content" -> JsString(Jsoup.clean(getContent(rev),"http://localhost:9000/",Whitelist.basicWithImages()
+      .preserveRelativeLinks(true)
+      .addAttributes("img","class")
+      .addAttributes("p","class")
+      .addAttributes("div","align")
+    ))
+  )
+
   def getContent() = {
     GitRepo.getFile(content)
+  }
+
+  def getContent(commitId :String) = {
+    GitRepo.getFile(content,commitId)
   }
 }
 

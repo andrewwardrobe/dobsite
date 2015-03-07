@@ -15,19 +15,14 @@ class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
 
   "Repository" must {
-    "Be able to list all commits" in {
-      val commitList = GitRepo.find
-      commitList.length must equal(7) //The setup does a commit so this should be 7
-    }
-
-    "Be able to list all commit dates" in {
-      val commitList = GitRepo.find
-      commitList.length must equal(7) //The setup does a commit so this should be 7
-    }
-
     "Be able to show the current branch" in {
       val currBranch = GitRepo.getBranch
       currBranch must equal ("refs/heads/master")
+    }
+
+    "Be able to list all commits" in {
+      val commitList = GitRepo.find
+      commitList.length must equal(7) //The setup does a commit so this should be 7
     }
 
     "Be able to list all commits for a path" in {
@@ -35,8 +30,25 @@ class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
       commitList.length must equal(2)
     }
 
+    "Be able to list all commit dates" in {
+      val commitList = GitRepo.find
+      commitList.length must equal(7) //The setup does a commit so this should be 7
+    }
+
     "Be able to list all commit dates for a path" in {
       val commitList = GitRepo.findRevDates ("leek")
+      commitList.length must equal(2)
+    }
+
+
+
+    "Be able to list all commits along side its commit date" in {
+      val commitList = GitRepo.findWithDate
+      commitList.length must equal(7) //The setup does a commit so this should be 7
+    }
+
+    "Be able to list all commits along side its commit date for a path" in {
+      val commitList = GitRepo.findWithDate ("leek")
       commitList.length must equal(2)
     }
   }

@@ -87,7 +87,8 @@ object Application extends Controller  with OptionalAuthElement with AuthConfigI
       Ok(Routes.javascriptRouter("jsRoutes")(
           routes.javascript.Authorised.submitBlog,
           routes.javascript.JsonApi.getPostById,
-        routes.javascript.JsonApi.getRevisions,
+        routes.javascript.JsonApi.getPostRevisionById,
+        routes.javascript.JsonApi.getRevisionsWithDates,
         routes.javascript.Authorised.submitBlogUpdate,
         routes.javascript.Admin.changeRole,
         routes.javascript.UserServices.checkEmail,
