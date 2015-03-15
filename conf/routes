@@ -11,6 +11,9 @@ GET     /leek                       controllers.Authorised.index
 GET     /checkname/:name              controllers.UserServices.checkName(name :String)
 GET     /checkemail/:email              controllers.UserServices.checkEmail(email :String)
 
+
+GET     /testpage                         controllers.Application.posts
+
 POST     /signup                     controllers.UserServices.register
 GET     /login                           controllers.UserServices.login
 POST    /login                           controllers.UserServices.authenticate

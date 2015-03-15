@@ -33,7 +33,8 @@ libraryDependencies ++= Seq(
   "jp.t2v" %% "play2-auth-test" % "0.13.0" % "test",
   "org.mindrot" % "jbcrypt" % "0.3m",
   "commons-io" % "commons-io" % "2.4",
-  "org.eclipse.jgit" % "org.eclipse.jgit" % "3.6.1.201501031845-r"
+  "org.eclipse.jgit" % "org.eclipse.jgit" % "3.6.1.201501031845-r",
+  "org.webjars" % "font-awesome" % "4.3.0-1"
 )
 
 Keys.fork in (Test) := true

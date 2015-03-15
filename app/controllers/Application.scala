@@ -34,6 +34,11 @@ object Application extends Controller  with OptionalAuthElement with AuthConfigI
     Ok(views.html.index(maybeUser))
   }
 
+  def posts =  Action(parse.temporaryFile) { implicit request =>
+
+    Ok(views.html.posts("",Post.blogForm,-1))
+  }
+
 
   def upload = Action(parse.temporaryFile) { request =>
 

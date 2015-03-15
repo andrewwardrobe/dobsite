@@ -121,6 +121,7 @@ $("#saveButton").click(function(){
                $("#result").append(d);
                $("#postId").val(data);
                getRevisions();
+               window.removeEventListener("beforeunload",unload);
            },
            error: function(data){
                var d = $('<div>');
@@ -164,6 +165,8 @@ $(function(){
         });
     }
 });
+
+
 
 function doCodeFormat()
 {
@@ -220,3 +223,20 @@ $('#revisions').affix({
 });
 
 getRevisions();
+
+
+
+
+function unload (e) {
+  var confirmationMessage = "Leek?";
+
+  (e || window.event).returnValue = confirmationMessage;     // Gecko and Trident
+  return confirmationMessage;                                // Gecko and WebKit
+}
+
+$('#editor').on('input',function(){
+    window.editorChanged = true;
+    window.addEventListener("beforeunload",unload);
+});
+
+
