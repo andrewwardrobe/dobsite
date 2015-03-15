@@ -2,14 +2,15 @@ package test.integration
 
 import com.daoostinboyeez.git.GitRepo
 import org.openqa.selenium.By
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
+import org.openqa.selenium.support.ui.ExpectedConditions
+import org.scalatest.{ShouldMatchers, BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play.{FirefoxFactory, OneBrowserPerSuite, OneServerPerSuite, PlaySpec}
 import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
 import test.helpers.PostHelper
-import test.integration.pages.{SignUpPage, SignInPage, EditorPage}
+import test.integration.pages.{NewsPage, SignUpPage, SignInPage, EditorPage}
 
 import scala.slick.jdbc.JdbcBackend._
 
@@ -30,6 +31,8 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   }
 
   val editorPage = new EditorPage(port)
+  val newsPage = new NewsPage(port)
+
   var setupDone: Boolean = false
 
   def setup() = {
@@ -57,8 +60,6 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
     "Be able to save a post" in {
       goTo (editorPage)
-      //editorPage.highLightText("Start Typing your post content here")
-      //editorPage.highLightText("Typing")
       editorPage.save
       eventually{ editorPage.saveSuccessful mustEqual (true) }
     }
@@ -69,6 +70,18 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
       editorPage.save
       eventually{ editorPage.saveSuccessful mustEqual (true) }
     }
+
+    //Selenium doesnt seem to be able to handle this
+//    "Display a warning when trying to leave the page if a change has been made" in {
+//      go to editorPage
+//      addContent("Here is some changes")
+//      go to newsPage
+//      eventually {
+//        switch to alertBox
+//      }
+//    }
+
+
   }
 
   "Revision List" must {
@@ -87,8 +100,7 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
       eventually{editorPage.revisionLinks must not be empty }
     }
 
-
-    "load the specifed revision when the link is clicked" in {
+    "load the specified revision when the link is clicked" in {
       goTo (editorPage.post(1))
       eventually{
         click on id(editorPage.revisionLinks(1).attribute("id").get)
@@ -96,4 +108,7 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
       }
     }
   }
+
+
+  def addContent(content: String) = editorPage.addContent(content)
 }

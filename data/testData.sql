@@ -1,9 +1,9 @@
 insert into "biography" values (1, 'MC Donalds', 0, 'images/crew/donalds_col.png', 'images/crew/donalds_col.png','blah blah');
-insert into "biography" values (2, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
-insert into "biography" values (3, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
-insert into "biography" values (4, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
-insert into "biography" values (5, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
-insert into "biography" values (6, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
+insert into "biography" values (2, '2 Fresh', 0, 'images/crew/2fresh_col.png', 'images/crew/2fresh_col.png','blah blah');
+insert into "biography" values (3, 'DJ D-Lux', 0, 'images/crew/dlux_col.png', 'images/crew/dlux_col.png','blah blah');
+insert into "biography" values (4, 'T-Bag', 0, 'images/crew/tbag_col.png', 'images/crew/tbag_col.png','blah blah');
+insert into "biography" values (5, 'Pope Frost', 0, 'images/crew/popefrost_col.png', 'images/crew/popefrost_col.png','blah blah');
+insert into "biography" values (6, 'Jean Jemonge', 0, 'images/crew/jeanjemonge_col.png', 'images/crew/jeanjemonge_col.png','blah blah');
 insert into "biography" values (7, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
 insert into "biography" values (8, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
 insert into "biography" values (9, 'MC Donalds', 0, 'images/crew/donalds_bw.jpg', 'images/crew/donalds_bw.jpg','blah blah');
