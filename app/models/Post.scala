@@ -16,6 +16,7 @@ import play.api.libs.json.{JsString, Json, JsValue, JsObject, JsNumber}
  */
 case class Post(id: Int, title: String,postType: Int, dateCreated: Date, author: String,content: String ) {
 
+  val repo = GitRepo.apply()
   def json: JsValue = Json.obj(
      "id" -> id,
       "title" -> title,
@@ -45,11 +46,11 @@ case class Post(id: Int, title: String,postType: Int, dateCreated: Date, author:
   )
 
   def getContent() = {
-    GitRepo.getFile(content)
+    repo.getFile(content)
   }
 
   def getContent(commitId :String) = {
-    GitRepo.getFile(content,commitId)
+    repo.getFile(content,commitId)
   }
 }
 

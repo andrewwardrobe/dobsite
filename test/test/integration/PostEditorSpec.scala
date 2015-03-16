@@ -21,12 +21,13 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
+  val repo = GitRepo.apply()
   def extraSetup = {
     database.withSession { implicit session =>
 
       val firstFile = PostHelper.createPost("DOB Test News Post","MC Donalds","ah ah blah",1)
       PostHelper.createPost("2nd Post","MC Donalds","Jimbo jimbp",1)
-      GitRepo.updateFile(firstFile.content,"Here is some data I just changed")
+      repo.updateFile(firstFile.content,"Here is some data I just changed")
     }
   }
 
@@ -39,7 +40,7 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     val signUp = new SignUpPage(port)
     val signIn = new SignInPage(port)
     if(!setupDone) {
-      GitRepo.refresh
+      repo.refresh
       signUp.signup("andrew", "andrew@dob.com", "pa$$word")
       signIn.signin("andrew", "pa$$word")
       extraSetup

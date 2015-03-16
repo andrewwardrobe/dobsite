@@ -27,6 +27,7 @@ object JsonApi extends Controller {
   implicit val bioFormat =  Json.format[Biography]
   implicit val newsFormat =  Json.format[Post]
   implicit val commitFormat =  Json.format[CommitMeta]
+  val repo = GitRepo.apply()
 
   def getDiscographyByReleaseType(_type: Int) = DBAction { implicit response =>
       Ok(toJson(Discography.getByReleaseType(_type)))
@@ -54,7 +55,7 @@ object JsonApi extends Controller {
       post.isEmpty match{
         case false => {
           val filename = post.head.content
-          val revisions = GitRepo.findRevDates(filename)
+          val revisions = repo.findRevDates(filename)
           revisions.isEmpty match {
             case false => {
               Ok(toJson(revisions))
@@ -74,7 +75,7 @@ object JsonApi extends Controller {
     post.isEmpty match{
       case false => {
         val filename = post.head.content
-        val revisions = GitRepo.findWithDate(filename)
+        val revisions = repo.findWithDate(filename)
         revisions.isEmpty match {
           case false => {
             val json = ListBuffer[JsValue]()

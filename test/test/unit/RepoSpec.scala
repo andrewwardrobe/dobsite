@@ -13,62 +13,63 @@ import test._
 class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
-
+  val repo = GitRepo.apply()
+  
   "Repository" must {
     "Be able to show the current branch" in {
-      val currBranch = GitRepo.getBranch
+      val currBranch = repo.getBranch
       currBranch must equal ("refs/heads/master")
     }
 
     "Be able to list all commits" in {
-      val commitList = GitRepo.find
+      val commitList = repo.find
       commitList.length must equal(7) //The setup does a commit so this should be 7
     }
 
     "Be able to list all commits for a path" in {
-      val commitList = GitRepo.find ("leek")
+      val commitList = repo.find ("leek")
       commitList.length must equal(2)
     }
 
     "Be able to list all commit dates" in {
-      val commitList = GitRepo.find
+      val commitList = repo.find
       commitList.length must equal(7) //The setup does a commit so this should be 7
     }
 
     "Be able to list all commit dates for a path" in {
-      val commitList = GitRepo.findRevDates ("leek")
+      val commitList = repo.findRevDates ("leek")
       commitList.length must equal(2)
     }
 
 
 
     "Be able to list all commits along side its commit date" in {
-      val commitList = GitRepo.findWithDate
+      val commitList = repo.findWithDate
       commitList.length must equal(7) //The setup does a commit so this should be 7
     }
 
     "Be able to list all commits along side its commit date for a path" in {
-      val commitList = GitRepo.findWithDate ("leek")
+      val commitList = repo.findWithDate ("leek")
       commitList.length must equal(2)
     }
   }
 
 
    before {
-    GitRepo.refresh
-    val firstFile = GitRepo.createFile("Here is some data in a file")
-    val secondFile = GitRepo.createFile("Some other data")
+    repo.refresh
+    val firstFile = repo.createFile("Here is some data in a file")
+    val secondFile = repo.createFile("Some other data")
 
-    GitRepo.newFile("leek","Here is leek")
+    repo.newFile("leek","Here is leek")
 
-    GitRepo.updateFile(firstFile,"Here is some data in a file I just changed")
-    GitRepo.updateFile(secondFile,"Some other data, i just changed")
+    repo.updateFile(firstFile,"Here is some data in a file I just changed")
+    repo.updateFile(secondFile,"Some other data, i just changed")
 
-    GitRepo.updateFile("leek","Here is some more leeks")
+    repo.updateFile("leek","Here is some more leeks")
   }
 
   after {
-    GitRepo.refresh
+    repo.refresh
   }
 
 }

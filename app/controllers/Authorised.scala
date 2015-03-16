@@ -2,7 +2,7 @@ package controllers
 
 import java.util.Date
 
-import com.daoostinboyeez.git.GitRepo
+import com.daoostinboyeez.git.{GitRepo}
 import controllers.Application._
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
@@ -28,7 +28,7 @@ import scala.slick.jdbc.JdbcBackend._
 object Authorised extends Controller with AuthElement with AuthConfigImpl {
 
 
-
+  val repo = GitRepo.apply()
 
   def index = StackAction(AuthorityKey -> Contributor) { implicit request =>
     val user = loggedIn
@@ -49,7 +49,7 @@ object Authorised extends Controller with AuthElement with AuthConfigImpl {
 
     val item = Post.blogForm.bindFromRequest().get
     val content = item.content
-    val filename = GitRepo.createFile(content)
+    val filename = repo.createFile(content)
     val newItem = new Post(item.id,item.title,item.postType,item.dateCreated,item.author,filename)
 
     val id = database.withSession { implicit s =>
@@ -70,7 +70,7 @@ object Authorised extends Controller with AuthElement with AuthConfigImpl {
     database.withSession { implicit s =>
       val filename = Post.getById(item.id).head.content
       val newItem = new Post(item.id,item.title,item.postType,item.dateCreated,item.author,filename)
-      GitRepo.updateFile(filename,content)
+      repo.updateFile(filename,content)
       Post.update(newItem)
     }
     Ok(""+item.id)

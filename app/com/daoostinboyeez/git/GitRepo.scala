@@ -23,9 +23,9 @@ import org.apache.commons.io
 /**
  * Created by andrew on 25/01/15.
  */
-object GitRepo {
+class GitRepo {
 
-   val repoLocation = Play.application.configuration.getString("git.repo.dir").getOrElse("content/.git")
+  val repoLocation = Play.application.configuration.getString("git.repo.dir").getOrElse("content/.git")
   val repo = init
   val git = new Git(repo)
 
@@ -85,13 +85,14 @@ object GitRepo {
   }
 
   def getRepoDir = git.getRepository.getDirectory
+
   def getBranch = { git.getRepository.getFullBranch()}
 
   def newFile(path:String, fileData:String)={
     doFile(path, fileData,s"Added File $path")
   }
 
- def init = {
+  def init = {
    Play.application.configuration.getString("git.repo.testmode").getOrElse("false") match {
      case "false" =>
        Logger.info("In Non Test Mode = ")
@@ -155,13 +156,11 @@ object GitRepo {
     getFile(path,Constants.HEAD)
   }
 
-
   def getFile(path:String,revSpec:String)= {
     val id = repo.resolve(revSpec)
     val reader = repo.newObjectReader()
     val revWalk = new RevWalk(reader)
     val commit = revWalk.parseCommit(id)
-
     val revTree = commit.getTree()
     val treeWalk = TreeWalk.forPath(reader,path,revTree)
 
@@ -175,4 +174,15 @@ object GitRepo {
       new String("")
     }
   }
+}
+
+object GitRepo{
+  lazy val repo = init
+
+  private def init = {
+    new GitRepo
+  }
+
+  def apply() = {repo}
+  def refresh = repo.refresh
 }
