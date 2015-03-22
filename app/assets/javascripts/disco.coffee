@@ -27,12 +27,15 @@ doModal = (id, image, title) ->
         title.attr 'class', 'model-title'
         header.append title
         body = $("<div>")
-        body.attr 'class', 'modal-body'
+        body.attr 'class', 'center modal-body'
         content.append body
+        newDiv = $("<div>")
+        newDiv.attr 'align', 'center'
         img = $("<img>")
         img.attr 'class', 'discoImage'
         img.attr 'src', 'assets/' + image
-        content.append img
+        newDiv.append img
+        body.append newDiv
         tracks = $("<ol>")
         content.append tracks
         $.get "/json/tracks/byrelease/" + id, (data) ->

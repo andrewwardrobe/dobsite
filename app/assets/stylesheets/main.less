@@ -1,6 +1,7 @@
 @import "lib/bootstrap/less/bootstrap.less";
 
 @body-bg:#000000;
+@nav-link-hover-bg:@gray-dark;
 
 @modal-content-bg:#000000;
 @table-border-color:#000;
@@ -11,6 +12,13 @@
 @thumbWidth:150px;
 @thumbHeight:150px;
 
+.modal-header .close{
+    color:#ffffff;
+}
+
+.center{
+    align:center;
+}
 
 
 @text-color:#fff;
@@ -18,14 +26,24 @@
 
 div.floating-menu {
     position:fixed;
-    background:#000000;
+    background:@gray-darker;
     border:1px solid #eeeeee;
     width:250px;
     top:300px;
     right: 5px;
     z-index:100;
     font-size: 12px;
+    border-radius:15px;
 }
+
+#revBox{
+    padding-top: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+    padding-left: 15px;
+}
+
+
 
 #editor {
 max-height: 250px;
@@ -215,6 +233,8 @@ box-shadow: 0 0 15px rgba(211, 211, 211, 1);
 .discoImage{
     width:@albumWidth;
     height:@albumHeight;
+    text-align:center;
+    align:center;
  }
 
 .moveLeft{
