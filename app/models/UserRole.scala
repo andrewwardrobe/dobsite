@@ -11,12 +11,12 @@ object UserRole {
   case object Administrator extends UserRole("Administrator")
   case object NormalUser extends UserRole("NormalUser")
   case object Contributor extends UserRole("Contributor")
-  case object GuestUser extends UserRole("GuestUser")
+  case object InActiveUser extends UserRole("InActiveUser")
   def valueOf(value: String): UserRole = value match {
     case "Administrator" => Administrator
     case "NormalUser" => NormalUser
     case "Contributor" => Contributor
-    case "GuestUser" => GuestUser
+    case "InActiveUser" => InActiveUser
     case _ => throw new IllegalArgumentException()
   }
 }
