@@ -37,6 +37,7 @@ doModal = (id, image, title) ->
         newDiv.append img
         body.append newDiv
         tracks = $("<ol>")
+        tracks.attr 'id','double'
         content.append tracks
         $.get "/json/tracks/byrelease/" + id, (data) ->
             $.each data, (index, item) ->
