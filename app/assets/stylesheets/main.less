@@ -25,6 +25,15 @@
 }
 
 
+
+.bgimg {
+    background-image: url(../images/bglogo.png);
+    	background-size: 375px 525px;
+    	background-repeat: no-repeat;
+    	background-position: center;
+    	background-attachment: fixed;
+}
+
 @text-color:#fff;
 @input-color:#000;
 
@@ -265,13 +274,27 @@ box-shadow: 0 0 15px rgba(211, 211, 211, 1);
     text-align:center;
     vertical-align: text-top;
     border-top: #000;
-
+border-top: none;
   }
+
+  .table th, .table td {
+       border-top: none;
+   }
+
   .discoCell{
     text-align:center;
     vertical-align: text-top;
     border-top: #000;
+border-top: none;
+  }
 
+  .table-no-border>thead>tr>th,
+  .table-no-border>tbody>tr>th,
+  .table-no-border>tfoot>tr>th,
+  .table-no-border>thead>tr>td,
+  .table-no-border>tbody>tr>td,
+  .table-no-border>tfoot>tr>td {
+    border-top: none;
   }
 /*
  * Masthead for nav
