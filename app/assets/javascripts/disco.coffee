@@ -4,7 +4,7 @@ l2t = (list, target, threshold, cols) ->
   `var row`
   items = $('#' + list).children()
   table = $('<table>')
-  table.attr 'class', 'disc-table'
+  table.attr 'class', 'table table-condensed table-no-border'
   $('#' + target).append table
   cnt = 0
   numRows = Math.ceil(items.length / cols)
