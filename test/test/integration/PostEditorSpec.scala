@@ -88,22 +88,26 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   "Revision List" must {
     "Display a list of revisions when there is some" in {
       goTo (editorPage.post(1))
+      editorPage.toggleRevisionList
       eventually{editorPage.revisionListText.size must be (2)}
     }
 
     "Display a list of revisions by dates" in {
       goTo (editorPage.post(1))
+      editorPage.toggleRevisionList
       eventually{editorPage.revisionListText(1) must include regex """\d{2}/\d{2}/\d{4}""".r }
     }
 
     "Display a list of revisions by dates with links to the revision" in {
       goTo (editorPage.post(1))
+      editorPage.toggleRevisionList
       eventually{editorPage.revisionLinks must not be empty }
     }
 
     "load the specified revision when the link is clicked" in {
       goTo (editorPage.post(1))
       eventually{
+        editorPage.toggleRevisionList
         click on id(editorPage.revisionLinks(1).attribute("id").get)
         editorPage.editorBoxText must include ("ah ah blah")
       }

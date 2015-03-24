@@ -11,5 +11,5 @@ class DiscographyPage (val port: Int)(implicit driver:WebDriver) extends org.sca
 
   def Albums = cssSelector("*[id*='alb']").findAllElements
   def Modals = cssSelector("*[id*='RelIDmodal']").findAllElements
-  def Tracks = cssSelector("*[id*='trackRel']").findAllElements
+  def Tracks = cssSelector("*[id*='_tab_cell']").findAllElements
 }
