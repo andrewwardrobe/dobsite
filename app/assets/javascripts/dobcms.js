@@ -214,15 +214,6 @@ $("#editor").on("DOMNodeInserted",function(event){
             break;
     }
 });
-$('#editor').wysiwyg();
-
-$('#revisions').affix({
-      offset: {
-        top: 350
-      }
-});
-
-getRevisions();
 
 
 
@@ -234,9 +225,56 @@ function unload (e) {
   return confirmationMessage;                                // Gecko and WebKit
 }
 
-$('#editor').on('input',function(){
-    window.editorChanged = true;
-    window.addEventListener("beforeunload",unload);
-});
 
+
+
+function addEditorMenu(){
+    var edFuncLink = $("<a>");
+    $(edFuncLink).attr('id',"editorMenu");
+    $(edFuncLink).attr('href','#');
+    $(edFuncLink).attr('class','toggle');
+    $(edFuncLink).attr('data-toggle','dropdown');
+    $(edFuncLink).text("Revisions");
+    var listElem = $("<li>");
+    $(listElem).append(edFuncLink);
+    $(listElem).attr('class','dropdown');
+
+    //Add in the menu
+    var edFuncMenu = $("<ul>");
+    $(edFuncMenu).attr('class','dropdown-menu');
+    $(edFuncMenu).attr('role','menu');
+
+    var revisions = $("<li>");
+    $(revisions).attr('class','dropdown');
+    $(revisions).attr('id','revisions');
+
+
+    $(edFuncMenu).append(revisions);
+    $(listElem).append(edFuncMenu);
+
+
+    $("#rightSideNavBar").prepend(listElem);
+}
+
+addEditorMenu();
+
+$(function(){
+    $('#editor').on('input',function(){
+        window.editorChanged = true;
+        window.addEventListener("beforeunload",unload);
+    });
+
+    $('#editor').wysiwyg();
+
+    $('#revisions').affix({
+          offset: {
+            top: 350
+          }
+    });
+
+
+    getRevisions();
+
+
+});
 

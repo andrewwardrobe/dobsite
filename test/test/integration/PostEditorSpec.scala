@@ -10,7 +10,7 @@ import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
 import test.helpers.PostHelper
-import test.integration.pages.{NewsPage, SignUpPage, SignInPage, EditorPage}
+import test.integration.pages._
 
 import scala.slick.jdbc.JdbcBackend._
 
@@ -33,6 +33,7 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
   val editorPage = new EditorPage(port)
   val newsPage = new NewsPage(port)
+  val menuBar = new MenuBar(port)
 
   var setupDone: Boolean = false
 
@@ -82,32 +83,38 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 //      }
 //    }
 
+    "Display a drop down menu for editor things" in {
+      goTo (editorPage)
+      eventually {menuBar.revisionsMenu .text must include ("Revisions") }
 
+    }
   }
 
   "Revision List" must {
     "Display a list of revisions when there is some" in {
       goTo (editorPage.post(1))
-      editorPage.toggleRevisionList
+
       eventually{editorPage.revisionListText.size must be (2)}
     }
 
     "Display a list of revisions by dates" in {
       goTo (editorPage.post(1))
-      editorPage.toggleRevisionList
-      eventually{editorPage.revisionListText(1) must include regex """\d{2}/\d{2}/\d{4}""".r }
+
+      eventually{
+        click on id("editorMenu")
+        editorPage.revisionListText(1) must include regex """\d{2}/\d{2}/\d{4}""".r
+      }
     }
 
     "Display a list of revisions by dates with links to the revision" in {
       goTo (editorPage.post(1))
-      editorPage.toggleRevisionList
       eventually{editorPage.revisionLinks must not be empty }
     }
 
     "load the specified revision when the link is clicked" in {
       goTo (editorPage.post(1))
       eventually{
-        editorPage.toggleRevisionList
+        click on id("editorMenu")
         click on id(editorPage.revisionLinks(1).attribute("id").get)
         editorPage.editorBoxText must include ("ah ah blah")
       }

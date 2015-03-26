@@ -37,7 +37,7 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
 
   def revisionLinks = cssSelector("*[id*='revLink']").findAllElements.toList
 
-  def toggleRevisionList = click on id("revToggle")
+
   def save = {
     click on id("saveButton")
   }
