@@ -232,9 +232,9 @@ function addEditorMenu(){
     var edFuncLink = $("<a>");
     $(edFuncLink).attr('id',"editorMenu");
     $(edFuncLink).attr('href','#');
-    $(edFuncLink).attr('class','toggle');
+    $(edFuncLink).attr('class','dropdown-toggle');
     $(edFuncLink).attr('data-toggle','dropdown');
-    $(edFuncLink).text("Revisions");
+    $(edFuncLink).html('Revisions<span class="caret"></span>');
     var listElem = $("<li>");
     $(listElem).append(edFuncLink);
     $(listElem).attr('class','dropdown');
@@ -244,12 +244,10 @@ function addEditorMenu(){
     $(edFuncMenu).attr('class','dropdown-menu');
     $(edFuncMenu).attr('role','menu');
 
-    var revisions = $("<li>");
-    $(revisions).attr('class','dropdown');
-    $(revisions).attr('id','revisions');
+    $(edFuncMenu).attr('id','revisions');
 
 
-    $(edFuncMenu).append(revisions);
+  //  $(edFuncMenu).append(revisions);
     $(listElem).append(edFuncMenu);
 
 
