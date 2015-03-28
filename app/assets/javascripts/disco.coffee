@@ -75,7 +75,8 @@ doModal = (id, image, title) ->
         newDiv = $("<div>")
         newDiv.attr 'align', 'center'
         img = $("<img>")
-        img.attr 'class', 'discoImage'
+        img.attr 'class', 'discoImage img-responsive'
+        img.attr 'class', 'discoImage img-responsive'
         img.attr 'src', 'assets/' + image
         newDiv.append img
         body.append newDiv
