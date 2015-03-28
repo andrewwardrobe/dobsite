@@ -257,12 +257,15 @@ function addEditorMenu(){
 addEditorMenu();
 
 $(function(){
-    $('#editor').on('input',function(){
+
+    var editor = $('#editor');
+    $(editor).on('input',function(){
         window.editorChanged = true;
         window.addEventListener("beforeunload",unload);
     });
 
-    $('#editor').wysiwyg();
+    $(editor).wysiwyg();
+
 
     $('#revisions').affix({
           offset: {
@@ -276,3 +279,8 @@ $(function(){
 
 });
 
+(function($){
+        $(window).load(function(){
+            $("#editor").mCustomScrollbar();
+        });
+    })(jQuery);
