@@ -18,7 +18,7 @@ object PostHelper {
   val types = Map("News" -> 1, "Music" -> 2, "Gaz Three" -> 3)
   def createPost(title:String, author:String, content :String, typ: Int) = {
     val filename = repo.createFile(content)
-    val post = new Post(1, title,typ,new Date(),author,filename)
+    val post = new Post(1, title,typ,new Date(),author,filename,"")
     database.withSession { implicit s :Session =>
       Post.insert(post)
     }

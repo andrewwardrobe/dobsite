@@ -14,7 +14,7 @@ import play.api.libs.json.{JsString, Json, JsValue, JsObject, JsNumber}
 /**
  * Created by andrew on 11/10/14.
  */
-case class Post(id: Int, title: String,postType: Int, dateCreated: Date, author: String,content: String ) {
+case class Post(id: Int, title: String,postType: Int, dateCreated: Date, author: String,content: String, extraData: String ) {
 
   val repo = GitRepo.apply()
   def json: JsValue = Json.obj(
@@ -28,7 +28,8 @@ case class Post(id: Int, title: String,postType: Int, dateCreated: Date, author:
                                                                       .addAttributes("img","class")
                                                                       .addAttributes("p","class")
                                                                       .addAttributes("div","align")
-                                     ))
+                                     )),
+    "extraData" -> extraData
   )
 
   def json(rev :String): JsValue = Json.obj(
@@ -42,7 +43,8 @@ case class Post(id: Int, title: String,postType: Int, dateCreated: Date, author:
       .addAttributes("img","class")
       .addAttributes("p","class")
       .addAttributes("div","align")
-    ))
+    )),
+    "extraData" -> extraData
   )
 
   def getContent() = {
@@ -69,8 +71,9 @@ object Post{
       def dateCreated = column[Date]("DATE_CREATED")
       def author = column[String]("AUTHOR")
       def content = column[String]("CONTENT")
+      def extraData = column[String]("EXTRA_DATA")
 
-      def * = (id,title,postType,dateCreated,author,content) <> ((Post.apply _).tupled, Post.unapply)
+      def * = (id,title,postType,dateCreated,author,content,extraData) <> ((Post.apply _).tupled, Post.unapply)
   }
 
   val posts = TableQuery[PostTable]
@@ -109,7 +112,19 @@ object Post{
 
   def update(post :Post)(implicit s: Session) = { posts.insertOrUpdate(post) }
 
-
+  def extraDataToJson(extraData:String)  = {
+    val str : StringBuilder = new StringBuilder
+      str.append("{")
+    extraData.split("\n").foreach{
+      s =>
+        val parts = s.split("=")
+        if(parts.length > 1) {
+          str.append("\"" + parts(0) + "\":"+"\""+parts(1)+"\",")
+        }
+    }
+    str.append("}")
+    str.toString().replace(",}","}")
+  }
   val blogForm: Form[Post] = Form {
     mapping (
       "id" -> number,
@@ -117,7 +132,8 @@ object Post{
       "postType" -> number,
       "dateCreated" -> date,
       "author" ->text,
-      "content" -> text
+      "content" -> text,
+      "extraData" -> text
     )(Post.apply)(Post.unapply _)
   }
 }

@@ -460,6 +460,8 @@ border-top: none;
 
 
 
+
+
 /*
  * dob posts
  */
@@ -499,38 +501,44 @@ border-top: none;
     align:center;
     margin:5px;
  }
-
+ 
 .bioCell{
     text-align:left;
     vertical-align: text-top;
     border-top: #000;
     border-top: none;
   }
-
-  .bioDiv{
-    background:@gray-darker;
-    border-radius:15px;
-    margin:15px;
-    padding:10px;
-    /*max-height:150px;*/
+  
+    .bioDiv{
+      background:@gray-darker;
+      border-radius:15px;
+      margin:15px;
+      padding:10px;
+      /*max-height:150px;*/
+    }
+  
+    .bioText{
+      max-height:65px;
+      height:65px;
+      overflow:hidden;
+  
+    }
+  
+    .bioTextExpanded{
+  
+    }
+    .bioText:before {
+          background:linear-gradient(transparent 65px, @gray-darker);
+     }
+  
+  .expander{
+      align:right;
+      font-size:small;
   }
-
-  .bioText{
-    max-height:65px;
-    height:65px;
-    overflow:hidden;
-
-  }
-
-  .bioTextExpanded{
-
-  }
-  .bioText:before {
-        background:linear-gradient(transparent 65px, @gray-darker);
-   }
-
-.expander{
-    align:right;
-    font-size:small;
+  
+.blackTA{
+    background-color:transparent;
+    width:600px;
+    resize:none;
+    border:none;
 }
-

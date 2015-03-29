@@ -50,7 +50,7 @@ object Authorised extends Controller with AuthElement with AuthConfigImpl {
     val item = Post.blogForm.bindFromRequest().get
     val content = item.content
     val filename = repo.createFile(content)
-    val newItem = new Post(item.id,item.title,item.postType,item.dateCreated,item.author,filename)
+    val newItem = new Post(item.id,item.title,item.postType,item.dateCreated,item.author,filename,Post.extraDataToJson(item.extraData))
 
     val id = database.withSession { implicit s =>
       Post.insert(newItem)
@@ -69,7 +69,7 @@ object Authorised extends Controller with AuthElement with AuthConfigImpl {
     val content = item.content
     database.withSession { implicit s =>
       val filename = Post.getById(item.id).head.content
-      val newItem = new Post(item.id,item.title,item.postType,item.dateCreated,item.author,filename)
+      val newItem = new Post(item.id,item.title,item.postType,item.dateCreated,item.author,filename,Post.extraDataToJson(item.extraData))
       repo.updateFile(filename,content)
       Post.update(newItem)
     }
