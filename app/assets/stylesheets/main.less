@@ -20,6 +20,10 @@
 @thumbWidth:150px;
 @thumbHeight:150px;
 
+@bioThumbWidth:100px;
+@bioThumbHeight:100px;
+
+
 .modal-header .close{
     color:#ffffff;
 }
@@ -268,20 +272,16 @@ box-shadow: 0 0 15px rgba(211, 211, 211, 1);
   }
 
    .bioThumb{
-       width:@thumbWidth;
-       height:@thumbHeight;
+       width:@bioThumbWidth;
+       height:@bioThumbHeight;
     }
 
 
 .massive{
     font-size:68px;
 }
-.bioCell{
-    text-align:center;
-    vertical-align: text-top;
-    border-top: #000;
-border-top: none;
-  }
+
+
 
 *[id*='trackDiv']{
     padding-left:75px;
@@ -460,8 +460,6 @@ border-top: none;
 
 
 
-
-
 /*
  * dob posts
  */
@@ -499,4 +497,40 @@ border-top: none;
     height:@bioPicHeight;
     text-align:center;
     align:center;
+    margin:5px;
  }
+
+.bioCell{
+    text-align:left;
+    vertical-align: text-top;
+    border-top: #000;
+    border-top: none;
+  }
+
+  .bioDiv{
+    background:@gray-darker;
+    border-radius:15px;
+    margin:15px;
+    padding:10px;
+    /*max-height:150px;*/
+  }
+
+  .bioText{
+    max-height:65px;
+    height:65px;
+    overflow:hidden;
+
+  }
+
+  .bioTextExpanded{
+
+  }
+  .bioText:before {
+        background:linear-gradient(transparent 65px, @gray-darker);
+   }
+
+.expander{
+    align:right;
+    font-size:small;
+}
+

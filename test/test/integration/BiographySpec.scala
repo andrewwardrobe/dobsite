@@ -19,7 +19,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   def database = Database.forDataSource(DB.getDataSource())
 
 
-
+  var bio = 0;
 
   before{
     dataSetup
@@ -37,8 +37,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
       val biographyPage = new BiographyListPage(port)
       go to biographyPage
       eventually{
-        biographyPage.biographyCells must not be empty
-        biographyPage.biographyLinks must not be empty
+        biographyPage.biographyDivs must not be empty
         biographyPage.biographyImages must not be empty
       }
     }
@@ -46,19 +45,15 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     "Display Biography Details" in {
       val biographyPage = new BiographyListPage(port)
       go to biographyPage
-
       eventually{
-        val biographyDetails = biographyPage.viewBiography("MC Donalds")
-        biographyDetails.text must (include ("MC Donalds") and include ("blah blah"))
-        biographyDetails.image must not be empty
+        biographyPage.biographyDetails(bio) must include ("blah blah")
       }
-
     }
   }
 
   def dataSetup() = {
     database.withSession { implicit session =>
-       Biography.insert(Biography(1, "MC Donalds", 0, "images/crew/donalds_bw.jpg", "images/crew/donalds_bw.jpg","blah blah"))
+       bio = Biography.insert(Biography(1, "MC Donalds", 0, "images/crew/donalds_bw.jpg", "images/crew/donalds_bw.jpg","blah blah"))
 
     }
   }

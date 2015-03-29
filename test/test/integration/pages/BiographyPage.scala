@@ -8,11 +8,12 @@ import org.scalatest.selenium.{Page, WebBrowser}
  */
 class BiographyListPage(val port: Int)(implicit driver:WebDriver) extends Page with WebBrowser {
   val url = s"localhost:$port/biography"
-  def biographyLinks = { cssSelector("td > a[id*='bioLink']").findAllElements }
-  def biographyImages = cssSelector("td > img[id*='bioImage']").findAllElements
-  def biographyCells = cssSelector("td[id*='bioCell']").findAllElements
+  def biographyDivs = { cssSelector("*[id*='bioDiv']").findAllElements }
+  def biographyImages = cssSelector("*[id*='bioImage']").findAllElements
+
+  def biographyDetails(id : Int) = { cssSelector("#bioText"+ id).findElement.get.text }
   def viewBiography(name: String) = {
-      val bios = cssSelector("td > a[id*='bioLink']").findAllElements
+      val bios = cssSelector("td > a[id*='bioText']").findAllElements
       val link = bios.filter( a => a.text.contains(name)).next()
       click on link
       new BiographyDetailsPage(port)(driver)
