@@ -87,6 +87,55 @@ doBioDivs = (typ,target) ->
         $(div).attr 'class', 'bioText'
         $("#expander"+id).text "Expand"
 
-doBioDivs(0,'#leekDiv')
+doBioDivsFromPost = (typ,target) ->
+     $.get "/json/content/bytype/" + '4', (data) ->
+        bsRow = $("<div>")
+        bsRow.attr 'class','row'
+        $(target).append bsRow
+        counter = 0
+        $.each data, (index, bio) ->
+            bsRow2 = $("<div>")
+            bsRow2.attr 'class','col-sm-5'
+            bsRow.append bsRow2
+            extraData = $.parseJSON(bio.extraData)
+            image = $("<img>")
+            image.attr 'src', 'assets/'+ extraData.thumb
+            image.attr 'class','bioThumb pull-left'
+            image.attr 'id', 'bioImage' + bio.id
+            textDiv = $("<div>")
+            textDiv.attr 'id', 'bioDiv' + bio.id
+            textDiv.attr 'class', 'col-xs-12 col-sm-12 bioDiv'
+            textDiv.append image
+            nameDiv = $("<div>")
+            nameDiv.text bio.title
+            bioText = $("<div>")
+            bioText.attr 'class','bioText'
+            bioText.attr 'id','bioText' + bio.id
+            bioText.attr 'contenteditable','true'
+            bioText.text bio.content
+            textDiv.append nameDiv
+            bsRow2.append textDiv
+            textDiv.append bioText
+            rightDiv = $("<div>")
+            rightDiv.attr 'align','right'
+            expander = $("<a>")
+            expander.attr 'href','#'
+            expander.attr 'id', 'expander' + bio.id
+            expander.text "Expand"
+            expander.attr 'onclick',"expandDiv( " + bio.id + ")"
+            expander.attr 'class','expander'
+            rightDiv.append expander
+            textDiv.append rightDiv
+            counter++
+            if counter == 2
+                bsRow = $("<div>")
+                bsRow.attr 'class','row'
+                $(target).append bsRow
+                bsRow = $("<div>")
+                bsRow.attr 'class','row'
+                $(target).append bsRow
+                counter = 0
+
+doBioDivsFromPost(0,'#leekDiv')
 #doBioPages(0,'#dobBioTable')
 #doBioPages(1,'#mcBioTable')
