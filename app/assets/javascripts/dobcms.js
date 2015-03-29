@@ -6,7 +6,6 @@ function pasteHtmlAtCaret(html, selectPastedContent) {
         if (sel.getRangeAt && sel.rangeCount) {
             range = sel.getRangeAt(0);
             range.deleteContents();
-
             // Range.createContextualFragment() would be useful here but is
             // only relatively recently standardized and is not supported in
             // some browsers (IE9, for one)
@@ -18,7 +17,6 @@ function pasteHtmlAtCaret(html, selectPastedContent) {
             }
             var firstNode = frag.firstChild;
             range.insertNode(frag);
-
             // Preserve the selection
             if (lastNode) {
                 range = range.cloneRange();
@@ -103,6 +101,7 @@ $("#saveButton").click(function(){
     var postType = $("#postType").val();
     var id = $("#postId").val();
     var author = $("#author").val();
+    var extraData = $("#extraDataValues").val();
     var json = {
            data: {
                   "id": id,
@@ -111,7 +110,8 @@ $("#saveButton").click(function(){
                   "content": content,
                   "author": author,
                   "postType": postType,
-                  "filename": ""
+                  "filename": "",
+                  "extraData": extraData
            },
            success: function(data){
                var d = $('<div>');
@@ -144,8 +144,6 @@ $("#saveButton").click(function(){
     }else{
         jsRoutes.controllers.Authorised.submitBlogUpdate().ajax(json);
     }
-
-
 });
 
 
@@ -163,6 +161,16 @@ $(function(){
                var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
                $("#dateCreated").attr('value', dateStr);
                $("#postType").val(data.postType);
+               console.log("Extra Data = "+ data);
+               var json = $.parseJSON(data.extraData);
+               var text = "";
+               for (var key in json){
+                if(json.hasOwnProperty(key)){
+                    text += key + "=" + json[key] +"\n";
+                }
+               }
+               text.replace("\n$","");
+               $("#extraDataValues").val(text);
             }
         });
     }
@@ -175,8 +183,6 @@ function doCodeFormat()
     var coding = 0;
     return function(){
         var listId = window.getSelection().focusNode;
-
-
         if(coding === 0){
             if(listId.parentNode.id == "editor"){
 
