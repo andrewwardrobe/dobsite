@@ -54,7 +54,7 @@ function getRevisions(){
                     $.each(data,function(idx,rev){
                         var revDiv = $("<li>");
                         revDiv.attr('id','revId'+count);
-                        var dte = new Date(rev.commitDate);
+                        var dte = new Date(rev.commitDate.replace("BST",""));
                         var link = $("<a>");
                         var commitId = rev.commitId;
                         var id = $("#postId").val();
@@ -73,7 +73,9 @@ function getRevisions(){
                                        $("#editor").html(data.content);
                                        $("#postTitle").text = data.title;
                                        $("#author").attr('value', data.author);
-                                       var d = new Date(data.dateCreated);
+                                       var dt = data.dateCreated.replace("BST","");
+                                       console.log("date is "+dt);
+                                       var d = new Date(dt);
                                        var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
                                        $("#dateCreated").attr('value', dateStr);
                                        $("#postType").val(data.postType);
