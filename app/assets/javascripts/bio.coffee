@@ -136,6 +136,43 @@ doBioDivsFromPost = (typ,target) ->
                 $(target).append bsRow
                 counter = 0
 
+emptyDiv = (target) ->
+        bsRow = $("<div>")
+        bsRow.attr 'class','row'
+        $(target).append bsRow
+        bsRow2 = $("<div>")
+        bsRow2.attr 'class','col-sm-5'
+        bsRow.append bsRow2
+        image = $("<img>")
+        image.attr 'src', 'assets/images/crew/donalds_bw.jpg'
+        image.attr 'class','bioThumb pull-left'
+        image.attr 'id', 'bioImage' + 0
+        textDiv = $("<div>")
+        textDiv.attr 'id', 'bioDiv'
+        textDiv.attr 'class', 'col-xs-12 col-sm-12 bioDiv'
+        textDiv.append image
+        nameDiv = $("<div>")
+        nameDiv.text "New Biography"
+        bioText = $("<div>")
+        bioText.attr 'class','bioText'
+        bioText.attr 'id','bioText'
+        bioText.attr 'contenteditable','true'
+        bioText.text "Some example content"
+        textDiv.append nameDiv
+        bsRow2.append textDiv
+        textDiv.append bioText
+        rightDiv = $("<div>")
+        rightDiv.attr 'align','right'
+        expander = $("<a>")
+        expander.attr 'href','#'
+        expander.attr 'id', 'expander'
+        expander.text "Expand"
+        expander.attr 'onclick',"expandDiv(" + "" + ")"
+        expander.attr 'class','expander'
+        rightDiv.append expander
+        textDiv.append rightDiv
+
 doBioDivsFromPost(0,'#leekDiv')
+#emptyDiv('#leekDiv')
 #doBioPages(0,'#dobBioTable')
 #doBioPages(1,'#mcBioTable')
