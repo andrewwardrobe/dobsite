@@ -61,8 +61,9 @@ doBioDivs = (typ,target) ->
             rightDiv.attr 'align','right'
             expander = $("<a>")
             expander.attr 'href','#'
+            expander.attr 'id', 'expander' + bio.id
             expander.text "Expand"
-            expander.attr 'onclick',"expandDiv('#bioText" + bio.id + "')"
+            expander.attr 'onclick',"expandDiv( " + bio.id + ")"
             expander.attr 'class','expander'
             rightDiv.append expander
             textDiv.append rightDiv
@@ -76,12 +77,15 @@ doBioDivs = (typ,target) ->
                 $(target).append bsRow
                 counter = 0
 
-@expandDiv = (div) ->
+@expandDiv = (id) ->
+    div = $("#bioText"+id)
     clss =  $(div).attr 'class'
     if clss == "bioText"
         $(div).attr 'class', 'bioTextExpanded'
+        $("#expander"+id).text "Collaspe"
     else
         $(div).attr 'class', 'bioText'
+        $("#expander"+id).text "Expand"
 
 doBioDivs(0,'#leekDiv')
 #doBioPages(0,'#dobBioTable')
