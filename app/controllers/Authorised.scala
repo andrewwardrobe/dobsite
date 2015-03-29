@@ -6,7 +6,7 @@ import com.daoostinboyeez.git.{GitRepo}
 import controllers.Application._
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
-import models.{UserAccount, Post}
+import models.{Biography, UserAccount, Post}
 
 import models.UserRole.{Administrator, Contributor, NormalUser}
 import play.api.Logger
@@ -76,4 +76,12 @@ object Authorised extends Controller with AuthElement with AuthConfigImpl {
     Ok(""+item.id)
   }
 
+  def updateBiography= DBAction  { implicit response =>
+    val item = Biography.form.bindFromRequest().get
+
+    database.withSession {  implicit s =>
+      Biography.update(item)
+    }
+    Ok(""+item.id)
+  }
 }

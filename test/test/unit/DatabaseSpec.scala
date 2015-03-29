@@ -1,14 +1,14 @@
 package test.unit
 
 import com.daoostinboyeez.git.GitRepo
-import models.{Discography, Post}
+import models.{Biography, Discography, Post}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.Logger
-import play.api.db.DB
+
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test.helpers.PostHelper
-
+import play.api.db.DB
 import scala.slick.jdbc.JdbcBackend._
 import test._
 class DatabaseSpec extends PlaySpec with OneServerPerSuite{
@@ -35,5 +35,19 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite{
         result.head mustEqual newsItem
       }
     }
+
+    "Be able to update a biograpy" in {
+      database.withSession{ implicit session =>
+        val bio = new Biography(1, "MC Donalds", 0, "images/crew/donalds_bw.jpg", "images/crew/donalds_bw.jpg","blah blah")
+        val id = Biography.insert(bio)
+        val updatedBio = new Biography(id,bio.name,bio.bioType,bio.imagePath,bio.thumbPath,"new bio text");
+        Biography.update(updatedBio)
+        val inserted =  Biography.getById(id).head
+        inserted mustEqual updatedBio
+
+      }
+    }
   }
+
+
 }

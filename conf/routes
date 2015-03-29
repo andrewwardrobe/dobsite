@@ -29,6 +29,7 @@ POST    /upload          controllers.Application.upload()
 
 GET     /discography                controllers.Application.discography
 GET     /biography                controllers.Application.biography
+POST     /biography                controllers.Authorised.updateBiography
 GET     /hansundjorg                controllers.Application.hansUndJorg
 GET     /biography/:id                controllers.Application.biographyDetail(id: Int)
 GET     /javascriptRoutes     controllers.Application.javascriptRoutes
