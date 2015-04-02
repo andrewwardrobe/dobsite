@@ -112,7 +112,7 @@ doBioDivsFromPost = (typ,target) ->
             bioText.attr 'class','bioText'
             bioText.attr 'id','bioText' + bio.id
             bioText.attr 'contenteditable','true'
-            bioText.text bio.content
+            bioText.html bio.content
             textDiv.append nameDiv
             bsRow2.append textDiv
             textDiv.append bioText
