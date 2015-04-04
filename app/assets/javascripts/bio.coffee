@@ -109,12 +109,27 @@ doBioDivsFromPost = (typ,target) ->
             textDiv.append image
             nameDiv = $("<div>")
             nameDiv.text bio.title
+            nameDiv.attr 'id','bioName' + bio.id
             bioText = $("<div>")
             bioText.attr 'class','bioText'
             bioText.attr 'id','bioText' + bio.id
             bioText.attr 'contenteditable','false'
             bioText.html bio.content
             textDiv.append nameDiv
+            #Some hidden stuff
+            dateCreated = $("<input>")
+            dateCreated.attr 'id', 'bioDate' + bio.id
+            dateCreated.attr 'type', 'hidden'
+            d = new Date(bio.dateCreated);
+            dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+            dateCreated.attr 'value', dateStr
+            textDiv.append dateCreated
+            author = $("<input>")
+            author.attr 'id', 'bioAuthor' + bio.id
+            author.attr 'type', 'hidden'
+            author.attr 'value', bio.author
+            textDiv.append author
+
             iconDiv =  $("<div>")
             iconDiv.attr 'align', 'right'
             textDiv.append iconDiv
@@ -132,13 +147,65 @@ doBioDivsFromPost = (typ,target) ->
             textDiv.append rightDiv
             if editMode == "1"
                 bioText.attr 'contenteditable','true'
+                btnsDiv = $("<div>")
+                btnsDiv.attr 'id','btnsDiv'
+                btnsDiv.attr 'class', 'pull-right'
                 saveBtn = $("<a>")
                 saveBtn.html '<span class="fa fa-save"></span>'
                 saveBtn.attr 'id', 'bioSave' + bio.id
                 saveBtn.attr 'href', '#'
-                saveBtn.attr 'class', 'expander pull-right'
-                rightDiv.append $("<div>")
-                nameDiv.append saveBtn
+                saveBtn.attr 'class', 'expander'
+                saveSuccess = $("<a>")
+                saveSuccess.attr 'id', 'bioSuccess' + bio.id
+                saveSuccess.attr 'href', '#'
+                saveSuccess.attr 'class', 'btnSuccessful'
+                saveSuccess.html '<span class="fa fa-check-circle"></span>'
+                saveSuccess.hide()
+                saveFailure = $("<a>")
+                saveFailure.attr 'id', 'bioFailure' + bio.id
+                saveFailure.attr 'href', '#'
+                saveFailure.attr 'class', 'btnFailure'
+                saveFailure.html '<span class="fa fa-times-circle"></span>'
+                saveFailure.hide()
+                saveBtn.on "click", (event) ->
+                    extraData = "leek=leek"
+                    id = event.target.parentElement.id.replace "bioSave" , ""
+                    dte = $("#bioDate" +bio.id).val()
+                    title = $("#bioName" +bio.id).text()
+                    textId = "#bioText" + bio.id
+                    content = $(textId).html()
+                    $("#bioSuccess"+bio.id).hide()
+                    $("#bioFailure"+bio.id).hide()
+                    console.log event.target.id
+                    json = {
+                        data:
+                            "id":bio.id,
+                            "dateCreated":dte,
+                            "title":title,
+                            "content":content
+                            "author":bio.author,
+                            "postType":bio.postType,
+                            "filename":"",
+                            "extraData":extraData,
+                        success: (data) ->
+                            $("#bioSuccess"+bio.id).show()
+                            $("#bioSave"+bio.id).hide()
+                            console.log("Success")
+                        error: (data) ->
+                            $("#bioFailure"+bio.id).show()
+                            console.log("Error")
+                    }
+                    jsRoutes.controllers.Authorised.submitBlogUpdate().ajax(json);
+                    console.log("Buuton Clicked: " +JSON.stringify(json))
+
+                btnsDiv.append saveBtn
+                btnsDiv.append saveSuccess
+                btnsDiv.append saveFailure
+                nameDiv.append btnsDiv
+                $("#bioSave"+bio.id).hide()
+                textDiv.on "keyup", ->
+                    $("#bioSave"+bio.id).show()
+                    $("#bioSuccess"+bio.id).hide()
             counter++
             if counter == 2
                 bsRow = $("<div>")

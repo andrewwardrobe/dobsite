@@ -137,7 +137,7 @@ $("#saveButton").click(function(){
            }
     };
 
-    console.log(json);
+    console.log("Json: " +JSON.stringify(json));
     if(id == -1){
         jsRoutes.controllers.Authorised.submitBlog().ajax(json);
 

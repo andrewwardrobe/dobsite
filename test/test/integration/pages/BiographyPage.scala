@@ -22,6 +22,23 @@ class BiographyListPage(val port: Int)(implicit driver:WebDriver) extends Page w
       click on link
       new BiographyDetailsPage(port)(driver)
   }
+
+  def updateBio(id: Int, text: String) = {
+    val textBox = cssSelector("#bioText"+ id).findElement.get
+    textBox.underlying.sendKeys(text)
+  }
+
+  def saveBio(id: Int) = {
+    click on cssSelector("#bioSave"+id)
+  }
+
+  def saveSuccessfulVisible(id:Int) = {
+    cssSelector("#bioSuccess"+id).element.isDisplayed
+  }
+
+  def saveFailureVisible(id:Int) = {
+    cssSelector("#bioFailure"+id).element.isDisplayed
+  }
 }
 
 class BiographyDetailsPage(val port: Int)(implicit driver:WebDriver) extends Page with WebBrowser {

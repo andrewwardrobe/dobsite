@@ -16,4 +16,8 @@ class SignInPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
       submit()
     }
 
+    def signout = {
+      go to s"localhost:$port/signout"
+    }
+
 }

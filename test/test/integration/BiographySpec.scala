@@ -27,7 +27,8 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   var bio = 0
 
   var setupDone: Boolean = false
-
+  val signIn = new SignInPage(port)
+  val biographyPage = new BiographyListPage(port)
   def extraSetup = {
     database.withSession { implicit session =>
       PostHelper.createBiography("MC Donalds","Sample Bio 1","images/crew/donalds_bw.jpg")
@@ -36,12 +37,12 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   }
   def setup() = {
     //val signUp = new SignUpPage(port)
-    val signIn = new SignInPage(port)
+
     if(!setupDone) {
       repo.refresh
 
       UserAccountHelper.createUser("andrew", "andrew@dob.com", "pa$$word",TrustedContributor)
-      signIn.signin("andrew", "pa$$word")
+
       extraSetup
       setupDone = true
     }
@@ -62,7 +63,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
 
 
     "Render A table containing links to available biographies" in {
-      val biographyPage = new BiographyListPage(port)
+      //val biographyPage = new BiographyListPage(port)
       go to biographyPage
       eventually{
         biographyPage.biographyDivs must not be empty
@@ -71,20 +72,42 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     }
 
     "Display Biography Details" in {
-      val biographyPage = new BiographyListPage(port)
+      //val biographyPage = new BiographyListPage(port)
       go to biographyPage
       eventually{
         biographyPage.biographyDetails(1) must include ("Sample Bio 1")
       }
     }
 
-    "Display a save link if the user is at least a founder" in {
-      val biographyPage = new BiographyListPage(port)
+    "Display a save link if the text has changed" in {
+      signIn.signin("andrew", "pa$$word")
+      //val biographyPage = new BiographyListPage(port)
       go to biographyPage
       eventually{
+        biographyPage.updateBio(1,"MC Donalds is leek leek leek")
         biographyPage.saveButtons must not be empty
       }
+      signIn.signout
     }
+
+    "Have editible biographies if the user is a trusted contributor " in {
+
+    }
+
+    "Display a save sucessful indicator when successful" in {
+      signIn.signin("andrew", "pa$$word")
+
+      go to biographyPage
+      biographyPage.updateBio(1,"MC Donalds is leek leek leek")
+      biographyPage.saveBio(1)
+      eventually{
+        biographyPage.updateBio(1,"MC Donalds is leek leek leek")
+        biographyPage.saveBio(1)
+        biographyPage.saveSuccessfulVisible(1) mustEqual true
+      }
+      signIn.signout
+    }
+
   }
 
   def dataSetup() = {

@@ -1,5 +1,6 @@
 @(message: String,editable: Int)(implicit session : Session)
 @scripts = {
+<script type="text/javascript" src='@routes.Application.javascriptRoutes()'></script>
 <script src='@routes.Assets.at("javascripts/bio.js")'></script>
 }
 
