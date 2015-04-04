@@ -93,7 +93,7 @@ object UserAccount {
     val encPass = BCrypt.hashpw(password,BCrypt.gensalt())
     val insertAcc = accounts.length.run match {
       case 0 => new UserAccount(id, email, encPass, name, UserRole.valueOf("Administrator"))
-      case _ => new UserAccount(id, email, encPass, name, UserRole.valueOf("InActiveUser"))
+      case _ => new UserAccount(id, email, encPass, name, role)
     }
     accounts returning accounts.map(_.id) += insertAcc
   }

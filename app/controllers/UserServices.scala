@@ -1,6 +1,7 @@
 package controllers
 
 import jp.t2v.lab.play2.auth.LoginLogout
+import models.UserRole.InActiveUser
 import models.{UserRoleMapping, UserAccount}
 import play.api.data.Form
 import play.api.data.validation.{Invalid, Valid, ValidationError, Constraint}
@@ -41,9 +42,10 @@ object UserServices extends Controller with LoginLogout with StandardAuthConfig 
   def register = DBAction{ implicit request =>
     val newAccount = signUpForm.bindFromRequest().get
     //validate the user account
-
+    import newAccount._
+    val incAccount = new UserAccount(id, email, password, name, InActiveUser)
     database.withSession { implicit session =>
-      UserAccount.create(newAccount)
+      UserAccount.create(incAccount)
     }
     Redirect(routes.UserServices.login)
   }

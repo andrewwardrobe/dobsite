@@ -1,13 +1,14 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
+import models.UserRole.TrustedContributor
 import models._
 import org.scalatest._
 import org.scalatestplus.play._
 import play.api.db.DB
 import play.api.test.Helpers._
 import play.api.test._
-import test.helpers.PostHelper
+import test.helpers.{UserAccountHelper, PostHelper}
 import test.{TestGlobal, TestConfig}
 import test.integration.pages.{SignInPage, SignUpPage, BiographyListPage}
 
@@ -34,11 +35,12 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     }
   }
   def setup() = {
-    val signUp = new SignUpPage(port)
+    //val signUp = new SignUpPage(port)
     val signIn = new SignInPage(port)
     if(!setupDone) {
       repo.refresh
-      signUp.signup("andrew", "andrew@dob.com", "pa$$word")
+
+      UserAccountHelper.createUser("andrew", "andrew@dob.com", "pa$$word",TrustedContributor)
       signIn.signin("andrew", "pa$$word")
       extraSetup
       setupDone = true
