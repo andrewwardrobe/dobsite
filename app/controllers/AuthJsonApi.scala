@@ -11,7 +11,7 @@ import play.api.db.slick.DBAction
 import play.api.libs.json.Json._
 import play.api.mvc.Controller
 
-object AuthJsonApi extends Controller with AuthElement with AuthConfigImpl {
+object AuthJsonApi extends Controller with AuthElement with StandardAuthConfig {
 
 
 }

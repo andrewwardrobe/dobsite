@@ -11,7 +11,7 @@ import play.api.mvc.Controller
 /**
  * Created by andrew on 25/01/15.
  */
-object Admin extends Controller with AuthElement with AuthConfigImpl{
+object Admin extends Controller with AuthElement with StandardAuthConfig{
 
   def admin = StackAction(AuthorityKey -> Administrator) {  implicit request =>
     Ok(views.html.admin(""))

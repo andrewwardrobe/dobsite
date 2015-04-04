@@ -6,6 +6,6 @@ import play.api.mvc.Controller
 /**
  * Created by andrew on 29/12/14.
  */
-object Authenticated extends Controller with AuthenticationElement with AuthConfigImpl {
+object Authenticated extends Controller with AuthenticationElement with StandardAuthConfig {
 
 }

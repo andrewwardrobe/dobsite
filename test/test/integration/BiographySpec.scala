@@ -75,6 +75,14 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
         biographyPage.biographyDetails(1) must include ("Sample Bio 1")
       }
     }
+
+    "Display a save link if the user is at least a founder" in {
+      val biographyPage = new BiographyListPage(port)
+      go to biographyPage
+      eventually{
+        biographyPage.saveButtons must not be empty
+      }
+    }
   }
 
   def dataSetup() = {

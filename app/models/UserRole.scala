@@ -8,16 +8,33 @@ class UserRole(role: String){
 }
 
 object UserRole {
+
   case object Administrator extends UserRole("Administrator")
   case object NormalUser extends UserRole("NormalUser")
   case object Contributor extends UserRole("Contributor")
+  case object TrustedContributor extends UserRole("TrustedContributor")
   case object InActiveUser extends UserRole("InActiveUser")
   def valueOf(value: String): UserRole = value match {
     case "Administrator" => Administrator
     case "NormalUser" => NormalUser
+    case "TrustedContributor" => TrustedContributor
     case "Contributor" => Contributor
     case "InActiveUser" => InActiveUser
     case _ => throw new IllegalArgumentException()
+  }
+
+  def roleHasAuthority(role: UserRole, authority: UserRole) = {
+    (role, authority) match {
+      case (Administrator, _)       => true
+      case(TrustedContributor,TrustedContributor) => true
+      case(TrustedContributor,Contributor) => true
+      case(TrustedContributor,NormalUser) => true
+      case(Contributor,Contributor) => true
+      case(Contributor,NormalUser) => true
+      case(NormalUser, NormalUser) => true
+      case(InActiveUser, InActiveUser) => true
+      case _                        => false
+    }
   }
 }
 

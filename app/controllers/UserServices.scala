@@ -18,7 +18,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 /**
  * Created by andrew on 21/12/14.
  */
-object UserServices extends Controller with LoginLogout with AuthConfigImpl {
+object UserServices extends Controller with LoginLogout with StandardAuthConfig {
 
   val loginForm = {
     database.withSession { implicit session =>

@@ -11,7 +11,11 @@ class BiographyListPage(val port: Int)(implicit driver:WebDriver) extends Page w
   def biographyDivs = { cssSelector("*[id*='bioDiv']").findAllElements }
   def biographyImages = cssSelector("*[id*='bioImage']").findAllElements
 
+
   def biographyDetails(id : Int) = { cssSelector("#bioText"+ id).findElement.get.text }
+  def saveButton(id:Int) = cssSelector("#bioSave"+id).findElement
+  def saveButtons = cssSelector("*[id*='bioSave']").findAllElements
+
   def viewBiography(name: String) = {
       val bios = cssSelector("td > a[id*='bioText']").findAllElements
       val link = bios.filter( a => a.text.contains(name)).next()

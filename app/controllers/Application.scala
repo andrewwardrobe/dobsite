@@ -8,13 +8,16 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 
 
+
 import jp.t2v.lab.play2.auth.{OptionalAuthElement, AuthElement}
+import models.UserRole.TrustedContributor
 import models._
 import play.api._
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.db.slick._
 import play.api.db.slick.Config.driver.simple._
+import play.api.libs.json.Json.parse
 import play.api.mvc._
 import play.api.Play.current
 import play.api.libs.json.Json
@@ -22,7 +25,7 @@ import play.api.libs.json.Json._
 
 
 
-object Application extends Controller  with OptionalAuthElement with AuthConfigImpl{
+object Application extends Controller  with OptionalAuthElement with StandardAuthConfig{
 
 
 
@@ -70,8 +73,18 @@ object Application extends Controller  with OptionalAuthElement with AuthConfigI
     Ok(views.html.discography(""))
   }
 
-  def biography = Action {  implicit request =>
-    Ok(views.html.biography(""))}
+  def biography = StackAction {  implicit request =>
+    val maybeUser: Option[User] = loggedIn
+    maybeUser match {
+      case None => {Ok (views.html.biography ("", 0) )}
+      case Some(user) => {
+        user.hasPermission(TrustedContributor) match {
+          case false => Ok (views.html.biography ("", 0) )
+          case true => Ok (views.html.biography ("", 1) )
+        }
+      }
+    }
+  }
 
   def biographyDetail(id: Int) = DBAction { implicit resp =>
     val bio = Biography.getById(id)

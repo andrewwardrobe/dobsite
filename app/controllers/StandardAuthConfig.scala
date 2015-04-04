@@ -1,7 +1,7 @@
 package controllers
 
 import jp.t2v.lab.play2.auth.AuthConfig
-import models.UserRole.{InActiveUser, Contributor, NormalUser, Administrator}
+import models.UserRole._
 import models.{UserRole, UserAccount}
 import play.api.db.DB
 import play.api.db.slick.DBAction
@@ -21,7 +21,7 @@ import scala.slick.jdbc.JdbcBackend._
 /**
  * Created by andrew on 23/12/14.
  */
-trait AuthConfigImpl extends AuthConfig {
+trait StandardAuthConfig extends AuthConfig {
 
   type Id = Int
   type User = UserAccount
@@ -67,16 +67,8 @@ trait AuthConfigImpl extends AuthConfig {
   }
 
   def authorize(user: User, authority: Authority)(implicit ctx: ExecutionContext): Future[Boolean] = Future.successful {
-    (user.role, authority) match {
-      case (Administrator, _)       => true
-      case(Contributor,Contributor) => true
-      case(Contributor,NormalUser) => true
-      case(NormalUser, NormalUser) => true
-      case(InActiveUser, InActiveUser) => true
-      case _                        => false
-    }
+    UserRole.roleHasAuthority(user.role,authority)
   }
-
 
   override lazy val cookieSecureOption: Boolean = play.api.Play.isProd(play.api.Play.current)
 

@@ -23,7 +23,7 @@ import scala.text
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.json.Json._
 
-object AdminJsonApi extends Controller with AuthElement with AuthConfigImpl {
+object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig {
 
   def getUsers(name:String) = StackAction(AuthorityKey -> Administrator) { implicit request =>
     database.withSession{ implicit s =>

@@ -11,9 +11,6 @@ class JsonApiSpec extends PlaySpec with OneServerPerSuite{
 
   "Json API" should {
 
-    "be able to list the number of track on a relase" in (pending)
-
-
     def setup = {
 
     }

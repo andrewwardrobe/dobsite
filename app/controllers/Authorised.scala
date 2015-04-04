@@ -25,7 +25,7 @@ import scala.slick.jdbc.JdbcBackend._
 /**
  * Created by andrew on 23/12/14.
  */
-object Authorised extends Controller with AuthElement with AuthConfigImpl {
+object Authorised extends Controller with AuthElement with StandardAuthConfig {
 
 
   val repo = GitRepo.apply()

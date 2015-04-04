@@ -82,16 +82,17 @@ doBioDivs = (typ,target) ->
     clss =  $(div).attr 'class'
     if clss == "bioText"
         $(div).attr 'class', 'bioTextExpanded'
-        $("#expander"+id).text "Collaspe"
+        $("#expander"+id).html '<span class="fa fa-chevron-circle-up"></span>'
     else
         $(div).attr 'class', 'bioText'
-        $("#expander"+id).text "Expand"
+        $("#expander"+id).html '<span class="fa fa-chevron-circle-down"></span>'
 
 doBioDivsFromPost = (typ,target) ->
      $.get "/json/content/bytype/" + '4', (data) ->
         bsRow = $("<div>")
         bsRow.attr 'class','row'
         $(target).append bsRow
+        editMode = $(target).attr 'edit-mode'
         counter = 0
         $.each data, (index, bio) ->
             bsRow2 = $("<div>")
@@ -111,9 +112,12 @@ doBioDivsFromPost = (typ,target) ->
             bioText = $("<div>")
             bioText.attr 'class','bioText'
             bioText.attr 'id','bioText' + bio.id
-            bioText.attr 'contenteditable','true'
+            bioText.attr 'contenteditable','false'
             bioText.html bio.content
             textDiv.append nameDiv
+            iconDiv =  $("<div>")
+            iconDiv.attr 'align', 'right'
+            textDiv.append iconDiv
             bsRow2.append textDiv
             textDiv.append bioText
             rightDiv = $("<div>")
@@ -121,11 +125,20 @@ doBioDivsFromPost = (typ,target) ->
             expander = $("<a>")
             expander.attr 'href','#'
             expander.attr 'id', 'expander' + bio.id
-            expander.text "Expand"
+            expander.html '<span class="fa fa-chevron-circle-down"></span>'
             expander.attr 'onclick',"expandDiv( " + bio.id + ")"
             expander.attr 'class','expander'
             rightDiv.append expander
             textDiv.append rightDiv
+            if editMode == "1"
+                bioText.attr 'contenteditable','true'
+                saveBtn = $("<a>")
+                saveBtn.html '<span class="fa fa-save"></span>'
+                saveBtn.attr 'id', 'bioSave' + bio.id
+                saveBtn.attr 'href', '#'
+                saveBtn.attr 'class', 'expander pull-right'
+                rightDiv.append $("<div>")
+                nameDiv.append saveBtn
             counter++
             if counter == 2
                 bsRow = $("<div>")

@@ -21,6 +21,10 @@ case class UserAccount(id: Int, email: String, password: String, name: String, r
     "name" -> name,
     "role" -> role.name
   )
+
+  def hasPermission(required: UserRole) = {
+    UserRole.roleHasAuthority(role,required)
+  }
 }
 
 object UserAccount {
@@ -91,7 +95,7 @@ object UserAccount {
       case 0 => new UserAccount(id, email, encPass, name, UserRole.valueOf("Administrator"))
       case _ => new UserAccount(id, email, encPass, name, UserRole.valueOf("InActiveUser"))
     }
-    accounts.insert(insertAcc)
+    accounts returning accounts.map(_.id) += insertAcc
   }
 
   def update(userAccount: UserAccount)(implicit s: Session) = {
