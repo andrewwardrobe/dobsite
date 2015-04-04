@@ -518,7 +518,7 @@ border-top: none;
     }
   
     .bioText{
-      max-height:65px;
+      max-height:75px;
       height:65px;
       overflow:hidden;
   
@@ -531,19 +531,36 @@ border-top: none;
           background:linear-gradient(transparent 65px, @gray-darker);
      }
   
-  .expander{
+  .expander,
+  .expander:hover,
+  .expander:active,
+  .expander:link,
+  .expander:focus
+  {
+      outline: 0;
       align:right;
       font-size:small;
       color:@gray-light;
   }
 
-  .btnSuccessful{
+
+
+  .btnSuccessful,
+  .btnSuccessful:hover,
+  .btnSuccessful:active,
+  .btnSuccessful:link,
+  .btnSuccessful:focus
+  {
         align:right;
         font-size:small;
         color:@brand-success;
     }
 
-    .btnFailure{
+    .btnFailure,
+    .btnFailure:hover,
+    .btnFailure:active,
+    .btnFailure:link,
+    .btnFailure:focus{
           align:right;
           font-size:small;
           color:@brand-danger;
