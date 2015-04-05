@@ -99,7 +99,7 @@ function imagesSelected(myFiles, target) {
     var imageReader = new FileReader();
     imageReader.onload = (function(aFile) {
       return function(e) {
-	var imgName = "myImg" + (count++);
+	    var imgName = "myImg" + (count++);
         var span = document.createElement('img');
         span.setAttribute('id',imgName);
         span.setAttribute('class', 'images');

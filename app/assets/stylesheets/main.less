@@ -515,17 +515,34 @@ border-top: none;
       margin:15px;
       padding:10px;
       /*max-height:150px;*/
+      outline: 0;
     }
   
     .bioText{
+
       max-height:75px;
       height:65px;
       overflow:hidden;
-  
+        outline: 0;
     }
-  
+
+    div[id*='bioName']{
+        outline:0;
+        padding-left:2px;
+    }
+
+    div[id*='bioImageDiv']{
+        outline:0;
+        margin-right:4px;
+    }
+
+    img[id*='bioImage']{
+
+
+            margin-right:4px;
+        }
     .bioTextExpanded{
-  
+        min-height:65px;
     }
     .bioText:before {
           background:linear-gradient(transparent 65px, @gray-darker);

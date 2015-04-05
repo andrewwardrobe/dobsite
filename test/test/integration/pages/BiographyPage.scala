@@ -39,6 +39,26 @@ class BiographyListPage(val port: Int)(implicit driver:WebDriver) extends Page w
   def saveFailureVisible(id:Int) = {
     cssSelector("#bioFailure"+id).element.isDisplayed
   }
+
+  def nameEditable(id:Int) = {
+    cssSelector("#bioName"+id).element.attribute("contenteditable").get match {
+      case "true" => true
+      case _ => false
+    }
+  }
+
+  def bioEditable(id:Int) = {
+    cssSelector("#bioText"+id).element.attribute("contenteditable").get match {
+      case "true" => true
+      case _ => false
+    }
+  }
+  def imageEditable(id:Int) = {
+    cssSelector("#bioImageDiv"+id).element.attribute("contenteditable").get match {
+      case "true" => true
+      case _ => false
+    }
+  }
 }
 
 class BiographyDetailsPage(val port: Int)(implicit driver:WebDriver) extends Page with WebBrowser {

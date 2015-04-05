@@ -90,8 +90,16 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
       signIn.signout
     }
 
-    "Have editible biographies if the user is a trusted contributor " in {
+    "Have editable biographies if the user is a trusted contributor " in {
+      signIn.signin("andrew", "pa$$word")
+      go to biographyPage
+      eventually{
 
+        biographyPage.bioEditable(1) mustEqual true
+        biographyPage.nameEditable(1) mustEqual true
+        biographyPage.imageEditable(1) mustEqual true
+      }
+      signIn.signout
     }
 
     "Display a save sucessful indicator when successful" in {
