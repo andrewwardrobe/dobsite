@@ -56,7 +56,8 @@ imageDropped = (files, target) ->
         $("#expander"+id).html '<span class="fa fa-chevron-circle-down"></span>'
 
 #doBioPost = (bsRow,
-editModeOn = (id) ->
+@editModeOn = (id) ->
+    editBtn = $("#bioEdit" +id)
     bioText = $("#bioText" +id)
     nameDiv = $("#bioName" +id)
     imageDiv = $("#bioImageDiv"+ id)
@@ -67,8 +68,11 @@ editModeOn = (id) ->
     imageDiv.attr 'ondrop', 'dropper(event)'
     imageDiv.attr 'ondragenter', 'return false'
     imageDiv.attr 'ondragover', 'return false'
+    editBtn.attr 'class', 'editBtnOn'
+    editBtn.attr "onclick", "editModeOff(" + id + ")"
 
-editModeOff = (id) ->
+@editModeOff = (id) ->
+    editBtn = $("#bioEdit" +id)
     bioText = $("#bioText" +id)
     nameDiv = $("#bioName" +id)
     imageDiv = $("#bioImageDiv"+ id)
@@ -79,19 +83,20 @@ editModeOff = (id) ->
     imageDiv.attr 'ondrop', ''
     imageDiv.attr 'ondragenter', ''
     imageDiv.attr 'ondragover', ''
-
+    editBtn.attr 'class', 'editBtnOff'
+    editBtn.attr "onclick", "editModeOn(" + id + ")"
 
 doEditMode = (bio) ->
     bioText = $("#bioText" + bio.id)
     nameDiv = $("#bioName" + bio.id)
     imageDiv = $("#bioImageDiv" + bio.id)
     textDiv = $("#bioDiv" + bio.id)
-    bioText.attr 'contenteditable','true'
-    nameDiv.attr 'contenteditable','true'
-    imageDiv.attr 'contenteditable','true'
-    imageDiv.attr 'ondrop', 'dropper(event)'
-    imageDiv.attr 'ondragenter', 'return false'
-    imageDiv.attr 'ondragover', 'return false'
+    bioText.attr 'contenteditable','false'
+    nameDiv.attr 'contenteditable','false'
+    imageDiv.attr 'contenteditable','false'
+    imageDiv.attr 'ondrop', ''
+    imageDiv.attr 'ondragenter', ''
+    imageDiv.attr 'ondragover', ''
     btnsDiv = $("<div>")
     btnsDiv.attr 'id','btnsDiv'
     btnsDiv.attr 'class', 'pull-right'
@@ -100,6 +105,11 @@ doEditMode = (bio) ->
     saveBtn.attr 'id', 'bioSave' + bio.id
     saveBtn.attr 'href', '#'
     saveBtn.attr 'class', 'expander'
+    editBtn = $("<a>")
+    editBtn.html '<span class="fa fa-pencil"></span>'
+    editBtn.attr 'id', 'bioEdit' + bio.id
+    editBtn.attr 'href', '#'
+    editBtn.attr 'class', 'editBtnOff'
     saveSuccess = $("<a>")
     saveSuccess.attr 'id', 'bioSuccess' + bio.id
     saveSuccess.attr 'href', '#'
@@ -112,6 +122,7 @@ doEditMode = (bio) ->
     saveFailure.attr 'class', 'btnFailure'
     saveFailure.html '<span class="fa fa-times-circle"></span>'
     saveFailure.hide()
+    editBtn.attr "onclick", "editModeOn(" + bio.id + ")"
     saveBtn.on "click", (event) ->
         extraData = $("#bioExtra" +bio.id).val()
         id = event.target.parentElement.id.replace "bioSave" , ""
@@ -142,6 +153,7 @@ doEditMode = (bio) ->
         }
         jsRoutes.controllers.Authorised.submitBlogUpdate().ajax(json);
         console.log("Buuton Clicked: " +JSON.stringify(json))
+    btnsDiv.append editBtn
     btnsDiv.append saveBtn
     btnsDiv.append saveSuccess
     btnsDiv.append saveFailure

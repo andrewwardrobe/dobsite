@@ -29,6 +29,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   var setupDone: Boolean = false
   val signIn = new SignInPage(port)
   val biographyPage = new BiographyListPage(port)
+  import biographyPage._
   def extraSetup = {
     database.withSession { implicit session =>
       PostHelper.createBiography("MC Donalds","Sample Bio 1","images/crew/donalds_bw.jpg")
@@ -66,8 +67,8 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
       //val biographyPage = new BiographyListPage(port)
       go to biographyPage
       eventually{
-        biographyPage.biographyDivs must not be empty
-        biographyPage.biographyImages must not be empty
+        biographyDivs must not be empty
+        biographyImages must not be empty
       }
     }
 
@@ -75,7 +76,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
       //val biographyPage = new BiographyListPage(port)
       go to biographyPage
       eventually{
-        biographyPage.biographyDetails(1) must include ("Sample Bio 1")
+        biographyDetails(1) must include ("Sample Bio 1")
       }
     }
 
@@ -83,9 +84,9 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
       signIn.signin("andrew", "pa$$word")
       //val biographyPage = new BiographyListPage(port)
       go to biographyPage
+      updateBio(1,"MC Donalds is leek leek leek")
       eventually{
-        biographyPage.updateBio(1,"MC Donalds is leek leek leek")
-        biographyPage.saveButtons must not be empty
+        saveButtons must not be empty
       }
       signIn.signout
     }
@@ -94,10 +95,29 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
       signIn.signin("andrew", "pa$$word")
       go to biographyPage
       eventually{
+        editButtons must not be empty
+      }
+      signIn.signout
+    }
 
-        biographyPage.bioEditable(1) mustEqual true
-        biographyPage.nameEditable(1) mustEqual true
-        biographyPage.imageEditable(1) mustEqual true
+    "Have biographies that arent editable when the edit mode isnt on" in {
+      go to biographyPage
+      eventually{
+        bioEditable(1) mustEqual false
+        nameEditable(1) mustEqual false
+        imageEditable(1) mustEqual false
+      }
+
+    }
+
+    "Have biographies that become editable when the edit mode is on" in {
+      signIn.signin("andrew", "pa$$word")
+      go to biographyPage
+      eventually{
+        clickOnEditButton(1)
+        bioEditable(1) mustEqual true
+        nameEditable(1) mustEqual true
+        imageEditable(1) mustEqual true
       }
       signIn.signout
     }
@@ -106,12 +126,11 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
       signIn.signin("andrew", "pa$$word")
 
       go to biographyPage
-      biographyPage.updateBio(1,"MC Donalds is leek leek leek")
-      biographyPage.saveBio(1)
+      clickOnEditButton(1)
+      updateBio(1,"MC Donalds is leek leek leek")
+      saveBio(1)
       eventually{
-        biographyPage.updateBio(1,"MC Donalds is leek leek leek")
-        biographyPage.saveBio(1)
-        biographyPage.saveSuccessfulVisible(1) mustEqual true
+        saveSuccessfulVisible(1) mustEqual true
       }
       signIn.signout
     }

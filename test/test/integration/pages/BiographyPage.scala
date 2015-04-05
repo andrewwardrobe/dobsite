@@ -15,7 +15,7 @@ class BiographyListPage(val port: Int)(implicit driver:WebDriver) extends Page w
   def biographyDetails(id : Int) = { cssSelector("#bioText"+ id).findElement.get.text }
   def saveButton(id:Int) = cssSelector("#bioSave"+id).findElement
   def saveButtons = cssSelector("*[id*='bioSave']").findAllElements
-
+  def editButtons = cssSelector("*[id*='bioEdit']").findAllElements
   def viewBiography(name: String) = {
       val bios = cssSelector("td > a[id*='bioText']").findAllElements
       val link = bios.filter( a => a.text.contains(name)).next()
@@ -41,24 +41,30 @@ class BiographyListPage(val port: Int)(implicit driver:WebDriver) extends Page w
   }
 
   def nameEditable(id:Int) = {
-    cssSelector("#bioName"+id).element.attribute("contenteditable").get match {
+    cssSelector("#bioName"+id).element.attribute("contenteditable").getOrElse("false")  match {
       case "true" => true
       case _ => false
     }
   }
 
   def bioEditable(id:Int) = {
-    cssSelector("#bioText"+id).element.attribute("contenteditable").get match {
+    cssSelector("#bioText"+id).element.attribute("contenteditable").getOrElse("false")  match {
       case "true" => true
       case _ => false
     }
   }
   def imageEditable(id:Int) = {
-    cssSelector("#bioImageDiv"+id).element.attribute("contenteditable").get match {
+    cssSelector("#bioImageDiv"+id).element.attribute("contenteditable").getOrElse("false") match {
       case "true" => true
       case _ => false
     }
   }
+
+  def clickOnEditButton(id:Int) ={
+    click on cssSelector("#bioEdit"+id)
+  }
+
+
 }
 
 class BiographyDetailsPage(val port: Int)(implicit driver:WebDriver) extends Page with WebBrowser {
