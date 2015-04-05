@@ -155,7 +155,7 @@ $(function(){
         jsRoutes.controllers.JsonApi.getPostById(id).ajax({
             success: function (data){
                $("#editor").html(data.content);
-               $("#postTitle").text = data.title;
+               $("#postTitle").text(data.title);
                $("#author").attr('value', data.author);
                var d = new Date(data.dateCreated);
                var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();

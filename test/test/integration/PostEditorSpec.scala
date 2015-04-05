@@ -1,6 +1,7 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
+import models.UserRole.TrustedContributor
 import org.openqa.selenium.By
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.scalatest.{ShouldMatchers, BeforeAndAfter, BeforeAndAfterAll}
@@ -9,7 +10,7 @@ import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
-import test.helpers.PostHelper
+import test.helpers.{UserAccountHelper, PostHelper}
 import test.integration.pages._
 
 import scala.slick.jdbc.JdbcBackend._
@@ -27,6 +28,7 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
       val firstFile = PostHelper.createPost("DOB Test News Post","MC Donalds","ah ah blah",1)
       PostHelper.createPost("2nd Post","MC Donalds","Jimbo jimbp",1)
+      PostHelper.createPost("3rd Post","MC Donalds","Dis is Da Oostin Boyeez Leek",1)
       repo.updateFile(firstFile.content,"Here is some data I just changed")
     }
   }
@@ -35,14 +37,16 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   val newsPage = new NewsPage(port)
   val menuBar = new MenuBar(port)
 
+  import editorPage._
+
   var setupDone: Boolean = false
 
   def setup() = {
-    val signUp = new SignUpPage(port)
+
     val signIn = new SignInPage(port)
     if(!setupDone) {
       repo.refresh
-      signUp.signup("andrew", "andrew@dob.com", "pa$$word")
+      UserAccountHelper.createUser("andrew", "andrew@dob.com", "pa$$word",TrustedContributor)
       signIn.signin("andrew", "pa$$word")
       extraSetup
       setupDone = true
@@ -82,6 +86,13 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 //        switch to alertBox
 //      }
 //    }
+
+    "Be able to load a post" in {
+      go to post(3)
+      title mustBe ("3rd Post")
+      editorBoxText mustBe ("Dis is Da Oostin Boyeez Leek")
+      postType mustBe ("News")
+    }
 
     "Display a drop down menu for editor things" in {
       goTo (editorPage)

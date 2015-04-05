@@ -2,6 +2,7 @@ package test.integration.pages
 
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.interactions.Actions
+import org.openqa.selenium.support.ui.Select
 import org.scalatest.selenium.WebBrowser
 import play.api.Logger
 
@@ -42,7 +43,12 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
     click on id("saveButton")
   }
 
+  def postType = {
+    val select = new Select(cssSelector("#postType").findElement.get.underlying)
+    select.getFirstSelectedOption().getText()
+  }
 
+  def title = cssSelector("#postTitle").findElement.get.text
 
   def saveSuccessful = {
     if(cssSelector("*[id*='res-success']").findAllElements.toList.length > 0)
