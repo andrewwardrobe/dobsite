@@ -1,0 +1,31 @@
+@(message: String, postId: Int)(implicit session : Session)
+
+@content = {
+<div class="row" >
+
+    <div  class="col-md-10  col-sm-offset-1 dob-main">
+        <input type="hidden" name="postId" id="postId" value="@postId" />
+
+        <h2 class="dob-post-title" id="postTitle" contenteditable="true">Dob Post Title</h2>
+        <input type="hidden" value="1" id="postType" />
+        <div>
+            Created On <div name="dateCreated" id="dateCreated"  size="auto" readonly="false" style="display:inline">Date</div> by  <div style="display:inline" name="author" id="author">author</div>
+        </div>
+        <input type="hidden" name="content" id="content" />
+        <div id="editor" class="mCustomScrollbar" data-mcs-theme="rounded" data-mcs-axis="y">
+            <div id="initText">Start Typing your post content here</div>
+        </div>
+    </div>
+
+</div><!-- /.row -->
+}
+
+@scripts = {
+<script src="@routes.WebJarAssets.at(WebJarAssets.locate("jquery-ui.min.js"))" type="text/javascript"></script>
+<script type="text/javascript" src='@routes.Application.javascriptRoutes()'></script>
+<script src="@routes.Assets.at("javascripts/jquery.hotkeys.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/bootstrap-wysiwyg.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/post.js")" type="text/javascript"></script>
+
+}
+@main("Da Oostin Boyeez")(content)( scripts)

@@ -11,7 +11,11 @@ doPager = (nxt) ->
             $("#posts").append itm
             itm.attr 'id', 'newsId'+ news.id
             itm.attr 'class', 'dob-post row'
-            itm.append $("<h2>", {class: 'dob-post-title'}).text news.title
+            lnk = $("<a>")
+            lnk.attr "href", "post/" + news.id
+            lnk.attr "id", "newsLink" + news.id
+            lnk.append  $("<h2>", {class: 'dob-post-title'}).text news.title
+            itm.append lnk
             typ = $("<hidden>")
             typ.attr 'id', 'typId' + news.id
             typ.attr 'value', news.postType

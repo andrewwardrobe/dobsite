@@ -35,9 +35,9 @@ object PostHelper {
   def createBiography(name:String, text :String, thumb :String) = {
     val filename = repo.createFile(text)
     val post = new Post(1, name, 4 ,new Date(),"",filename,Post.extraDataToJson(s"thumb=$thumb"))
-    database.withSession { implicit s :Session =>
-      val p = Post.insert(post)
+    val p = database.withSession { implicit s :Session =>
+      Post.insert(post)
     }
-    post
+    Post(p, name, 4 ,new Date(),"",filename,Post.extraDataToJson(s"thumb=$thumb"))
   }
 }

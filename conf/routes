@@ -12,7 +12,7 @@ GET     /checkname/:name              controllers.UserServices.checkName(name :S
 GET     /checkemail/:email              controllers.UserServices.checkEmail(email :String)
 
 
-GET     /testpage                         controllers.Application.posts
+GET     /post/:id                         controllers.Application.post(id:Int)
 
 POST     /signup                     controllers.UserServices.register
 GET     /login                           controllers.UserServices.login
