@@ -20,10 +20,13 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
-
+  var setupDone = false
 
   before{
-    dataSetup
+    if(!setupDone) {
+      dataSetup
+      setupDone = true
+    }
   }
 
   val newsPage = new NewsPage(port)
