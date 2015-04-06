@@ -69,12 +69,13 @@
 
         @helper.form(action = routes.Authorised.submitBlog, 'id -> "blogForm" ){
         <input type="hidden" name="postId" id="postId" value="@postId" />
+        <!-- Start Toolbar
+            -->
+        @toolbar
+        <!-- End Tool bar
+          -->
         <div class="col-md-7">
-        <input type="hidden" name="title" id="title" />
-
         <h2 class="dob-post-title" id="postTitle" contenteditable="true">Dob Post Title</h2>
-        <input type="hidden" value="1" id="typId1" />
-        <input type="hidden" value="1" id="typId1" />
         </div>
         <div class="col-md-2">
             @helper.select(field = form("postType"), options = List("1" ->"News","2"->"Music","3"->"Gaz Three", "4" -> "Biography"),  args = 'class -> "form-control dob-control",'_label -> "" )
@@ -87,24 +88,17 @@
         </script>
         <input type="hidden" name="author" id="author" value="@username" />
         <!--@helper.inputText(field = form("author"), args = 'class -> "form-control",'_label -> "Author") -->
-<script>
-
-</script>
-      <div  class="col-md-9  dob-main">
+        <div  class="col-md-9  dob-main">
           <input type="hidden" name="content" id="content" />
 
-          <!-- Start Toolbar
-          -->
-          @toolbar
-        <!-- End Tool bar
-          -->
+
           <div id="editor" class="mCustomScrollbar" data-mcs-theme="rounded" data-mcs-axis="y">
               <div id="initText">Start Typing your post content here</div>
           </div>
 
 
-      </div>
-         <div class="col-md-9  dob-main">
+        </div>
+        <div class="col-md-9  dob-main">
             <div>
                 Extra Data:
                 <div id="extraData">
@@ -119,9 +113,8 @@
         </div>
 
 
-    <div  class="col-md-9  dob-main">
-        <div id="result">
-
+        <div  class="col-md-9  dob-main">
+            <div id="result">
         </div>
 
 
@@ -132,9 +125,8 @@
 
 </div><!-- /.row -->
 
-
-
 }
+
 @scripts = {
 <script src="@routes.WebJarAssets.at(WebJarAssets.locate("jquery-ui.min.js"))" type="text/javascript"></script>
 <script type="text/javascript" src='@routes.Application.javascriptRoutes()'></script>
