@@ -611,3 +611,55 @@ border-top: none;
     resize:none;
     border:none;
 }
+
+.ui-dialog .ui-dialog-content {
+    padding: 0;
+}
+
+#tabs {
+    border: none;
+    padding: 0;
+}
+
+
+
+.ui-tabs-nav {
+    background-color: @gray-darker !important; /*To overwrite jquery-ui.css*/
+    height: 30px;                        /*To stop nav block scaling of tab size*/
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus  {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: @gray-dark;        /*To make it looks like on example pic, it is possible do do with it whatever you want*/
+    border-color: #CCCCCC;
+    border-style: solid;
+    border-width: 1px 1px 0;
+    border-radius: 5px 5px 0 0;    /*To affect only top corners*/
+    color: white;
+    position: relative;
+    z-index: 5;
+    color: black !important;             /*To overwrite jquery-ui.css*/
+    text-decoration: none !important;     /*To overwrite jquery-ui.css*/
+}
+
+.ui-tabs .ui-tabs-nav li {
+    position: relative;    /*To overwrite jquery-ui.css*/
+    top: -10px !important;  /*To overwrite jquery-ui.css*/
+    border: none;
+    margin: 0 0 -5px 0;
+    background: none;
+}
+.ui-tabs-anchor{
+    color: white !important;                  /*To overwrite jquery-ui.css*/
+    text-decoration: underline !important;    /*To overwrite jquery-ui.css*/
+}
+
+.ui-tabs .ui-tabs-panel /* just in case you want to change the panel */
+{
+    background:white;
+    color:@gray-light !important;
+}
+

@@ -292,3 +292,9 @@ $(function(){
             $("#editor").mCustomScrollbar();
         });
     })(jQuery);
+/*
+$(function(){
+   // $('#toolbar-tabs').tabs();
+    $('#toolbar').dialog();
+});
+*/
