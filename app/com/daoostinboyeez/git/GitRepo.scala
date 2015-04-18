@@ -4,7 +4,7 @@ import java.io.{File, FileWriter}
 import java.util.Date
 
 import com.sun.xml.internal.bind.v2.TODO
-import models.CommitMeta
+import models.PostMeta
 import org.apache.commons.io.FileUtils
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.internal.storage.file.FileRepository
@@ -40,18 +40,18 @@ class GitRepo {
 
   def findWithDate(path:String) = {
     val commits = git.log().addPath(path).call()
-    val commitList: ListBuffer[CommitMeta] = new ListBuffer[CommitMeta]()
+    val commitList: ListBuffer[PostMeta] = new ListBuffer[PostMeta]()
     commits.foreach{ commit =>
-      commitList +=new CommitMeta(commit.getName , commit.getAuthorIdent.getWhen().toString)
+      commitList +=new PostMeta(commit.getName , commit.getAuthorIdent.getWhen().toString)
     }
     commitList.toList
   }
 
   def findWithDate = {
     val commits = git.log().call()
-    val commitList: ListBuffer[CommitMeta] = new ListBuffer[CommitMeta]()
+    val commitList: ListBuffer[PostMeta] = new ListBuffer[PostMeta]()
     commits.foreach{ commit =>
-      commitList +=new CommitMeta(commit.getName , commit.getAuthorIdent.getWhen().toString)
+      commitList +=new PostMeta(commit.getName , commit.getAuthorIdent.getWhen().toString)
     }
     commitList.toList
   }
@@ -92,6 +92,10 @@ class GitRepo {
     doFile(path, fileData,s"Added File $path")
   }
 
+  def newFile(path:String, fileData:String, commitMsg:String)={
+    doFile(path, fileData,commitMsg)
+  }
+
   def init = {
    Play.application.configuration.getString("git.repo.testmode").getOrElse("false") match {
      case "false" =>
@@ -128,14 +132,18 @@ class GitRepo {
     doFile(path, fileData,s"Edited File $path")
   }
 
-  def createFile(prefix:String, fileData:String) = {
+  def createFile(prefix:String, fileData:String, commitMsg:String) = {
     val path = prefix + genFileName
-    doFile(path, fileData,s"Created file $path")
+    doFile(path, fileData,commitMsg)
     path
   }
 
+  def createFile(fileData:String, commitMsg:String):String = {
+    createFile("",fileData,commitMsg)
+  }
+
   def createFile(fileData:String):String = {
-    createFile("",fileData)
+    createFile("",fileData,"")
   }
 
   def genFileName = {

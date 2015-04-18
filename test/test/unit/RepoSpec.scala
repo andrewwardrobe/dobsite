@@ -15,7 +15,7 @@ class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   val repo = GitRepo.apply()
   
-  "Repository" must {
+  "Content Repository" must {
     "Be able to show the current branch" in {
       val currBranch = repo.getBranch
       currBranch must equal ("refs/heads/master")
@@ -52,6 +52,8 @@ class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
       val commitList = repo.findWithDate ("leek")
       commitList.length must equal(2)
     }
+
+
   }
 
 

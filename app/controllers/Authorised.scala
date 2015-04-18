@@ -1,12 +1,12 @@
 package controllers
 
-import java.util.Date
+import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.{GitRepo}
 import controllers.Application._
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
-import models.{Biography, UserAccount, Post}
+import models.{PostMeta, Biography, UserAccount, Post}
 
 import models.UserRole.{Administrator, Contributor, NormalUser}
 import play.api.Logger
@@ -37,10 +37,10 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   }
 
   def blogInput = StackAction(AuthorityKey -> Contributor){  implicit request =>
-    Ok(views.html.editor("",Post.blogForm,-1))
+    Ok(views.html.editor("",Post.blogForm,"-1"))
   }
 
-  def blogUpdate(id: Int) = StackAction(AuthorityKey -> Contributor) {  implicit request =>
+  def blogUpdate(id: String) = StackAction(AuthorityKey -> Contributor) {  implicit request =>
     Ok(views.html.editor("",Post.blogForm,id))
   }
 
@@ -49,9 +49,10 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
 
     val item = Post.blogForm.bindFromRequest().get
     val content = item.content
-    val filename = repo.createFile(content)
-    val newItem = new Post(item.id,item.title,item.postType,item.dateCreated,item.author,filename,Post.extraDataToJson(item.extraData))
+    val filename = repo.genFileName
+    val newItem = new Post(UUID.randomUUID().toString(), item.title, item.postType, new Date(), item.author, filename, Post.extraDataToJson(item.extraData))
 
+    repo.createFile(content, PostMeta.makeCommitMsg("Created",newItem))
     val id = database.withSession { implicit s =>
       Post.insert(newItem)
     }
@@ -68,8 +69,9 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     val item = Post.blogForm.bindFromRequest().get
     val content = item.content
     database.withSession { implicit s =>
-      val filename = Post.getById(item.id).head.content
-      val newItem = new Post(item.id,item.title,item.postType,item.dateCreated,item.author,filename,Post.extraDataToJson(item.extraData))
+      val post = Post.getById(item.id).head
+      val filename = post.content
+      val newItem = new Post(item.id, item.title, item.postType, post.dateCreated, item.author, filename, Post.extraDataToJson(item.extraData))
       repo.updateFile(filename,content)
       Post.update(newItem)
     }

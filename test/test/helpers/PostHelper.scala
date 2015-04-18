@@ -1,6 +1,7 @@
 package test.helpers
 
-import java.util.Date
+import java.text.SimpleDateFormat
+import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.GitRepo
 import models.Post
@@ -23,21 +24,33 @@ object PostHelper {
     createPost(title, author, content, typ, "")
   }
 
+
   def createPost(title:String, author:String, content :String, typ: Int, extraData :String):Post = {
+    createPost(title, author, content, typ, "", new Date())
+  }
+
+  def createPost(title:String, author:String, content :String, typ: Int, extraData :String, date: Date):Post = {
     val filename = repo.createFile(content)
-    val post = new Post(1, title,typ,new Date(),author,filename,extraData)
+    val post = new Post(UUID.randomUUID().toString(),title, typ, date, author, filename, extraData)
     database.withSession { implicit s :Session =>
       Post.insert(post)
     }
     post
   }
 
+  def createPost(title:String, author:String, content :String, typ: Int, extraData :String, date: String):Post = {
+    val df = new SimpleDateFormat("yyyyMMddHHmmss")
+    createPost(title, author, content, typ, "", df.parse(date))
+  }
+
   def createBiography(name:String, text :String, thumb :String) = {
     val filename = repo.createFile(text)
-    val post = new Post(1, name, 4 ,new Date(),"",filename,Post.extraDataToJson(s"thumb=$thumb"))
-    database.withSession { implicit s :Session =>
-      val p = Post.insert(post)
+    val post = new Post(UUID.randomUUID().toString(),name, 4, new Date(), "", filename, Post.extraDataToJson(s"thumb=$thumb"))
+    val p = database.withSession { implicit s :Session =>
+      Post.insert(post)
     }
     post
   }
+
+
 }

@@ -94,6 +94,13 @@ function getRevisions(){
     jsRoutes.controllers.JsonApi.getRevisionsWithDates(id).ajax(json);
 }
 
+
+$("#editor").on("keyup",function(e){
+    $("#saveButton").show();
+    $("#btnSuccessful").hide();
+    $("#btnFailure").hide();
+});
+
 $("#saveButton").click(function(){
     var dateStr = $("#dateCreated").val();
     var title = $("#postTitle").text();
@@ -120,10 +127,12 @@ $("#saveButton").click(function(){
                $(d).attr('role','alert');
                $(d).attr('id','res-success');
                $("#result").html("");
-               $("#result").append(d);
+               //$("#result").append(d);
                $("#postId").val(data);
                getRevisions();
                window.removeEventListener("beforeunload",unload);
+               $("#saveButton").hide();
+               $("#btnSuccessful").show();
            },
            error: function(data){
                var d = $('<div>');
@@ -134,6 +143,8 @@ $("#saveButton").click(function(){
                $("#result").html("");
                $("#result").append(d);
                $("#postId").val(data);
+               $("#saveButton").hide();
+               $("#btnFailure").show();
            }
     };
 
@@ -151,8 +162,7 @@ $("#saveButton").click(function(){
 $(function(){
     var id = $("#postId").val();
     if(id != -1){
-        $("#saveButton").attr('value',"Update");
-        jsRoutes.controllers.JsonApi.getPostById(id).ajax({
+            jsRoutes.controllers.JsonApi.getPostById(id).ajax({
             success: function (data){
                $("#editor").html(data.content);
                $("#postTitle").text(data.title);
@@ -272,7 +282,7 @@ $(function(){
         window.addEventListener("beforeunload",unload);
     });
 
-    $(editor).wysiwyg();
+    $(editor).wysiwyg({activeToolbarClass:"btn-dob-toolbar"});
 
 
     $('#revisions').affix({
@@ -287,8 +297,44 @@ $(function(){
 
 });
 
+
+
+
+$('#toolbar').on('dragstart',function(){
+    $("#toolbar").attr('class','toolbar-compact');
+    $("#tbSpace").hide();
+    $("#tbSpace").show();
+    $("#expanderIcon").attr('class','fa fa-expand');
+});
+
+
+
+  $('.dropdown-menu input, .dropdown label').click(function(e) {
+    e.stopPropagation();
+  });
+
 (function($){
         $(window).load(function(){
             $("#editor").mCustomScrollbar();
         });
-    })(jQuery);
+})(jQuery);
+
+$("#expander").on('click',function(e){
+    var cls = $("#expanderIcon").attr('class');
+    if(cls == "fa fa-compress"){
+        $("#toolbar").attr('class','toolbar-compact');
+        $("#expanderIcon").attr('class','fa fa-expand');
+    }else{
+         $("#toolbar").attr('class','toolbar');
+         $("#toolbar").attr('style','');
+         $("#expanderIcon").attr('class','fa fa-compress');
+    }
+});
+
+$(function(){
+    $('#toolbar').draggable({stack: "#editor"});
+    $("#btnSuccessful").hide();
+    $("#btnFailure").hide();
+});
+
+

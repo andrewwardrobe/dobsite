@@ -1,7 +1,6 @@
 @import "lib/bootstrap/less/bootstrap.less";
 
 @body-bg:#000000;
-@nav-link-hover-bg:@gray-dark;
 
 @modal-content-bg:@gray-darker;
 @table-border-color:#000;
@@ -23,6 +22,17 @@
 @bioThumbWidth:100px;
 @bioThumbHeight:100px;
 
+@dropdown-bg:@gray-darker;
+@dropdown-link-color:@gray-light;
+@dropdown-header-color:@gray;
+@dropdown-divider-bg:@gray;
+@dropdown-link-hover-bg:@gray-light;
+@dropdown-border:rgba(0,0,0,.15);
+@nav-link-hover-bg:@gray-dark;
+@navbar-inverse-link-active-bg:@gray-darker;
+
+
+@gray-darker-trans:fade(@gray-darker,90%);
 
 .modal-header .close{
     color:#ffffff;
@@ -71,19 +81,19 @@ div.floating-menu {
 
 
 #editor {
-max-height: 400px;
-height: 450px;
-background-color: rgba(0,0,0,0);
-border-collapse: separate;
+    max-height: 400px;
+    height: 450px;
+    background-color: rgba(0,0,0,0);
+    border-collapse: separate;
 
-padding: 4px;
-box-sizing: content-box;
--webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
-border-top-right-radius: 3px; border-bottom-right-radius: 3px;
-border-bottom-left-radius: 3px; border-top-left-radius: 3px;
-/*overflow-y: scroll;*/
-outline: none;
+    padding: 4px;
+    box-sizing: content-box;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+    box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+    border-top-right-radius: 3px; border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px; border-top-left-radius: 3px;
+    /*overflow-y: scroll;*/
+    outline: none;
 }
 
 #voiceBtn {
@@ -100,20 +110,20 @@ box-shadow: none;
 }
 
 div[data-role="editor-toolbar"] {
--webkit-user-select: none;
--moz-user-select: none;
--ms-user-select: none;
-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 .dropdown-menu a {
-cursor: pointer;
+    cursor: pointer;
 }
 
 label {
-float: left;
-width: 4em;
-margin-right: 1em;
-font-weight: normal;
+    float: left;
+    width: 4em;
+    margin-right: 1em;
+    font-weight: normal;
 }
 
 .code {
@@ -203,10 +213,10 @@ h1 {
 }
 
 .loginForm{
-background-color: #ffffff;
-color:#000000;
-padding:15px;
-box-shadow: 0 0 15px rgba(211, 211, 211, 1);
+    background-color: #ffffff;
+    color:#000000;
+    padding:15px;
+    box-shadow: 0 0 15px rgba(211, 211, 211, 1);
 }
 
 .dob-control-white{
@@ -266,15 +276,15 @@ box-shadow: 0 0 15px rgba(211, 211, 211, 1);
     text-align:right;
 }
 
- .discoThumb{
-     width:@thumbWidth;
-     height:@thumbHeight;
-  }
+.discoThumb{
+ width:@thumbWidth;
+ height:@thumbHeight;
+}
 
-   .bioThumb{
-       width:@bioThumbWidth;
-       height:@bioThumbHeight;
-    }
+.bioThumb{
+   width:@bioThumbWidth;
+   height:@bioThumbHeight;
+}
 
 
 .massive{
@@ -298,25 +308,25 @@ box-shadow: 0 0 15px rgba(211, 211, 211, 1);
 .modal-cell{
 }
 
-  .table th, .table td {
-       border-top: none;
-   }
+.table th, .table td {
+   border-top: none;
+}
 
-  .discoCell{
-    text-align:center;
-    vertical-align: text-top;
-    border-top: #000;
+.discoCell{
+text-align:center;
+vertical-align: text-top;
+border-top: #000;
 border-top: none;
-  }
+}
 
-  .table-no-border>thead>tr>th,
-  .table-no-border>tbody>tr>th,
-  .table-no-border>tfoot>tr>th,
-  .table-no-border>thead>tr>td,
-  .table-no-border>tbody>tr>td,
-  .table-no-border>tfoot>tr>td {
+.table-no-border>thead>tr>th,
+.table-no-border>tbody>tr>th,
+.table-no-border>tfoot>tr>th,
+.table-no-border>thead>tr>td,
+.table-no-border>tbody>tr>td,
+.table-no-border>tfoot>tr>td {
     border-top: none;
-  }
+}
 /*
  * Masthead for nav
  */
@@ -509,105 +519,173 @@ border-top: none;
     border-top: none;
   }
   
-    .bioDiv{
-      background:@gray-darker;
-      border-radius:15px;
-      margin:15px;
-      padding:10px;
-      /*max-height:150px;*/
-      outline: 0;
-    }
-  
-    .bioText{
+.bioDiv{
+  background:@gray-darker-trans;
+  border-radius:5px;
+  margin:15px;
+  padding:10px;
+  /*max-height:150px;*/
+  outline: 0;
+}
 
-      max-height:75px;
-      height:65px;
-      overflow:hidden;
-        outline: 0;
-    }
+.bioText{
 
-    div[id*='bioName']{
-        outline:0;
-        padding-left:2px;
-    }
+  max-height:75px;
+  height:65px;
+  overflow:hidden;
+    outline: 0;
+}
 
-    div[id*='bioImageDiv']{
-        outline:0;
+div[id*='bioName']{
+    outline:0;
+    padding-left:2px;
+}
+
+div[id*='bioImageDiv']{
+    outline:0;
+    margin-right:4px;
+}
+
+img[id*='bioImage']{
+
+
         margin-right:4px;
     }
+.bioTextExpanded{
+    min-height:65px;
+}
+.bioText:before {
+      background:linear-gradient(transparent 65px, @gray-darker);
+ }
 
-    img[id*='bioImage']{
+.expander,
+.expander:hover,
+.expander:active,
+.expander:link,
+.expander:focus
+{
+  outline: 0;
+  align:right;
+  font-size:small;
+  color:@gray-light;
+}
 
+.editBtnOn,
+.editBtnOn:hover,
+.editBtnOn:active,
+.editBtnOn:link,
+.editBtnOn:focus
+{
+    outline: 0;
+    align:right;
+    font-size:small;
+    color:@brand-success;
+}
 
-            margin-right:4px;
-        }
-    .bioTextExpanded{
-        min-height:65px;
-    }
-    .bioText:before {
-          background:linear-gradient(transparent 65px, @gray-darker);
-     }
-  
-  .expander,
-  .expander:hover,
-  .expander:active,
-  .expander:link,
-  .expander:focus
-  {
-      outline: 0;
+.editBtnOff,
+.editBtnOff:hover,
+.editBtnOff:active,
+.editBtnOff:link,
+.editBtnOff:focus
+{
+    outline: 0;
+    align:right;
+    font-size:small;
+    color:@gray-light;
+}
+
+.btnSuccessful,
+.btnSuccessful:hover,
+.btnSuccessful:active,
+.btnSuccessful:link,
+.btnSuccessful:focus
+{
+    align:right;
+    font-size:small;
+    color:@brand-success;
+}
+
+.btnFailure,
+.btnFailure:hover,
+.btnFailure:active,
+.btnFailure:link,
+.btnFailure:focus{
       align:right;
       font-size:small;
-      color:@gray-light;
+      color:@brand-danger;
   }
 
-    .editBtnOn,
-    .editBtnOn:hover,
-    .editBtnOn:active,
-    .editBtnOn:link,
-    .editBtnOn:focus
-    {
-        outline: 0;
-        align:right;
-        font-size:small;
-        color:@brand-success;
-    }
-
-    .editBtnOff,
-    .editBtnOff:hover,
-    .editBtnOff:active,
-    .editBtnOff:link,
-    .editBtnOff:focus
-    {
-        outline: 0;
-        align:right;
-        font-size:small;
-        color:@gray-light;
-    }
-
-  .btnSuccessful,
-  .btnSuccessful:hover,
-  .btnSuccessful:active,
-  .btnSuccessful:link,
-  .btnSuccessful:focus
-  {
-        align:right;
-        font-size:small;
-        color:@brand-success;
-    }
-
-    .btnFailure,
-    .btnFailure:hover,
-    .btnFailure:active,
-    .btnFailure:link,
-    .btnFailure:focus{
-          align:right;
-          font-size:small;
-          color:@brand-danger;
-      }
-  
 .blackTA{
     background-color:transparent;
     width:600px;
     resize:none;
     border:none;
+}
+
+.ui-dialog .ui-dialog-content {
+    padding: 0;
+}
+
+#tabs {
+    border: none;
+    padding: 0;
+}
+
+
+
+.ui-tabs-nav {
+    background-color: @gray-darker !important; /*To overwrite jquery-ui.css*/
+    height: 30px;                        /*To stop nav block scaling of tab size*/
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus  {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: @gray-dark;        /*To make it looks like on example pic, it is possible do do with it whatever you want*/
+    border-color: #CCCCCC;
+    border-style: solid;
+    border-width: 1px 1px 0;
+    border-radius: 5px 5px 0 0;    /*To affect only top corners*/
+    color: white;
+    position: relative;
+    z-index: 5;
+    color: black !important;             /*To overwrite jquery-ui.css*/
+    text-decoration: none !important;     /*To overwrite jquery-ui.css*/
+}
+
+.ui-tabs .ui-tabs-nav li {
+    position: relative;    /*To overwrite jquery-ui.css*/
+    top: -10px !important;  /*To overwrite jquery-ui.css*/
+    border: none;
+    margin: 0 0 -5px 0;
+    background: none;
+}
+.ui-tabs-anchor{
+    color: white !important;                  /*To overwrite jquery-ui.css*/
+    text-decoration: underline !important;    /*To overwrite jquery-ui.css*/
+}
+
+.ui-tabs .ui-tabs-panel /* just in case you want to change the panel */
+{
+    background:white;
+    color:@gray-light !important;
+}
+
+.toolbar{
+}
+
+.toolbar-compact{
+    position:absolute;
+    width:100px;
+}
+
+.btn-toolbar{
+  text-align: center;
+  align: center;
+}
+
+.btn-dob-toolbar{
+   background:@gray-darker;
 }

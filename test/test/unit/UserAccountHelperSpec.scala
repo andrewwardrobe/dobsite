@@ -17,6 +17,7 @@ class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite{
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
+
   "UserAccountHelper" must {
     "Be able to create an account" in {
       database.withSession { implicit session =>

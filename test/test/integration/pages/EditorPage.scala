@@ -24,7 +24,7 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
     box.underlying.sendKeys(content)
   }
 
-  def post(id:Int) = s"localhost:$port/editor/$id"
+  def post(id:String) = s"localhost:$port/editor/$id"
 
   def revisionListText = {
     val revisions: ListBuffer[String] = new ListBuffer[String]()
@@ -50,11 +50,9 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
 
   def title = cssSelector("#postTitle").findElement.get.text
 
+
   def saveSuccessful = {
-    if(cssSelector("*[id*='res-success']").findAllElements.toList.length > 0)
-      true
-    else
-      false
+    cssSelector("#btnSuccessful").findElement.get.underlying.isDisplayed()
   }
 
   def highLightText(text:String) = { //Doesnt quite work

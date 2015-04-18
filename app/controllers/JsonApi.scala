@@ -1,6 +1,9 @@
 package controllers
 
 
+import java.text.SimpleDateFormat
+import java.util.Date
+
 import com.daoostinboyeez.git.GitRepo
 import models._
 import play.api._
@@ -26,7 +29,7 @@ object JsonApi extends Controller {
   implicit val trackFormat =  Json.format[Track]
   implicit val bioFormat =  Biography.jsonFormat;
   implicit val newsFormat =  Json.format[Post]
-  implicit val commitFormat =  Json.format[CommitMeta]
+  implicit val commitFormat =  Json.format[PostMeta]
   val repo = GitRepo.apply()
 
   def getDiscographyByReleaseType(_type: Int) = DBAction { implicit response =>
@@ -42,15 +45,15 @@ object JsonApi extends Controller {
     val newsList = blogToJson(Post.getByType(contentType))
     Ok(toJson(newsList))
   }
-  def getPostById(id: Int) = DBAction { implicit response =>
+  def getPostById(id: String) = DBAction { implicit response =>
     Ok(toJson(Post.getById(id).head.json))
   }
 
-  def getPostRevisionById(id: Int, revId : String) = DBAction { implicit response =>
+  def getPostRevisionById(id: String, revId : String) = DBAction { implicit response =>
     Ok(toJson(Post.getById(id).head.json(revId)))
   }
 
-  def getRevisions(id: Int) =  DBAction { implicit response =>
+  def getRevisions(id: String) =  DBAction { implicit response =>
     val post = Post.getById(id)
       post.isEmpty match{
         case false => {
@@ -70,7 +73,7 @@ object JsonApi extends Controller {
 
   }
 
-  def getRevisionsWithDates(id: Int) =  DBAction { implicit response =>
+  def getRevisionsWithDates(id: String) =  DBAction { implicit response =>
     val post = Post.getById(id)
     post.isEmpty match{
       case false => {
@@ -98,7 +101,7 @@ object JsonApi extends Controller {
     blogsJson.toList
   }
 
-  def getNewsByRange(start: Int, num: Int) = DBAction { implicit response =>
+  def getNewsByRange(start: String, num: Int) = DBAction { implicit response =>
     if(start != -1) {
       val newsList = blogToJson(Post.getXNewsItemsFromId(start, num))
       Ok(toJson(newsList))
@@ -108,14 +111,31 @@ object JsonApi extends Controller {
     }
   }
 
-  def getContentByRange(typ:Int, start: Int, num: Int) = DBAction { implicit response =>
-    if(start != -1) {
-      val content = blogToJson(Post.getXItemsFromId(typ,start, num))
-      Ok(toJson(content))
-    }else {
-      val content = blogToJson(Post.getXItems(typ,num))
-      Ok(toJson(content))
+//  def getContentByRange(id:String, start: String, num: Int) = DBAction { implicit response =>
+//    if(start != "-1") {
+//      val content = blogToJson(Post.getXItemsFromId(id,start, num))
+//      Ok(toJson(content))
+//    }else {
+//      val content = blogToJson(Post.getXItems(id,num))
+//      Ok(toJson(content))
+//    }
+//  }
+
+  def getContentByDate(typ: Int)  = DBAction { implicit response =>
+    val contentList = blogToJson(Post.getByDate(typ))
+    Ok(toJson(contentList))
+  }
+
+  def getContentByDateStart(typ: Int,startDate: String,max :Int)  = DBAction { implicit response =>
+    val contentList = startDate match {
+      case s if s.isEmpty() || s == "" => { blogToJson(Post.getByDate(typ,new Date(),max)) }
+      case s if s == "today" => { blogToJson(Post.getByDate(typ,new Date(),max)) }
+      case _ => {
+        val df = new SimpleDateFormat("yyyyMMddHHmmss")
+        blogToJson(Post.getByDate(typ,df.parse(startDate),max))
+      }
     }
+    Ok(toJson(contentList))
   }
 
   def getDiscography = DBAction { implicit response =>

@@ -1,6 +1,7 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
+import models.Post
 import models.UserRole.TrustedContributor
 import org.openqa.selenium.By
 import org.openqa.selenium.support.ui.ExpectedConditions
@@ -23,13 +24,17 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   def database = Database.forDataSource(DB.getDataSource())
 
   val repo = GitRepo.apply()
+  var post1: Post = null
+  var post2: Post = null
+  var post3: Post = null
+
   def extraSetup = {
     database.withSession { implicit session =>
 
-      val firstFile = PostHelper.createPost("DOB Test News Post","MC Donalds","ah ah blah",1)
-      PostHelper.createPost("2nd Post","MC Donalds","Jimbo jimbp",1)
-      PostHelper.createPost("3rd Post","MC Donalds","Dis is Da Oostin Boyeez Leek",1)
-      repo.updateFile(firstFile.content,"Here is some data I just changed")
+      post1 = PostHelper.createPost("DOB Test News Post","MC Donalds","ah ah blah",1)
+      post2 =  PostHelper.createPost("2nd Post","MC Donalds","Jimbo jimbp",1)
+      post3 = PostHelper.createPost("3rd Post","MC Donalds","Dis is Da Oostin Boyeez Leek",1)
+      repo.updateFile(post1.content,"Here is some data I just changed")
     }
   }
 
@@ -71,7 +76,7 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     }
 
     "Be able to update a post" in {
-      goTo (editorPage.post(2))
+      goTo (editorPage.post(post2.id))
       editorPage.addContent("leek")
       editorPage.save
       eventually{ editorPage.saveSuccessful mustEqual (true) }
@@ -88,7 +93,7 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 //    }
 
     "Be able to load a post" in {
-      go to post(3)
+      go to post(post3.id)
       title mustBe ("3rd Post")
       editorBoxText mustBe ("Dis is Da Oostin Boyeez Leek")
       postType mustBe ("News")
@@ -103,13 +108,13 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
   "Revision List" must {
     "Display a list of revisions when there is some" in {
-      goTo (editorPage.post(1))
+      goTo (editorPage.post(post1.id))
 
       eventually{editorPage.revisionListText.size must be (2)}
     }
 
     "Display a list of revisions by dates" in {
-      goTo (editorPage.post(1))
+      goTo (editorPage.post(post1.id))
 
       eventually{
         click on id("editorMenu")
@@ -118,12 +123,12 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     }
 
     "Display a list of revisions by dates with links to the revision" in {
-      goTo (editorPage.post(1))
+      goTo (editorPage.post(post1.id))
       eventually{editorPage.revisionLinks must not be empty }
     }
 
     "load the specified revision when the link is clicked" in {
-      goTo (editorPage.post(1))
+      goTo (editorPage.post(post1.id))
       eventually{
         click on id("editorMenu")
         click on id(editorPage.revisionLinks(1).attribute("id").get)

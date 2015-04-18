@@ -1,14 +1,16 @@
 package test.unit
 
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
-import play.api.test.FakeRequest
+import play.api.test.{FakeApplication, FakeRequest}
 import play.api.test.Helpers._
+import test.{TestGlobal, TestConfig}
 
 /**
  * Created by andrew on 14/09/14.
  */
 class ApplicationSpec extends PlaySpec with OneServerPerSuite{
 
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   "Application" should {
 
     "send 404 on a bad request" in {

@@ -12,7 +12,7 @@ GET     /checkname/:name              controllers.UserServices.checkName(name :S
 GET     /checkemail/:email              controllers.UserServices.checkEmail(email :String)
 
 
-GET     /testpage                         controllers.Application.posts
+GET     /post/:id                         controllers.Application.post(id:String)
 
 POST     /signup                     controllers.UserServices.register
 GET     /login                           controllers.UserServices.login
@@ -20,7 +20,7 @@ POST    /login                           controllers.UserServices.authenticate
 
 GET     /news                           controllers.Application.news
 GET     /editor                           controllers.Authorised.blogInput
-GET     /editor/:id                           controllers.Authorised.blogUpdate(id: Int)
+GET     /editor/:id                           controllers.Authorised.blogUpdate(id: String)
 
 POST     /blog                           controllers.Authorised.submitBlog
 PUT     /blog                           controllers.Authorised.submitBlogUpdate
@@ -50,12 +50,13 @@ GET     /json/tracks/byrelease/:id           controllers.JsonApi.getTracksByRele
 GET     /json/admin/users/:id           controllers.AdminJsonApi.getUsers(id: String)
 GET     /json/admin/user/:id           controllers.AdminJsonApi.getUser(id: String)
 GET     /json/news           controllers.JsonApi.getNews()
-GET     /json/content/:id           controllers.JsonApi.getPostById(id: Int)
-GET     /json/content/:id/revisions           controllers.JsonApi.getRevisionsWithDates(id: Int)
-GET     /json/content/:id/revisions/:revId           controllers.JsonApi.getPostRevisionById(id: Int, revId: String)
+GET     /json/content/:id           controllers.JsonApi.getPostById(id: String)
+GET     /json/content/:id/revisions           controllers.JsonApi.getRevisionsWithDates(id: String)
+GET     /json/content/:id/revisions/:revId           controllers.JsonApi.getPostRevisionById(id: String, revId: String)
 GET     /json/content/bytype/:type           controllers.JsonApi.getContentByType(type: Int)
-GET     /json/content/bytype/:type/:start/:num           controllers.JsonApi.getContentByRange(type: Int, start: Int, num: Int)
-GET     /json/news/:id/:max           controllers.JsonApi.getNewsByRange(id: Int, max: Int)
+GET     /json/content/bydate/:type          controllers.JsonApi.getContentByDate(type: Int)
+GET     /json/content/bydate/:type/:startDate/:max           controllers.JsonApi.getContentByDateStart(type: Int,startDate: String,max :Int)
+GET     /json/news/:id/:max           controllers.JsonApi.getNewsByRange(id: String, max: Int)
 
 # Home page
 

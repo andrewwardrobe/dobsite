@@ -16,6 +16,10 @@ class NewsPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest.s
     itemList.toList
   }
 
+
+  def itemLinks = {
+   cssSelector("*[id*='newsLink']").findAllElements.toList
+  }
   def TypeIds = {
 
     val typeIDList: ListBuffer[String] = new ListBuffer[String]()

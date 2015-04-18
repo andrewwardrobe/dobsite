@@ -69,7 +69,7 @@ imageDropped = (files, target) ->
     imageDiv.attr 'ondragenter', 'return false'
     imageDiv.attr 'ondragover', 'return false'
     editBtn.attr 'class', 'editBtnOn'
-    editBtn.attr "onclick", "editModeOff(" + id + ")"
+    editBtn.attr "onclick", "editModeOff('" + id + "')"
 
 @editModeOff = (id) ->
     editBtn = $("#bioEdit" +id)
@@ -84,7 +84,7 @@ imageDropped = (files, target) ->
     imageDiv.attr 'ondragenter', ''
     imageDiv.attr 'ondragover', ''
     editBtn.attr 'class', 'editBtnOff'
-    editBtn.attr "onclick", "editModeOn(" + id + ")"
+    editBtn.attr "onclick", "editModeOn('" + id + "')"
 
 doEditMode = (bio) ->
     bioText = $("#bioText" + bio.id)
@@ -122,7 +122,7 @@ doEditMode = (bio) ->
     saveFailure.attr 'class', 'btnFailure'
     saveFailure.html '<span class="fa fa-times-circle"></span>'
     saveFailure.hide()
-    editBtn.attr "onclick", "editModeOn(" + bio.id + ")"
+    editBtn.attr "onclick", "editModeOn('" + bio.id + "')"
     saveBtn.on "click", (event) ->
         extraData = $("#bioExtra" +bio.id).val()
         id = event.target.parentElement.id.replace "bioSave" , ""

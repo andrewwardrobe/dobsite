@@ -37,10 +37,8 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
     Ok(views.html.index(maybeUser))
   }
 
-  def posts =  Action(parse.temporaryFile) { implicit request =>
-
-   // Ok(views.html.posts("",Post.blogForm,-1))
-    Ok("")
+  def post(id :String) =  Action{ implicit request =>
+   Ok(views.html.post("",id))
   }
 
 
@@ -62,7 +60,7 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
   }
 
   def news = Action {  implicit request =>
-    Ok(views.html.contentList(routes.JsonApi.getContentByType(1).url))
+    Ok(views.html.contentList(routes.JsonApi.getContentByDate(1).url))
   }
 
   def hansUndJorg = Action {  implicit request =>

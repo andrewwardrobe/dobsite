@@ -24,7 +24,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
 
   val repo = GitRepo.apply()
 
-  var bio = 0
+  var bio = ""
 
   var setupDone: Boolean = false
   val signIn = new SignInPage(port)
@@ -34,6 +34,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     database.withSession { implicit session =>
       PostHelper.createBiography("MC Donalds","Sample Bio 1","assets/images/crew/donalds_bw.jpg")
       val post = PostHelper.createBiography("MC Leek","Sample Bio 2","assests/images/crew/donalds_bw.jpg")
+      bio = post.id
     }
   }
   def setup() = {
@@ -76,7 +77,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
       //val biographyPage = new BiographyListPage(port)
       go to biographyPage
       eventually{
-        biographyDetails(1) must include ("Sample Bio 1")
+        biographyDetails(bio) must include ("Sample Bio 2")
       }
     }
 
@@ -84,7 +85,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
       signIn.signin("andrew", "pa$$word")
       //val biographyPage = new BiographyListPage(port)
       go to biographyPage
-      updateBio(1,"MC Donalds is leek leek leek")
+      updateBio(bio,"MC Donalds is leek leek leek")
       eventually{
         saveButtons must not be empty
       }
@@ -103,9 +104,9 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     "Have biographies that arent editable when the edit mode isnt on" in {
       go to biographyPage
       eventually{
-        bioEditable(1) mustEqual false
-        nameEditable(1) mustEqual false
-        imageEditable(1) mustEqual false
+        bioEditable(bio) mustEqual false
+        nameEditable(bio) mustEqual false
+        imageEditable(bio) mustEqual false
       }
 
     }
@@ -114,10 +115,10 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
       signIn.signin("andrew", "pa$$word")
       go to biographyPage
       eventually{
-        clickOnEditButton(1)
-        bioEditable(1) mustEqual true
-        nameEditable(1) mustEqual true
-        imageEditable(1) mustEqual true
+        clickOnEditButton(bio)
+        bioEditable(bio) mustEqual true
+        nameEditable(bio) mustEqual true
+        imageEditable(bio) mustEqual true
       }
       signIn.signout
     }
@@ -126,11 +127,11 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
       signIn.signin("andrew", "pa$$word")
 
       go to biographyPage
-      clickOnEditButton(1)
-      updateBio(1,"MC Donalds is leek leek leek")
-      saveBio(1)
+      clickOnEditButton(bio)
+      updateBio(bio,"MC Donalds is leek leek leek")
+      saveBio(bio)
       eventually{
-        saveSuccessfulVisible(1) mustEqual true
+        saveSuccessfulVisible(bio) mustEqual true
       }
       signIn.signout
     }

@@ -2,14 +2,16 @@ package test.unit
 
 import models.Biography
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
-import play.api.test.{FakeHeaders, FakeRequest}
+import play.api.test.{FakeApplication, FakeHeaders, FakeRequest}
 import play.api.test.Helpers._
 import play.api.db.DB
+import test.{TestGlobal, TestConfig}
 import scala.slick.jdbc.JdbcBackend._
 /**
  * Created by andrew on 14/09/14.
  */
 class AuthApplicationSpec extends PlaySpec with OneServerPerSuite{
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
   "Application" should {
 

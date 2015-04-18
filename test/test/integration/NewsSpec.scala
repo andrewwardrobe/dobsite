@@ -20,13 +20,17 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
-
+  var setupDone = false
 
   before{
-    dataSetup
+    if(!setupDone) {
+      dataSetup
+      setupDone = true
+    }
   }
 
   val newsPage = new NewsPage(port)
+  import newsPage._
 
   after {
     dataTearDown
@@ -46,6 +50,13 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
       go to newsPage
       eventually{
         newsPage.TypeIds must contain only("1")
+      }
+    }
+
+    "Display links to full items" in {
+      go to newsPage
+      eventually{
+        itemLinks must not be empty
       }
     }
 

@@ -34,7 +34,11 @@ libraryDependencies ++= Seq(
   "org.mindrot" % "jbcrypt" % "0.3m",
   "commons-io" % "commons-io" % "2.4",
   "org.eclipse.jgit" % "org.eclipse.jgit" % "3.6.1.201501031845-r",
-  "org.webjars" % "font-awesome" % "4.3.0-1"
+  "org.webjars" % "font-awesome" % "4.3.0-1",
+  "org.webjars" % "jquery" % "2.1.3",
+  "org.webjars" % "jquery-ui" % "1.11.4",
+  "mysql" % "mysql-connector-java" % "5.1.21",
+  "net.sf.flexjson" % "flexjson" % "3.1"
 )
 
 Keys.fork in (Test) := true
