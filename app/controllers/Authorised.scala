@@ -52,7 +52,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     val filename = repo.genFileName
     val newItem = new Post(UUID.randomUUID().toString(), item.title, item.postType, new Date(), item.author, filename, Post.extraDataToJson(item.extraData))
 
-    repo.createFile(content, PostMeta.makeCommitMsg("Created",newItem))
+    repo.doFile(filename,content, PostMeta.makeCommitMsg("Created",newItem))
     val id = database.withSession { implicit s =>
       Post.insert(newItem)
     }
@@ -72,7 +72,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
       val post = Post.getById(item.id).head
       val filename = post.content
       val newItem = new Post(item.id, item.title, item.postType, post.dateCreated, item.author, filename, Post.extraDataToJson(item.extraData))
-      repo.updateFile(filename,content)
+      repo.updateFile(filename,content, PostMeta.makeCommitMsg("Updated",newItem))
       Post.update(newItem)
     }
     Ok(""+item.id)

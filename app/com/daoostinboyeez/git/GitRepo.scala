@@ -132,6 +132,11 @@ class GitRepo {
     doFile(path, fileData,s"Edited File $path")
   }
 
+  def updateFile(path:String, fileData:String, commitMsg :String)={
+    doFile(path, fileData,commitMsg)
+  }
+
+
   def createFile(prefix:String, fileData:String, commitMsg:String) = {
     val path = prefix + genFileName
     doFile(path, fileData,commitMsg)
