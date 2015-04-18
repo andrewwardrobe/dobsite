@@ -59,8 +59,8 @@ GET     /json/content/bydate/:type/:startDate/:max           controllers.JsonApi
 GET     /json/news/:id/:max           controllers.JsonApi.getNewsByRange(id: String, max: Int)
 
 # Home page
-
-
+#Be able to access any content via its id (change this later to be a cool redirecty thing)
+GET     /:id                         controllers.Application.post(id:String)
 GET     /webjars/*file                    controllers.WebJarAssets.at(file)
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

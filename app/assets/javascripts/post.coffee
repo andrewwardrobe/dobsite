@@ -6,8 +6,9 @@
         $("#editor").html data.content
         $("#author").text data.author
         d = new Date(data.dateCreated)
-        dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+        dateStr = d.toLocaleDateString()
         $("#dateCreated").text dateStr
+        $("#postId").val data.id
 
     error: (data) ->
         $("#postTitle").text "No such item"

@@ -82,6 +82,7 @@ object Post{
 
   def get(implicit s: Session) = { posts.list }
   def getById(id: String)(implicit s: Session) = { posts.filter(_.id === id).list }
+  def getByTitle(title: String)(implicit s: Session) = { posts.filter(_.title.toLowerCase === title.toLowerCase).list }
   def getByType(typ: Int)(implicit s: Session) = { posts.filter(_.postType === typ).list }
 
   def getXNewsItemsFromId(id: String, max: Int)(implicit s: Session) = {

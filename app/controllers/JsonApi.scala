@@ -46,7 +46,26 @@ object JsonApi extends Controller {
     Ok(toJson(newsList))
   }
   def getPostById(id: String) = DBAction { implicit response =>
-    Ok(toJson(Post.getById(id).head.json))
+    val regex = """[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}""".r
+     id match {
+      case regex() => {
+        Logger.info("Matched a UUID")
+        val posts = Post.getById(id)
+        if( posts.length > 0 )
+          Ok(toJson(posts.head.json))
+        else
+          BadRequest("Not Found")
+      }
+      case _ => {
+        val title = id.replace("_"," ")
+        val posts = Post.getByTitle(title)
+        if( posts.length > 0 )
+          Ok(toJson(posts.head.json))
+        else
+          BadRequest("Not Found")
+      }
+    }
+
   }
 
   def getPostRevisionById(id: String, revId : String) = DBAction { implicit response =>
