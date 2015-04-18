@@ -49,7 +49,6 @@ object JsonApi extends Controller {
     val regex = """[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}""".r
      id match {
       case regex() => {
-        Logger.info("Matched a UUID")
         val posts = Post.getById(id)
         if( posts.length > 0 )
           Ok(toJson(posts.head.json))
@@ -129,16 +128,6 @@ object JsonApi extends Controller {
       Ok(toJson(newsList))
     }
   }
-
-//  def getContentByRange(id:String, start: String, num: Int) = DBAction { implicit response =>
-//    if(start != "-1") {
-//      val content = blogToJson(Post.getXItemsFromId(id,start, num))
-//      Ok(toJson(content))
-//    }else {
-//      val content = blogToJson(Post.getXItems(id,num))
-//      Ok(toJson(content))
-//    }
-//  }
 
   def getContentByDate(typ: Int)  = DBAction { implicit response =>
     val contentList = blogToJson(Post.getByDate(typ))
