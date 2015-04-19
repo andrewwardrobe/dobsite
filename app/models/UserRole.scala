@@ -1,15 +1,57 @@
 package models
 
+import play.api.{Logger, Play}
+import play.api.Play.current
 import play.api.data.validation.Constraint
 import play.api.data.{WrappedMapping, FormError, Mapping}
 
+import scala.collection.mutable.ListBuffer
+
 class UserRole(role: String){
   def name = role
+  lazy val roles = loadRoles(role)
+
+  lazy val authorities = loadAuthorities(name)
+
+  def loadRoles(userRole:String):List[String] = {
+    val builder = new ListBuffer[String]
+    val roles = Play.application.configuration.getString(s"userrole.$userRole.roles").getOrElse("")
+    builder ++= roles.split(",").map(_.trim).toList
+    Play.application.configuration.getString(s"userrole.$userRole.auhtorities").getOrElse("").split(",").map(s => s.trim).toList.foreach{ rle =>
+      if(rle!="")
+        builder ++= loadRoles(rle)
+    }
+    builder.toList
+  }
+
+  def loadAuthorities(auth:String):List[String] ={
+    val builder = new ListBuffer[String]
+    builder += auth
+    val roles = Play.application.configuration.getString(s"userrole.$auth.auhtorities").getOrElse("").split(",").map(s => s.trim).toList
+    roles.foreach{ rle =>
+      if(rle!="")
+        builder ++= loadAuthorities(rle)
+    }
+    builder.toList
+  }
+
+  def hasAuthority(auth:String) = {
+    authorities.contains(auth)
+  }
+
+  def hasPermission(perm:String) = {
+    roles.contains(perm)
+  }
 }
 
 object UserRole {
 
-  case object Administrator extends UserRole("Administrator")
+
+
+  case object Administrator extends UserRole("Administrator") {
+    override def hasAuthority(auth:String) = true
+    override def hasPermission(auth:String) = true
+  }
   case object NormalUser extends UserRole("NormalUser")
   case object Contributor extends UserRole("Contributor")
   case object TrustedContributor extends UserRole("TrustedContributor")
@@ -24,17 +66,7 @@ object UserRole {
   }
 
   def roleHasAuthority(role: UserRole, authority: UserRole) = {
-    (role, authority) match {
-      case (Administrator, _)       => true
-      case(TrustedContributor,TrustedContributor) => true
-      case(TrustedContributor,Contributor) => true
-      case(TrustedContributor,NormalUser) => true
-      case(Contributor,Contributor) => true
-      case(Contributor,NormalUser) => true
-      case(NormalUser, NormalUser) => true
-      case(InActiveUser, InActiveUser) => true
-      case _                        => false
-    }
+    role.hasAuthority(authority.name)
   }
 }
 

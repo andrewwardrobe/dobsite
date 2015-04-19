@@ -126,6 +126,8 @@ class PostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
         posts.head.dateCreated mustEqual latest.dateCreated
       }
     }
+
+
   }
 
 

@@ -14,7 +14,7 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
   "Application" should {
 
     "send 404 on a bad request" in {
-      route(FakeRequest(GET, "/boum")) mustBe None
+      route(FakeRequest(GET, "/boum/lle")) mustBe None
     }
 
     "render the index page" in{

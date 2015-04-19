@@ -1,5 +1,7 @@
 package test.unit
 
+import models.UserRole
+import models.UserRole.{NormalUser, Contributor}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.test.{FakeApplication, FakeRequest}
 import play.api.test.Helpers._
@@ -14,6 +16,13 @@ class UserServiceSpec extends PlaySpec with OneServerPerSuite{
   "User Services Controller" must {
 
     "Allow the user to create an account" in (pending)
+
+    "Sort Security out" in pending
+
+    "Leek" in {
+      UserRole.roleHasAuthority(UserRole.valueOf("TrustedContributor"),NormalUser) mustEqual true
+    }
+
 
     def setup = {
 
