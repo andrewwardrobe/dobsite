@@ -135,4 +135,6 @@ class PostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
     val repo = GitRepo.apply()
     repo.refresh
   }
+
+
 }

@@ -12,6 +12,7 @@ import java.util.Calendar
 import jp.t2v.lab.play2.auth.{OptionalAuthElement, AuthElement}
 import models.UserRole.TrustedContributor
 import models._
+import org.apache.commons.io.IOUtils
 import play.api._
 import play.api.data.Form
 import play.api.data.Forms._
@@ -22,7 +23,6 @@ import play.api.mvc._
 import play.api.Play.current
 import play.api.libs.json.Json
 import play.api.libs.json.Json._
-
 
 
 object Application extends Controller  with OptionalAuthElement with StandardAuthConfig{
@@ -41,6 +41,20 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
    Ok(views.html.post("",id))
   }
 
+  def uploadedImage(file:String) = Action{ implicit response =>
+    val image = try{
+      IOUtils.toByteArray(new FileInputStream(new File("public/images/uploaded/"+file)));
+    }catch {
+      case ex: Exception=> {null}
+    }
+    if(image == null){
+      NotFound("")
+    }else{
+      Ok(image).as("image")
+    }
+
+
+  }
 
   def upload = Action(parse.temporaryFile) { request =>
 
@@ -48,6 +62,7 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
 
     val is = new BufferedInputStream(new FileInputStream(request.body.file))
     val mimetype = URLConnection.guessContentTypeFromStream(is)
+
     is.close()
 
     val dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS")

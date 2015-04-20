@@ -4,7 +4,7 @@ import java.util.{UUID, Date}
 import com.daoostinboyeez.git.GitRepo
 import org.jsoup._
 import org.jsoup.safety.Whitelist
-import play.api.Logger
+import play.api.{Play, Logger}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.db.slick._
@@ -175,4 +175,25 @@ object Post{
       "extraData" -> text
     )(Post.apply)(Post.unapply _)
   }
+}
+
+
+import play.api.Play.current
+object PostTypeMap {
+  private lazy val typeMap = {
+    val tmp = scala.collection.mutable.Map[Int, String]()
+    Play.configuration.getString("posttypes.map").getOrElse("").split(",").map(s => s.trim).toList.foreach{ str =>
+      if(str != "") {
+        val parts = str.split("->").map(s => s.trim).toList
+        if(parts.length == 2)
+          tmp += (parts(0).toInt -> parts(1))
+      }
+    }
+    scala.collection.immutable.Map[Int, String](tmp.toSeq:_*)
+  }
+  private lazy val revMap = typeMap.map(_.swap)
+
+  def apply(key:String) = revMap.getOrElse(key,-1)
+
+  def apply(key:Int) = typeMap.getOrElse(key,"")
 }

@@ -60,9 +60,10 @@ GET     /json/news/:id/:max           controllers.JsonApi.getNewsByRange(id: Str
 
 # Home page
 #Be able to access any content via its id (change this later to be a cool redirecty thing)
-GET     /:id                         controllers.Application.post(id:String)
+
 GET     /webjars/*file                    controllers.WebJarAssets.at(file)
 # Map static resources from the /public folder to the /assets URL path
+GET     /assets/images/uploaded/:file                         controllers.Application.uploadedImage(file)
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
-
+GET     /:id                         controllers.Application.post(id:String)
 

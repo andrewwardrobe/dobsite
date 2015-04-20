@@ -15,9 +15,6 @@ class UserServiceSpec extends PlaySpec with OneServerPerSuite{
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   "User Services Controller" must {
 
-    "Allow the user to create an account" in (pending)
-
-    "Sort Security out" in pending
 
     "Leek" in {
       UserRole.roleHasAuthority(UserRole.valueOf("TrustedContributor"),NormalUser) mustEqual true

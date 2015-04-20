@@ -6,6 +6,7 @@ import org.scalatestplus.play._
 import play.api.db.DB
 import play.api.test.Helpers._
 import play.api.test._
+import test.{TestGlobal, TestConfig}
 import test.integration.pages.DiscographyPage
 
 import scala.slick.jdbc.JdbcBackend.Database
@@ -13,7 +14,7 @@ import scala.slick.jdbc.JdbcBackend.Database
 
 class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase())
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
   val discography = new DiscographyPage(port)
 
