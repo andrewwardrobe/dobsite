@@ -65,7 +65,7 @@ def signedout = Action { implicit request =>
     submission.fold(
       formWithErrors => Future.successful(BadRequest(views.html.login(formWithErrors))),
       user =>{
-        gotoLoginSucceeded(user.get.id)
+        gotoLoginSucceeded(user.get.name)
       }
     )
   }

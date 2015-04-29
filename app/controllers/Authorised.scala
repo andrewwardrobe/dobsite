@@ -6,12 +6,13 @@ import com.daoostinboyeez.git.{GitRepo}
 import controllers.Application._
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
-import models.{PostMeta, Biography, UserAccount, Post}
+import models._
 
-import models.UserRole.{Administrator, Contributor, NormalUser}
+import models.UserRole.{InActiveUser, Administrator, Contributor, NormalUser}
 import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.libs.json.Json
 import play.api.mvc.Controller
 import play.api.db.DB
 import play.api.db.slick.DBAction
@@ -36,27 +37,49 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     Ok(views.html.index(Some(user)))
   }
 
+  def getEditables = StackAction(AuthorityKey -> InActiveUser) { implicit request =>
+    val user = loggedIn
+    val json = Json.obj("pages" -> Json.toJson(user.role.roles))
+    Ok(json)
+  }
+
+  def newContent(contentType:String) = StackAction(AuthorityKey -> Contributor){  implicit request =>
+    val typ = PostTypeMap.get(contentType)
+    Ok(views.html.editor("",Post.blogForm,"-1",typ))
+  }
+
   def blogInput = StackAction(AuthorityKey -> Contributor){  implicit request =>
     Ok(views.html.editor("",Post.blogForm,"-1"))
   }
 
   def blogUpdate(id: String) = StackAction(AuthorityKey -> Contributor) {  implicit request =>
+
     Ok(views.html.editor("",Post.blogForm,id))
   }
 
 
   def submitBlog = StackAction(AuthorityKey -> Contributor) { implicit response =>
+    val user = loggedIn
+    Post.blogForm.bindFromRequest() match {
+      case s: Form[Post] => {
+        val item = s.get
+        if(user.role.hasPermission(PostTypeMap(item.postType))) {
+          val content = item.content
 
-    val item = Post.blogForm.bindFromRequest().get
-    val content = item.content
-    val filename = repo.genFileName
-    val newItem = new Post(UUID.randomUUID().toString(), item.title, item.postType, new Date(), item.author, filename, Post.extraDataToJson(item.extraData))
+          val filename = repo.genFileName
+          val newItem = new Post(UUID.randomUUID().toString(), item.title, item.postType, new Date(), item.author, filename, Post.extraDataToJson(item.extraData))
 
-    repo.doFile(filename,content, PostMeta.makeCommitMsg("Created",newItem))
-    val id = database.withSession { implicit s =>
-      Post.insert(newItem)
+          repo.doFile(filename, content, PostMeta.makeCommitMsg("Created", newItem))
+          val id = database.withSession {
+            implicit s =>
+              Post.insert(newItem)
+          }
+          Ok("" + id)
+        }else
+          Unauthorized("You don't have the right privileges for "+PostTypeMap(item.postType))
+      }
+      case _ => { BadRequest("Invalid Post Data")}
     }
-    Ok(""+id)
   }
 
   def genFileName = {

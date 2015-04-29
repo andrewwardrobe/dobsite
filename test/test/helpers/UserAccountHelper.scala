@@ -19,4 +19,10 @@ object UserAccountHelper {
     }
   }
 
+  def createUser(userId: String, password: String, role: String) = {
+    database.withSession { implicit session =>
+      val user = new UserAccount(1,  s"$userId@daoostinboyeez.com", password,userId, UserRole.valueOf(role))
+      UserAccount.create(user)
+    }
+  }
 }

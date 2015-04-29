@@ -51,6 +51,7 @@ object UserRole {
   case object Administrator extends UserRole("Administrator") {
     override def hasAuthority(auth:String) = true
     override def hasPermission(auth:String) = true
+    override lazy val roles = PostTypeMap.allRoles
   }
   case object NormalUser extends UserRole("NormalUser")
   case object Contributor extends UserRole("Contributor")
@@ -62,7 +63,7 @@ object UserRole {
     case "TrustedContributor" => TrustedContributor
     case "Contributor" => Contributor
     case "InActiveUser" => InActiveUser
-    case _ => throw new IllegalArgumentException()
+    case _ => throw new IllegalArgumentException(value)
   }
 
   def roleHasAuthority(role: UserRole, authority: UserRole) = {

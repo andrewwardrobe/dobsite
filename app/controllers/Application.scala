@@ -122,6 +122,7 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
         routes.javascript.JsonApi.getPostRevisionById,
         routes.javascript.JsonApi.getRevisionsWithDates,
         routes.javascript.Authorised.submitBlogUpdate,
+        routes.javascript.Authorised.newContent,
         routes.javascript.Admin.changeRole,
         routes.javascript.UserServices.checkEmail,
         routes.javascript.UserServices.checkName,

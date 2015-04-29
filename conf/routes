@@ -20,6 +20,7 @@ POST    /login                           controllers.UserServices.authenticate
 
 GET     /news                           controllers.Application.news
 GET     /editor                           controllers.Authorised.blogInput
+GET     /editor/new/:contentType                           controllers.Authorised.newContent(contentType: String)
 GET     /editor/:id                           controllers.Authorised.blogUpdate(id: String)
 
 POST     /blog                           controllers.Authorised.submitBlog
@@ -29,7 +30,7 @@ POST    /upload          controllers.Application.upload()
 
 GET     /discography                controllers.Application.discography
 GET     /biography                controllers.Application.biography
-POST     /biography                controllers.Authorised.updateBiography
+POST    /biography                controllers.Authorised.updateBiography
 GET     /hansundjorg                controllers.Application.hansUndJorg
 GET     /biography/:id                controllers.Application.biographyDetail(id: Int)
 GET     /javascriptRoutes     controllers.Application.javascriptRoutes
@@ -37,6 +38,8 @@ GET     /admin     controllers.Admin.admin
 
 PUT     /admin/changerole/:user/:role     controllers.Admin.changeRole(user:String, role:String)
 PUT     /admin/changeemail/:user/:email     controllers.Admin.changeEmail(user:String, email:String)
+
+GET     /userroles     controllers.Authorised.getEditables
 
 POST    /admin/changepass       controllers.Admin.changePassword
 #JSon API

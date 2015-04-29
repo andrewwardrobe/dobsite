@@ -23,7 +23,7 @@ import scala.slick.jdbc.JdbcBackend._
  */
 trait StandardAuthConfig extends AuthConfig {
 
-  type Id = Int
+  type Id = String
   type User = UserAccount
   type Authority = UserRole
   val sessionTimeoutInSeconds: Int = 3600
@@ -32,7 +32,7 @@ trait StandardAuthConfig extends AuthConfig {
   val idTag: ClassTag[Id] = classTag[Id]
 
   def resolveUser(id: Id)(implicit ctx: ExecutionContext): Future[Option[User]] = { database.withSession{ implicit s =>
-    Future.successful(UserAccount.findById(id))
+    Future.successful(UserAccount.findByName(id))
   } }
 
   def loginSucceeded(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] = {
@@ -58,8 +58,9 @@ trait StandardAuthConfig extends AuthConfig {
   def logoutSucceeded(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] =
     Future.successful(Redirect(routes.UserServices.signedout))
 
-  def authenticationFailed(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] =
+  def authenticationFailed(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] = {
     Future.successful(Redirect(routes.UserServices.login).withSession("access_uri" -> request.uri))
+  }
 
 
   def authorizationFailed(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] = {

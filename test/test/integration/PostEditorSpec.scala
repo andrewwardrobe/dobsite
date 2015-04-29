@@ -1,7 +1,7 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
-import models.Post
+import models.{PostTypeMap, Post}
 import models.UserRole.TrustedContributor
 import org.openqa.selenium.By
 import org.openqa.selenium.support.ui.ExpectedConditions
@@ -51,8 +51,11 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     val signIn = new SignInPage(port)
     if(!setupDone) {
       repo.refresh
-      UserAccountHelper.createUser("andrew", "andrew@dob.com", "pa$$word",TrustedContributor)
-      signIn.signin("andrew", "pa$$word")
+      UserAccountHelper.createUser("Administrator","Administrator","Administrator")
+      UserAccountHelper.createUser("Contributor","Contributor","Contributor")
+      UserAccountHelper.createUser("TrustedContributor","TrustedContributor","TrustedContributor")
+      UserAccountHelper.createUser("NormalUser","NormalUser","NormalUser")
+      signIn.signin("TrustedContributor", "TrustedContributor")
       extraSetup
       setupDone = true
     }
@@ -71,6 +74,7 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
     "Be able to save a post" in {
       goTo (editorPage)
+      editorPage.addContent("some data")
       editorPage.save
       eventually{ editorPage.saveSuccessful mustEqual (true) }
     }
@@ -82,15 +86,10 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
       eventually{ editorPage.saveSuccessful mustEqual (true) }
     }
 
-    //Selenium doesnt seem to be able to handle this
-//    "Display a warning when trying to leave the page if a change has been made" in {
-//      go to editorPage
-//      addContent("Here is some changes")
-//      go to newsPage
-//      eventually {
-//        switch to alertBox
-//      }
-//    }
+    "Be able to open on a particular post type" in {
+      go to editorPage.posttype("Biography")
+      editorPage.postType mustEqual("Biography")
+    }
 
     "Be able to load a post" in {
       go to post(post3.id)

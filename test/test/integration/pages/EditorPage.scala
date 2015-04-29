@@ -24,7 +24,11 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
     box.underlying.sendKeys(content)
   }
 
+  def posttype(pt:String) = s"localhost:$port/editor/new/$pt"
+
   def post(id:String) = s"localhost:$port/editor/$id"
+
+
 
   def revisionListText = {
     val revisions: ListBuffer[String] = new ListBuffer[String]()
