@@ -41,11 +41,11 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   def setup() = {
   if(!setupDone) {
       repo.refresh
-      UserAccountHelper.createUser("andrew", "andrew@dob.com", "pa$$word",TrustedContributor)
+
       insertedPost= extraSetup
       setupDone = true
     }
-
+    UserAccountHelper.createUser("andrew","pa$$word","TrustedContributor")
   }
 
   before{

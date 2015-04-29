@@ -43,12 +43,16 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     if(!setupDone) {
       repo.refresh
 
-      UserAccountHelper.createUser("andrew", "andrew@dob.com", "pa$$word",TrustedContributor)
 
       extraSetup
       setupDone = true
     }
 
+    UserAccountHelper.createUser("andrew", "pa$$word","TrustedContributor")
+    UserAccountHelper.createUser("Administrator","Administrator","Administrator")
+    UserAccountHelper.createUser("Contributor","Contributor","Contributor")
+    UserAccountHelper.createUser("TrustedContributor","TrustedContributor","TrustedContributor")
+    UserAccountHelper.createUser("NormalUser","NormalUser","NormalUser")
   }
   before{
     //repo.refresh
@@ -82,7 +86,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     }
 
     "Display a save link if the text has changed" in {
-      signIn.signin("andrew", "pa$$word")
+      signIn.signin("TrustedContributor", "TrustedContributor")
       //val biographyPage = new BiographyListPage(port)
       go to biographyPage
       updateBio(bio,"MC Donalds is leek leek leek")
@@ -93,7 +97,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     }
 
     "Have editable biographies if the user is a trusted contributor " in {
-      signIn.signin("andrew", "pa$$word")
+      signIn.signin("TrustedContributor", "TrustedContributor")
       go to biographyPage
       eventually{
         editButtons must not be empty
@@ -112,7 +116,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     }
 
     "Have biographies that become editable when the edit mode is on" in {
-      signIn.signin("andrew", "pa$$word")
+      signIn.signin("TrustedContributor", "TrustedContributor")
       go to biographyPage
       eventually{
         clickOnEditButton(bio)
@@ -124,7 +128,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     }
 
     "Display a save sucessful indicator when successful" in {
-      signIn.signin("andrew", "pa$$word")
+      signIn.signin("TrustedContributor", "TrustedContributor")
 
       go to biographyPage
       clickOnEditButton(bio)

@@ -6,12 +6,15 @@
 <div  class="col-md-12  col-sm-offset-1 dob-main">
     @user match {
         case None => { <h1>Coming Soon</h1> }
-        case _ => { <h1>Leeek</h1> }
+        case _ => { <h1>Leeek</h1>
+
+        }
     }
 
     @session.get("username") match {
     case Some(username) => {
     <h2>Hello @username</h2>
+
     }
     case None => {<h2>No User in session</h2>}
     }

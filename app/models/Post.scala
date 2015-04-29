@@ -193,6 +193,8 @@ object PostTypeMap {
   }
   private lazy val revMap = typeMap.map(_.swap)
 
+  def allRoles = typeMap.values.toList
+
   def apply(key:String) = revMap.getOrElse(key,-1)
 
   def apply(key:Int) = typeMap.getOrElse(key,"")

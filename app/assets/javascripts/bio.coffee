@@ -227,7 +227,7 @@ doExpander = (bio) ->
     expander.attr 'href','#'
     expander.attr 'id', 'expander' + bio.id
     expander.html '<span class="fa fa-chevron-circle-down"></span>'
-    expander.attr 'onclick',"expandDiv( " + bio.id + ")"
+    expander.attr 'onclick',"expandDiv('" + bio.id + "')"
     expander.attr 'class','expander'
     rightDiv.append expander
     textDiv.append rightDiv

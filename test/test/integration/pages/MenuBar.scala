@@ -11,6 +11,11 @@ class MenuBar(val port: Int)(implicit driver:WebDriver) extends org.scalatest.se
 
     def revisionsMenu = { cssSelector("#editorMenu").findElement.get }
 
+    def revisionList = cssSelector("*[id*='revId']").findAllElements.toList
+
+    def revisionLinks = cssSelector("*[id*='revLink']").findAllElements.toList
+
+    def editLinks = cssSelector("*[id*='editLink']").findAllElements.toList
 
 
 }

@@ -38,6 +38,8 @@ GET     /admin     controllers.Admin.admin
 PUT     /admin/changerole/:user/:role     controllers.Admin.changeRole(user:String, role:String)
 PUT     /admin/changeemail/:user/:email     controllers.Admin.changeEmail(user:String, email:String)
 
+GET     /userroles     controllers.Authorised.getEditables
+
 POST    /admin/changepass       controllers.Admin.changePassword
 #JSon API
 GET     /json/discography           controllers.JsonApi.getDiscography

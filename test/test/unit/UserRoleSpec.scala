@@ -14,29 +14,29 @@ import test._
  */
 class UserRoleSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withTestSecurityRoles, withGlobal = Some(TestGlobal))
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
 
   
   "User Role" must {
 
       "Be able to load primary roles" in {
         val role = UserRole.valueOf("TrustedContributor")
-        role.roles must contain ("bios")
+        role.roles must contain ("Biography")
       }
 
     "Be able to load inheirited roles" in {
       val role = UserRole.valueOf("TrustedContributor")
-      role.roles must contain ("news")
+      role.roles must contain ("News")
     }
 
     "Be able to load indirectly inhierited roles" in {
       val role = UserRole.valueOf("TrustedContributor")
-      role.roles must contain ("leek")
+      role.roles must contain ("News")
     }
 
     "Confirm a permission" in {
       val role = UserRole.valueOf("TrustedContributor")
-      role.hasPermission("bios") mustEqual true
+      role.hasPermission("Biography") mustEqual true
     }
 
     "Confirm lack of a permission" in {

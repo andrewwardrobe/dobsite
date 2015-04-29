@@ -51,8 +51,11 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     val signIn = new SignInPage(port)
     if(!setupDone) {
       repo.refresh
-      UserAccountHelper.createUser("andrew", "andrew@dob.com", "pa$$word",TrustedContributor)
-      signIn.signin("andrew", "pa$$word")
+      UserAccountHelper.createUser("Administrator","Administrator","Administrator")
+      UserAccountHelper.createUser("Contributor","Contributor","Contributor")
+      UserAccountHelper.createUser("TrustedContributor","TrustedContributor","TrustedContributor")
+      UserAccountHelper.createUser("NormalUser","NormalUser","NormalUser")
+      signIn.signin("TrustedContributor", "TrustedContributor")
       extraSetup
       setupDone = true
     }
