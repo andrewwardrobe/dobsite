@@ -127,7 +127,8 @@ class PostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
       }
     }
 
-
+    "Have tags" in pending
+    "have a live flag" in pending
   }
 
 
