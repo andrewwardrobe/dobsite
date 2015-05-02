@@ -1,5 +1,6 @@
 package test.integration
 
+import models.PostTypeMap
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play._
 import play.api.db.DB
@@ -42,14 +43,14 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
 
       go to newsPage
       eventually{
-        newsPage.Items must not be empty
+        Items must not be empty
       }
     }
 
     "Only Display News Posts" in {
       go to newsPage
       eventually{
-        newsPage.TypeIds must contain only("1")
+        TypeIds must contain only PostTypeMap.get("News").toString
       }
     }
 
@@ -63,7 +64,7 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
     "Display a Post" in {
       go to newsPage
       eventually {
-        newsPage.Items(0) must include ("Some Example content blah blah blah 1234567")
+        Items(0) must include ("Some Example content blah blah blah 1234567")
       }
     }
 
@@ -72,8 +73,8 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
 
   def dataSetup = {
     database.withSession { implicit session =>
-      val newsItem = PostHelper.createPost("DOB Test News Post","MC Donalds","Some Example content blah blah blah 1234567",1)
-      val nonNewsItem =  PostHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",2)
+      val newsItem = PostHelper.createPost("DOB Test News Post","MC Donalds","Some Example content blah blah blah 1234567",PostTypeMap.get("News"))
+      val nonNewsItem =  PostHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",PostTypeMap.get("Music"))
     }
   }
 

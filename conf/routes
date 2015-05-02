@@ -13,12 +13,13 @@ GET     /checkemail/:email              controllers.UserServices.checkEmail(emai
 
 
 GET     /post/:id                         controllers.Application.post(id:String)
-
+GET     /posts                       controllers.Application.posts
 POST     /signup                     controllers.UserServices.register
 GET     /login                           controllers.UserServices.login
 POST    /login                           controllers.UserServices.authenticate
 
 GET     /news                           controllers.Application.news
+GET     /gazthree                           controllers.Application.gazthree
 GET     /editor                           controllers.Authorised.blogInput
 GET     /editor/new/:contentType                           controllers.Authorised.newContent(contentType: String)
 GET     /editor/:id                           controllers.Authorised.blogUpdate(id: String)

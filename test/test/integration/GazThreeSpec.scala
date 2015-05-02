@@ -53,7 +53,7 @@ class GazThreeSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSui
     "Only Display News Posts" in {
       go to gazthreePage
       eventually{
-        TypeIds must contain only("1")
+        TypeIds must contain only(PostTypeMap.get("Gaz Three").toString)
       }
     }
 
@@ -67,7 +67,7 @@ class GazThreeSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSui
     "Display a Post" in {
       go to gazthreePage
       eventually {
-        Items(0) must include ("Some Example content blah blah blah 1234567")
+        Items(0) must include ("Gaz three post Leek")
       }
     }
 

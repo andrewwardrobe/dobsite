@@ -41,6 +41,10 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
    Ok(views.html.post("",id))
   }
 
+  def posts =  Action{ implicit request =>
+    Ok(views.html.posts(""))
+  }
+
   def uploadedImage(file:String) = Action{ implicit response =>
     val image = try{
       IOUtils.toByteArray(new FileInputStream(new File("public/images/uploaded/"+file)));
@@ -75,7 +79,11 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
   }
 
   def news = Action {  implicit request =>
-    Ok(views.html.contentList(routes.JsonApi.getContentByDate(1).url))
+    Ok(views.html.contentList(routes.JsonApi.getContentByDate(PostTypeMap.get("News")).url))
+  }
+
+  def gazthree = Action {  implicit request =>
+    Ok(views.html.contentList(routes.JsonApi.getContentByDate(PostTypeMap.get("Gaz Three")).url))
   }
 
   def hansUndJorg = Action {  implicit request =>
