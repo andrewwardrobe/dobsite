@@ -30,8 +30,6 @@ class MusicPageSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
 
 
 
-  }
-
 
 
 
