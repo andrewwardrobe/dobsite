@@ -75,9 +75,9 @@ function getRevisions(){
                                        $("#dateCreated").attr('value', dateStr);
                                        $("#postType").val(data.postType);
                                        $("#editAlertRevision").show();
-                                       console.log(data.dateCreated);
+
                                        var dt = data.dateCreated.replace("BST","");
-                                         console.log("date is "+dt);
+
                                          var d = new Date(dt);
                                          var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
                                     }
@@ -114,7 +114,6 @@ $("#saveButton").click(function(){
     var author = $("#author").val();
     var extraData = $("#extraDataValues").val();
     var isDraft = $("#isDraft").hasClass("isDraftOn");
-    console.log("IsDraft: " +isDraft);
     var json = {
            data: {
                   "id": id,
@@ -161,7 +160,7 @@ $("#saveButton").click(function(){
            }
     };
 
-    console.log("Json: " +JSON.stringify(json));
+
     if(id == -1){
         jsRoutes.controllers.Authorised.submitBlog().ajax(json);
 
@@ -204,8 +203,7 @@ function doCodeFormat()
 
 function doTabIndent(){
     return function(){
-        console.log($(window.getSelection().focusNode).text());
-      //  $(window.getSelection().focusNode).insertAtCaret("leeek")
+              //  $(window.getSelection().focusNode).insertAtCaret("leeek")
         pasteHtmlAtCaret("&nbsp;&nbsp;");
     };
 }
@@ -316,8 +314,7 @@ $(function(){
 
 
 function doDraftButtonCss(isDraft){
-    console.log("Leek2 "+isDraft);
-    console.log("Leek3 "+$("#draft").val());
+
     if(isDraft){
             $("#isDraft").removeClass("isDraftOn");
             $("#isDraft").addClass("isDraftOff");
@@ -332,20 +329,20 @@ function doDraftButtonCss(isDraft){
 }
 
 function draftModeToggle(){
-    console.log("Toggle clicked");
+
     var isDraft = $("#isDraft").hasClass("isDraftOn");
     if(isDraft){ //we are currenty a draft and we are going live
         if($("#draft").val() == "true"){ // at the last save we re a draft
-        console.log("true true"+isDraft+", "+$("#draft").val());
+
          $("#editAlertLive2Draft").hide();
          $("#editAlertDraft2Live").show();
         }else{
-        console.log("true false"+isDraft+", "+$("#draft").val());
+
          $("#editAlertLive2Draft").hide();
          $("#editAlertDraft2Live").hide();
         }
     }else{
-        console.log("leek"+isDraft+", "+$("#draft").val());
+
         if($("#draft").val() == "false"){
              $("#editAlertLive2Draft").show();
              $("#editAlertDraft2Live").hide();
@@ -379,17 +376,15 @@ $(function(){
                var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
                $("#dateCreated").attr('value', dateStr);
                $("#postType").val(data.postType);
-               console.log("Extra Data = "+ data);
-               console.log("Leek "+data.isDraft);
-              var isDraft;
+               var isDraft;
               if(data.isDraft !== false){
-              console.log("is draft true");
+
                isDraft= false;
                $("#draft").val(true);
                $("#editAlertDraft").show();
               }else{
                isDraft = true;
-               console.log("is draft false");
+
                $("#editAlertLive").show();
                $("#draft").val(false);
               }

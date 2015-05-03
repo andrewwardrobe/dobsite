@@ -13,7 +13,7 @@ GET     /checkemail/:email              controllers.UserServices.checkEmail(emai
 
 
 GET     /post/:id                         controllers.Application.post(id:String)
-GET     /posts                       controllers.Application.posts
+GET     /test                       controllers.Application.playground
 POST     /signup                     controllers.UserServices.register
 GET     /login                           controllers.UserServices.login
 POST    /login                           controllers.UserServices.authenticate
