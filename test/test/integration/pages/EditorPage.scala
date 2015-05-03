@@ -42,6 +42,11 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
 
   def revisionLinks = cssSelector("*[id*='revLink']").findAllElements.toList
 
+  def toggleDraftMode = click on id("isDraft")
+
+  def draftMode = { val elemClass = id("isDraft").webElement.getAttribute("class")
+    elemClass.contains("isDraftOn")
+  }
 
   def save = {
     click on id("saveButton")

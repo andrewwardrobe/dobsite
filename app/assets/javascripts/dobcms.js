@@ -109,6 +109,8 @@ $("#saveButton").click(function(){
     var id = $("#postId").val();
     var author = $("#author").val();
     var extraData = $("#extraDataValues").val();
+    var isDraft = $("#isDraft").hasClass("isDraftOn");
+    console.log("IsDraft: " +isDraft);
     var json = {
            data: {
                   "id": id,
@@ -118,7 +120,8 @@ $("#saveButton").click(function(){
                   "author": author,
                   "postType": postType,
                   "filename": "",
-                  "extraData": extraData
+                  "extraData": extraData,
+                  "isDraft": isDraft
            },
            success: function(data){
                var d = $('<div>');
@@ -181,6 +184,14 @@ $(function(){
                }
                text.replace("\n$","");
                $("#extraDataValues").val(text);
+               console.log("Leek "+data.isDraft);
+               var isDraft;
+               if(data.isDraft){
+                isDraft= false;
+               }else{
+                isDraft = true;
+               }
+               doDraftButtonCss(isDraft);
             }
         });
     }
@@ -338,3 +349,23 @@ $(function(){
 });
 
 
+function doDraftButtonCss(isDraft){
+    console.log("Leek2 "+isDraft);
+    if(isDraft){
+            $("#isDraft").removeClass("isDraftOn");
+            $("#isDraft").addClass("isDraftOff");
+            $("#isDraft").attr('title','This post is Live');
+        }else{
+            $("#isDraft").removeClass("isDraftOff");
+            $("#isDraft").addClass("isDraftOn");
+            $("#isDraft").attr('title','This post is a draft');
+        }
+}
+
+function draftModeToggle(){
+    console.log("Toggle clicked");
+    var isDraft = $("#isDraft").hasClass("isDraftOn");
+    doDraftButtonCss(isDraft);
+}
+
+$("#isDraft").on('click',draftModeToggle);

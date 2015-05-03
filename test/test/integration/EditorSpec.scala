@@ -19,7 +19,7 @@ import scala.slick.jdbc.JdbcBackend._
 /**
  * Created by andrew on 01/03/15.
  */
-class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
+class EditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
@@ -66,10 +66,20 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     setup()
   }
 
-  "Post Editor" must {
+  "Editor" must {
    "Display the editor with some initial text" in {
       goTo (editorPage)
       editorPage.editorBoxText must include ("Typing")
+    }
+    "Be in draft mode by default" in {
+      go to editorPage
+      draftMode mustEqual true
+    }
+
+    "Be able to toggle draft mode" in {
+      go to editorPage
+      toggleDraftMode
+      draftMode mustEqual false
     }
 
     "Be able to save a post" in {
@@ -103,6 +113,9 @@ class PostEditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
       eventually {menuBar.revisionsMenu .text must include ("Revisions") }
 
     }
+
+
+
   }
 
   "Revision List" must {

@@ -45,7 +45,7 @@ class PostMetaSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
 
     "Be able to serialize json string into a post" in  {
-      val post = new Post(UUID.randomUUID().toString(), "title", 2, new Date(), "Andrew", "12345678", """{ "thumb":"assets/leek.jpg"}""")
+      val post = new Post(UUID.randomUUID().toString(), "title", 2, new Date(), "Andrew", "12345678", """{ "thumb":"assets/leek.jpg"}""",false)
 
       val metaString = PostMeta.toMeta(post)
       val createdPost = PostMeta.toPost(metaString)
@@ -69,7 +69,7 @@ class PostMetaSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
   }
 
   "Be able to make a commit message with meta data" in {
-    val post = new Post(UUID.randomUUID().toString(), "title", 2, new Date(), "Andrew", "12345678", """{ "thumb":"assets/leek.jpg"}""")
+    val post = new Post(UUID.randomUUID().toString(), "title", 2, new Date(), "Andrew", "12345678", """{ "thumb":"assets/leek.jpg"}""",false)
     val commitMsg = "My Commit Msg"
     val expected = commitMsg + "\n\n" + PostMeta.toMeta(post)
 

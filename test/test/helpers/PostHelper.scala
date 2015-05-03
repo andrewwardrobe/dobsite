@@ -31,7 +31,7 @@ object PostHelper {
 
   def createPost(title:String, author:String, content :String, typ: Int, extraData :String, date: Date):Post = {
     val filename = repo.createFile(content)
-    val post = new Post(UUID.randomUUID().toString(),title, typ, date, author, filename, extraData)
+    val post = new Post(UUID.randomUUID().toString(),title, typ, date, author, filename, extraData,false)
     database.withSession { implicit s :Session =>
       Post.insert(post)
     }
@@ -45,12 +45,40 @@ object PostHelper {
 
   def createBiography(name:String, text :String, thumb :String) = {
     val filename = repo.createFile(text)
-    val post = new Post(UUID.randomUUID().toString(),name, 4, new Date(), "", filename, Post.extraDataToJson(s"thumb=$thumb"))
+    val post = new Post(UUID.randomUUID().toString(),name, 4, new Date(), "", filename, Post.extraDataToJson(s"thumb=$thumb"), false)
     val p = database.withSession { implicit s :Session =>
       Post.insert(post)
     }
     post
   }
 
+  def clearAll = {
+    database.withSession { implicit s :Session =>
+      Post.clearAll
+    }
+  }
+
+  def createDraft(title:String, author:String, content :String, typ: Int) :Post = {
+    createPost(title, author, content, typ, "")
+  }
+
+
+  def createDraft(title:String, author:String, content :String, typ: Int, extraData :String):Post = {
+    createDraft(title, author, content, typ, "", new Date())
+  }
+
+  def createDraft(title:String, author:String, content :String, typ: Int, extraData :String, date: Date):Post = {
+    val filename = repo.createFile(content)
+    val post = new Post(UUID.randomUUID().toString(),title, typ, date, author, filename, extraData,true)
+    database.withSession { implicit s :Session =>
+      Post.insert(post)
+    }
+    post
+  }
+
+  def createDraft(title:String, author:String, content :String, typ: Int, extraData :String, date: String):Post = {
+    val df = new SimpleDateFormat("yyyyMMddHHmmss")
+    createPost(title, author, content, typ, "", df.parse(date))
+  }
 
 }

@@ -71,6 +71,8 @@ class GazThreeSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSui
       }
     }
 
+    "Have have a different logo" in pending
+
 
   }
 

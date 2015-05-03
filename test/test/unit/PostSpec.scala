@@ -1,6 +1,7 @@
 package test.unit
 
 import java.text.{SimpleDateFormat, DateFormat}
+import java.util.Date
 
 import com.daoostinboyeez.git.GitRepo
 import models.{Biography, Discography, Post}
@@ -127,8 +128,32 @@ class PostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
       }
     }
 
+    "Not retrieve drafts by default" in {
+      database.withSession { implicit session =>
+
+        val draft = PostHelper.createDraft("Draft Post", "MC Donalds", "Leeek 1", 1, "")
+        PostHelper.createPost("Post 2166", "MC Donalds", "Leeek 2", 1, "")
+        PostHelper.createPost("Post 2133", "MC Donalds", "Leeek 3", 1, "")
+
+        val posts = Post.getByDate(1, new Date(), 10)
+        posts must not contain draft
+      }
+    }
+
+    "Have a way of  retrieving drafts" in {
+      database.withSession { implicit session =>
+
+        val draft = PostHelper.createDraft("Draft Post", "MC Donalds", "Leeek 1", 1, "")
+        PostHelper.createPost("Post 2166", "MC Donalds", "Leeek 2", 1, "")
+        PostHelper.createPost("Post 2133", "MC Donalds", "Leeek 3", 1, "")
+
+        val posts = Post.getByDateWithDrafts(1, new Date(), 10)
+        posts must contain (draft)
+      }
+    }
+
     "Have tags" in pending
-    "have a live flag" in pending
+
   }
 
 

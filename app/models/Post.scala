@@ -14,7 +14,7 @@ import play.api.libs.json.{JsString, Json, JsValue, JsObject, JsNumber}
 /**
  * Created by andrew on 11/10/14.
  */
-case class Post(id: String, title: String, postType: Int, dateCreated: Date, author: String, content: String, extraData: String) {
+case class Post(id: String, title: String, postType: Int, dateCreated: Date, author: String, content: String, extraData: String,isDraft: Boolean) {
 
   val repo = GitRepo.apply()
   def json: JsValue = Json.obj(
@@ -29,7 +29,8 @@ case class Post(id: String, title: String, postType: Int, dateCreated: Date, aut
                                                                       .addAttributes("p","class")
                                                                       .addAttributes("div","align")
                                      )),
-    "extraData" -> extraData
+    "extraData" -> extraData,
+    "isDraft" -> isDraft
   )
 
   def json(rev :String): JsValue = Json.obj(
@@ -44,7 +45,8 @@ case class Post(id: String, title: String, postType: Int, dateCreated: Date, aut
       .addAttributes("p","class")
       .addAttributes("div","align")
     )),
-    "extraData" -> extraData
+    "extraData" -> extraData,
+    "isDraft" -> isDraft
   )
 
   def getContent() = {
@@ -74,8 +76,9 @@ object Post{
       def author = column[String]("AUTHOR")
       def content = column[String]("CONTENT")
       def extraData = column[String]("EXTRA_DATA")
+      def isDraft = column[Boolean]("DRAFT")
 
-      def * = (id,title,postType,dateCreated,author,content,extraData) <> ((Post.apply _).tupled, Post.unapply)
+      def * = (id,title,postType,dateCreated,author,content,extraData,isDraft) <> ((Post.apply _).tupled, Post.unapply)
   }
 
   val posts = TableQuery[PostTable]
@@ -118,18 +121,22 @@ object Post{
     newsItem.id
   }
 
-  def getByDate(implicit  s: Session) = { posts.sortBy(_.dateCreated.desc).list}
+  def getByDate(implicit  s: Session) = { posts.filter(post => post.isDraft === false).sortBy(_.dateCreated.desc).list}
 
-  def getByDate(typ: Int)(implicit  s: Session) = { posts.filter(_.postType === typ).sortBy(_.dateCreated.desc).list}
+  def getByDate(typ: Int)(implicit  s: Session) = {
+    posts.filter(post => post.postType === typ && post.isDraft === false ).sortBy(_.dateCreated.desc).list
+  }
 
-  def getByDate(typ: Int, max :Int)(implicit  s: Session) = { posts.filter(_.postType === typ).sortBy(_.dateCreated.desc).take(max).list}
+  def getByDate(typ: Int, max :Int)(implicit  s: Session) = {
+    posts.filter(post => post.postType === typ && post.isDraft === false).sortBy(_.dateCreated.desc).take(max).list
+  }
 
   def getByDate(beforeDate: Date)(implicit  s: Session) = {
-    posts.filter(_.dateCreated < beforeDate).sortBy(_.dateCreated.desc).list
+    posts.filter(post => post.dateCreated < beforeDate && post.isDraft === false).sortBy(_.dateCreated.desc).list
   }
 
   def getByDate(beforeDate: Date, max :Int)(implicit  s: Session) = {
-    posts.filter(_.dateCreated < beforeDate).sortBy(_.dateCreated.desc).take(max).list
+    posts.filter(post => post.dateCreated < beforeDate && post.isDraft === false).sortBy(_.dateCreated.desc).take(max).list
   }
 
 
@@ -138,6 +145,7 @@ object Post{
     posts.filter( post =>
       post.dateCreated < beforeDate
       && post.postType === typ
+       && post.isDraft === false
     ).sortBy(_.dateCreated.desc).list
   }
 
@@ -145,10 +153,45 @@ object Post{
     posts.filter( post =>
       post.dateCreated < beforeDate
         && post.postType === typ
+        && post.isDraft === false
     ).sortBy(_.dateCreated.desc).take(max).list
   }
 
+  def getByDateWithDrafts(implicit  s: Session) = { posts.sortBy(_.dateCreated.desc).list}
 
+  def getByDateWithDrafts(typ: Int)(implicit  s: Session) = {
+    posts.filter(post => post.postType === typ ).sortBy(_.dateCreated.desc).list
+  }
+
+  def getByDateWithDrafts(typ: Int, max :Int)(implicit  s: Session) = {
+    posts.filter(post => post.postType === typ).sortBy(_.dateCreated.desc).take(max).list
+  }
+
+  def getByDateWithDrafts(beforeDate: Date)(implicit  s: Session) = {
+    posts.filter(post => post.dateCreated < beforeDate).sortBy(_.dateCreated.desc).list
+  }
+
+  def getByDateWithDrafts(beforeDate: Date, max :Int)(implicit  s: Session) = {
+    posts.filter(post => post.dateCreated < beforeDate).sortBy(_.dateCreated.desc).take(max).list
+  }
+
+
+
+  def getByDateWithDrafts(typ: Int,beforeDate: Date )(implicit  s: Session) = {
+    posts.filter( post =>
+      post.dateCreated < beforeDate
+        && post.postType === typ
+    ).sortBy(_.dateCreated.desc).list
+  }
+
+  def getByDateWithDrafts(typ: Int,beforeDate: Date,max :Int )(implicit  s: Session) = {
+    posts.filter( post =>
+      post.dateCreated < beforeDate
+        && post.postType === typ
+    ).sortBy(_.dateCreated.desc).take(max).list
+  }
+
+  def clearAll(implicit  s: Session) = { posts.delete }
   def update(post :Post)(implicit s: Session) = { posts.insertOrUpdate(post) }
 
   def extraDataToJson(extraData:String)  = {
@@ -172,7 +215,8 @@ object Post{
       "dateCreated" -> date,
       "author" ->text,
       "content" -> text,
-      "extraData" -> text
+      "extraData" -> text,
+      "isDraft" -> boolean
     )(Post.apply)(Post.unapply _)
   }
 }
