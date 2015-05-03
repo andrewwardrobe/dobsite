@@ -44,6 +44,22 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
 
   def toggleDraftMode = click on id("isDraft")
 
+  def liveAlertVisible = cssSelector("#editAlertLive").element.isDisplayed
+
+  def liveToDraftAlertVisible = cssSelector("#editAlertLive2Draft").element.isDisplayed
+
+  def draftAlertVisible = cssSelector("#editAlertDraft").element.isDisplayed
+
+  def draftToLiveAlertVisible = cssSelector("#editAlertDraft2Live").element.isDisplayed
+
+  def unsavedAlertVisible = cssSelector("#editAlertUnsaved").element.isDisplayed
+
+  def revisionAlertVisible = cssSelector("#editAlertRevision").element.isDisplayed
+
+  def newAlertVisible = cssSelector("#editAlertNew").element.isDisplayed
+
+
+
   def draftMode = { val elemClass = id("isDraft").webElement.getAttribute("class")
     elemClass.contains("isDraftOn")
   }

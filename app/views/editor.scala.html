@@ -1,61 +1,6 @@
 @(message: String, form: Form[Post], postId: String,postType:Int = 1)(implicit session : Session)
 
 
-@toolbar = {
-
-            <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
-                <div class="btn-group">
-                    <a class="btn expander" data-edit="undo" title="Undo (Ctrl/Cmd+Z)"><span class="glyphicon glyphicon-backward"></span ></a>
-                    <a class="btn" data-edit="redo" title="Redo (Ctrl/Cmd+Y)"><span class="glyphicon glyphicon-forward"></span ></a>
-                </div>
-                <div class="btn-group">
-                    <a class="btn dropdown-toggle" data-toggle="dropdown" title="Font Size"><span class="glyphicon glyphicon-text-height"></span >&nbsp;<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a data-edit="fontSize 5"><font size="5">Large</font></a></li>
-                        <li><a data-edit="fontSize 3"><font size="3">Normal</font></a></li>
-                        <li><a data-edit="fontSize 1"><font size="1">Small</font></a></li>
-                    </ul>
-                </div>
-                <div class="btn-group">
-                    <a class="btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><span class="glyphicon glyphicon-bold"></span></a>
-                    <a class="btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><span class="glyphicon glyphicon-italic"></span ></a>
-                    <!-- Cant find a glyph for these so taking he out
-                    <a class="btn" data-edit="strikethrough" title="Strikethrough"><span class="glyphicon glyphicon-bold"></span ></a>
-                    <a class="btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><span class="glyphicon glyphicon-bold"></span ></a>
-                    -->
-                </div>
-                <div class="btn-group">
-                    <a class="btn" data-edit="insertunorderedlist" title="Bullet list"><span class="glyphicon glyphicon-list"></span ></a>
-                    <a class="btn" data-edit="insertorderedlist" title="Number list"><span class="icon-list-ol"></span ></a>
-                    <a class="btn" data-edit="outdent" title="Reduce indent (Shift+Tab)"><span class="glyphicon glyphicon-indent-left"></span ></a>
-                    <a class="btn" data-edit="indent" title="Indent (Tab)"><span class="glyphicon glyphicon-indent-right"></span ></a>
-                </div>
-                <div class="btn-group">
-                    <a data-edit="justifyleft" class="btn" aria-label="Left Align">
-                        <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
-                    </a>
-                    <a class="btn" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><span class="glyphicon glyphicon-align-center"></span ></a>
-                    <a class="btn" data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><span class="glyphicon glyphicon-align-right"></span ></a>
-                    <a class="btn" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><span class="glyphicon glyphicon-align-justify"></span ></a>
-                </div>
-                <div class="btn-group">
-                    <a class="btn dropdown-toggle" data-toggle="dropdown" title="Hyperlink"><span class="glyphicon glyphicon-hand-up"></span ></a>
-                    <div class="dropdown-menu input-append">
-                        <input class="span2" placeholder="URL" type="text" data-edit="createLink"/>
-                        <button class="btn" type="button">Add</button>
-                    </div>
-                    <a class="btn expander" data-edit="unlink" title="Remove Hyperlink"><span class="fa glyphicon-remove"></span ></a>
-                </div>
-
-                <div class="btn-group">
-                    <a class="btn" title="Insert picture (or just drag & drop)" id="pictureBtn"><span class="glyphicon glyphicon-picture"></span ></a>
-                </div>
-
-            </div>
-
-
-}
-
 @username = {
     @session.get("username") match {
         case Some(username) => {@username}
@@ -70,6 +15,16 @@
     <div  class="col-md-10  col-sm-offset-1 dob-main">
 
 
+        <div id="warnings">
+            <div id="editAlertNew" class="alert alert-info compact" role="alert">This a new post<a href="#" class="alert-close btnSuccessful pull-right">X</a></div>
+            <div id="editAlertLive" class=" alert-success compact" role="alert">This Post is live<a href="#" class="alert-close btnSuccessful pull-right">X</a></div>
+            <div id="editAlertDraft" class="alert alert-info compact" role="alert">This post a draft<a href="#" class="alert-close btnInfo pull-right">X</a></div>
+            <div id="editAlertUnsaved" class="alert alert-warning compact" role="alert">This post has unsaved changes<a href="#" class="alert-close btnWarning pull-right">X</a></div>
+
+            <div id="editAlertDraft2Live" class="alert alert-info compact" role="alert">This post will become live on next save<a href="#" class="alert-close btnInfo pull-right">X</a></div>
+            <div id="editAlertLive2Draft" class="alert alert-warning compact" role="alert">By entering draft mode this post will no longer be visible when you hit save<a href="#" class="alert-close btnWarning pull-right">X</a></div>
+            <div id="editAlertRevision" class="alert alert-info compact" role="alert">You are viewing a revision<a href="#" class="alert-close btnInfo pull-right">X</a></div>
+        </div>
         @helper.form(action = routes.Authorised.submitBlog, 'id -> "blogForm" ){
         <input type="hidden" name="postId" id="postId" value="@postId" />
         <!-- Start Toolbar
@@ -87,6 +42,7 @@
                 @helper.select(field = form("postType"), options = List("1" ->"News","2"->"Music","3"->"Gaz Three", "4" -> "Biography"),  args =   'class -> "form-control dob-control",'_label -> "" )
             </div>
             <input type="hidden" name="dateCreated" id="dateCreated" />
+            <input type="hidden" name="draft" id="draft"/>
             <script type="text/javascript">
                 var d = new Date()
                 var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();

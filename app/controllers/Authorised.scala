@@ -65,16 +65,14 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
         val item = s.get
         if(user.role.hasPermission(PostTypeMap(item.postType))) {
           val content = item.content
-
           val filename = repo.genFileName
-          val newItem = new Post(UUID.randomUUID().toString(), item.title, item.postType, new Date(), item.author, filename, Post.extraDataToJson(item.extraData),false)
-
+          val newItem = new Post(UUID.randomUUID().toString(), item.title, item.postType, new Date(), item.author, filename, Post.extraDataToJson(item.extraData),item.isDraft)
           repo.doFile(filename, content, PostMeta.makeCommitMsg("Created", newItem))
           val id = database.withSession {
             implicit s =>
               Post.insert(newItem)
           }
-          Ok("" + id)
+          Ok(newItem.json)
         }else
           Unauthorized("You don't have the right privileges for "+PostTypeMap(item.postType))
       }
@@ -91,14 +89,15 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   def submitBlogUpdate = StackAction(AuthorityKey -> Contributor) { implicit response =>
     val item = Post.blogForm.bindFromRequest().get
     val content = item.content
-    database.withSession { implicit s =>
+    val data = database.withSession { implicit s =>
       val post = Post.getById(item.id).head
       val filename = post.content
-      val newItem = new Post(item.id, item.title, item.postType, post.dateCreated, item.author, filename, Post.extraDataToJson(item.extraData),false)
+      val newItem = new Post(item.id, item.title, item.postType, post.dateCreated, item.author, filename, Post.extraDataToJson(item.extraData),item.isDraft)
       repo.updateFile(filename,content, PostMeta.makeCommitMsg("Updated",newItem))
       Post.update(newItem)
+      newItem
     }
-    Ok(""+item.id)
+    Ok(data.json)
   }
 
   def updateBiography= DBAction  { implicit response =>

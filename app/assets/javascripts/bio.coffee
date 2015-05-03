@@ -143,6 +143,7 @@ doEditMode = (bio) ->
                 "postType":bio.postType,
                 "filename":"",
                 "extraData":extraData,
+                "isDraft":false
             success: (data) ->
                 $("#bioSuccess"+bio.id).show()
                 $("#bioSave"+bio.id).hide()

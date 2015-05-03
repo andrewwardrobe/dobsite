@@ -59,7 +59,7 @@ object PostHelper {
   }
 
   def createDraft(title:String, author:String, content :String, typ: Int) :Post = {
-    createPost(title, author, content, typ, "")
+    createDraft(title, author, content, typ, "")
   }
 
 
@@ -78,7 +78,7 @@ object PostHelper {
 
   def createDraft(title:String, author:String, content :String, typ: Int, extraData :String, date: String):Post = {
     val df = new SimpleDateFormat("yyyyMMddHHmmss")
-    createPost(title, author, content, typ, "", df.parse(date))
+    createDraft(title, author, content, typ, "", df.parse(date))
   }
 
 }

@@ -27,6 +27,7 @@ class EditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuit
   var post1: Post = null
   var post2: Post = null
   var post3: Post = null
+  var post4: Post = null
 
   def extraSetup = {
     database.withSession { implicit session =>
@@ -34,6 +35,7 @@ class EditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuit
       post1 = PostHelper.createPost("DOB Test News Post","MC Donalds","ah ah blah",1)
       post2 =  PostHelper.createPost("2nd Post","MC Donalds","Jimbo jimbp",1)
       post3 = PostHelper.createPost("3rd Post","MC Donalds","Dis is Da Oostin Boyeez Leek",1)
+      post4 = PostHelper.createDraft("4th Post","MC Donalds","Jambo jimbo Leek",1)
       repo.updateFile(post1.content,"Here is some data I just changed")
     }
   }
@@ -71,6 +73,41 @@ class EditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuit
       goTo (editorPage)
       editorPage.editorBoxText must include ("Typing")
     }
+
+    "Display a notification when a post is new" in {
+      go to editorPage
+
+      newAlertVisible mustEqual true
+    }
+
+
+    "Display a notification when a post is in draft" in {
+      goTo (editorPage.post(post4.id))
+
+      eventually{draftAlertVisible mustEqual true}
+    }
+
+    "Display a notification when a post is live" in {
+      goTo (editorPage.post(post2.id))
+      eventually{liveAlertVisible mustEqual true}
+    }
+    "Display a notification when a post has unsaved changes" in {
+      go to editorPage
+      addContent("some data")
+      unsavedAlertVisible mustEqual true
+    }
+
+    "Display a notification when a post is moving from live to draft on next save" in {
+      goTo (editorPage.post(post2.id))
+      toggleDraftMode
+      eventually{liveToDraftAlertVisible mustEqual true}
+    }
+    "Display a notification when a post is moving from draft to live on next save" in {
+      goTo (editorPage.post(post4.id))
+      toggleDraftMode
+      eventually{draftToLiveAlertVisible mustEqual true}
+    }
+
     "Be in draft mode by default" in {
       go to editorPage
       draftMode mustEqual true
@@ -114,7 +151,15 @@ class EditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuit
 
     }
 
+    "Warn when switching revisions if there is unsaved changes" in pending
+    "Warn when viewing a revision" in {
+      goTo (editorPage.post(post1.id))
+      click on id("editorMenu")
+      click on id(editorPage.revisionLinks(1).attribute("id").get)
+      revisionAlertVisible mustEqual true
 
+    }
+    "Warn when making changes to revisions" in pending
 
   }
 
@@ -147,6 +192,8 @@ class EditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuit
         editorPage.editorBoxText must include ("ah ah blah")
       }
     }
+
+
   }
 
 

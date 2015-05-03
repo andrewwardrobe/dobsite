@@ -71,12 +71,15 @@ function getRevisions(){
                                        $("#editor").html(data.content);
                                        $("#postTitle").text = data.title;
                                        $("#author").attr('value', data.author);
-                                       var dt = data.dateCreated.replace("BST","");
-                                       console.log("date is "+dt);
-                                       var d = new Date(dt);
-                                       var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+
                                        $("#dateCreated").attr('value', dateStr);
                                        $("#postType").val(data.postType);
+                                       $("#editAlertRevision").show();
+                                       console.log(data.dateCreated);
+                                       var dt = data.dateCreated.replace("BST","");
+                                         console.log("date is "+dt);
+                                         var d = new Date(dt);
+                                         var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
                                     }
                                 });
                             }
@@ -99,6 +102,7 @@ $("#editor").on("keyup",function(e){
     $("#saveButton").show();
     $("#btnSuccessful").hide();
     $("#btnFailure").hide();
+    $("#editAlertUnsaved").show();
 });
 
 $("#saveButton").click(function(){
@@ -124,18 +128,24 @@ $("#saveButton").click(function(){
                   "isDraft": isDraft
            },
            success: function(data){
-               var d = $('<div>');
-              $(d).text("Saved");
-               $(d).attr('class','alert alert-success');
-               $(d).attr('role','alert');
-               $(d).attr('id','res-success');
-               $("#result").html("");
-               //$("#result").append(d);
-               $("#postId").val(data);
-               getRevisions();
-               window.removeEventListener("beforeunload",unload);
-               $("#saveButton").hide();
-               $("#btnSuccessful").show();
+                var d = $('<div>');
+                $(d).text("Saved");
+                $(d).attr('class','alert alert-success');
+                $(d).attr('role','alert');
+                $(d).attr('id','res-success');
+                $("#result").html("");
+                //$("#result").append(d);
+                $("#postId").val(data.id);
+                getRevisions();
+                $("#saveButton").hide();
+                $("#btnSuccessful").show();
+                $("*[id*='editAlert']").hide();
+                $("#draft").val(data.isDraft);
+                if(data.isDraft !== false){
+                    $("#editAlertDraft").show();
+                }else{
+                    $("#editAlertLive").show();
+                }
            },
            error: function(data){
                var d = $('<div>');
@@ -162,40 +172,6 @@ $("#saveButton").click(function(){
 
 
 
-$(function(){
-    var id = $("#postId").val();
-    if(id != -1){
-            jsRoutes.controllers.JsonApi.getPostById(id).ajax({
-            success: function (data){
-               $("#editor").html(data.content);
-               $("#postTitle").text(data.title);
-               $("#author").attr('value', data.author);
-               var d = new Date(data.dateCreated);
-               var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
-               $("#dateCreated").attr('value', dateStr);
-               $("#postType").val(data.postType);
-               console.log("Extra Data = "+ data);
-               var json = $.parseJSON(data.extraData);
-               var text = "";
-               for (var key in json){
-                if(json.hasOwnProperty(key)){
-                    text += key + "=" + json[key] +"\n";
-                }
-               }
-               text.replace("\n$","");
-               $("#extraDataValues").val(text);
-               console.log("Leek "+data.isDraft);
-               var isDraft;
-               if(data.isDraft){
-                isDraft= false;
-               }else{
-                isDraft = true;
-               }
-               doDraftButtonCss(isDraft);
-            }
-        });
-    }
-});
 
 
 
@@ -247,15 +223,6 @@ $("#editor").on("DOMNodeInserted",function(event){
 
 
 
-function unload (e) {
-  var confirmationMessage = "Leek?";
-
-  (e || window.event).returnValue = confirmationMessage;     // Gecko and Trident
-  return confirmationMessage;                                // Gecko and WebKit
-}
-
-
-
 
 function addEditorMenu(){
     var edFuncLink = $("<a>");
@@ -290,7 +257,6 @@ $(function(){
     var editor = $('#editor');
     $(editor).on('input',function(){
         window.editorChanged = true;
-        window.addEventListener("beforeunload",unload);
     });
 
     $(editor).wysiwyg({activeToolbarClass:"btn-dob-toolbar"});
@@ -351,10 +317,13 @@ $(function(){
 
 function doDraftButtonCss(isDraft){
     console.log("Leek2 "+isDraft);
+    console.log("Leek3 "+$("#draft").val());
     if(isDraft){
             $("#isDraft").removeClass("isDraftOn");
             $("#isDraft").addClass("isDraftOff");
             $("#isDraft").attr('title','This post is Live');
+
+
         }else{
             $("#isDraft").removeClass("isDraftOff");
             $("#isDraft").addClass("isDraftOn");
@@ -365,7 +334,79 @@ function doDraftButtonCss(isDraft){
 function draftModeToggle(){
     console.log("Toggle clicked");
     var isDraft = $("#isDraft").hasClass("isDraftOn");
+    if(isDraft){ //we are currenty a draft and we are going live
+        if($("#draft").val() == "true"){ // at the last save we re a draft
+        console.log("true true"+isDraft+", "+$("#draft").val());
+         $("#editAlertLive2Draft").hide();
+         $("#editAlertDraft2Live").show();
+        }else{
+        console.log("true false"+isDraft+", "+$("#draft").val());
+         $("#editAlertLive2Draft").hide();
+         $("#editAlertDraft2Live").hide();
+        }
+    }else{
+        console.log("leek"+isDraft+", "+$("#draft").val());
+        if($("#draft").val() == "false"){
+             $("#editAlertLive2Draft").show();
+             $("#editAlertDraft2Live").hide();
+         }else{
+             $("#editAlertLive2Draft").hide();
+             $("#editAlertDraft2Live").hide();
+         }
+    }
     doDraftButtonCss(isDraft);
+
 }
 
 $("#isDraft").on('click',draftModeToggle);
+
+$(".alert-close").on('click',function(event){
+    $(event.target.parentNode).hide();
+});
+
+$("*[id*='editAlert']").hide();
+
+$(function(){
+    var id = $("#postId").val();
+    if(id != -1){
+            jsRoutes.controllers.JsonApi.getPostById(id).ajax({
+            success: function (data){
+               $("#editor").html(data.content);
+               $("#postId").val(data.id);
+               $("#postTitle").text(data.title);
+               $("#author").attr('value', data.author);
+               var d = new Date(data.dateCreated);
+               var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+               $("#dateCreated").attr('value', dateStr);
+               $("#postType").val(data.postType);
+               console.log("Extra Data = "+ data);
+               console.log("Leek "+data.isDraft);
+              var isDraft;
+              if(data.isDraft !== false){
+              console.log("is draft true");
+               isDraft= false;
+               $("#draft").val(true);
+               $("#editAlertDraft").show();
+              }else{
+               isDraft = true;
+               console.log("is draft false");
+               $("#editAlertLive").show();
+               $("#draft").val(false);
+              }
+              doDraftButtonCss(isDraft);
+               var json = $.parseJSON(data.extraData);
+               var text = "";
+               for (var key in json){
+                if(json.hasOwnProperty(key)){
+                    text += key + "=" + json[key] +"\n";
+                }
+               }
+               text.replace("\n$","");
+               $("#extraDataValues").val(text);
+
+            }
+        });
+    }else{
+        $("#editAlertNew").show();
+    }
+});
