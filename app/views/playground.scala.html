@@ -1,0 +1,72 @@
+@(message: String)(implicit session : Session)
+@content = {
+
+
+<div class="row" >
+
+    <div  class="col-md-10  col-sm-offset-1 dob-main">
+        <div id="playerDiv" >
+
+            <a href="" id="scLink1"><span id="artist" ></span> - <span id="title" ></span></a><br>
+
+            <img id="waveform"/>
+            <img id="artwork"/>
+
+
+            <audio id="player" controls></audio><br/>
+            <a id="scLionk2" href="//souncloud.com">Listen On <img alt="Player Attribution" class="classattribution"
+                                                                              src='@routes.Assets.at("images/soundcloud/logo_white-8bf7615eb575eeb114fc65323068e1e4.png")'></a><br/>
+            <span id="description"></span>
+
+        <script src="//connect.soundcloud.com/sdk.js"></script>
+        <script>
+
+f
+              SC.initialize({
+                client_id: "24c282811baeec10a4df20a724df478c",
+                redirect_uri: "http://localhost:9000/callback.html",
+              });
+/*/users/1254808*/
+              SC.get("/tracks/3720974",function(data){
+
+                console.log("data: "+JSON.stringify(data));
+
+                $("*[id*='scLink']").attr('href',data.permalink_url);
+                //$("#waveform").attr('src',data.waveform_url);
+                //$("#artwork").attr('src',data.artwork_url);
+                $("#artist").text(data.user.username);
+                $("#title").text(data.title);
+                $("#description").html(data.description.replace(/\n/g,"</br>"));
+                $("#player").attr('src', data.stream_url +"?client_id=24c282811baeec10a4df20a724df478c");
+
+              });
+
+
+        </script>
+         </div><!-- /.dob-main -->
+
+
+</div><!-- /.row -->
+
+
+}
+@scripts = {
+<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js" type="text/javascript"></script>
+<script type="text/javascript" src='@routes.Application.javascriptRoutes()'></script>
+<script src="@routes.Assets.at("javascripts/jquery.hotkeys.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/bootstrap-wysiwyg.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/dobcms.js")" type="text/javascript"></script>
+
+}
+
+
+
+@username = {
+    @session.get("username") match {
+        case Some(username) => {@username}
+        case None => {no-one}
+    }
+}
+
+
+@main("Da Oostin Boyeez")(content)( scripts)

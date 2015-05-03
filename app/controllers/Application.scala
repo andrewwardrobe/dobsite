@@ -41,8 +41,8 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
    Ok(views.html.post("",id))
   }
 
-  def posts =  Action{ implicit request =>
-    Ok(views.html.posts(""))
+  def playground =  Action{ implicit request =>
+    Ok(views.html.playground(""))
   }
 
   def uploadedImage(file:String) = Action{ implicit response =>
