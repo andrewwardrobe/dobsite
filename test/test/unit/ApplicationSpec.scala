@@ -31,6 +31,41 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
       contentType(revisions) mustBe Some("application/json")
     }
 
+    "Just have biography and news post types" in pending
+
+
+    "Refactor News Post type to be Blog Post" in pending
+    "Change biography type to have value 2" in pending
+
+    "Make a tag feature" in pending
+    "Try using requirejs" in pending
+
+    "Make Gaz three page a user profile page based on a with a blog post list based on a user alias filter" in pending
+          "\tMake a user profile feature" in pending
+          "\tMake a user alias feature" in pending
+                "\t\tOnly allow TrustedContributor and admin to have this feature" in pending
+
+    "Switch the discography page to use the post system" in pending
+          "\tGive pos" in pending
+          "\tList track one by one in content then loop that in disgraphy page" in pending
+          "\tUse extra data thumb for picture" in pending
+
+    "Remove the Biography,Person and discography model types" in pending
+
+    "Make a show in user profile check box on editor" in pending
+
+
+
+    "Make a music page based on a music tag filter + user filter" in pending
+        "\t\tMake a soundcloud player feature on editor" in pending
+
+    "Refactor post to be ContentPost" in pending
+
+    "Facility to bulk load in posts" in pending
+
+    "Facility to restore/migrate posts from meta in the commits" in pending
+
+    "Facility to restore/migrate user accounts, store this in the git repo some how" in pending
 
     def setup = {
 
