@@ -31,9 +31,6 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
       contentType(revisions) mustBe Some("application/json")
     }
 
-    "Just have biography and news post types" in pending
-
-
     "Refactor News Post type to be Blog Post" in pending
     "Change biography type to have value 2" in pending
 

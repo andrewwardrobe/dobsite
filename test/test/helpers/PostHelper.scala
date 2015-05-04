@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.GitRepo
-import models.Post
+import models.{PostTypeMap, Post}
 import play.api.Logger
 import play.api.Play.current
 import play.api.db.DB
@@ -19,7 +19,6 @@ object PostHelper {
   val repo = GitRepo.apply()
   def database = Database.forDataSource(DB.getDataSource())
 
-  val types = Map("News" -> 1, "Music" -> 2, "Gaz Three" -> 3, "Biography" -> 4)
   def createPost(title:String, author:String, content :String, typ: Int) :Post = {
     createPost(title, author, content, typ, "")
   }
@@ -45,7 +44,7 @@ object PostHelper {
 
   def createBiography(name:String, text :String, thumb :String) = {
     val filename = repo.createFile(text)
-    val post = new Post(UUID.randomUUID().toString(),name, 4, new Date(), "", filename, Post.extraDataToJson(s"thumb=$thumb"), false)
+    val post = new Post(UUID.randomUUID().toString(),name, PostTypeMap("Biography"), new Date(), "", filename, Post.extraDataToJson(s"thumb=$thumb"), false)
     val p = database.withSession { implicit s :Session =>
       Post.insert(post)
     }
