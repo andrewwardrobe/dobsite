@@ -49,18 +49,20 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
                 "\t\tOnly allow TrustedContributor and admin to have this feature" in pending
 
     "Switch the discography page to use the post system" in pending
-          "\tGive pos" in pending
-          "\tList track one by one in content then loop that in disgraphy page" in pending
+          "\tGive discography a post type in the post type map" in pending
+          "\tList track one by one in content then loop that in discography page" in pending
           "\tUse extra data thumb for picture" in pending
+          "\tAdd in some discography specific stuff to the view page to display album as two column list or single column lis if on small screen or less than 10 tracks" in pending
 
     "Remove the Biography,Person and discography model types" in pending
 
     "Make a show in user profile check box on editor" in pending
 
     "Make a music page based on a music tag filter + user filter" in pending
-        "\t\tMake a soundcloud player feature on editor" in pending
+        "\tMake a soundcloud player feature on editor" in pending
 
-    "Refactor post to be ContentPost" in pending
+    "Refactor post to be ContentPost or content" in pending
+        "\tRefactor PostTypeMap to be ContentTypeMap" in pending
 
     "Facility to bulk load in posts" in pending
 
