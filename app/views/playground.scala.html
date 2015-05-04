@@ -18,15 +18,15 @@
                                                                               src='@routes.Assets.at("images/soundcloud/logo_white-8bf7615eb575eeb114fc65323068e1e4.png")'></a><br/>
             <span id="description"></span>
 
-        <script src="//connect.soundcloud.com/sdk.js"></script>
-        <script>
+            <script src="//connect.soundcloud.com/sdk.js"></script>
+            <script>
 
-f
+
               SC.initialize({
                 client_id: "24c282811baeec10a4df20a724df478c",
                 redirect_uri: "http://localhost:9000/callback.html",
               });
-/*/users/1254808*/
+                /*/users/1254808*/
               SC.get("/tracks/3720974",function(data){
 
                 console.log("data: "+JSON.stringify(data));
