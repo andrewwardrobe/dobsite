@@ -31,10 +31,16 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
       contentType(revisions) mustBe Some("application/json")
     }
 
+    def setup = {
+
+    }
+  }
+    //  !!!!!!!!! Todo List
+    "Make a tag feature" in pending
+
     "Refactor News Post type to be Blog Post" in pending
     "Change biography type to have value 2" in pending
 
-    "Make a tag feature" in pending
     "Try using requirejs" in pending
 
     "Make Gaz three page a user profile page based on a with a blog post list based on a user alias filter" in pending
@@ -51,8 +57,6 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
 
     "Make a show in user profile check box on editor" in pending
 
-
-
     "Make a music page based on a music tag filter + user filter" in pending
         "\t\tMake a soundcloud player feature on editor" in pending
 
@@ -64,9 +68,6 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
 
     "Facility to restore/migrate user accounts, store this in the git repo some how" in pending
 
-    def setup = {
 
-    }
-  }
 
 }
