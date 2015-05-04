@@ -10,7 +10,7 @@ import play.api.test.Helpers._
 import play.api.test._
 import test.helpers.{UserAccountHelper, PostHelper}
 import test.{TestGlobal, TestConfig}
-import test.integration.pages.{SignInPage, SignUpPage, BiographyListPage}
+import test.integration.pages.{SignInPage, SignUpPage, BiographyPage}
 
 import scala.slick.jdbc.JdbcBackend.Database
 
@@ -28,7 +28,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
 
   var setupDone: Boolean = false
   val signIn = new SignInPage(port)
-  val biographyPage = new BiographyListPage(port)
+  val biographyPage = new BiographyPage(port)
   import biographyPage._
   def extraSetup = {
     database.withSession { implicit session =>
@@ -69,7 +69,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
 
 
     "Render A table containing links to available biographies" in {
-      //val biographyPage = new BiographyListPage(port)
+      //val biographyPage = new BiographyPage(port)
       go to biographyPage
       eventually{
         biographyDivs must not be empty
@@ -78,7 +78,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     }
 
     "Display Biography Details" in {
-      //val biographyPage = new BiographyListPage(port)
+      //val biographyPage = new BiographyPage(port)
       go to biographyPage
       eventually{
         biographyDetails(bio) must include ("Sample Bio 2")
@@ -87,7 +87,7 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
 
     "Display a save link if the text has changed" in {
       signIn.signin("TrustedContributor", "TrustedContributor")
-      //val biographyPage = new BiographyListPage(port)
+      //val biographyPage = new BiographyPage(port)
       go to biographyPage
       updateBio(bio,"MC Donalds is leek leek leek")
       eventually{

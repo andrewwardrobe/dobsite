@@ -1,7 +1,7 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
-import models.Post
+import models.{PostTypeMap, Post}
 import models.UserRole.TrustedContributor
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play.{FirefoxFactory, OneBrowserPerSuite, OneServerPerSuite, PlaySpec}
@@ -23,7 +23,7 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
 
 
 
-  val repo = GitRepo.apply()
+  lazy val repo = GitRepo.apply()
   def extraSetup = {
     database.withSession { implicit session =>
       PostHelper.createPost("Da Oostin Boyeez","MC Donalds","Hello",1)
@@ -31,7 +31,7 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   }
 
   var insertedPost: Post = null
-  val postPage = new PostPage(port)
+  lazy val postPage = new PostPage(port)
 
 
   import postPage._
@@ -59,6 +59,13 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
      articleText mustBe insertedPost.getContent()
      author mustBe insertedPost.author
    }
+
+    "Display the biography image when viewing biographies" in {
+      val bio = PostHelper.createPost("Da Oostin Boyeez","MC Donalds","leek",PostTypeMap("Biography"),"""{"thumb":"assets/images/crew/otis_col.png"}""")
+      go to post(bio.id)
+      eventually{bioImagePresent mustEqual true}
+
+    }
 
   }
 

@@ -6,72 +6,65 @@ import org.scalatest.selenium.{Page, WebBrowser}
 /**
  * Created by andrew on 17/12/14.
  */
-class BiographyListPage(val port: Int)(implicit driver:WebDriver) extends Page with WebBrowser {
+class BiographyPage(val port: Int)(implicit driver:WebDriver) extends Page with WebBrowser {
   val url = s"localhost:$port/biography"
-  def biographyDivs = { cssSelector("*[id*='bioDiv']").findAllElements }
+
+  def biographyDivs = {
+    cssSelector("*[id*='bioDiv']").findAllElements
+  }
+
   def biographyImages = cssSelector("*[id*='bioImage']").findAllElements
 
 
-  def biographyDetails(id : String) = { cssSelector("#bioText"+ id).findElement.get.text }
-  def saveButton(id:String) = cssSelector("#bioSave"+id).findElement
-  def saveButtons = cssSelector("*[id*='bioSave']").findAllElements
-  def editButtons = cssSelector("*[id*='bioEdit']").findAllElements
-  def viewBiography(name: String) = {
-      val bios = cssSelector("td > a[id*='bioText']").findAllElements
-      val link = bios.filter( a => a.text.contains(name)).next()
-      click on link
-      new BiographyDetailsPage(port)(driver)
+  def biographyDetails(id: String) = {
+    cssSelector("#bioText" + id).findElement.get.text
   }
 
+  def saveButton(id: String) = cssSelector("#bioSave" + id).findElement
+
+  def saveButtons = cssSelector("*[id*='bioSave']").findAllElements
+
+  def editButtons = cssSelector("*[id*='bioEdit']").findAllElements
+
   def updateBio(id: String, text: String) = {
-    val textBox = cssSelector("#bioText"+ id).findElement.get
+    val textBox = cssSelector("#bioText" + id).findElement.get
     textBox.underlying.sendKeys(text)
   }
 
   def saveBio(id: String) = {
-    click on cssSelector("#bioSave"+id)
+    click on cssSelector("#bioSave" + id)
   }
 
-  def saveSuccessfulVisible(id:String) = {
-    cssSelector("#bioSuccess"+id).element.isDisplayed
+  def saveSuccessfulVisible(id: String) = {
+    cssSelector("#bioSuccess" + id).element.isDisplayed
   }
 
-  def saveFailureVisible(id:String) = {
-    cssSelector("#bioFailure"+id).element.isDisplayed
+  def saveFailureVisible(id: String) = {
+    cssSelector("#bioFailure" + id).element.isDisplayed
   }
 
-  def nameEditable(id:String) = {
-    cssSelector("#bioName"+id).element.attribute("contenteditable").getOrElse("false")  match {
+  def nameEditable(id: String) = {
+    cssSelector("#bioName" + id).element.attribute("contenteditable").getOrElse("false") match {
       case "true" => true
       case _ => false
     }
   }
 
-  def bioEditable(id:String) = {
-    cssSelector("#bioText"+id).element.attribute("contenteditable").getOrElse("false")  match {
-      case "true" => true
-      case _ => false
-    }
-  }
-  def imageEditable(id:String) = {
-    cssSelector("#bioImageDiv"+id).element.attribute("contenteditable").getOrElse("false") match {
+  def bioEditable(id: String) = {
+    cssSelector("#bioText" + id).element.attribute("contenteditable").getOrElse("false") match {
       case "true" => true
       case _ => false
     }
   }
 
-  def clickOnEditButton(id:String) ={
-    click on cssSelector("#bioEdit"+id)
+  def imageEditable(id: String) = {
+    cssSelector("#bioImageDiv" + id).element.attribute("contenteditable").getOrElse("false") match {
+      case "true" => true
+      case _ => false
+    }
   }
 
-
-}
-
-class BiographyDetailsPage(val port: Int)(implicit driver:WebDriver) extends Page with WebBrowser {
-  val url = s"localhost:$port/biography"
-  def text = {
-    val biographyDiv = cssSelector("*[id*='bioText']").findElement
-    biographyDiv.get.text
+  def clickOnEditButton(id: String) = {
+    click on cssSelector("#bioEdit" + id)
   }
-  def image = cssSelector("*[id*='bioText']").findElement
 }

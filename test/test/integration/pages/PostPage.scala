@@ -31,7 +31,14 @@ class PostPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest.s
 
   def dateCreated = cssSelector("#dateCreated").findElement.get.text
 
+  def bioImagePresent = {
+    cssSelector("#bioImage").findElement match {
+      case None => false
+      case _ => true
+    }
+  }
 
+  def bioImage = cssSelector("#bioImage").findElement.get
 
 
 }

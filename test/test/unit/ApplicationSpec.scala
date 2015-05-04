@@ -31,9 +31,7 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
       contentType(revisions) mustBe Some("application/json")
     }
 
-    "Send requests for  News type post to the news  full page view(post page)" in (pending)
-    "Send  requests for  biographies to the biography full page view" in (pending)
-    "Send  requests for  gaz three posts  to the gaz three full page view" in (pending)
+
     def setup = {
 
     }

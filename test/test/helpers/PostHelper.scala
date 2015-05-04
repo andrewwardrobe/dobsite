@@ -26,7 +26,7 @@ object PostHelper {
 
 
   def createPost(title:String, author:String, content :String, typ: Int, extraData :String):Post = {
-    createPost(title, author, content, typ, "", new Date())
+    createPost(title, author, content, typ, extraData, new Date())
   }
 
   def createPost(title:String, author:String, content :String, typ: Int, extraData :String, date: Date):Post = {
