@@ -23,6 +23,10 @@ object PostHelper {
     createPost(title, author, content, typ, "")
   }
 
+  def createPostWithTags(title:String, content :String, typ: Int,tags :String) :Post = {
+    createPost(title, "PostHelper", content, typ, "")//Need to actually make the tags
+  }
+
 
   def createPost(title:String, author:String, content :String, typ: Int, extraData :String):Post = {
     createPost(title, author, content, typ, extraData, new Date())

@@ -53,20 +53,24 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   }
 
   "Post" must {
-   "Display a post" in {
-     go to post(insertedPost.id)
-     title mustBe insertedPost.title
-     articleText mustBe insertedPost.getContent()
-     author mustBe insertedPost.author
-   }
+    "Display a post" in {
+       go to post(insertedPost.id)
+       title mustBe insertedPost.title
+       articleText mustBe insertedPost.getContent()
+       author mustBe insertedPost.author
+    }
 
     "Display the biography image when viewing biographies" in {
       val bio = PostHelper.createPost("Da Oostin Boyeez","MC Donalds","leek",PostTypeMap("Biography"),"""{"thumb":"assets/images/crew/otis_col.png"}""")
       go to post(bio.id)
       eventually{bioImagePresent mustEqual true}
-
     }
 
+    "Display post tags" in {
+      val testPost = PostHelper.createPostWithTags("Da Oostin Boyeez","Hello",PostTypeMap("News"),"Da Oostin Boyeez,Jon Kevson")
+      go to post(testPost.id)
+      eventually{bioImagePresent mustEqual true}
+    }
   }
 
 
