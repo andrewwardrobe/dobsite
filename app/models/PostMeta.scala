@@ -13,7 +13,7 @@ case class PostMeta(commitId: String,commitDate :String,extraData :String){
 }
 
 object PostMeta {
-
+  implicit val tagFormat = Json.format[Tags]
   implicit val postFormat = Json.format[Post]
 
 

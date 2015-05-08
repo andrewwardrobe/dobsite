@@ -4,7 +4,7 @@ import java.text.{SimpleDateFormat, DateFormat}
 import java.util.Date
 
 import com.daoostinboyeez.git.GitRepo
-import models.{Biography, Discography, Post}
+import models.{PostTypeMap, Biography, Discography, Post}
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB
@@ -22,6 +22,7 @@ class PostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
   def database = Database.forDataSource(DB.getDataSource())
   "Post" must {
+
 
 
     "Be able to insert and retrieve posts items" in {
@@ -152,8 +153,16 @@ class PostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
       }
     }
 
-    "Have tags" in pending
+    "Be able to retrieve tags" in {
+      database.withSession { implicit session =>
+        val post = PostHelper.createPostWithTags("Post with tags","Some Content",PostTypeMap("News"),"Leek,Freek,Sheek")
+        post.tags mustEqual List("Leek","Freek","Sheek")
 
+      }
+    }
+
+
+    "Tidy this up" in pending
   }
 
 

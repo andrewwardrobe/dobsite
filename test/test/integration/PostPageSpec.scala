@@ -3,7 +3,7 @@ package test.integration
 import com.daoostinboyeez.git.GitRepo
 import models.{PostTypeMap, Post}
 import models.UserRole.TrustedContributor
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
+import org.scalatest.{Matchers, BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play.{FirefoxFactory, OneBrowserPerSuite, OneServerPerSuite, PlaySpec}
 import play.api.db.DB
 import play.api.test.FakeApplication
@@ -17,7 +17,7 @@ import scala.slick.jdbc.JdbcBackend._
 /**
  * Created by andrew on 01/03/15.
  */
-class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
+class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll {
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
@@ -69,7 +69,7 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     "Display post tags" in {
       val testPost = PostHelper.createPostWithTags("Da Oostin Boyeez","Hello",PostTypeMap("News"),"Da Oostin Boyeez,Jon Kevson")
       go to post(testPost.id)
-      eventually{bioImagePresent mustEqual true}
+      eventually{tags must contain allOf("Jon Kevson","Da Oostin Boyeez")}
     }
   }
 

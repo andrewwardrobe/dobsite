@@ -14,7 +14,7 @@ import play.api.libs.json.{JsString, Json, JsValue, JsObject, JsNumber}
 /**
  * Created by andrew on 11/10/14.
  */
-case class Post(id: String, title: String, postType: Int, dateCreated: Date, author: String, content: String, extraData: String,isDraft: Boolean) {
+case class Post(id: String, title: String, postType: Int, dateCreated: Date, author: String, content: String, extraData: String,isDraft: Boolean, taggles: List[Tags]) {
 
   val repo = GitRepo.apply()
   def json: JsValue = Json.obj(
@@ -56,6 +56,10 @@ case class Post(id: String, title: String, postType: Int, dateCreated: Date, aut
   def getContent(commitId :String) = {
     repo.getFile(content,commitId)
   }
+
+  def tags = {
+
+  }
 }
 
 object Post{
@@ -77,11 +81,13 @@ object Post{
       def content = column[String]("CONTENT")
       def extraData = column[String]("EXTRA_DATA")
       def isDraft = column[Boolean]("DRAFT")
+      def tags = PostTags.postTags.filter(_.postId === id).flatMap(_.tagsFK).list
 
-      def * = (id,title,postType,dateCreated,author,content,extraData,isDraft) <> ((Post.apply _).tupled, Post.unapply)
+      def * = (id,title,postType,dateCreated,author,content,extraData,isDraft,tags) <> ((Post.apply _).tupled, Post.unapply _)
   }
 
   val posts = TableQuery[PostTable]
+
 
   def get(implicit s: Session) = { posts.list }
   def getById(id: String)(implicit s: Session) = { posts.filter(_.id === id).list }
@@ -222,6 +228,41 @@ object Post{
 }
 
 
+case class Tags(id: String, title:String)
+
+
+object Tags {
+
+  class TagsTable(tag: Tag) extends Table[Tags](tag, "TAGS") {
+    //Pri Key
+    def id = column[String]("id",O.PrimaryKey)
+    def title = column[String]("title")
+    def * = (id, title) <> ((Tags.apply _).tupled, Tags.unapply)
+    def posts = PostTags.postTags.filter(_.tagId === id).flatMap(_.postFK)
+  }
+
+  val tags = TableQuery[TagsTable]
+
+}
+
+case class PostTags(postId :String, tagID :String)
+
+object PostTags {
+
+  class PostTagsTable(tag: Tag) extends Table[PostTags](tag, "POST_TAGS") {
+    //Pri Key
+    def postId = column[String]("postId",O.PrimaryKey)
+    def tagId = column[String]("tagId")
+    def * = (postId, tagId) <> ((PostTags.apply _).tupled, PostTags.unapply)
+    //TODO: foreign keys
+    def postFK = foreignKey("post_fk", postId,Post.posts)(post => post.id)
+    def tagsFK = foreignKey("tag_fk", tagId, Tags.tags)(tags => tags.id)
+  }
+
+  val postTags = TableQuery[PostTagsTable]
+
+}
+
 import play.api.Play.current
 object PostTypeMap {
   private lazy val typeMap = {
@@ -249,3 +290,4 @@ object PostTypeMap {
 
   def get(key:Int) = typeMap.getOrElse(key,"")
 }
+

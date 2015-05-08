@@ -28,6 +28,7 @@ object JsonApi extends Controller {
   implicit val discoFormat =  Json.format[Discography]
   implicit val trackFormat =  Json.format[Track]
   implicit val bioFormat =  Biography.jsonFormat;
+  implicit val tagFormat = Json.format[Tags]
   implicit val newsFormat =  Json.format[Post]
   implicit val commitFormat =  Json.format[PostMeta]
   val repo = GitRepo.apply()
