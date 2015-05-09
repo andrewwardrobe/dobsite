@@ -14,7 +14,7 @@ import play.api.libs.json.{JsString, Json, JsValue, JsObject, JsNumber}
 /**
  * Created by andrew on 11/10/14.
  */
-case class Post(id: String, title: String, postType: Int, dateCreated: Date, author: String, content: String, extraData: String,isDraft: Boolean, taggles: List[Tags]) {
+case class Post(id: String, title: String, postType: Int, dateCreated: Date, author: String, content: String, extraData: String,isDraft: Boolean) {
 
   val repo = GitRepo.apply()
   def json: JsValue = Json.obj(
@@ -70,9 +70,6 @@ object Post{
   )
 
   class PostTable(tag:Tag) extends Table[Post](tag,"posts"){
-
-
-
       def id = column[String]("ID",O.PrimaryKey)
       def title = column[String]("ITEM_TITLE")
       def postType = column[Int]("TYPE")
@@ -81,9 +78,9 @@ object Post{
       def content = column[String]("CONTENT")
       def extraData = column[String]("EXTRA_DATA")
       def isDraft = column[Boolean]("DRAFT")
-      def tags = PostTags.postTags.filter(_.postId === id).flatMap(_.tagsFK).list
+      //def tags = PostTags.postTags.filter(_.postId === id).flatMap(_.tagsFK)
 
-      def * = (id,title,postType,dateCreated,author,content,extraData,isDraft,tags) <> ((Post.apply _).tupled, Post.unapply _)
+      def * = (id,title,postType,dateCreated,author,content,extraData,isDraft) <> ((Post.apply _).tupled, Post.unapply _)
   }
 
   val posts = TableQuery[PostTable]
@@ -94,6 +91,7 @@ object Post{
   def getByTitle(title: String)(implicit s: Session) = { posts.filter(_.title.toLowerCase === title.toLowerCase).list }
   def getByType(typ: Int)(implicit s: Session) = { posts.filter(_.postType === typ).list }
 
+  def getTags(post:Post)(implicit s:Session) = {}
   def getXNewsItemsFromId(id: String, max: Int)(implicit s: Session) = {
     getXItemsFromId(id,max,1)
   }
@@ -230,9 +228,7 @@ object Post{
 
 case class Tags(id: String, title:String)
 
-
-object Tags {
-
+trait TagsSchema {
   class TagsTable(tag: Tag) extends Table[Tags](tag, "TAGS") {
     //Pri Key
     def id = column[String]("id",O.PrimaryKey)
@@ -241,9 +237,33 @@ object Tags {
     def posts = PostTags.postTags.filter(_.tagId === id).flatMap(_.postFK)
   }
 
-  val tags = TableQuery[TagsTable]
+  val tagsTable = TableQuery[TagsTable]
+}
+
+trait TagsFunctions { this: TagsSchema =>
+
+
+  /*def create(title:String)(implicit s:Session) = {
+    val newTag = new Tags(UUID.randomUUID.toString, title)
+    tagsTable.insert(newTag)
+    newTag
+  }*/
+
+  //def get(id:String)(implicit s:Session) = tagsTable.filter(_.id === id).list.head
 
 }
+
+object Tags{
+
+}
+
+object TagsCake extends TagsFunctions with TagsSchema {
+}
+
+
+
+
+
 
 case class PostTags(postId :String, tagID :String)
 
@@ -256,7 +276,7 @@ object PostTags {
     def * = (postId, tagId) <> ((PostTags.apply _).tupled, PostTags.unapply)
     //TODO: foreign keys
     def postFK = foreignKey("post_fk", postId,Post.posts)(post => post.id)
-    def tagsFK = foreignKey("tag_fk", tagId, Tags.tags)(tags => tags.id)
+    //def tagsFK = foreignKey("tag_fk", tagId, Tags.tagsTable)(tags => tags.id)
   }
 
   val postTags = TableQuery[PostTagsTable]
