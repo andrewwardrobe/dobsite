@@ -348,6 +348,32 @@ function hideWarnings(){
     $("*[id*='editAlert']").hide();
 }
 
+function loadTags(){
+    var postId = $("#postId").val();
+    $("#tagBox").val("");
+    json = {
+        success: function(data){
+            console.log("Data" +data);
+            $.each(data,function(key,val) {
+               var text = $("#tagBox").val();
+               text = text + val;
+               if(key < data.length -1)
+                text = text + ",";
+
+               $("#tagBox").val(text);
+            });
+            var text = $("#tagBox").val();
+            text = text.replace(/(^,)|(,$)/g, "");
+             $("#tagBox").val(text);
+         },
+        error: function(data){
+            console.log("Could not fetch tags");
+        }
+    };
+    console.log("Loading...");
+    console.log("URL "+jsRoutes.controllers.JsonApi.getContentTags(postId).url);
+    jsRoutes.controllers.JsonApi.getContentTags(postId).ajax(json);
+}
 
 function load(){
     console.log("hello");
@@ -358,7 +384,7 @@ function load(){
     hideWarnings();
     setupKeyUpEvents();
     loadContentData();
-
+    loadTags();
 }
 
 $(function(){
