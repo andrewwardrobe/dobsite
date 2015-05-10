@@ -19,11 +19,11 @@ import scala.slick.jdbc.JdbcBackend._
 /**
  * Created by andrew on 01/03/15.
  */
-class EditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
+class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
-  val repo = GitRepo.apply()
+  lazy val repo = GitRepo.apply()
   var post1: Post = null
   var post2: Post = null
   var post3: Post = null
@@ -94,7 +94,7 @@ class EditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuit
     "Display a notification when a post has unsaved changes" in {
       go to editorPage
       addContent("some data")
-      unsavedAlertVisible mustEqual true
+      eventually {unsavedAlertVisible mustEqual true }
     }
 
     "Display a notification when a post is moving from live to draft on next save" in {
@@ -159,6 +159,17 @@ class EditorSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuit
       revisionAlertVisible mustEqual true
 
     }
+
+    "Be able to save tags" in {
+      val postPage = new PostPage(port)
+      go to post(post3.id)
+      addTags("Leek,Sheek")
+      save
+      go to postPage.post(post3.id)
+      postPage.tagList must contain allOf ("Leek","Sheek")
+    }
+
+
     "Warn when making changes to revisions" in pending
 
   }

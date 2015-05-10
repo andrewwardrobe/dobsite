@@ -11,6 +11,8 @@ import play.api.db.slick._
 import play.api.db.slick.Config.driver.simple._
 import play.api.libs.json.{JsString, Json, JsValue, JsObject, JsNumber}
 
+import scala.collection.mutable.ListBuffer
+
 /**
  * Created by andrew on 11/10/14.
  */
@@ -56,6 +58,14 @@ case class Post(id: String, title: String, postType: Int, dateCreated: Date, aut
   def getContent(commitId :String) = {
     repo.getFile(content,commitId)
   }
+
+  def tags(implicit s: Session) = {
+    val lb = new ListBuffer[String]
+    Post.getTags(id).foreach { t =>
+      lb += t.title
+    }
+    lb.toList
+  }
 }
 
 object Post{
@@ -66,9 +76,6 @@ object Post{
   )
 
   class PostTable(tag:Tag) extends Table[Post](tag,"posts"){
-
-
-
       def id = column[String]("ID",O.PrimaryKey)
       def title = column[String]("ITEM_TITLE")
       def postType = column[Int]("TYPE")
@@ -77,16 +84,30 @@ object Post{
       def content = column[String]("CONTENT")
       def extraData = column[String]("EXTRA_DATA")
       def isDraft = column[Boolean]("DRAFT")
+      def tags = PostToTag.postTags.filter(_.postId === id).flatMap(_.tagsFK)
 
-      def * = (id,title,postType,dateCreated,author,content,extraData,isDraft) <> ((Post.apply _).tupled, Post.unapply)
+      def * = (id,title,postType,dateCreated,author,content,extraData,isDraft) <> ((Post.apply _).tupled, Post.unapply _)
   }
 
   val posts = TableQuery[PostTable]
+
 
   def get(implicit s: Session) = { posts.list }
   def getById(id: String)(implicit s: Session) = { posts.filter(_.id === id).list }
   def getByTitle(title: String)(implicit s: Session) = { posts.filter(_.title.toLowerCase === title.toLowerCase).list }
   def getByType(typ: Int)(implicit s: Session) = { posts.filter(_.postType === typ).list }
+
+  def getTags(id:String)(implicit s:Session) = {
+    PostToTag.postTags.filter(_.postId === id).flatMap(_.tagsFK).list
+  }
+
+  def getTagsAsJson(id:String)(implicit s:Session) = {
+    val lb = new ListBuffer[String]
+    getTags(id).foreach { t =>
+      lb += t.title
+    }
+    Json.toJson(lb.toList)
+  }
 
   def getXNewsItemsFromId(id: String, max: Int)(implicit s: Session) = {
     getXItemsFromId(id,max,1)
@@ -222,6 +243,7 @@ object Post{
 }
 
 
+
 import play.api.Play.current
 object PostTypeMap {
   private lazy val typeMap = {
@@ -249,3 +271,4 @@ object PostTypeMap {
 
   def get(key:Int) = typeMap.getOrElse(key,"")
 }
+

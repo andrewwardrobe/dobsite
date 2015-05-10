@@ -12,7 +12,8 @@
         if data.extraData != ""
             console.log(data.extraData)
             extraData = $.parseJSON(data.extraData)
-            if extraData.thumb != ""
+            console.log("Extra Data = " +extraData.thumb)
+            if extraData.thumb != undefined
                 img = $("<img>")
                 img.attr 'id','bioImage'
                 img.attr 'src', extraData.thumb
@@ -25,9 +26,23 @@
  }
  jsRoutes.controllers.JsonApi.getPostById(postId).ajax(json)
 
+@populateTags = (postId) ->
+    json = {
+        success: (data) ->
+            $.each data, (key,val) ->
+                link = $("<a>")
+                link.attr 'href', '#'
+                link.attr 'id', 'tag_'+val
+                link.text val
+                $("#tags").append link
+                $("#tags").append document.createTextNode("  ")
+    }
+    jsRoutes.controllers.JsonApi.getContentTags(postId).ajax(json)
+
 
 doPage = () ->
     postId = $("#postId").val()
     populatePage(postId)
+    populateTags(postId)
 
 doPage()

@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.GitRepo
-import models.{PostTypeMap, Post}
+import models.{ContentTag, PostTypeMap, Post,PostToTag}
 import play.api.Logger
 import play.api.Play.current
 import play.api.db.DB
@@ -19,8 +19,29 @@ object PostHelper {
   val repo = GitRepo.apply()
   def database = Database.forDataSource(DB.getDataSource())
 
+
+  def getPost(id:String) = {
+    database.withSession{ implicit sess :Session =>
+      val rawPost = Post.getById(id)
+      rawPost
+    }
+  }
+
   def createPost(title:String, author:String, content :String, typ: Int) :Post = {
     createPost(title, author, content, typ, "")
+  }
+
+  def createPostWithTags(title:String, content :String, typ: Int,tags :String) :Post = {
+
+    database.withSession {  implicit sess :Session  =>
+      val post = createPost(title, "PostHelper", content, typ, "")//Need to actually make the tags
+      tags.split(",").foreach{ s =>
+        val tag = ContentTag.create(s.trim)
+        PostToTag.link(post.id, tag.id)
+      }
+      post
+    }
+
   }
 
 

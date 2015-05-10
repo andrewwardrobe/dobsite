@@ -43,6 +43,8 @@ PUT     /admin/changeemail/:user/:email     controllers.Admin.changeEmail(user:S
 GET     /userroles     controllers.Authorised.getEditables
 
 POST    /admin/changepass       controllers.Admin.changePassword
+
+
 #JSon API
 GET     /json/discography           controllers.JsonApi.getDiscography
 GET     /json/discography/:id           controllers.JsonApi.getRelease(id: Int)
@@ -54,6 +56,7 @@ GET     /json/tracks/byrelease/:id           controllers.JsonApi.getTracksByRele
 GET     /json/admin/users/:id           controllers.AdminJsonApi.getUsers(id: String)
 GET     /json/admin/user/:id           controllers.AdminJsonApi.getUser(id: String)
 GET     /json/news           controllers.JsonApi.getNews()
+GET     /json/content/tags/:id      controllers.JsonApi.getContentTags(id: String)
 GET     /json/content/:id           controllers.JsonApi.getPostById(id: String)
 GET     /json/content/:id/revisions           controllers.JsonApi.getRevisionsWithDates(id: String)
 GET     /json/content/:id/revisions/:revId           controllers.JsonApi.getPostRevisionById(id: String, revId: String)

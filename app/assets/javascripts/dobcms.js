@@ -1,48 +1,3 @@
-function pasteHtmlAtCaret(html, selectPastedContent) {
-    var sel, range;
-    if (window.getSelection) {
-        // IE9 and non-IE
-        sel = window.getSelection();
-        if (sel.getRangeAt && sel.rangeCount) {
-            range = sel.getRangeAt(0);
-            range.deleteContents();
-            // Range.createContextualFragment() would be useful here but is
-            // only relatively recently standardized and is not supported in
-            // some browsers (IE9, for one)
-            var el =$("div");
-            //$(el).html;
-            var frag = document.createDocumentFragment(), node, lastNode;
-            while ( (node = el.firstChild) ) {
-                lastNode = frag.appendChild(node);
-            }
-            var firstNode = frag.firstChild;
-            range.insertNode(frag);
-            // Preserve the selection
-            if (lastNode) {
-                range = range.cloneRange();
-                range.setStartAfter(lastNode);
-                if (selectPastedContent) {
-                    range.setStartBefore(firstNode);
-                } else {
-                    range.collapse(true);
-                }
-                sel.removeAllRanges();
-                sel.addRange(range);
-            }
-        }
-    } else if ( (sel = document.selection) && sel.type != "Control") {
-        // IE < 9
-        var originalRange = sel.createRange();
-        originalRange.collapse(true);
-        sel.createRange().pasteHTML(html);
-        if (selectPastedContent) {
-            range = sel.createRange();
-            range.setEndPoint("StartToStart", originalRange);
-            range.select();
-        }
-    }
-}
-
 function getRevisions(){
     var id = $("#postId").val();
     var json = {
@@ -97,15 +52,7 @@ function getRevisions(){
     jsRoutes.controllers.JsonApi.getRevisionsWithDates(id).ajax(json);
 }
 
-
-$("#editor").on("keyup",function(e){
-    $("#saveButton").show();
-    $("#btnSuccessful").hide();
-    $("#btnFailure").hide();
-    $("#editAlertUnsaved").show();
-});
-
-$("#saveButton").click(function(){
+function save(){
     var dateStr = $("#dateCreated").val();
     var title = $("#postTitle").text();
     var content = $('#editor').cleanHtml();
@@ -114,6 +61,7 @@ $("#saveButton").click(function(){
     var author = $("#author").val();
     var extraData = $("#extraDataValues").val();
     var isDraft = $("#isDraft").hasClass("isDraftOn");
+    var tags = $("#tagBox").val();
     var json = {
            data: {
                   "id": id,
@@ -124,7 +72,8 @@ $("#saveButton").click(function(){
                   "postType": postType,
                   "filename": "",
                   "extraData": extraData,
-                  "isDraft": isDraft
+                  "isDraft": isDraft,
+                  "tags":tags
            },
            success: function(data){
                 var d = $('<div>');
@@ -167,56 +116,7 @@ $("#saveButton").click(function(){
     }else{
         jsRoutes.controllers.Authorised.submitBlogUpdate().ajax(json);
     }
-});
-
-
-
-
-
-
-function doCodeFormat()
-{
-    var coding = 0;
-    return function(){
-        var listId = window.getSelection().focusNode;
-        if(coding === 0){
-            if(listId.parentNode.id == "editor"){
-
-                coding = 1;
-                $(listId).wrap('<pre><code class="java"></code></pre>');
-                $('pre code').each(function(i, block) {
-                    hljs.highlightBlock(block);
-                });
-                window.getSelection().focusNode = listId;
-            }
-        }else{
-             if(listId.parentNode.parentNode.parentNode.id == "editor"){
-                coding = 0;
-                $(listId).unwrap().unwrap();
-                window.getSelection().focusNode = listId;
-             }
-        }
-    };
 }
-
-
-
-function doTabIndent(){
-    return function(){
-              //  $(window.getSelection().focusNode).insertAtCaret("leeek")
-        pasteHtmlAtCaret("&nbsp;&nbsp;");
-    };
-}
-
-$("#editor").on("DOMNodeInserted",function(event){
-    var target = event.target;
-
-    switch(target.nodeName){
-        case "BLOCKQUOTE":
-            $(target).attr('style','margin: 0 0 0 40px; border: none; padding: 0px;');
-            break;
-    }
-});
 
 
 
@@ -248,7 +148,7 @@ function addEditorMenu(){
     $("#rightSideNavBar").prepend(listElem);
 }
 
-addEditorMenu();
+
 
 $(function(){
 
@@ -274,59 +174,65 @@ $(function(){
 
 
 
-
-$('#toolbar').on('dragstart',function(){
-    $("#toolbar").attr('class','toolbar-compact');
-    $("#tbSpace").hide();
-    $("#tbSpace").show();
-    $("#expanderIcon").attr('class','fa fa-expand');
-});
-
-
-
   $('.dropdown-menu input, .dropdown label').click(function(e) {
     e.stopPropagation();
   });
 
-(function($){
-        $(window).load(function(){
-            $("#editor").mCustomScrollbar();
-        });
-})(jQuery);
-
-$("#expander").on('click',function(e){
-    var cls = $("#expanderIcon").attr('class');
-    if(cls == "fa fa-compress"){
-        $("#toolbar").attr('class','toolbar-compact');
-        $("#expanderIcon").attr('class','fa fa-expand');
-    }else{
-         $("#toolbar").attr('class','toolbar');
-         $("#toolbar").attr('style','');
-         $("#expanderIcon").attr('class','fa fa-compress');
-    }
-});
-
-$(function(){
-    $('#toolbar').draggable({stack: "#editor"});
-    $("#btnSuccessful").hide();
-    $("#btnFailure").hide();
-});
+function addEditorScrollbar(){
+    $("#editor").mCustomScrollbar();
+}
 
 
+
+function preventEditorBlockQuote(){
+  $("#editor").on("DOMNodeInserted",function(event){
+      var target = event.target;
+
+      switch(target.nodeName){
+          case "BLOCKQUOTE":
+              $(target).attr('style','margin: 0 0 0 40px; border: none; padding: 0px;');
+              break;
+      }
+  });
+}
+function setupKeyUpEvents(){
+    $("#editor").on("keyup",function(e){
+
+        $("#saveButton").show();
+        $("#btnSuccessful").hide();
+        $("#btnFailure").hide();
+        $("#editAlertUnsaved").show();
+    });
+}
+
+function setupEditorBox(){
+    preventEditorBlockQuote();
+    addEditorScrollbar();
+    setupKeyUpEvents();
+}
+
+/////Toolbar Stuff
 function doDraftButtonCss(isDraft){
 
     if(isDraft){
             $("#isDraft").removeClass("isDraftOn");
             $("#isDraft").addClass("isDraftOff");
             $("#isDraft").attr('title','This post is Live');
-
-
-        }else{
+     }else{
             $("#isDraft").removeClass("isDraftOff");
             $("#isDraft").addClass("isDraftOn");
             $("#isDraft").attr('title','This post is a draft');
         }
 }
+
+function setupSaveButtonHandler(){
+    $("#saveButton").click(function(){
+        save();
+    });
+}
+
+
+
 
 function draftModeToggle(){
 
@@ -355,53 +261,132 @@ function draftModeToggle(){
 
 }
 
-$("#isDraft").on('click',draftModeToggle);
+////End
 
-$(".alert-close").on('click',function(event){
-    $(event.target.parentNode).hide();
-});
+function loadContentData(){
+    $(function(){
+        var id = $("#postId").val();
+        if(id != -1){
+                jsRoutes.controllers.JsonApi.getPostById(id).ajax({
+                success: function (data){
+                   $("#editor").html(data.content);
+                   $("#postId").val(data.id);
+                   $("#postTitle").text(data.title);
+                   $("#author").attr('value', data.author);
+                   var d = new Date(data.dateCreated);
+                   var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+                   $("#dateCreated").attr('value', dateStr);
+                   $("#postType").val(data.postType);
+                   var isDraft;
+                  if(data.isDraft !== false){
 
-$("*[id*='editAlert']").hide();
+                   isDraft= false;
+                   $("#draft").val(true);
+                   $("#editAlertDraft").show();
+                  }else{
+                   isDraft = true;
+
+                   $("#editAlertLive").show();
+                   $("#draft").val(false);
+                  }
+                  doDraftButtonCss(isDraft);
+                   var json = $.parseJSON(data.extraData);
+                   var text = "";
+                   for (var key in json){
+                    if(json.hasOwnProperty(key)){
+                        text += key + "=" + json[key] +"\n";
+                    }
+                   }
+                   text.replace("\n$","");
+                   $("#extraDataValues").val(text);
+
+                }
+            });
+        }else{
+            $("#editAlertNew").show();
+        }
+    });
+}
+
+function setupAdditionalToolbarHandlers(){
+    $("#isDraft").on('click',draftModeToggle);
+    $("#expander").on('click',function(e){
+        var cls = $("#expanderIcon").attr('class');
+        if(cls == "fa fa-compress"){
+            $("#toolbar").attr('class','toolbar-compact');
+            $("#expanderIcon").attr('class','fa fa-expand');
+        }else{
+             $("#toolbar").attr('class','toolbar');
+             $("#toolbar").attr('style','');
+             $("#expanderIcon").attr('class','fa fa-compress');
+        }
+    });
+
+
+
+        $('#toolbar').draggable({stack: "#editor"});
+        $("#btnSuccessful").hide();
+        $("#btnFailure").hide();
+
+    $('#toolbar').on('dragstart',function(){
+        $("#toolbar").attr('class','toolbar-compact');
+        $("#tbSpace").hide();
+        $("#tbSpace").show();
+        $("#expanderIcon").attr('class','fa fa-expand');
+    });
+
+    setupSaveButtonHandler();
+}
+
+function setupWarningBoxHandlers(){
+    $(".alert-close").on('click',function(event){
+        $(event.target.parentNode).hide();
+    });
+}
+
+function hideWarnings(){
+    $("*[id*='editAlert']").hide();
+}
+
+function loadTags(){
+    var postId = $("#postId").val();
+    $("#tagBox").val("");
+    json = {
+        success: function(data){
+            console.log("Data" +data);
+            $.each(data,function(key,val) {
+               var text = $("#tagBox").val();
+               text = text + val;
+               if(key < data.length -1)
+                text = text + ",";
+
+               $("#tagBox").val(text);
+            });
+            var text = $("#tagBox").val();
+            text = text.replace(/(^,)|(,$)/g, "");
+             $("#tagBox").val(text);
+         },
+        error: function(data){
+            console.log("Could not fetch tags");
+        }
+    };
+    console.log("Loading...");
+    console.log("URL "+jsRoutes.controllers.JsonApi.getContentTags(postId).url);
+    jsRoutes.controllers.JsonApi.getContentTags(postId).ajax(json);
+}
+
+function load(){
+    console.log("hello");
+    addEditorMenu();
+    setupAdditionalToolbarHandlers();
+    setupEditorBox();
+    setupWarningBoxHandlers();
+    hideWarnings();
+    setupKeyUpEvents();
+    loadContentData();
+    loadTags();
+}
 
 $(function(){
-    var id = $("#postId").val();
-    if(id != -1){
-            jsRoutes.controllers.JsonApi.getPostById(id).ajax({
-            success: function (data){
-               $("#editor").html(data.content);
-               $("#postId").val(data.id);
-               $("#postTitle").text(data.title);
-               $("#author").attr('value', data.author);
-               var d = new Date(data.dateCreated);
-               var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
-               $("#dateCreated").attr('value', dateStr);
-               $("#postType").val(data.postType);
-               var isDraft;
-              if(data.isDraft !== false){
-
-               isDraft= false;
-               $("#draft").val(true);
-               $("#editAlertDraft").show();
-              }else{
-               isDraft = true;
-
-               $("#editAlertLive").show();
-               $("#draft").val(false);
-              }
-              doDraftButtonCss(isDraft);
-               var json = $.parseJSON(data.extraData);
-               var text = "";
-               for (var key in json){
-                if(json.hasOwnProperty(key)){
-                    text += key + "=" + json[key] +"\n";
-                }
-               }
-               text.replace("\n$","");
-               $("#extraDataValues").val(text);
-
-            }
-        });
-    }else{
-        $("#editAlertNew").show();
-    }
+    load();
 });
