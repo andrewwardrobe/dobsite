@@ -26,7 +26,7 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite{
 
   implicit val postFormat = Json.format[Post]
 
-  "Application" should {
+  "Auth Application" should {
 
     "Be able to Update a biography" in {
 
@@ -43,10 +43,10 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite{
     }
 
     "Allow Contributors to create news posts" in {
-       setup
-       val json = Json.parse("""{"id":"f26c0ddc-214e-4d3a-a8c8-0deec3045e75","title":"title","postType":1,"dateCreated":"2012-04-21","author":"Andrew","content":"12345678","extraData":"{ \"thumb\":\"assets/leek.jpg\"}","isDraft":false}""")
-       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitBlog().url,FakeHeaders(),json).withLoggedIn(config)("Contributor")).get
-       status(result) mustBe OK
+      setup
+      val json = Json.parse("""{"id":"f26c0ddc-214e-4d3a-a8c8-0deec3045e75","title":"title","postType":1,"dateCreated":"2012-04-21","author":"Andrew","content":"12345678","extraData":"{ \"thumb\":\"assets/leek.jpg\"}","isDraft":false}""")
+      val result = route(FakeRequest(POST, controllers.routes.Authorised.submitBlog().url,FakeHeaders(),json).withLoggedIn(config)("Contributor")).get
+      status(result) mustBe OK
     }
 
     "Not Allow normal users to create news posts" in {

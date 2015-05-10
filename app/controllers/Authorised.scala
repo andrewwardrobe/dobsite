@@ -58,7 +58,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   }
 
 
-  def submitBlog = StackAction(AuthorityKey -> Contributor) { implicit response =>
+  def submitBlog = StackAction(AuthorityKey -> Contributor) { implicit request =>
     val user = loggedIn
     Post.blogForm.bindFromRequest() match {
       case s: Form[Post] => {
@@ -68,11 +68,28 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
           val filename = repo.genFileName
           val newItem = new Post(UUID.randomUUID().toString(), item.title, item.postType, new Date(), item.author, filename, Post.extraDataToJson(item.extraData),item.isDraft)
           repo.doFile(filename, content, PostMeta.makeCommitMsg("Created", newItem))
-          val id = database.withSession {
+          val res = database.withSession {
             implicit s =>
               Post.insert(newItem)
+              request.body.asFormUrlEncoded match {
+                case None => {}
+                case Some(formData) => {
+                  formData.get("tags") match {
+                    case Some(tagData) => {
+                        tagData.foreach { tags =>
+                          tags.split(",").foreach { str:String =>
+                            val tag = ContentTag.create(str.trim)
+                            PostToTag.link(newItem.id, tag.id)
+                          }
+                        }
+                    }
+                  }
+                }
+                case _ => Logger.info("Matched Niether")
+              }
+              Ok(newItem.json)
           }
-          Ok(newItem.json)
+          res
         }else
           Unauthorized("You don't have the right privileges for "+PostTypeMap(item.postType))
       }
@@ -86,18 +103,41 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   }
 
 
-  def submitBlogUpdate = StackAction(AuthorityKey -> Contributor) { implicit response =>
+  def submitBlogUpdate = StackAction(AuthorityKey -> Contributor) { implicit request =>
     val item = Post.blogForm.bindFromRequest().get
     val content = item.content
-    val data = database.withSession { implicit s =>
+   //
+    database.withSession { implicit s =>
       val post = Post.getById(item.id).head
       val filename = post.content
+
+      //val tags = js \ "tags"
       val newItem = new Post(item.id, item.title, item.postType, post.dateCreated, item.author, filename, Post.extraDataToJson(item.extraData),item.isDraft)
       repo.updateFile(filename,content, PostMeta.makeCommitMsg("Updated",newItem))
       Post.update(newItem)
-      newItem
+      request.body.asFormUrlEncoded match {
+        case None => {Logger.info("Couldn;t get data from request")}
+        case Some(formData) => {
+          formData.get("tags") match {
+            case Some(tagData) => {
+              tagData.foreach { tags:String =>
+                tags.split(",").foreach { str:String =>
+                  val tag = ContentTag.create(str.trim)
+                  PostToTag.link(newItem.id, tag.id)
+                }
+              }
+            }
+          }
+        }
+        case _ => Logger.info("Matched Niether")
+      }
+      //tags.toString.split(",").foreach{ str:String =>
+      //  val tag = ContentTag.create(str.trim)
+      //  PostToTag.link(newItem.id, tag.id)
+     // }
+      Ok(newItem.json)
     }
-    Ok(data.json)
+
   }
 
   def updateBiography= DBAction  { implicit response =>

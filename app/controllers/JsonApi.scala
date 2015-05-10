@@ -28,7 +28,7 @@ object JsonApi extends Controller {
   implicit val discoFormat =  Json.format[Discography]
   implicit val trackFormat =  Json.format[Track]
   implicit val bioFormat =  Biography.jsonFormat;
-  implicit val tagFormat = Json.format[Tags]
+  //implicit val tagFormat = Json.format[ContentTag]
   implicit val newsFormat =  Json.format[Post]
   implicit val commitFormat =  Json.format[PostMeta]
   val repo = GitRepo.apply()
@@ -66,6 +66,11 @@ object JsonApi extends Controller {
       }
     }
 
+  }
+
+  def getContentTags(id:String) = DBAction { implicit response =>
+    val json = Post.getTagsAsJson(id)
+    Ok(toJson(json))
   }
 
   def getPostRevisionById(id: String, revId : String) = DBAction { implicit response =>

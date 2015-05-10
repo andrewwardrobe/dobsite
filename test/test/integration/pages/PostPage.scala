@@ -31,9 +31,10 @@ class PostPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest.s
 
   def dateCreated = cssSelector("#dateCreated").findElement.get.text
 
-  def tags = {
+
+  def tagList = {
     val tags: ListBuffer[String] = new ListBuffer[String]()
-    cssSelector("*[id*='tag']").findAllElements.toList.foreach { elem =>
+    cssSelector("a[id*='tag']").findAllElements.toList.foreach { elem =>
       tags += elem.text
     }
     tags.toList

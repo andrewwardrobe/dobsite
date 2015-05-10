@@ -25,9 +25,22 @@
  }
  jsRoutes.controllers.JsonApi.getPostById(postId).ajax(json)
 
+@populateTags = (postId) ->
+    json = {
+        success: (data) ->
+            $.each data, (key,val) ->
+                link = $("<a>")
+                link.attr 'href', '#'
+                link.attr 'id', 'tag_'+val
+                link.text val
+                $("#tags").append link
+    }
+    jsRoutes.controllers.JsonApi.getContentTags(postId).ajax(json)
+
 
 doPage = () ->
     postId = $("#postId").val()
     populatePage(postId)
+    populateTags(postId)
 
 doPage()

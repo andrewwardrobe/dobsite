@@ -11,6 +11,8 @@ import play.api.db.slick._
 import play.api.db.slick.Config.driver.simple._
 import play.api.libs.json.{JsString, Json, JsValue, JsObject, JsNumber}
 
+import scala.collection.mutable.ListBuffer
+
 /**
  * Created by andrew on 11/10/14.
  */
@@ -57,8 +59,12 @@ case class Post(id: String, title: String, postType: Int, dateCreated: Date, aut
     repo.getFile(content,commitId)
   }
 
-  def tags = {
-
+  def tags(implicit s: Session) = {
+    val lb = new ListBuffer[String]
+    Post.getTags(id).foreach { t =>
+      lb += t.title
+    }
+    lb.toList
   }
 }
 
@@ -78,7 +84,7 @@ object Post{
       def content = column[String]("CONTENT")
       def extraData = column[String]("EXTRA_DATA")
       def isDraft = column[Boolean]("DRAFT")
-      //def tags = PostTags.postTags.filter(_.postId === id).flatMap(_.tagsFK)
+      def tags = PostToTag.postTags.filter(_.postId === id).flatMap(_.tagsFK)
 
       def * = (id,title,postType,dateCreated,author,content,extraData,isDraft) <> ((Post.apply _).tupled, Post.unapply _)
   }
@@ -91,7 +97,18 @@ object Post{
   def getByTitle(title: String)(implicit s: Session) = { posts.filter(_.title.toLowerCase === title.toLowerCase).list }
   def getByType(typ: Int)(implicit s: Session) = { posts.filter(_.postType === typ).list }
 
-  def getTags(post:Post)(implicit s:Session) = {}
+  def getTags(id:String)(implicit s:Session) = {
+    PostToTag.postTags.filter(_.postId === id).flatMap(_.tagsFK).list
+  }
+
+  def getTagsAsJson(id:String)(implicit s:Session) = {
+    val lb = new ListBuffer[String]
+    getTags(id).foreach { t =>
+      lb += t.title
+    }
+    Json.toJson(lb.toList)
+  }
+
   def getXNewsItemsFromId(id: String, max: Int)(implicit s: Session) = {
     getXItemsFromId(id,max,1)
   }
@@ -226,62 +243,6 @@ object Post{
 }
 
 
-case class Tags(id: String, title:String)
-
-trait TagsSchema {
-  class TagsTable(tag: Tag) extends Table[Tags](tag, "TAGS") {
-    //Pri Key
-    def id = column[String]("id",O.PrimaryKey)
-    def title = column[String]("title")
-    def * = (id, title) <> ((Tags.apply _).tupled, Tags.unapply)
-    def posts = PostTags.postTags.filter(_.tagId === id).flatMap(_.postFK)
-  }
-
-  val tagsTable = TableQuery[TagsTable]
-}
-
-trait TagsFunctions { this: TagsSchema =>
-
-
-  /*def create(title:String)(implicit s:Session) = {
-    val newTag = new Tags(UUID.randomUUID.toString, title)
-    tagsTable.insert(newTag)
-    newTag
-  }*/
-
-  //def get(id:String)(implicit s:Session) = tagsTable.filter(_.id === id).list.head
-
-}
-
-object Tags{
-
-}
-
-object TagsCake extends TagsFunctions with TagsSchema {
-}
-
-
-
-
-
-
-case class PostTags(postId :String, tagID :String)
-
-object PostTags {
-
-  class PostTagsTable(tag: Tag) extends Table[PostTags](tag, "POST_TAGS") {
-    //Pri Key
-    def postId = column[String]("postId",O.PrimaryKey)
-    def tagId = column[String]("tagId")
-    def * = (postId, tagId) <> ((PostTags.apply _).tupled, PostTags.unapply)
-    //TODO: foreign keys
-    def postFK = foreignKey("post_fk", postId,Post.posts)(post => post.id)
-    //def tagsFK = foreignKey("tag_fk", tagId, Tags.tagsTable)(tags => tags.id)
-  }
-
-  val postTags = TableQuery[PostTagsTable]
-
-}
 
 import play.api.Play.current
 object PostTypeMap {

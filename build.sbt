@@ -10,7 +10,7 @@ Play2WarKeys.servletVersion := "3.1"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.11.1"
+scalaVersion := "2.11.2"
 
 libraryDependencies ++= Seq(
   jdbc,
@@ -19,9 +19,9 @@ libraryDependencies ++= Seq(
   ws
 )
 
-libraryDependencies += "com.typesafe.play" %% "play-slick" % "0.8.0"
-
 libraryDependencies ++= Seq(
+  "com.typesafe.play" %% "play-slick" % "0.8.0",
+  "io.strongtyped"			%% 	"active-slick"	% "0.2.2",
   "org.webjars" %% "webjars-play" % "2.3.0",
   "org.webjars" % "bootstrap" % "3.1.1-2",
   "org.seleniumhq.selenium" % "selenium-server" % "2.45.0" % "test",

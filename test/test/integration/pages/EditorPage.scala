@@ -28,6 +28,9 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
 
   def post(id:String) = s"localhost:$port/editor/$id"
 
+  def addTags(tags:String) = { val tagBox = id("tagBox").element
+    tagBox.underlying.sendKeys(tags)
+  }
 
 
   def revisionListText = {
