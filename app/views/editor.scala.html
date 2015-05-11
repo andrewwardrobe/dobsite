@@ -39,7 +39,7 @@
                 <h2 class="dob-post-title" id="postTitle" contenteditable="true">Dob Post Title</h2>
             </div>
             <div class="col-md-2">
-                @helper.select(field = form("postType"), options = List("1" ->"News","2"->"Music","3"->"Gaz Three", "4" -> "Biography"),  args =   'class -> "form-control dob-control",'_label -> "" )
+                @helper.select(field = form("postType"), options = List("1" ->"News","2"->"Discography", "4" -> "Biography"),  args =   'class -> "form-control dob-control",'_label -> "" )
             </div>
             <input type="hidden" name="dateCreated" id="dateCreated" />
             <input type="hidden" name="draft" id="draft"/>

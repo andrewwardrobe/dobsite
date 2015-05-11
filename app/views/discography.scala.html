@@ -29,10 +29,11 @@
     <div id="modals">
     </div><!-- /.container -->
 
+@helper.requireJs(core = routes.Assets.at("javascripts/require.js").url,
+module = routes.Assets.at("javascripts/entry").url)
 }
 
 @scripts ={
-    <script src='@routes.Assets.at("javascripts/disco.js")'></script>
 
     }
 

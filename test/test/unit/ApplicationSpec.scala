@@ -36,13 +36,11 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
     }
   }
     //  !!!!!!!!! Todo List
-    "Make a tag feature" in pending
-
     "Refactor News Post type to be Blog Post" in pending
 
     "Separate db schema from " in pending
 
-  "Change biography type to have value 2" in pending
+  "Change biography type to have value 3" in pending
 
     "Try using requirejs" in pending
 
