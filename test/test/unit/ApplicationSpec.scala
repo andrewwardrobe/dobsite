@@ -38,22 +38,15 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
     //  !!!!!!!!! Todo List
     "Refactor News Post type to be Blog Post" in pending
 
-    "Separate db schema from " in pending
+    "Separate db schema from " in pending //Weird bug in this
 
-  "Change biography type to have value 3" in pending
+    "Change biography type to have value 3" in pending
 
-    "Try using requirejs" in pending
 
     "Make Gaz three page a user profile page based on a with a blog post list based on a user alias filter" in pending
           "\tMake a user profile feature" in pending
           "\tMake a user alias feature" in pending
                 "\t\tOnly allow TrustedContributor and admin to have this feature" in pending
-
-    "Switch the discography page to use the post system" in pending
-          "\tGive discography a post type in the post type map" in pending
-          "\tList track one by one in content then loop that in discography page" in pending
-          "\tUse extra data thumb for picture" in pending
-          "\tAdd in some discography specific stuff to the view page to display album as two column list or single column lis if on small screen or less than 10 tracks" in pending
 
     "Remove the Biography,Person and discography model types" in pending
 

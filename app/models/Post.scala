@@ -196,6 +196,7 @@ object Post{
     posts.filter(post => post.dateCreated < beforeDate).sortBy(_.dateCreated.desc).take(max).list
   }
 
+  def delete(id:String)(implicit  s: Session) = posts.filter(_.id === id).delete
 
 
   def getByDateWithDrafts(typ: Int,beforeDate: Date )(implicit  s: Session) = {

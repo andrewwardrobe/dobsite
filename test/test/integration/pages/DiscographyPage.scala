@@ -9,7 +9,7 @@ import org.scalatest.selenium.WebBrowser
 class DiscographyPage (val port: Int)(implicit driver:WebDriver) extends org.scalatest.selenium.Page with WebBrowser {
   val url = s"localhost:$port/discography"
 
-  def Albums = cssSelector("*[id*='alb']").findAllElements
-  def Modals = cssSelector("*[id*='RelIDmodal']").findAllElements
+  def Albums = cssSelector("*[id*='disc']").findAllElements
+  def Modals ={cssSelector("*[id*='RelIDmodal']").findAllElements }
   def Tracks = cssSelector("*[id*='_tab_cell']").findAllElements
 }

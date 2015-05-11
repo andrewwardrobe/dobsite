@@ -72,6 +72,15 @@ object PostHelper {
     post
   }
 
+  def createDiscographyItem(name:String, text :String, thumb :String, albumType :String) = {
+    val filename = repo.createFile(text)
+    val post = new Post(UUID.randomUUID().toString(),name, PostTypeMap("Discography"), new Date(), "", filename, Post.extraDataToJson(s"thumb=$thumb,discType=$albumType"), false)
+    val p = database.withSession { implicit s :Session =>
+      Post.insert(post)
+    }
+    post
+  }
+
   def clearAll = {
     database.withSession { implicit s :Session =>
       Post.clearAll

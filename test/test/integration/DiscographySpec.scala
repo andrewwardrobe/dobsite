@@ -6,6 +6,7 @@ import org.scalatestplus.play._
 import play.api.db.DB
 import play.api.test.Helpers._
 import play.api.test._
+import test.helpers.PostHelper
 import test.{TestGlobal, TestConfig}
 import test.integration.pages.DiscographyPage
 
@@ -18,6 +19,7 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
   def database = Database.forDataSource(DB.getDataSource())
   val discography = new DiscographyPage(port)
 
+  var bio : Post = null
   before{
     dataSetup
   }
@@ -51,12 +53,8 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       //implicitlyWait(Span(10, Seconds))
 
       eventually {
-
-        discography.Modals must not be empty
-
-
         discography.Tracks must not be empty
-        discography.Tracks must have length 3
+        discography.Modals must not be empty
       }
     }
   }
@@ -64,24 +62,22 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
   def dataSetup() = {
     database.withSession { implicit session =>
 
-      Discography.insert(Discography(1, "Mit Da Queen Mutter", 0, "images/mdqm.jpg"))
+      val content =
+        """
+          |<ol>
+          | <li>Replacement Hip Hop</li>
+          | <li>Mit Da Queen Mutter</li>
+          | <li>Leek</li>
+          |</ol>
+        """.stripMargin
+      bio = PostHelper.createDiscographyItem("Mit Da Queen Mutter",content,"assets/images/mdqm.jpg","Album")
 
-
-      val disc = Discography.getByName("Mit Da Queen Mutter").head
-
-      Track.insert(Track(1,disc.id,1,"Replacement Hip Hop"))
-      Track.insert(Track(2,disc.id,2,"Mit Da Queen Mutter"))
-      Track.insert(Track(3,disc.id,3,"Leek"))
     }
   }
 
   def dataTearDown() = {
     database.withSession { implicit session =>
-      val disc = Discography.getByName("Mit Da Queen Mutter").head
-
-      Track.deleteByRelId(disc.id)
-      Discography.delete(disc.id);
-      //info(res.head.name)
+      Post.delete(bio.id)
     }
   }
 
