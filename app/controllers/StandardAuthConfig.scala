@@ -1,5 +1,6 @@
 package controllers
 
+import _root_.data.UserAccounts
 import jp.t2v.lab.play2.auth.AuthConfig
 import models.UserRole._
 import models.{UserRole, UserAccount}
@@ -32,7 +33,7 @@ trait StandardAuthConfig extends AuthConfig {
   val idTag: ClassTag[Id] = classTag[Id]
 
   def resolveUser(id: Id)(implicit ctx: ExecutionContext): Future[Option[User]] = { database.withSession{ implicit s =>
-    Future.successful(UserAccount.findByName(id))
+    Future.successful(UserAccounts.findByName(id))
   } }
 
   def loginSucceeded(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] = {
@@ -44,7 +45,7 @@ trait StandardAuthConfig extends AuthConfig {
     val user = database.withSession { implicit s =>
       email.contains("@") match {
         case true =>
-          UserAccount.getUserName(email).get
+          UserAccounts.getUserName(email).get
         case false =>
           email
       }

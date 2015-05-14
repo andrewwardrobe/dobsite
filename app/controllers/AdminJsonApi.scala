@@ -4,9 +4,10 @@
 package controllers
 
 import controllers.Application._
+import data.UserAccounts
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
-import models.{UserAccount, Post$}
+import models.{UserAccount, Post}
 
 import models.UserRole.{Administrator, Contributor, NormalUser}
 import play.api.data.Form
@@ -27,14 +28,14 @@ object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig 
 
   def getUsers(name:String) = StackAction(AuthorityKey -> Administrator) { implicit request =>
     database.withSession{ implicit s =>
-      Ok(toJson(UserAccount.getUsersLike(name)))
+      Ok(toJson(UserAccounts.getUsersLike(name)))
     }
   }
 
 
   def getUser(name:String) = StackAction(AuthorityKey -> Administrator) { implicit request =>
     database.withSession{ implicit s =>
-      Ok(toJson(UserAccount.findByName(name).head.json))
+      Ok(toJson(UserAccounts.findByName(name).head.json))
     }
   }
 }

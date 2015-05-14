@@ -1,5 +1,6 @@
 package controllers
 
+import data.UserAccounts
 import jp.t2v.lab.play2.auth.LoginLogout
 import models.UserRole.InActiveUser
 import models.{UserRoleMapping, UserAccount}
@@ -24,7 +25,7 @@ object UserServices extends Controller with LoginLogout with StandardAuthConfig 
   val loginForm = {
     database.withSession { implicit session =>
       Form {
-        mapping("email" -> text, "password" -> text)(UserAccount.authenticate)(_.map(u => (u.email, "")))
+        mapping("email" -> text, "password" -> text)(UserAccounts.authenticate)(_.map(u => (u.email, "")))
           .verifying("Invalid email or password", result => result.isDefined)
       }
     }
@@ -45,7 +46,7 @@ object UserServices extends Controller with LoginLogout with StandardAuthConfig 
     import newAccount._
     val incAccount = new UserAccount(id, email, password, name, InActiveUser)
     database.withSession { implicit session =>
-      UserAccount.create(incAccount)
+      UserAccounts.create(incAccount)
     }
     Redirect(routes.UserServices.login)
   }
@@ -72,14 +73,14 @@ def signedout = Action { implicit request =>
 
   def checkName(name: String) = Action{ implicit request =>
     val count = database.withSession { implicit s =>
-      UserAccount.getUserNameCount(name)
+      UserAccounts.getUserNameCount(name)
     }
     Ok(""+count)
   }
 
   def checkEmail(email: String) = Action{ implicit request =>
     val count = database.withSession { implicit s =>
-      UserAccount.getEmailCount(email)
+      UserAccounts.getEmailCount(email)
     }
     Ok(""+count)
   }
@@ -88,7 +89,7 @@ def signedout = Action { implicit request =>
   val emailIsAvailable: Constraint[String] = Constraint("constraints.accountavailable")({
     email =>
       val errors = database.withSession { implicit session =>
-        UserAccount.getEmailCount(email) match {
+        UserAccounts.getEmailCount(email) match {
           case 0 => Nil
           case _ => Seq(ValidationError("Email Address is already in use"))
         }
@@ -104,7 +105,7 @@ def signedout = Action { implicit request =>
   val userNameIsAvailable: Constraint[String] = Constraint("constraints.nameavailable")({
     name =>
       val errors = database.withSession { implicit session =>
-        UserAccount.getUserNameCount(name) match {
+        UserAccounts.getUserNameCount(name) match {
           case 0 => Nil
           case _ => Seq(ValidationError("Screen Name is already in use"))
         }

@@ -1,6 +1,7 @@
 package controllers
 
 import controllers.Authorised._
+import data.UserAccounts
 import jp.t2v.lab.play2.auth.AuthElement
 import models.UserAccount
 import models.UserRole.Administrator
@@ -21,8 +22,8 @@ object Admin extends Controller with AuthElement with StandardAuthConfig{
   def changeRole(name: String,role:String) = StackAction(AuthorityKey -> Administrator) {  implicit request =>
 
     database.withSession { implicit s =>
-      val user = UserAccount.findByName(name).get
-      UserAccount.changeRole(user, role)
+      val user = UserAccounts.findByName(name).get
+      UserAccounts.changeRole(user, role)
     } match {
       case 0 => Ok("")
       case 1=> BadRequest("Unknown User Role")
@@ -32,10 +33,10 @@ object Admin extends Controller with AuthElement with StandardAuthConfig{
   def changeEmail(name: String, email:String) = StackAction(AuthorityKey -> Administrator) { implicit request =>
 
     database.withSession { implicit s =>
-      UserAccount.getEmailCount(email) match {
+      UserAccounts.getEmailCount(email) match {
         case 0 =>
-          val user = UserAccount.findByName(name).get
-          UserAccount.newEmail(user, email)
+          val user = UserAccounts.findByName(name).get
+          UserAccounts.newEmail(user, email)
           Ok("Email Updated")
         case _ =>
           BadRequest("Email In Use")
@@ -59,8 +60,8 @@ object Admin extends Controller with AuthElement with StandardAuthConfig{
       BadRequest("Passwords Do Not Match")
     } else {
       database.withSession { implicit s =>
-        val user = UserAccount.findByName(data.userName).head
-        UserAccount.newPasswd(user, data.password)
+        val user = UserAccounts.findByName(data.userName).head
+        UserAccounts.newPasswd(user, data.password)
       }
       Ok("Password Updated")
     }
