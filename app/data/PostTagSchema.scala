@@ -15,7 +15,7 @@ trait PostToTagSchema{
     def * = (postId, tagId) <> ((PostToTagLink.apply _).tupled, PostToTagLink.unapply)
     //TODO: foreign keys
     def postFK = foreignKey("post_fk", postId,Posts.postTable)(post => post.id)
-    def tagsFK = foreignKey("tag_fk", tagId, ContentTag.tagsTable)(tags => tags.id)
+    def tagsFK = foreignKey("tag_fk", tagId, Tags.tagsTable)(tags => tags.id)
   }
 
 }

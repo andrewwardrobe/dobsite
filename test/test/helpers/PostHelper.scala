@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.GitRepo
-import data.{Posts, PostToTagDAO}
+import data.{Tags, Posts, PostToTagDAO}
 import models.{ContentTag, PostTypeMap, Post,PostToTagLink}
 import play.api.Logger
 import play.api.Play.current
@@ -37,7 +37,7 @@ object PostHelper {
     database.withSession {  implicit sess :Session  =>
       val post = createPost(title, "PostHelper", content, typ, "")//Need to actually make the tags
       tags.split(",").foreach{ s =>
-        val tag = ContentTag.create(s.trim)
+        val tag = Tags.create(s.trim)
         PostToTagDAO.link(post.id, tag.id)
       }
       post

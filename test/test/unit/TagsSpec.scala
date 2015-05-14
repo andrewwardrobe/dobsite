@@ -1,6 +1,6 @@
 package test.unit
 
-import models.{ContentTag}
+import data.Tags
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB
@@ -24,8 +24,8 @@ class TagsSpec  extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
     "Be able to insert create tags and retreive tags" in {
       database.withSession { implicit session =>
-        val tag = ContentTag.create("Tag")
-        val retrievedTag = ContentTag.get(tag.id)
+        val tag = Tags.create("Tag")
+        val retrievedTag = Tags.get(tag.id)
         retrievedTag mustEqual tag
       }
     }

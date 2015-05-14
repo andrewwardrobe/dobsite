@@ -4,7 +4,7 @@ import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.{GitRepo}
 import controllers.Application._
-import data.{Posts, PostToTagDAO}
+import data.{Tags, Posts, PostToTagDAO}
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
 import models._
@@ -79,7 +79,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
                     case Some(tagData) => {
                         tagData.foreach { tags =>
                           tags.split(",").foreach { str:String =>
-                            val tag = ContentTag.create(str.trim)
+                            val tag = Tags.create(str.trim)
                             PostToTagDAO.link(newItem.id, tag.id)
                           }
                         }
@@ -124,7 +124,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
             case Some(tagData) => {
               tagData.foreach { tags:String =>
                 tags.split(",").foreach { str:String =>
-                  val tag = ContentTag.create(str.trim)
+                  val tag = Tags.create(str.trim)
                   PostToTagDAO.link(newItem.id, tag.id)
                 }
               }
