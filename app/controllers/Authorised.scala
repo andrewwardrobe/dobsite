@@ -4,7 +4,7 @@ import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.{GitRepo}
 import controllers.Application._
-import data.PostToTagDAO
+import data.{Posts, PostToTagDAO}
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
 import models._
@@ -71,7 +71,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
           repo.doFile(filename, content, PostMeta.makeCommitMsg("Created", newItem))
           val res = database.withSession {
             implicit s =>
-              Post.insert(newItem)
+              Posts.insert(newItem)
               request.body.asFormUrlEncoded match {
                 case None => {}
                 case Some(formData) => {
@@ -110,13 +110,13 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     val content = item.content
    //
     database.withSession { implicit s =>
-      val post = Post.getById(item.id).head
+      val post = Posts.getById(item.id).head
       val filename = post.content
 
       //val tags = js \ "tags"
       val newItem = new Post(item.id, item.title, item.postType, post.dateCreated, item.author, filename, Post.extraDataToJson(item.extraData),item.isDraft)
       repo.updateFile(filename,content, PostMeta.makeCommitMsg("Updated",newItem))
-      Post.update(newItem)
+      Posts.update(newItem)
       request.body.asFormUrlEncoded match {
         case None => {Logger.info("Couldn;t get data from request")}
         case Some(formData) => {

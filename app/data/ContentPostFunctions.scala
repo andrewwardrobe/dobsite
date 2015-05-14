@@ -1,0 +1,142 @@
+package data
+
+import java.util.Date
+
+import models.Post
+import play.api.libs.json.Json
+
+import scala.collection.mutable.ListBuffer
+
+/**
+ * Created by andrew on 14/05/15.
+ */
+trait ContentPostFunctions {this: ContentPostSchema =>
+  
+  import play.api.db.slick.Config.driver.simple._
+  val postTable = TableQuery[PostTable]
+
+
+  def get(implicit s: Session) = { postTable.list }
+  def getById(id: String)(implicit s: Session) = { postTable.filter(_.id === id).list }
+  def getByTitle(title: String)(implicit s: Session) = { postTable.filter(_.title.toLowerCase === title.toLowerCase).list }
+  def getByType(typ: Int)(implicit s: Session) = { postTable.filter(_.postType === typ).list }
+
+  def getTags(id:String)(implicit s:Session) = {
+    PostToTagDAO.postTags.filter(_.postId === id).flatMap(_.tagsFK).list
+  }
+
+  def getTagsAsJson(id:String)(implicit s:Session) = {
+    val lb = new ListBuffer[String]
+    getTags(id).foreach { t =>
+      lb += t.title
+    }
+    Json.toJson(lb.toList)
+  }
+
+  def getXNewsItemsFromId(id: String, max: Int)(implicit s: Session) = {
+    getXItemsFromId(id,max,1)
+  }
+
+
+  def getXItemsFromId(id: String, max: Int, typ: Int)(implicit s: Session) = {
+    postTable.filter( blogPost =>
+      blogPost.id <= id &&
+        blogPost.postType === typ
+    ).sortBy(_.id.desc).take(5).list
+  }
+
+
+
+  def getXNewsItems(max: Int)(implicit s: Session) = {
+    getXItems(1,max)
+  }
+
+  def getXItems(typ: Int,max: Int)(implicit s: Session) = {
+    postTable.filter( blogPost =>
+      blogPost.postType === typ
+    ).sortBy(_.id.desc).take(max).list
+  }
+
+
+
+  def getNews(implicit s: Session) = { postTable.filter(_.postType === 1).list }
+
+  def insert(newsItem: Post)(implicit s: Session) = {
+    postTable.insert(newsItem)
+    newsItem.id
+  }
+
+  def getByDate(implicit  s: Session) = { postTable.filter(post => post.isDraft === false).sortBy(_.dateCreated.desc).list}
+
+  def getByDate(typ: Int)(implicit  s: Session) = {
+    postTable.filter(post => post.postType === typ && post.isDraft === false ).sortBy(_.dateCreated.desc).list
+  }
+
+  def getByDate(typ: Int, max :Int)(implicit  s: Session) = {
+    postTable.filter(post => post.postType === typ && post.isDraft === false).sortBy(_.dateCreated.desc).take(max).list
+  }
+
+  def getByDate(beforeDate: Date)(implicit  s: Session) = {
+    postTable.filter(post => post.dateCreated < beforeDate && post.isDraft === false).sortBy(_.dateCreated.desc).list
+  }
+
+  def getByDate(beforeDate: Date, max :Int)(implicit  s: Session) = {
+    postTable.filter(post => post.dateCreated < beforeDate && post.isDraft === false).sortBy(_.dateCreated.desc).take(max).list
+  }
+
+
+
+  def getByDate(typ: Int,beforeDate: Date )(implicit  s: Session) = {
+    postTable.filter( post =>
+      post.dateCreated < beforeDate
+        && post.postType === typ
+        && post.isDraft === false
+    ).sortBy(_.dateCreated.desc).list
+  }
+
+  def getByDate(typ: Int,beforeDate: Date,max :Int )(implicit  s: Session) = {
+    postTable.filter( post =>
+      post.dateCreated < beforeDate
+        && post.postType === typ
+        && post.isDraft === false
+    ).sortBy(_.dateCreated.desc).take(max).list
+  }
+
+  def getByDateWithDrafts(implicit  s: Session) = { postTable.sortBy(_.dateCreated.desc).list}
+
+  def getByDateWithDrafts(typ: Int)(implicit  s: Session) = {
+    postTable.filter(post => post.postType === typ ).sortBy(_.dateCreated.desc).list
+  }
+
+  def getByDateWithDrafts(typ: Int, max :Int)(implicit  s: Session) = {
+    postTable.filter(post => post.postType === typ).sortBy(_.dateCreated.desc).take(max).list
+  }
+
+  def getByDateWithDrafts(beforeDate: Date)(implicit  s: Session) = {
+    postTable.filter(post => post.dateCreated < beforeDate).sortBy(_.dateCreated.desc).list
+  }
+
+  def getByDateWithDrafts(beforeDate: Date, max :Int)(implicit  s: Session) = {
+    postTable.filter(post => post.dateCreated < beforeDate).sortBy(_.dateCreated.desc).take(max).list
+  }
+
+  def delete(id:String)(implicit  s: Session) = postTable.filter(_.id === id).delete
+
+
+  def getByDateWithDrafts(typ: Int,beforeDate: Date )(implicit  s: Session) = {
+    postTable.filter( post =>
+      post.dateCreated < beforeDate
+        && post.postType === typ
+    ).sortBy(_.dateCreated.desc).list
+  }
+
+  def getByDateWithDrafts(typ: Int,beforeDate: Date,max :Int )(implicit  s: Session) = {
+    postTable.filter( post =>
+      post.dateCreated < beforeDate
+        && post.postType === typ
+    ).sortBy(_.dateCreated.desc).take(max).list
+  }
+
+  def clearAll(implicit  s: Session) = { postTable.delete }
+  def update(post :Post)(implicit s: Session) = { postTable.insertOrUpdate(post) }
+}

@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.GitRepo
-import data.PostToTagDAO
+import data.{Posts, PostToTagDAO}
 import models.{ContentTag, PostTypeMap, Post,PostToTagLink}
 import play.api.Logger
 import play.api.Play.current
@@ -23,7 +23,7 @@ object PostHelper {
 
   def getPost(id:String) = {
     database.withSession{ implicit sess :Session =>
-      val rawPost = Post.getById(id)
+      val rawPost = Posts.getById(id)
       rawPost
     }
   }
@@ -54,7 +54,7 @@ object PostHelper {
     val filename = repo.createFile(content)
     val post = new Post(UUID.randomUUID().toString(),title, typ, date, author, filename, extraData,false)
     database.withSession { implicit s :Session =>
-      Post.insert(post)
+      Posts.insert(post)
     }
     post
   }
@@ -68,7 +68,7 @@ object PostHelper {
     val filename = repo.createFile(text)
     val post = new Post(UUID.randomUUID().toString(),name, PostTypeMap("Biography"), new Date(), "", filename, Post.extraDataToJson(s"thumb=$thumb"), false)
     val p = database.withSession { implicit s :Session =>
-      Post.insert(post)
+      Posts.insert(post)
     }
     post
   }
@@ -77,14 +77,14 @@ object PostHelper {
     val filename = repo.createFile(text)
     val post = new Post(UUID.randomUUID().toString(),name, PostTypeMap("Discography"), new Date(), "", filename, Post.extraDataToJson(s"thumb=$thumb,discType=$albumType"), false)
     val p = database.withSession { implicit s :Session =>
-      Post.insert(post)
+      Posts.insert(post)
     }
     post
   }
 
   def clearAll = {
     database.withSession { implicit s :Session =>
-      Post.clearAll
+      Posts.clearAll
     }
   }
 
@@ -101,7 +101,7 @@ object PostHelper {
     val filename = repo.createFile(content)
     val post = new Post(UUID.randomUUID().toString(),title, typ, date, author, filename, extraData,true)
     database.withSession { implicit s :Session =>
-      Post.insert(post)
+      Posts.insert(post)
     }
     post
   }

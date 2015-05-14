@@ -4,6 +4,7 @@ package controllers
 import java.text.SimpleDateFormat
 import java.util.Date
 
+import _root_.data.Posts
 import com.daoostinboyeez.git.GitRepo
 import models._
 import play.api._
@@ -38,19 +39,19 @@ object JsonApi extends Controller {
   }
 
   def getNews = DBAction { implicit response =>
-    val newsList = blogToJson(Post.getNews)
+    val newsList = blogToJson(Posts.getNews)
     Ok(toJson(newsList))
   }
 
   def getContentByType(contentType: Int) = DBAction { implicit response =>
-    val newsList = blogToJson(Post.getByType(contentType))
+    val newsList = blogToJson(Posts.getByType(contentType))
     Ok(toJson(newsList))
   }
   def getPostById(id: String) = DBAction { implicit response =>
     val regex = """[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}""".r
      id match {
       case regex() => {
-        val posts = Post.getById(id)
+        val posts = Posts.getById(id)
         if( posts.length > 0 )
           Ok(toJson(posts.head.json))
         else
@@ -58,7 +59,7 @@ object JsonApi extends Controller {
       }
       case _ => {
         val title = id.replace("_"," ")
-        val posts = Post.getByTitle(title)
+        val posts = Posts.getByTitle(title)
         if( posts.length > 0 )
           Ok(toJson(posts.head.json))
         else
@@ -69,16 +70,16 @@ object JsonApi extends Controller {
   }
 
   def getContentTags(id:String) = DBAction { implicit response =>
-    val json = Post.getTagsAsJson(id)
+    val json = Posts.getTagsAsJson(id)
     Ok(toJson(json))
   }
 
   def getPostRevisionById(id: String, revId : String) = DBAction { implicit response =>
-    Ok(toJson(Post.getById(id).head.json(revId)))
+    Ok(toJson(Posts.getById(id).head.json(revId)))
   }
 
   def getRevisions(id: String) =  DBAction { implicit response =>
-    val post = Post.getById(id)
+    val post = Posts.getById(id)
       post.isEmpty match{
         case false => {
           val filename = post.head.content
@@ -98,7 +99,7 @@ object JsonApi extends Controller {
   }
 
   def getRevisionsWithDates(id: String) =  DBAction { implicit response =>
-    val post = Post.getById(id)
+    val post = Posts.getById(id)
     post.isEmpty match{
       case false => {
         val filename = post.head.content
@@ -127,26 +128,26 @@ object JsonApi extends Controller {
 
   def getNewsByRange(start: String, num: Int) = DBAction { implicit response =>
     if(start != -1) {
-      val newsList = blogToJson(Post.getXNewsItemsFromId(start, num))
+      val newsList = blogToJson(Posts.getXNewsItemsFromId(start, num))
       Ok(toJson(newsList))
     }else {
-      val newsList = blogToJson(Post.getXNewsItems(num))
+      val newsList = blogToJson(Posts.getXNewsItems(num))
       Ok(toJson(newsList))
     }
   }
 
   def getContentByDate(typ: Int)  = DBAction { implicit response =>
-    val contentList = blogToJson(Post.getByDate(typ))
+    val contentList = blogToJson(Posts.getByDate(typ))
     Ok(toJson(contentList))
   }
 
   def getContentByDateStart(typ: Int,startDate: String,max :Int)  = DBAction { implicit response =>
     val contentList = startDate match {
-      case s if s.isEmpty() || s == "" => { blogToJson(Post.getByDate(typ,new Date(),max)) }
-      case s if s == "today" => { blogToJson(Post.getByDate(typ,new Date(),max)) }
+      case s if s.isEmpty() || s == "" => { blogToJson(Posts.getByDate(typ,new Date(),max)) }
+      case s if s == "today" => { blogToJson(Posts.getByDate(typ,new Date(),max)) }
       case _ => {
         val df = new SimpleDateFormat("yyyyMMddHHmmss")
-        blogToJson(Post.getByDate(typ,df.parse(startDate),max))
+        blogToJson(Posts.getByDate(typ,df.parse(startDate),max))
       }
     }
     Ok(toJson(contentList))
