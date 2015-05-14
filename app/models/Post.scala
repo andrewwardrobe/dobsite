@@ -2,7 +2,7 @@ package models
 
 import java.util.{UUID, Date}
 import com.daoostinboyeez.git.GitRepo
-import dal.PostToTagDAO
+import data.PostToTagDAO
 import org.jsoup._
 import org.jsoup.safety.Whitelist
 import play.api.{Play, Logger}

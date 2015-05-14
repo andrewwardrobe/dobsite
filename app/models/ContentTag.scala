@@ -1,7 +1,7 @@
 package models
 
 
-import dal.{PostToTagSchema, PostToTagFunctions}
+import data.{PostToTagSchema, PostToTagFunctions}
 import models._
 import play.api._
 import play.api.db.slick._

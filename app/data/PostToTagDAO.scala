@@ -1,4 +1,4 @@
-package dal
+package data
 
 /**
  * Created by andrew on 14/05/15.

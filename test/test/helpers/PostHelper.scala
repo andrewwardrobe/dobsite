@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.GitRepo
-import dal.PostToTagDAO
+import data.PostToTagDAO
 import models.{ContentTag, PostTypeMap, Post,PostToTagLink}
 import play.api.Logger
 import play.api.Play.current

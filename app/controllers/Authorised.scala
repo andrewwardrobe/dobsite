@@ -4,7 +4,7 @@ import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.{GitRepo}
 import controllers.Application._
-import dal.PostToTagDAO
+import data.PostToTagDAO
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
 import models._
