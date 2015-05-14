@@ -4,6 +4,7 @@ import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.{GitRepo}
 import controllers.Application._
+import dal.PostToTagDAO
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
 import models._
@@ -79,13 +80,14 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
                         tagData.foreach { tags =>
                           tags.split(",").foreach { str:String =>
                             val tag = ContentTag.create(str.trim)
-                            PostToTag.link(newItem.id, tag.id)
+                            PostToTagDAO.link(newItem.id, tag.id)
                           }
                         }
                     }
+                    case _ => {}
                   }
                 }
-                case _ => Logger.info("Matched Niether")
+                case _ => Logger.info("Matched Neither")
               }
               Ok(newItem.json)
           }
@@ -123,10 +125,11 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
               tagData.foreach { tags:String =>
                 tags.split(",").foreach { str:String =>
                   val tag = ContentTag.create(str.trim)
-                  PostToTag.link(newItem.id, tag.id)
+                  PostToTagDAO.link(newItem.id, tag.id)
                 }
               }
             }
+            case _ => {}
           }
         }
         case _ => Logger.info("Matched Niether")

@@ -2,6 +2,7 @@ package models
 
 import java.util.{UUID, Date}
 import com.daoostinboyeez.git.GitRepo
+import dal.PostToTagDAO
 import org.jsoup._
 import org.jsoup.safety.Whitelist
 import play.api.{Play, Logger}
@@ -84,7 +85,7 @@ object Post{
       def content = column[String]("CONTENT")
       def extraData = column[String]("EXTRA_DATA")
       def isDraft = column[Boolean]("DRAFT")
-      def tags = PostToTag.postTags.filter(_.postId === id).flatMap(_.tagsFK)
+      def tags = PostToTagDAO.postTags.filter(_.postId === id).flatMap(_.tagsFK)
 
       def * = (id,title,postType,dateCreated,author,content,extraData,isDraft) <> ((Post.apply _).tupled, Post.unapply _)
   }
@@ -98,7 +99,7 @@ object Post{
   def getByType(typ: Int)(implicit s: Session) = { posts.filter(_.postType === typ).list }
 
   def getTags(id:String)(implicit s:Session) = {
-    PostToTag.postTags.filter(_.postId === id).flatMap(_.tagsFK).list
+    PostToTagDAO.postTags.filter(_.postId === id).flatMap(_.tagsFK).list
   }
 
   def getTagsAsJson(id:String)(implicit s:Session) = {
