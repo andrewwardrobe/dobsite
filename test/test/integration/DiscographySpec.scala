@@ -1,6 +1,6 @@
 package test.integration
 
-import data.Posts
+import data.Content
 import models._
 import org.scalatest._
 import org.scalatestplus.play._
@@ -20,7 +20,7 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
   def database = Database.forDataSource(DB.getDataSource())
   val discography = new DiscographyPage(port)
 
-  var bio : Post = null
+  var bio : ContentPost = null
   before{
     dataSetup
   }
@@ -78,7 +78,7 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
   def dataTearDown() = {
     database.withSession { implicit session =>
-      Posts.delete(bio.id)
+      Content.delete(bio.id)
     }
   }
 

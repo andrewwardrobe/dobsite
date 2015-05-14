@@ -1,6 +1,6 @@
 package test.integration
 
-import models.PostTypeMap
+import models.ContentTypeMap
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play._
 import play.api.db.DB

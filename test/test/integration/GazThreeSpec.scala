@@ -1,6 +1,6 @@
 package test.integration
 
-import models.PostTypeMap
+import models.ContentTypeMap
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play._
 import play.api.db.DB
@@ -33,8 +33,8 @@ class GazThreeSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSui
   }
   def dataSetup = {
     database.withSession { implicit session =>
-      val newsItem = PostHelper.createPost("DOB Test News Post","Gaz Three","Gaz three post Leek",PostTypeMap.get("Gaz Three"))
-      val nonNewsItem =  PostHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",PostTypeMap.get("Biography"))
+      val newsItem = PostHelper.createPost("DOB Test News Post","Gaz Three","Gaz three post Leek",ContentTypeMap.get("Gaz Three"))
+      val nonNewsItem =  PostHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",ContentTypeMap.get("Biography"))
     }
   }
 
@@ -53,7 +53,7 @@ class GazThreeSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSui
     "Only Display News Posts" in {
       go to gazthreePage
       eventually{
-        TypeIds must contain only(PostTypeMap.get("Gaz Three").toString)
+        TypeIds must contain only(ContentTypeMap.get("Gaz Three").toString)
       }
     }
 

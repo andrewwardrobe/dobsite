@@ -4,7 +4,7 @@ import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.{GitRepo}
 import controllers.Application._
-import data.{Tags, Posts, PostToTagDAO}
+import data.{Tags, Content}
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
 import models._
@@ -45,33 +45,33 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   }
 
   def newContent(contentType:String) = StackAction(AuthorityKey -> Contributor){  implicit request =>
-    val typ = PostTypeMap.get(contentType)
-    Ok(views.html.editor("",Post.blogForm,"-1",typ))
+    val typ = ContentTypeMap.get(contentType)
+    Ok(views.html.editor("",ContentPost.blogForm,"-1",typ))
   }
 
   def blogInput = StackAction(AuthorityKey -> Contributor){  implicit request =>
-    Ok(views.html.editor("",Post.blogForm,"-1"))
+    Ok(views.html.editor("",ContentPost.blogForm,"-1"))
   }
 
   def blogUpdate(id: String) = StackAction(AuthorityKey -> Contributor) {  implicit request =>
 
-    Ok(views.html.editor("",Post.blogForm,id))
+    Ok(views.html.editor("",ContentPost.blogForm,id))
   }
 
 
   def submitBlog = StackAction(AuthorityKey -> Contributor) { implicit request =>
     val user = loggedIn
-    Post.blogForm.bindFromRequest() match {
-      case s: Form[Post] => {
+    ContentPost.blogForm.bindFromRequest() match {
+      case s: Form[ContentPost] => {
         val item = s.get
-        if(user.role.hasPermission(PostTypeMap(item.postType))) {
+        if(user.role.hasPermission(ContentTypeMap(item.postType))) {
           val content = item.content
           val filename = repo.genFileName
-          val newItem = new Post(UUID.randomUUID().toString(), item.title, item.postType, new Date(), item.author, filename, Post.extraDataToJson(item.extraData),item.isDraft)
-          repo.doFile(filename, content, PostMeta.makeCommitMsg("Created", newItem))
+          val newItem = new ContentPost(UUID.randomUUID().toString(), item.title, item.postType, new Date(), item.author, filename, ContentPost.extraDataToJson(item.extraData),item.isDraft)
+          repo.doFile(filename, content, ContentMeta.makeCommitMsg("Created", newItem))
           val res = database.withSession {
             implicit s =>
-              Posts.insert(newItem)
+              Content.insert(newItem)
               request.body.asFormUrlEncoded match {
                 case None => {}
                 case Some(formData) => {
@@ -80,7 +80,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
                         tagData.foreach { tags =>
                           tags.split(",").foreach { str:String =>
                             val tag = Tags.create(str.trim)
-                            PostToTagDAO.link(newItem.id, tag.id)
+                            Tags.link(newItem.id, tag.id)
                           }
                         }
                     }
@@ -93,7 +93,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
           }
           res
         }else
-          Unauthorized("You don't have the right privileges for "+PostTypeMap(item.postType))
+          Unauthorized("You don't have the right privileges for "+ContentTypeMap(item.postType))
       }
       case _ => { BadRequest("Invalid Post Data")}
     }
@@ -106,17 +106,17 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
 
 
   def submitBlogUpdate = StackAction(AuthorityKey -> Contributor) { implicit request =>
-    val item = Post.blogForm.bindFromRequest().get
+    val item = ContentPost.blogForm.bindFromRequest().get
     val content = item.content
    //
     database.withSession { implicit s =>
-      val post = Posts.getById(item.id).head
+      val post = Content.getById(item.id).head
       val filename = post.content
 
       //val tags = js \ "tags"
-      val newItem = new Post(item.id, item.title, item.postType, post.dateCreated, item.author, filename, Post.extraDataToJson(item.extraData),item.isDraft)
-      repo.updateFile(filename,content, PostMeta.makeCommitMsg("Updated",newItem))
-      Posts.update(newItem)
+      val newItem = new ContentPost(item.id, item.title, item.postType, post.dateCreated, item.author, filename, ContentPost.extraDataToJson(item.extraData),item.isDraft)
+      repo.updateFile(filename,content, ContentMeta.makeCommitMsg("Updated",newItem))
+      Content.update(newItem)
       request.body.asFormUrlEncoded match {
         case None => {Logger.info("Couldn;t get data from request")}
         case Some(formData) => {
@@ -125,7 +125,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
               tagData.foreach { tags:String =>
                 tags.split(",").foreach { str:String =>
                   val tag = Tags.create(str.trim)
-                  PostToTagDAO.link(newItem.id, tag.id)
+                  Tags.link(newItem.id, tag.id)
                 }
               }
             }

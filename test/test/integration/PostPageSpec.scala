@@ -1,7 +1,7 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
-import models.{PostTypeMap, Post}
+import models.{ContentTypeMap, ContentPost}
 import models.UserRole.TrustedContributor
 import org.scalatest.{Matchers, BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play.{FirefoxFactory, OneBrowserPerSuite, OneServerPerSuite, PlaySpec}
@@ -30,7 +30,7 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     }
   }
 
-  var insertedPost: Post = null
+  var insertedPost: ContentPost = null
   lazy val postPage = new PostPage(port)
 
 
@@ -61,13 +61,13 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     }
 
     "Display the biography image when viewing biographies" in {
-      val bio = PostHelper.createPost("Da Oostin Boyeez","MC Donalds","leek",PostTypeMap("Biography"),"""{"thumb":"assets/images/crew/otis_col.png"}""")
+      val bio = PostHelper.createPost("Da Oostin Boyeez","MC Donalds","leek",ContentTypeMap("Biography"),"""{"thumb":"assets/images/crew/otis_col.png"}""")
       go to post(bio.id)
       eventually{bioImagePresent mustEqual true}
     }
 
     "Display post tags" in {
-      val testPost = PostHelper.createPostWithTags("Da Oostin Boyeez","Hello",PostTypeMap("News"),"Da Oostin Boyeez,Jon Kevson")
+      val testPost = PostHelper.createPostWithTags("Da Oostin Boyeez","Hello",ContentTypeMap("News"),"Da Oostin Boyeez,Jon Kevson")
       go to post(testPost.id)
       eventually{tagList must contain allOf("Jon Kevson","Da Oostin Boyeez")}
     }

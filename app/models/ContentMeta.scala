@@ -7,14 +7,14 @@ import play.api.libs.json.{JsError, JsSuccess, Json, Writes}
 /**
  * Created by andrew on 07/03/15.
  */
-case class PostMeta(commitId: String,commitDate :String,extraData :String){
+case class ContentMeta(commitId: String,commitDate :String,extraData :String){
   def this(commitId: String,commitDate :String) = this(commitId,commitDate,"")
 
 }
 
-object PostMeta {
+object ContentMeta {
   //implicit val tagFormat = Json.format[ContentTag]
-  implicit val postFormat = Json.format[Post]
+  implicit val postFormat = Json.format[ContentPost]
 
 
   def getMeta(commitMsg:String) = {
@@ -24,13 +24,13 @@ object PostMeta {
 
   def toPost(meta:String) = {
     val json = Json.parse(getMeta(meta))
-    Json.fromJson[Post](json) match {
-      case p: JsSuccess[Post] => p.get
+    Json.fromJson[ContentPost](json) match {
+      case p: JsSuccess[ContentPost] => p.get
       case err: JsError => throw new InvalidMetaJsonException("Error Deserialising Json :" +JsError.toFlatJson(err).toString())
     }
   }
 
-  def makeCommitMsg(commitMsg: String, post: Post) = {
+  def makeCommitMsg(commitMsg: String, post: ContentPost) = {
     val str = new StringBuilder
     str.append(commitMsg)
     str.append("\n\n")
@@ -38,7 +38,7 @@ object PostMeta {
     str.toString()
   }
 
-  def toMeta(post: Post) = {
+  def toMeta(post: ContentPost) = {
     val metaStr = new StringBuilder()
     metaStr.append("++++META++++")
     metaStr.append("\n")
@@ -48,6 +48,6 @@ object PostMeta {
     metaStr.toString()
   }
 
-  def fromPost(post: Post) = new PostMeta("","",toMeta(post))
+  def fromPost(post: ContentPost) = new ContentMeta("","",toMeta(post))
 
 }

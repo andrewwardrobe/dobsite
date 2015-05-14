@@ -2,7 +2,7 @@ package models
 
 import java.util.{UUID, Date}
 import com.daoostinboyeez.git.GitRepo
-import data.{Posts, ContentPostSchema, ContentPostFunctions, PostToTagDAO}
+import data.{Content, ContentPostSchema, ContentPostFunctions}
 import org.jsoup._
 import org.jsoup.safety.Whitelist
 import play.api.{Play, Logger}
@@ -17,7 +17,7 @@ import scala.collection.mutable.ListBuffer
 /**
  * Created by andrew on 11/10/14.
  */
-case class Post(id: String, title: String, postType: Int, dateCreated: Date, author: String, content: String, extraData: String,isDraft: Boolean) {
+case class ContentPost(id: String, title: String, postType: Int, dateCreated: Date, author: String, content: String, extraData: String,isDraft: Boolean) {
 
   val repo = GitRepo.apply()
   def json: JsValue = Json.obj(
@@ -62,14 +62,14 @@ case class Post(id: String, title: String, postType: Int, dateCreated: Date, aut
 
   def tags(implicit s: Session) = {
     val lb = new ListBuffer[String]
-    Posts.getTags(id).foreach { t =>
+    Content.getTags(id).foreach { t =>
       lb += t.title
     }
     lb.toList
   }
 }
 
-object Post {
+object ContentPost {
 
   def extraDataToJson(extraData:String)  = {
     val str : StringBuilder = new StringBuilder
@@ -85,7 +85,7 @@ object Post {
     str.toString().replace(",}","}")
   }
 
-  val blogForm: Form[Post] = Form {
+  val blogForm: Form[ContentPost] = Form {
     mapping (
       "id" -> text,
       "title" -> text,
@@ -95,14 +95,14 @@ object Post {
       "content" -> text,
       "extraData" -> text,
       "isDraft" -> boolean
-    )(Post.apply)(Post.unapply _)
+    )(ContentPost.apply)(ContentPost.unapply _)
   }
 }
 
 
 
 import play.api.Play.current
-object PostTypeMap {
+object ContentTypeMap {
   private lazy val typeMap = {
     val tmp = scala.collection.mutable.Map[Int, String]()
     Play.configuration.getString("posttypes.map").getOrElse("").split(",").map(s => s.trim).toList.foreach{ str =>

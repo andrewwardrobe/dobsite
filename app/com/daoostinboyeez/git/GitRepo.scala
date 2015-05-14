@@ -4,7 +4,7 @@ import java.io.{File, FileWriter}
 import java.util.Date
 
 import com.sun.xml.internal.bind.v2.TODO
-import models.PostMeta
+import models.{ContentMeta}
 import org.apache.commons.io.FileUtils
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.internal.storage.file.FileRepository
@@ -40,18 +40,18 @@ class GitRepo {
 
   def findWithDate(path:String) = {
     val commits = git.log().addPath(path).call()
-    val commitList: ListBuffer[PostMeta] = new ListBuffer[PostMeta]()
+    val commitList: ListBuffer[ContentMeta] = new ListBuffer[ContentMeta]()
     commits.foreach{ commit =>
-      commitList +=new PostMeta(commit.getName , commit.getAuthorIdent.getWhen().toString)
+      commitList +=new ContentMeta(commit.getName , commit.getAuthorIdent.getWhen().toString)
     }
     commitList.toList
   }
 
   def findWithDate = {
     val commits = git.log().call()
-    val commitList: ListBuffer[PostMeta] = new ListBuffer[PostMeta]()
+    val commitList: ListBuffer[ContentMeta] = new ListBuffer[ContentMeta]()
     commits.foreach{ commit =>
-      commitList +=new PostMeta(commit.getName , commit.getAuthorIdent.getWhen().toString)
+      commitList +=new ContentMeta(commit.getName , commit.getAuthorIdent.getWhen().toString)
     }
     commitList.toList
   }

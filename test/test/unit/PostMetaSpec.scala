@@ -4,7 +4,7 @@ import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.GitRepo
 import com.daoostinboyeez.site.exceptions.InvalidMetaJsonException
-import models.{Post, PostMeta}
+import models.{ContentMeta, ContentPost}
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.libs.json.Json
@@ -37,7 +37,7 @@ class PostMetaSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
         |----META----
       """.stripMargin
 
-      var meta = PostMeta.getMeta(commitMgs)
+      var meta = ContentMeta.getMeta(commitMgs)
 
       meta must equal("""{ "field":"value" }""")
 
@@ -45,10 +45,10 @@ class PostMetaSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
 
     "Be able to serialize json string into a post" in  {
-      val post = new Post(UUID.randomUUID().toString(), "title", 2, new Date(), "Andrew", "12345678", """{ "thumb":"assets/leek.jpg"}""",false)
+      val post = new ContentPost(UUID.randomUUID().toString(), "title", 2, new Date(), "Andrew", "12345678", """{ "thumb":"assets/leek.jpg"}""",false)
 
-      val metaString = PostMeta.toMeta(post)
-      val createdPost = PostMeta.toPost(metaString)
+      val metaString = ContentMeta.toMeta(post)
+      val createdPost = ContentMeta.toPost(metaString)
 
       createdPost mustEqual (post)
 
@@ -63,17 +63,17 @@ class PostMetaSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
                          |----META----
                        """.stripMargin
       intercept[InvalidMetaJsonException] {
-        val createdPost = PostMeta.toPost(metaString)
+        val createdPost = ContentMeta.toPost(metaString)
       }
     }
   }
 
   "Be able to make a commit message with meta data" in {
-    val post = new Post(UUID.randomUUID().toString(), "title", 2, new Date(), "Andrew", "12345678", """{ "thumb":"assets/leek.jpg"}""",false)
+    val post = new ContentPost(UUID.randomUUID().toString(), "title", 2, new Date(), "Andrew", "12345678", """{ "thumb":"assets/leek.jpg"}""",false)
     val commitMsg = "My Commit Msg"
-    val expected = commitMsg + "\n\n" + PostMeta.toMeta(post)
+    val expected = commitMsg + "\n\n" + ContentMeta.toMeta(post)
 
-    val actual = PostMeta.makeCommitMsg(commitMsg,post)
+    val actual = ContentMeta.makeCommitMsg(commitMsg,post)
 
     actual mustEqual expected
 

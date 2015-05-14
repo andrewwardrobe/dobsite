@@ -4,8 +4,8 @@ import java.text.{SimpleDateFormat, DateFormat}
 import java.util.Date
 
 import com.daoostinboyeez.git.GitRepo
-import data.Posts
-import models.{PostTypeMap, Biography, Discography, Post}
+import data.Content
+import models.{ContentTypeMap, Biography, Discography, ContentPost}
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB
@@ -16,13 +16,13 @@ import test.helpers.PostHelper
 
 import scala.slick.jdbc.JdbcBackend._
 
-class PostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
+class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
 
 
   def database = Database.forDataSource(DB.getDataSource())
-  "Post" must {
+  "Content Post" must {
 
 
 
@@ -31,7 +31,7 @@ class PostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
         val newsItem = PostHelper.createPost("DOB Test News Post","MC Donalds","News Content for db spec",1)
         val nonNewsItem =  PostHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music for dbspec",2)
-        val result = Posts.get
+        val result = Content.get
         result.head mustEqual newsItem
       }
     }
@@ -43,7 +43,7 @@ class PostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
         PostHelper.createPost("Post 3","MC Donalds","Post 3",1,"")
         PostHelper.createPost("Post 4","MC Donalds","Post 4",1,"")
         val mostRecent = PostHelper.createPost("Post 6","MC Donalds","Post 5",1,"")
-        val post = Posts.getByDate.head
+        val post = Content.getByDate.head
         post.dateCreated mustEqual mostRecent.dateCreated
       }
     }
@@ -54,7 +54,7 @@ class PostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
         PostHelper.createPost("Post 32","MC Donalds","Post 3",1,"")
         val mostRecentType1 = PostHelper.createPost("Post 62","MC Donalds","Post 5",1,"")
         PostHelper.createPost("Post 43","MC Donalds","Post 4",2,"")
-        val post = Posts.getByDate(1).head
+        val post = Content.getByDate(1).head
         post mustEqual mostRecentType1
       }
     }
@@ -71,7 +71,7 @@ class PostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
         val df = new SimpleDateFormat("yyyyMMddHHmmss")
         val targetDate = df.parse("20170802154423")
 
-        val post = Posts.getByDate(targetDate).head
+        val post = Content.getByDate(targetDate).head
 
         post mustEqual target
       }
@@ -90,7 +90,7 @@ class PostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
         val df = new SimpleDateFormat("yyyyMMddHHmmss")
         val targetDate = df.parse("20170802154423")
 
-        val post = Posts.getByDate(2,targetDate).head
+        val post = Content.getByDate(2,targetDate).head
 
         post mustEqual target
       }
@@ -105,7 +105,7 @@ class PostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
         PostHelper.createPost("Post 218","MC Donalds","Jimbo Jambo 4",1,"")
         PostHelper.createPost("Post 219","MC Donalds","Jimbo Jambo 5",2,"")
 
-        val posts = Posts.getByDate(1,3)
+        val posts = Content.getByDate(1,3)
 
         posts must have length(3)
       }
@@ -123,7 +123,7 @@ class PostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
         val df = new SimpleDateFormat("yyyyMMddHHmmss")
         val targetDate = df.parse("20170802154423")
-        val posts = Posts.getByDate(1,targetDate,3)
+        val posts = Content.getByDate(1,targetDate,3)
 
         posts must have length(3)
         posts.head.dateCreated mustEqual latest.dateCreated
@@ -137,7 +137,7 @@ class PostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
         PostHelper.createPost("Post 2166", "MC Donalds", "Leeek 2", 1, "")
         PostHelper.createPost("Post 2133", "MC Donalds", "Leeek 3", 1, "")
 
-        val posts = Posts.getByDate(1, new Date(), 10)
+        val posts = Content.getByDate(1, new Date(), 10)
         posts must not contain draft
       }
     }
@@ -149,14 +149,14 @@ class PostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
         PostHelper.createPost("Post 2166", "MC Donalds", "Leeek 2", 1, "")
         PostHelper.createPost("Post 2133", "MC Donalds", "Leeek 3", 1, "")
 
-        val posts = Posts.getByDateWithDrafts(1, new Date(), 10)
+        val posts = Content.getByDateWithDrafts(1, new Date(), 10)
         posts must contain (draft)
       }
     }
 
     "Be able to retrieve tags" in {
       database.withSession { implicit session =>
-        val post = PostHelper.createPostWithTags("Post with tags","Some Content",PostTypeMap("News"),"Leek,Freek,Gimp")
+        val post = PostHelper.createPostWithTags("Post with tags","Some Content",ContentTypeMap("News"),"Leek,Freek,Gimp")
         post.tags must contain allOf ("Leek","Gimp","Freek")
 
       }

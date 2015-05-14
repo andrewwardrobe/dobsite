@@ -3,7 +3,7 @@ package test.unit
 import java.text.{SimpleDateFormat, DateFormat}
 
 import com.daoostinboyeez.git.GitRepo
-import models.{PostTypeMap, Biography, Discography, Post}
+import models.{ContentTypeMap, Biography, Discography, ContentPost}
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB
@@ -25,12 +25,12 @@ class PostTypeMapSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
 
   "Post type Map" must {
     "Be able to map a post type id to its name" in {
-      val postTypeName = PostTypeMap(1)
+      val postTypeName = ContentTypeMap(1)
       postTypeName mustEqual("News")
     }
 
     "Be able to map a post type name to its id" in {
-      val postTypeId = PostTypeMap("News")
+      val postTypeId = ContentTypeMap("News")
       postTypeId mustEqual(1)
     }
   }

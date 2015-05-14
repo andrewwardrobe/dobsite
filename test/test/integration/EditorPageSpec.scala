@@ -1,7 +1,7 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
-import models.{PostTypeMap, Post}
+import models.{ContentTypeMap, ContentPost}
 import models.UserRole.TrustedContributor
 import org.openqa.selenium.By
 import org.openqa.selenium.support.ui.ExpectedConditions
@@ -24,10 +24,10 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   def database = Database.forDataSource(DB.getDataSource())
 
   lazy val repo = GitRepo.apply()
-  var post1: Post = null
-  var post2: Post = null
-  var post3: Post = null
-  var post4: Post = null
+  var post1: ContentPost = null
+  var post2: ContentPost = null
+  var post3: ContentPost = null
+  var post4: ContentPost = null
 
   def extraSetup = {
     database.withSession { implicit session =>

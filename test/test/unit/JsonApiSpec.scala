@@ -1,7 +1,7 @@
 package test.unit
 
 import controllers.routes
-import models.{Post, PostTypeMap}
+import models.{ContentPost, ContentTypeMap}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.test.{FakeApplication, FakeRequest}
@@ -17,14 +17,14 @@ class JsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter{
 
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
-  var post: Post = null
+  var post: ContentPost = null
 
    before {
-    post = PostHelper.createPost("Leek","andrew","jimmy",PostTypeMap.get("News"))
-    PostHelper.createPost("Bio 1","andrew","Bio 1",PostTypeMap.get("Biography"))
-    PostHelper.createPost("Bio 2","andrew","Bio 1",PostTypeMap.get("Biography"))
-    PostHelper.createPost("Bio 3","andrew","Bio 1",PostTypeMap.get("Biography"))
-    PostHelper.createPost("Music 1","andrew","Bio 1",PostTypeMap.get("Music"))
+    post = PostHelper.createPost("Leek","andrew","jimmy",ContentTypeMap.get("News"))
+    PostHelper.createPost("Bio 1","andrew","Bio 1",ContentTypeMap.get("Biography"))
+    PostHelper.createPost("Bio 2","andrew","Bio 1",ContentTypeMap.get("Biography"))
+    PostHelper.createPost("Bio 3","andrew","Bio 1",ContentTypeMap.get("Biography"))
+    PostHelper.createPost("Music 1","andrew","Bio 1",ContentTypeMap.get("Music"))
   }
 
   after {

@@ -2,7 +2,7 @@ package data
 
 import java.util.Date
 
-import models.Post
+import models.ContentPost
 import play.api.libs.json.Json
 
 import scala.collection.mutable.ListBuffer
@@ -22,7 +22,7 @@ trait ContentPostFunctions {this: ContentPostSchema =>
   def getByType(typ: Int)(implicit s: Session) = { postTable.filter(_.postType === typ).list }
 
   def getTags(id:String)(implicit s:Session) = {
-    PostToTagDAO.postTags.filter(_.postId === id).flatMap(_.tagsFK).list
+    Tags.contentTags.filter(_.postId === id).flatMap(_.tagsFK).list
   }
 
   def getTagsAsJson(id:String)(implicit s:Session) = {
@@ -61,7 +61,7 @@ trait ContentPostFunctions {this: ContentPostSchema =>
 
   def getNews(implicit s: Session) = { postTable.filter(_.postType === 1).list }
 
-  def insert(newsItem: Post)(implicit s: Session) = {
+  def insert(newsItem: ContentPost)(implicit s: Session) = {
     postTable.insert(newsItem)
     newsItem.id
   }
@@ -138,5 +138,5 @@ trait ContentPostFunctions {this: ContentPostSchema =>
   }
 
   def clearAll(implicit  s: Session) = { postTable.delete }
-  def update(post :Post)(implicit s: Session) = { postTable.insertOrUpdate(post) }
+  def update(post :ContentPost)(implicit s: Session) = { postTable.insertOrUpdate(post) }
 }

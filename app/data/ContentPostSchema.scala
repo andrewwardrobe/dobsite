@@ -2,7 +2,7 @@ package data
 
 import java.util.Date
 
-import models.Post
+import models.ContentPost
 
 
 /**
@@ -16,7 +16,7 @@ trait ContentPostSchema {
       d => new java.sql.Timestamp(d.getTime),
       d => new java.util.Date(d.getTime)
     )
-  class PostTable(tag:Tag) extends Table[Post](tag,"posts"){
+  class PostTable(tag:Tag) extends Table[ContentPost](tag,"posts"){
 
 
 
@@ -28,8 +28,8 @@ trait ContentPostSchema {
     def content = column[String]("CONTENT")
     def extraData = column[String]("EXTRA_DATA")
     def isDraft = column[Boolean]("DRAFT")
-    def tags = PostToTagDAO.postTags.filter(_.postId === id).flatMap(_.tagsFK)
+    def tags = Tags.contentTags.filter(_.postId === id).flatMap(_.tagsFK)
 
-    def * = (id,title,postType,dateCreated,author,content,extraData,isDraft) <> ((Post.apply _).tupled, Post.unapply _)
+    def * = (id,title,postType,dateCreated,author,content,extraData,isDraft) <> ((ContentPost.apply _).tupled, ContentPost.unapply _)
   }
 }

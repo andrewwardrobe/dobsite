@@ -79,11 +79,11 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
   }
 
   def news = Action {  implicit request =>
-    Ok(views.html.contentList(routes.JsonApi.getContentByDate(PostTypeMap.get("News")).url))
+    Ok(views.html.contentList(routes.JsonApi.getContentByDate(ContentTypeMap.get("News")).url))
   }
 
   def gazthree = Action {  implicit request =>
-    Ok(views.html.contentList(routes.JsonApi.getContentByDate(PostTypeMap.get("Gaz Three")).url))
+    Ok(views.html.contentList(routes.JsonApi.getContentByDate(ContentTypeMap.get("Gaz Three")).url))
   }
 
   def hansUndJorg = Action {  implicit request =>

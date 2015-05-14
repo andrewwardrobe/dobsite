@@ -3,7 +3,7 @@ package test.unit
 import com.daoostinboyeez.git.GitRepo
 import data.UserAccounts
 import models.UserRole.NormalUser
-import models.{UserAccount, Biography, Discography, Post}
+import models.{UserAccount, Biography, Discography, ContentPost}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB
 import play.api.test.FakeApplication
@@ -23,7 +23,7 @@ class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite{
     "Be able to create an account" in {
       database.withSession { implicit session =>
         UserAccountHelper.createUser("test", "test@test.com", "pa$$word", NormalUser)
-        UserAccounts.findByEmail("test@test.com") mustBe (defined)
+        UserAccounts.findByEmail("test@test.com") mustBe defined
       }
     }
   }

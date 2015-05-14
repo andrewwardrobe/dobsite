@@ -1,8 +1,8 @@
 package test.unit
 
 import com.daoostinboyeez.git.GitRepo
-import data.Posts
-import models.{Biography, Discography, Post}
+import data.Content
+import models.{Biography, Discography, ContentPost}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.Logger
 
@@ -32,7 +32,7 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite{
         GitRepo.refresh
         val newsItem = PostHelper.createPost("DOB Test News Post","MC Donalds","News Content for db spec",1)
         val nonNewsItem =  PostHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music for dbspec",2)
-        val result = Posts.get
+        val result = Content.get
         result.head mustEqual newsItem
       }
     }

@@ -38,8 +38,6 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
     //  !!!!!!!!! Todo List
     "Refactor News Post type to be Blog Post" in pending
 
-    "Separate db schema from " in pending //Weird bug in this
-
     "Change biography type to have value 3" in pending
 
     "Save button should be available lin biography when editing title" in pending
@@ -60,8 +58,6 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
     "Make a music page based on a music tag filter + user filter" in pending
         "\tMake a soundcloud player feature on editor" in pending
 
-    "Refactor post to be ContentPost or content" in pending
-        "\tRefactor PostTypeMap to be ContentTypeMap" in pending
 
     "Facility to bulk load in posts" in pending
 

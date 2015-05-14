@@ -4,7 +4,7 @@ import java.util.{Date, UUID}
 
 import com.daoostinboyeez.git.GitRepo
 import controllers.StandardAuthConfig
-import models.{PostTypeMap, Post, Biography}
+import models.{ContentTypeMap, ContentPost, Biography}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import play.api.test.{FakeRequest, FakeApplication, FakeHeaders}
@@ -24,7 +24,7 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite{
 
   object config extends StandardAuthConfig
 
-  implicit val postFormat = Json.format[Post]
+  implicit val postFormat = Json.format[ContentPost]
 
   "Auth Application" should {
 
