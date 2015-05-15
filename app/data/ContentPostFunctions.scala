@@ -21,6 +21,8 @@ trait ContentPostFunctions {this: ContentPostSchema =>
   def getByTitle(title: String)(implicit s: Session) = { postTable.filter(_.title.toLowerCase === title.toLowerCase).list }
   def getByType(typ: Int)(implicit s: Session) = { postTable.filter(_.postType === typ).list }
 
+
+  //Does this belong here? cut it be moved to a trait?
   def getTags(id:String)(implicit s:Session) = {
     Tags.contentTags.filter(_.postId === id).flatMap(_.tagsFK).list
   }
