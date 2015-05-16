@@ -3,7 +3,7 @@ package test.unit
 import com.daoostinboyeez.git.GitRepo
 import data.UserAccounts
 import models.UserRole.NormalUser
-import models.{UserAccount, Discography, ContentPost}
+import models.{UserAccount, ContentPost}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB
 import play.api.test.FakeApplication

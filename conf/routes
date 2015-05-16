@@ -46,11 +46,7 @@ POST    /admin/changepass       controllers.Admin.changePassword
 
 
 #JSon API
-GET     /json/discography           controllers.JsonApi.getDiscography
-GET     /json/discography/:id           controllers.JsonApi.getRelease(id: Int)
-GET     /json/discography/bytype/:releaseType                controllers.JsonApi.getDiscographyByReleaseType(releaseType :Int)
 
-GET     /json/tracks/byrelease/:id           controllers.JsonApi.getTracksByReleaseId(id: Int)
 GET     /json/admin/users/:id           controllers.AdminJsonApi.getUsers(id: String)
 GET     /json/admin/user/:id           controllers.AdminJsonApi.getUser(id: String)
 GET     /json/news           controllers.JsonApi.getNews()

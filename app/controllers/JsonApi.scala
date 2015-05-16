@@ -4,7 +4,7 @@ package controllers
 import java.text.SimpleDateFormat
 import java.util.Date
 
-import _root_.data.Content
+import data.Content
 import com.daoostinboyeez.git.GitRepo
 import models._
 import play.api._
@@ -26,17 +26,13 @@ import scala.util.parsing.json.{JSONObject, JSONArray}
  */
 object JsonApi extends Controller {
 
-  implicit val discoFormat =  Json.format[Discography]
-  implicit val trackFormat =  Json.format[Track]
 
   //implicit val tagFormat = Json.format[ContentTag]
   implicit val newsFormat =  Json.format[ContentPost]
   implicit val commitFormat =  Json.format[ContentMeta]
   val repo = GitRepo.apply()
 
-  def getDiscographyByReleaseType(_type: Int) = DBAction { implicit response =>
-      Ok(toJson(Discography.getByReleaseType(_type)))
-  }
+
 
   def getNews = DBAction { implicit response =>
     val newsList = blogToJson(Content.getNews)
@@ -153,17 +149,8 @@ object JsonApi extends Controller {
     Ok(toJson(contentList))
   }
 
-  def getDiscography = DBAction { implicit response =>
-    Ok(toJson(Discography.get))
-  }
 
-  def getRelease(id: Int) = DBAction { implicit response =>
-    Ok(toJson(Discography.getById(id)))
-  }
 
-  def getTracksByReleaseId(relId: Int) = DBAction {implicit response =>
-    Ok(toJson(Track.getByReleaseId(relId)))
 
-  }
 
 }

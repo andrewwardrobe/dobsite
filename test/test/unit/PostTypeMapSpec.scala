@@ -3,7 +3,7 @@ package test.unit
 import java.text.{SimpleDateFormat, DateFormat}
 
 import com.daoostinboyeez.git.GitRepo
-import models.{ContentTypeMap, Discography, ContentPost}
+import models.{ContentTypeMap,ContentPost}
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB

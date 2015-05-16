@@ -2,7 +2,7 @@ package test.unit
 
 import com.daoostinboyeez.git.GitRepo
 import data.Content
-import models.{Discography, ContentPost}
+import models.{ ContentPost}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.Logger
 
@@ -18,14 +18,7 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite{
   def database = Database.forDataSource(DB.getDataSource())
 
   "Database" must {
-    "Be able to Insert Discography Releases" in {
-      database.withSession { implicit session =>
-        val disc = Discography(1, "Da Oostin Boyeez", 0, "images/dob.jpg")
-        Discography.insert(disc)
-        val res = Discography.get
-        res.head mustEqual disc
-      }
-    }
+
 
     "Be able to insert and retrieve posts items" in {
       database.withSession { implicit session =>
