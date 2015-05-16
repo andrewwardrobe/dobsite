@@ -4,7 +4,7 @@ import java.util.{Date, UUID}
 
 import com.daoostinboyeez.git.GitRepo
 import controllers.StandardAuthConfig
-import models.{ContentTypeMap, ContentPost, Biography}
+import models.{ContentTypeMap, ContentPost}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import play.api.test.{FakeRequest, FakeApplication, FakeHeaders}
@@ -28,19 +28,6 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite{
 
   "Auth Application" should {
 
-    "Be able to Update a biography" in {
-
-      database.withSession { implicit session =>
-        val bio = new Biography(1, "MC Donalds", 0, "images/crew/donalds_bw.jpg", "images/crew/donalds_bw.jpg", "blah blah")
-        val id = Biography.insert(bio)
-        val updatedBio = new Biography(id, bio.name, bio.bioType, bio.imagePath, bio.thumbPath, "new bio text");
-
-        val results = route(FakeRequest(POST, controllers.routes.Authorised.updateBiography().url, FakeHeaders(), updatedBio.json)).get
-        status(results) mustBe (OK)
-        contentType(results) mustBe Some("text/plain")
-        contentAsString(results) must include (id.toString)
-      }
-    }
 
     "Allow Contributors to create news posts" in {
       setup

@@ -29,7 +29,6 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
 
 
 
-  implicit val personFormat =  Json.format[Person]
 
   def index = StackAction { implicit request =>
     val maybeUser: Option[User] = loggedIn
@@ -107,18 +106,9 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
     }
   }
 
-  def biographyDetail(id: Int) = DBAction { implicit resp =>
-    val bio = Biography.getById(id)
-    Ok(views.html.biodetails("")(bio.head))}
 
 
-  def insert = DBAction { implicit response =>
-    val person = Person.personForm.bindFromRequest().get
-    Person.insert(person)
 
-
-    Redirect(routes.Application.index)
-  }
 
 
   def javascriptRoutes = Action{

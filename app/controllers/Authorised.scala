@@ -143,12 +143,5 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
 
   }
 
-  def updateBiography= DBAction  { implicit response =>
-    val item = Biography.form.bindFromRequest().get
 
-    database.withSession {  implicit s =>
-      Biography.update(item)
-    }
-    Ok(""+item.id)
-  }
 }

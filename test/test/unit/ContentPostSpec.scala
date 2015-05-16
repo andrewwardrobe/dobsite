@@ -5,7 +5,7 @@ import java.util.Date
 
 import com.daoostinboyeez.git.GitRepo
 import data.Content
-import models.{ContentTypeMap, Biography, Discography, ContentPost}
+import models.{ContentTypeMap,ContentPost}
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB

@@ -28,7 +28,7 @@ object JsonApi extends Controller {
 
   implicit val discoFormat =  Json.format[Discography]
   implicit val trackFormat =  Json.format[Track]
-  implicit val bioFormat =  Biography.jsonFormat;
+
   //implicit val tagFormat = Json.format[ContentTag]
   implicit val newsFormat =  Json.format[ContentPost]
   implicit val commitFormat =  Json.format[ContentMeta]
@@ -166,16 +166,4 @@ object JsonApi extends Controller {
 
   }
 
-  def getBioByType(bioType: Int) = DBAction { implicit response =>
-    Ok(toJson(Biography.getByType(bioType)))
-  }
-
-
-  def getBioById(id: Int) = DBAction { implicit response =>
-    Ok(toJson(Biography.getByType(id)))
-  }
-
-  def getBiography() = DBAction { implicit response =>
-     Ok(toJson(Biography.getAll))
-  }
 }

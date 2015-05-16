@@ -2,7 +2,7 @@ package test.unit
 
 import com.daoostinboyeez.git.GitRepo
 import data.Content
-import models.{Biography, Discography, ContentPost}
+import models.{Discography, ContentPost}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.Logger
 
@@ -37,17 +37,7 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite{
       }
     }
 
-    "Be able to update a biograpy" in {
-      database.withSession{ implicit session =>
-        val bio = new Biography(1, "MC Donalds", 0, "images/crew/donalds_bw.jpg", "images/crew/donalds_bw.jpg","blah blah")
-        val id = Biography.insert(bio)
-        val updatedBio = new Biography(id,bio.name,bio.bioType,bio.imagePath,bio.thumbPath,"new bio text");
-        Biography.update(updatedBio)
-        val inserted =  Biography.getById(id).head
-        inserted mustEqual updatedBio
 
-      }
-    }
   }
 
 

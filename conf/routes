@@ -11,6 +11,7 @@ GET     /leek                       controllers.Authorised.index
 GET     /checkname/:name              controllers.UserServices.checkName(name :String)
 GET     /checkemail/:email              controllers.UserServices.checkEmail(email :String)
 
+GET     /biography                      controllers.Application.biography
 
 GET     /post/:id                         controllers.Application.post(id:String)
 GET     /test                       controllers.Application.playground
@@ -30,10 +31,9 @@ POST    /upload          controllers.Application.upload()
 
 
 GET     /discography                controllers.Application.discography
-GET     /biography                controllers.Application.biography
-POST    /biography                controllers.Authorised.updateBiography
+
 GET     /hansundjorg                controllers.Application.hansUndJorg
-GET     /biography/:id                controllers.Application.biographyDetail(id: Int)
+
 GET     /javascriptRoutes     controllers.Application.javascriptRoutes
 GET     /admin     controllers.Admin.admin
 
@@ -49,9 +49,7 @@ POST    /admin/changepass       controllers.Admin.changePassword
 GET     /json/discography           controllers.JsonApi.getDiscography
 GET     /json/discography/:id           controllers.JsonApi.getRelease(id: Int)
 GET     /json/discography/bytype/:releaseType                controllers.JsonApi.getDiscographyByReleaseType(releaseType :Int)
-GET     /json/biography           controllers.JsonApi.getBiography()
-GET     /json/biography/:id           controllers.JsonApi.getBioById(id: Int)
-GET     /json/biography/bytype/:bioType                controllers.JsonApi.getBioByType(bioType :Int)
+
 GET     /json/tracks/byrelease/:id           controllers.JsonApi.getTracksByReleaseId(id: Int)
 GET     /json/admin/users/:id           controllers.AdminJsonApi.getUsers(id: String)
 GET     /json/admin/user/:id           controllers.AdminJsonApi.getUser(id: String)
