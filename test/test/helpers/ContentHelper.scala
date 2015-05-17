@@ -16,7 +16,7 @@ import scala.slick.jdbc.JdbcBackend._
 /**
  * Created by andrew on 14/02/15.
  */
-object PostHelper {
+object ContentHelper {
   val repo = GitRepo.apply()
   def database = Database.forDataSource(DB.getDataSource())
 

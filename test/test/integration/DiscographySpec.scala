@@ -7,7 +7,7 @@ import org.scalatestplus.play._
 import play.api.db.DB
 import play.api.test.Helpers._
 import play.api.test._
-import test.helpers.PostHelper
+import test.helpers.ContentHelper
 import test.{TestGlobal, TestConfig}
 import test.integration.pages.DiscographyPage
 
@@ -71,7 +71,7 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
           | <li>Leek</li>
           |</ol>
         """.stripMargin
-      bio = PostHelper.createDiscographyItem("Mit Da Queen Mutter",content,"assets/images/mdqm.jpg","Album")
+      bio = ContentHelper.createDiscographyItem("Mit Da Queen Mutter",content,"assets/images/mdqm.jpg","Album")
 
     }
   }

@@ -105,7 +105,7 @@ import play.api.Play.current
 object ContentTypeMap {
   private lazy val typeMap = {
     val tmp = scala.collection.mutable.Map[Int, String]()
-    Play.configuration.getString("posttypes.map").getOrElse("").split(",").map(s => s.trim).toList.foreach{ str =>
+    Play.configuration.getString("contenttypes.map").getOrElse("").split(",").map(s => s.trim).toList.foreach{ str =>
       if(str != "") {
         val parts = str.split("->").map(s => s.trim).toList
         if(parts.length == 2)

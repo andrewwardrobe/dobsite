@@ -8,7 +8,7 @@ import org.scalatestplus.play._
 import play.api.db.DB
 import play.api.test.Helpers._
 import play.api.test._
-import test.helpers.{UserAccountHelper, PostHelper}
+import test.helpers.{UserAccountHelper, ContentHelper}
 import test.{TestGlobal, TestConfig}
 import test.integration.pages.{SignInPage, SignUpPage, BiographyPage}
 
@@ -32,8 +32,8 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   import biographyPage._
   def extraSetup = {
     database.withSession { implicit session =>
-      PostHelper.createBiography("MC Donalds","Sample Bio 1","assets/images/crew/donalds_bw.jpg")
-      val post = PostHelper.createBiography("MC Leek","Sample Bio 2","assests/images/crew/donalds_bw.jpg")
+      ContentHelper.createBiography("MC Donalds","Sample Bio 1","assets/images/crew/donalds_bw.jpg")
+      val post = ContentHelper.createBiography("MC Leek","Sample Bio 2","assests/images/crew/donalds_bw.jpg")
       bio = post.id
     }
   }

@@ -6,7 +6,7 @@ import org.scalatestplus.play._
 import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
-import test.helpers.PostHelper
+import test.helpers.ContentHelper
 import test.integration.pages.NewsPage
 import test.{TestConfig, TestGlobal}
 

@@ -6,7 +6,7 @@ import org.scalatestplus.play._
 import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
-import test.helpers.PostHelper
+import test.helpers.ContentHelper
 import test.integration.pages.{GazThreePage, NewsPage}
 import test.{TestConfig, TestGlobal}
 
@@ -33,8 +33,8 @@ class GazThreeSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSui
   }
   def dataSetup = {
     database.withSession { implicit session =>
-      val newsItem = PostHelper.createPost("DOB Test News Post","Gaz Three","Gaz three post Leek",ContentTypeMap.get("Gaz Three"))
-      val nonNewsItem =  PostHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",ContentTypeMap.get("Biography"))
+      val newsItem = ContentHelper.createPost("DOB Test News Post","Gaz Three","Gaz three post Leek",ContentTypeMap.get("Gaz Three"))
+      val nonNewsItem =  ContentHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",ContentTypeMap.get("Biography"))
     }
   }
 

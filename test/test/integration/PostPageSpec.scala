@@ -9,7 +9,7 @@ import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
-import test.helpers.{PostHelper, UserAccountHelper}
+import test.helpers.{ContentHelper, UserAccountHelper}
 import test.integration.pages.PostPage
 
 import scala.slick.jdbc.JdbcBackend._
@@ -26,7 +26,7 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   lazy val repo = GitRepo.apply()
   def extraSetup = {
     database.withSession { implicit session =>
-      PostHelper.createPost("Da Oostin Boyeez","MC Donalds","Hello",1)
+      ContentHelper.createPost("Da Oostin Boyeez","MC Donalds","Hello",1)
     }
   }
 
@@ -61,13 +61,13 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     }
 
     "Display the biography image when viewing biographies" in {
-      val bio = PostHelper.createPost("Da Oostin Boyeez","MC Donalds","leek",ContentTypeMap("Biography"),"""{"thumb":"assets/images/crew/otis_col.png"}""")
+      val bio = ContentHelper.createPost("Da Oostin Boyeez","MC Donalds","leek",ContentTypeMap("Biography"),"""{"thumb":"assets/images/crew/otis_col.png"}""")
       go to post(bio.id)
       eventually{bioImagePresent mustEqual true}
     }
 
     "Display post tags" in {
-      val testPost = PostHelper.createPostWithTags("Da Oostin Boyeez","Hello",ContentTypeMap("News"),"Da Oostin Boyeez,Jon Kevson")
+      val testPost = ContentHelper.createPostWithTags("Da Oostin Boyeez","Hello",ContentTypeMap("News"),"Da Oostin Boyeez,Jon Kevson")
       go to post(testPost.id)
       eventually{tagList must contain allOf("Jon Kevson","Da Oostin Boyeez")}
     }

@@ -9,7 +9,7 @@ import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
-import test.helpers.{UserAccountHelper, PostHelper}
+import test.helpers.{UserAccountHelper, ContentHelper}
 
 import scala.slick.jdbc.JdbcBackend._
 

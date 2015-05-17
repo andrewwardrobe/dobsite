@@ -6,7 +6,7 @@ import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.test.{FakeApplication, FakeRequest}
 import play.api.test.Helpers._
-import test.helpers.PostHelper
+import test.helpers.ContentHelper
 import test.{TestGlobal, TestConfig}
 
 /**
@@ -20,15 +20,15 @@ class JsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter{
   var post: ContentPost = null
 
    before {
-    post = PostHelper.createPost("Leek","andrew","jimmy",ContentTypeMap.get("News"))
-    PostHelper.createPost("Bio 1","andrew","Bio 1",ContentTypeMap.get("Biography"))
-    PostHelper.createPost("Bio 2","andrew","Bio 1",ContentTypeMap.get("Biography"))
-    PostHelper.createPost("Bio 3","andrew","Bio 1",ContentTypeMap.get("Biography"))
-    PostHelper.createPost("Music 1","andrew","Bio 1",ContentTypeMap.get("Music"))
+    post = ContentHelper.createPost("Leek","andrew","jimmy",ContentTypeMap.get("News"))
+    ContentHelper.createPost("Bio 1","andrew","Bio 1",ContentTypeMap.get("Biography"))
+    ContentHelper.createPost("Bio 2","andrew","Bio 1",ContentTypeMap.get("Biography"))
+    ContentHelper.createPost("Bio 3","andrew","Bio 1",ContentTypeMap.get("Biography"))
+    ContentHelper.createPost("Music 1","andrew","Bio 1",ContentTypeMap.get("Music"))
   }
 
   after {
-    PostHelper.clearAll
+    ContentHelper.clearAll
   }
 
   "Json API" should {

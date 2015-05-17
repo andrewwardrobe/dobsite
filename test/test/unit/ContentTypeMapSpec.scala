@@ -10,20 +10,20 @@ import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
-import test.helpers.PostHelper
+import test.helpers.ContentHelper
 
 import scala.slick.jdbc.JdbcBackend._
 
-class PostTypeMapSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
+class ContentTypeMapSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo
     ++ withPostTypeMapConfig, withGlobal = Some(TestGlobal))
 
   def withPostTypeMapConfig: Map[String,String] = {
-    Map("posttypes.map"->"1 -> News,2 -> Music,3 -> Gaz Three,4 -> Biography" )
+    Map("contenttypes.map"->"1 -> News,2 -> Music,3 -> Gaz Three,4 -> Biography" )
   }
 
-  "Post type Map" must {
+  "Content type Map" must {
     "Be able to map a post type id to its name" in {
       val postTypeName = ContentTypeMap(1)
       postTypeName mustEqual("News")

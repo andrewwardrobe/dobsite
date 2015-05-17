@@ -11,17 +11,17 @@ import play.api.libs.json.Json
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
-import test.helpers.PostHelper
+import test.helpers.ContentHelper
 
 /**
  * Created by andrew on 21/02/15.
  */
-class PostMetaSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
+class ContentMetaSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
 
   
-  "Post Meta Spec" must {
+  "Content Meta Spec" must {
 
     "Be able to convert a post to a meta data string " +
       "containing all fields but the content and filename" in {

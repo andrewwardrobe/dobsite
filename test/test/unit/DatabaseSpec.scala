@@ -8,7 +8,7 @@ import play.api.Logger
 
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
-import test.helpers.PostHelper
+import test.helpers.ContentHelper
 import play.api.db.DB
 import scala.slick.jdbc.JdbcBackend._
 import test._
@@ -23,8 +23,8 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite{
     "Be able to insert and retrieve posts items" in {
       database.withSession { implicit session =>
         GitRepo.refresh
-        val newsItem = PostHelper.createPost("DOB Test News Post","MC Donalds","News Content for db spec",1)
-        val nonNewsItem =  PostHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music for dbspec",2)
+        val newsItem = ContentHelper.createPost("DOB Test News Post","MC Donalds","News Content for db spec",1)
+        val nonNewsItem =  ContentHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music for dbspec",2)
         val result = Content.get
         result.head mustEqual newsItem
       }
