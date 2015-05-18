@@ -7,7 +7,7 @@ GET     /                           controllers.Application.index
 GET     /signout                     controllers.UserServices.signout
 GET     /signup                     controllers.UserServices.signup
 GET     /signedout                     controllers.UserServices.signedout
-GET     /leek                       controllers.Authorised.index
+GET     /profile                       controllers.Authorised.profile
 GET     /checkname/:name              controllers.UserServices.checkName(name :String)
 GET     /checkemail/:email              controllers.UserServices.checkEmail(email :String)
 

@@ -38,6 +38,11 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     Ok(views.html.index(Some(user)))
   }
 
+  def profile = StackAction(AuthorityKey -> InActiveUser) { implicit request =>
+    val user = loggedIn
+    Ok(views.html.profile("",user))
+  }
+
   def getEditables = StackAction(AuthorityKey -> InActiveUser) { implicit request =>
     val user = loggedIn
     val json = Json.obj("pages" -> Json.toJson(user.role.roles))

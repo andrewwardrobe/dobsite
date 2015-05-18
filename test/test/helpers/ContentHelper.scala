@@ -75,7 +75,7 @@ object ContentHelper {
 
   def createDiscographyItem(name:String, text :String, thumb :String, albumType :String) = {
     val filename = repo.createFile(text)
-    val post = new ContentPost(UUID.randomUUID().toString(),name, ContentTypeMap("Discography"), new Date(), "", filename, ContentPost.extraDataToJson(s"thumb=$thumb,discType=$albumType"), false)
+    val post = new ContentPost(UUID.randomUUID().toString(),name, ContentTypeMap("Discography"), new Date(), "", filename, ContentPost.extraDataToJson(s"thumb=$thumb\ndiscType=$albumType"), false)
     val p = database.withSession { implicit s :Session =>
       Content.insert(post)
     }

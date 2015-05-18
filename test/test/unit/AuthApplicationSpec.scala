@@ -57,6 +57,11 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite{
       status(result) mustBe OK
     }
 
+    "Provide a route to the user profile" in {
+      val result = route(FakeRequest(GET, "/profile",FakeHeaders(),"").withLoggedIn(config)("TrustedContributor")).get
+      status(result) mustBe OK
+    }
+
     def setup = {
       val repo = GitRepo.apply()
       repo.refresh

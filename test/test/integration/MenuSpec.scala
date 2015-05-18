@@ -8,7 +8,7 @@ import play.api.db.DB
 import play.api.test.Helpers._
 import play.api.test._
 import test.helpers.UserAccountHelper
-import test.integration.pages.{EditorPage, MenuBar, SignInPage, DiscographyPage}
+import test.integration.pages.{EditorPage, MenuBar, SignInPage}
 import test.{TestConfig, TestGlobal}
 
 import scala.slick.jdbc.JdbcBackend.Database
@@ -22,6 +22,8 @@ class MenuSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
   val signInPage = new SignInPage(port)
   val menuBar = new MenuBar(port)
   val editorPage = new EditorPage(port)
+
+
 
   before{
 
@@ -50,6 +52,12 @@ class MenuSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
       clickEditLink("Biography")
       editorPage.postType mustEqual("Biography")
 
+    }
+
+    "Provide a link to the user profile page" in {
+      signin("Administrator","Administrator")
+      clickOnUserMenu
+      profileLink must be('displayed)
     }
   }
 
