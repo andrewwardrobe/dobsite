@@ -13,4 +13,8 @@ class ProfilePage(val port: Int)(implicit driver:WebDriver) extends Page with We
     val userName = cssSelector("#userName").findElement.get
     userName.text
   }
+
+  def about = {
+    cssSelector("#about").findElement.get.text
+  }
 }

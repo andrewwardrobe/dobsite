@@ -4,7 +4,7 @@ import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.{GitRepo}
 import controllers.Application._
-import data.{Tags, Content}
+import data.{Profiles, Tags, Content}
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
 import models._
@@ -39,8 +39,11 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   }
 
   def profile = StackAction(AuthorityKey -> InActiveUser) { implicit request =>
-    val user = loggedIn
-    Ok(views.html.profile("",user))
+    database.withSession { implicit session =>
+      val user = loggedIn
+      val profile = Profiles.getByUserId(user.id)
+      Ok(views.html.profile("", user, profile))
+    }
   }
 
   def getEditables = StackAction(AuthorityKey -> InActiveUser) { implicit request =>

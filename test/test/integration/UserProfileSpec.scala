@@ -30,7 +30,8 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
   def setup() = {
     UserAccountHelper.createUser("Administrator","Administrator","Administrator")
     UserAccountHelper.createUser("Contributor","Contributor","Contributor")
-    UserAccountHelper.createUser("TrustedContributor","TrustedContributor","TrustedContributor")
+    val trust = UserAccountHelper.createUser("TrustedContributor","TrustedContributor","TrustedContributor")
+    UserAccountHelper.createProfile(trust.id,"this user is a fine member of da oostin boyeez")
     UserAccountHelper.createUser("NormalUser","NormalUser","NormalUser")
   }
 
@@ -50,8 +51,16 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
     "Display the users name" in {
       signin("TrustedContributor","TrustedContributor")
       go to  profilePage
-      eventually{usernameText must equal ("TrustedContributor")}
+      usernameText must equal ("TrustedContributor")
     }
+
+    "Display an about section" in {
+
+      signin("TrustedContributor","TrustedContributor")
+      go to  profilePage
+      about must include ("this user is a fine member of da oostin boyeez")
+    }
+
 
 
   }
