@@ -1,9 +1,9 @@
 package controllers
 
-import data.UserAccounts
+import data.{Profiles, UserAccounts}
 import jp.t2v.lab.play2.auth.LoginLogout
 import models.UserRole.InActiveUser
-import models.{UserRoleMapping, UserAccount}
+import models.{UserProfile, UserRoleMapping, UserAccount}
 import play.api.data.Form
 import play.api.data.validation.{Invalid, Valid, ValidationError, Constraint}
 import play.api.mvc.{Security, Action, Controller}
@@ -46,7 +46,9 @@ object UserServices extends Controller with LoginLogout with StandardAuthConfig 
     import newAccount._
     val incAccount = new UserAccount(id, email, password, name, InActiveUser)
     database.withSession { implicit session =>
-      UserAccounts.create(incAccount)
+      val insertId = UserAccounts.create(incAccount)
+      val newProfile = new UserProfile(0,insertId,"","")
+      Profiles.save(newProfile)
     }
     Redirect(routes.UserServices.login)
   }

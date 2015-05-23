@@ -97,7 +97,7 @@ trait UserAccountFunctions {this: UserAccountSchema =>
     import userAccount._
     val encPass = BCrypt.hashpw(password,BCrypt.gensalt())
     val insertAcc = new UserAccount(id,email,encPass,name,UserRole.valueOf(userRole))
-    accounts.insert(insertAcc)
+    accounts returning accounts.map(_.id) += insertAcc
   }
 
   def getUserName(email: String)(implicit s: Session) = {

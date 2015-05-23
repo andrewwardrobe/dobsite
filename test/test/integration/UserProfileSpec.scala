@@ -58,16 +58,27 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
       signin("TrustedContributor","TrustedContributor")
       go to  profilePage
-      about must include ("this user is a fine member of da oostin boyeez")
+      aboutText must include ("this user is a fine member of da oostin boyeez")
     }
 
     "Display a user avatar" in {
       signin("TrustedContributor","TrustedContributor")
       go to profilePage
-      info(pageSource)
       avatarDisplayed mustBe true
     }
 
+    "Allow the user to edit the about" in {
+      signin("TrustedContributor","TrustedContributor")
+      go to profilePage
+      toogleEditMode
+      aboutEditable mustBe true
+    }
+
+    "Be able to update a profile" in {
+      signin("TrustedContributor","TrustedContributor")
+      go to profilePage
+
+    }
 
 
   }

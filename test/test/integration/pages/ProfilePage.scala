@@ -2,6 +2,7 @@ package test.integration.pages
 
 import org.openqa.selenium.{WebElement, WebDriver}
 import org.scalatest.selenium.{Page, WebBrowser}
+import play.api.Logger
 
 /**
  * Created by andrew on 17/12/14.
@@ -14,8 +15,25 @@ class ProfilePage(val port: Int)(implicit driver:WebDriver) extends Page with We
     userName.text
   }
 
-  def about = {
+  def toogleEditMode =  click on cssSelector("#editBtn")
+
+  def aboutText = {
     cssSelector("#about").findElement.get.text
+  }
+
+  def aboutEditable = {
+    cssSelector("#about").findElement match {
+      case Some(element) => {
+        element.attribute("contenteditable").getOrElse("false") match {
+          case "true" => true
+          case _ => false
+        }
+      }
+      case _ => {
+        false
+      }
+
+    }
   }
 
   def avatarDisplayed ={
