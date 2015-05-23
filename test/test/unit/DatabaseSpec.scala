@@ -32,7 +32,7 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite{
     "Be able to save and retrieve user profile" in {
       database.withSession{ implicit session =>
         val user = UserAccountHelper.createUser("Contributor","Contributor","Contributor")
-        val profile = UserAccountHelper.createProfile(user.id,"some text")
+        val profile = UserAccountHelper.createProfile(user.id,"some text","assests/images/crew/donalds_bw.jpg")
         val retrievedProfile  = Profiles.get(profile.id)
         retrievedProfile mustEqual retrievedProfile
       }
@@ -42,7 +42,7 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite{
     "Be able to save and retrieve user profile as an option" in {
       database.withSession{ implicit session =>
         val user = UserAccountHelper.createUser("Contributor","Contributor","Contributor")
-        val profile = UserAccountHelper.createProfile(user.id,"some text")
+        val profile = UserAccountHelper.createProfile(user.id,"some text","assests/images/crew/donalds_bw.jpg")
         val retrievedProfile  = Profiles.getAsOption(profile.id)
         retrievedProfile must not be None
       }

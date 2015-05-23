@@ -29,11 +29,11 @@ object UserAccountHelper {
     }
   }
 
-  def createProfile(userId:Int, about:String) = {
+  def createProfile(userId:Int, about:String,avatar:String) = {
     database.withSession { implicit session =>
-      val profile = new UserProfile(0, userId, about)
+      val profile = new UserProfile(0, userId, about,avatar)
       val id = Profiles.save(profile)
-      new UserProfile(id, profile.userId, profile.about)
+      new UserProfile(id, profile.userId, profile.about,profile.avatar)
     }
   }
 }

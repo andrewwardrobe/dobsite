@@ -31,7 +31,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
     UserAccountHelper.createUser("Administrator","Administrator","Administrator")
     UserAccountHelper.createUser("Contributor","Contributor","Contributor")
     val trust = UserAccountHelper.createUser("TrustedContributor","TrustedContributor","TrustedContributor")
-    UserAccountHelper.createProfile(trust.id,"this user is a fine member of da oostin boyeez")
+    UserAccountHelper.createProfile(trust.id,"this user is a fine member of da oostin boyeez","assets/images/crew/donalds_bw.jpg")
     UserAccountHelper.createUser("NormalUser","NormalUser","NormalUser")
   }
 
@@ -59,6 +59,13 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       signin("TrustedContributor","TrustedContributor")
       go to  profilePage
       about must include ("this user is a fine member of da oostin boyeez")
+    }
+
+    "Display a user avatar" in {
+      signin("TrustedContributor","TrustedContributor")
+      go to profilePage
+      info(pageSource)
+      avatarDisplayed mustBe true
     }
 
 

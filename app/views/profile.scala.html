@@ -1,7 +1,5 @@
 @(message: String,user: UserAccount, profile:Option[UserProfile])(implicit session : Session)
 @scripts = {
-<script type="text/javascript" src='@routes.Application.javascriptRoutes()'></script>
-<script src='@routes.Assets.at("javascripts/bio.js")'></script>
 }
 
 @content = {
@@ -9,6 +7,10 @@
 <div class="row">
     <div class="col-md-10 col-md-offset-1 dob-main centered">
         <div>
+            @profile match {
+                case None => {<img src="" id="avatar" class="pull-left" />}
+                case Some(userProfile) => {<img src="@userProfile.avatar" id="avatar" class="pull-left" />}
+            }
             <h1 id="userName">@user.name</h1>
             About:
             <div id="about">

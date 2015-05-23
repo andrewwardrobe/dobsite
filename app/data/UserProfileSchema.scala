@@ -13,7 +13,8 @@ trait UserProfileSchema {
     def id = column[Int]("ID",O.PrimaryKey,O.AutoInc)
     def userId = column[Int]("USER_ID")
     def about = column[String]("ABOUT")
-    def * = (id, userId,about) <> ((UserProfile.apply _).tupled, UserProfile.unapply)
+    def avatar = column[String]("AVATAR")
+    def * = (id, userId,about,avatar) <> ((UserProfile.apply _).tupled, UserProfile.unapply)
     //TODO: foreign keys
     def postFK = foreignKey("USER_FK", userId,UserAccounts.accounts)(account => account.id)
   }
