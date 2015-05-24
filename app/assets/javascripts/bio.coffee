@@ -8,9 +8,6 @@ imageDropped = (files, target) ->
 
       imageReader.onload = ((aFile) ->
         (e) ->
-            console.log 'leek ' + aFile
-            console.log 'filesize '+ aFile.size / 1024
-            console.log 'filetype '+ aFile.type
             $("#"+target).attr 'src', e.target.result
             $.ajax
                 url: "/upload",

@@ -36,6 +36,21 @@ class ProfilePage(val port: Int)(implicit driver:WebDriver) extends Page with We
     }
   }
 
+  def avatarEditable = {
+    cssSelector("#avatarDiv").findElement match {
+      case Some(element) => {
+        element.attribute("contenteditable").getOrElse("false") match {
+          case "true" => true
+          case _ => false
+        }
+      }
+      case _ => {
+        false
+      }
+
+    }
+  }
+
   def avatarDisplayed ={
     val avatar = cssSelector("#avatar").findElement.get.underlying
     imageDisplayed(avatar)

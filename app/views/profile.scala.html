@@ -7,11 +7,16 @@
 <div class="row">
     <div class="col-md-10 col-md-offset-1 dob-main centered">
         <div>
-            <div style="display:inline" class="pull-right"><a href="#" id="editBtn" ><span class="fa fa-pencil"></span></a></div>
-            @profile match {
-                case None => {<img src="" id="avatar" class="profileAvatar pull-left"  />}
-                case Some(userProfile) => {<img src="@userProfile.avatar" id="avatar" class="profileAvatar pull-left" />}
-            }
+            <div style="display:inline" class="pull-right">
+                <a href="#" id="editBtn" class="editBtnOff"><span class="fa fa-pencil"></span></a>
+                <a href="#" id="saveBtn" class="editBtnOff"><span class="fa fa-pencil"></span></a>
+            </div>
+            <div id="avatarDiv">
+                @profile match {
+                    case None => {<img src="" id="avatar" class="profileAvatar pull-left"  />}
+                    case Some(userProfile) => {<img src="@userProfile.avatar" id="avatar" class="profileAvatar pull-left" />}
+                }
+            </div>
             <h1 id="userName">@user.name</h1>
 
             About:
@@ -22,7 +27,17 @@
                     case Some(userProfile) => {@userProfile.about}
                 }
             </div>
-        </div>
+            <hr/>
+            My Posts:
+            <div id="myPosts">
+
+            </div>
+            <hr/>
+            My Drafts:
+            <div id="myDrafts">
+
+            </div>
+        </>
     </div>
 
 </div><!-- /.row -->

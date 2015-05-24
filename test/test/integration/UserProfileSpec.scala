@@ -74,6 +74,17 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       aboutEditable mustBe true
     }
 
+    "Allow the user to edit the avatar" in {
+      signin("TrustedContributor","TrustedContributor")
+      go to profilePage
+      toogleEditMode
+      avatarEditable mustBe true
+    }
+
+    "Save changes to the profile" in {
+      fail("Need to write this test")
+    }
+
     "Be able to update a profile" in {
       signin("TrustedContributor","TrustedContributor")
       go to profilePage
