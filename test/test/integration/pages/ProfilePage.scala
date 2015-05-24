@@ -36,6 +36,13 @@ class ProfilePage(val port: Int)(implicit driver:WebDriver) extends Page with We
     }
   }
 
+  def saveButton =  cssSelector("#saveBtn").findElement.get
+
+  def save = click on cssSelector("#saveBtn")
+
+  def saveSuccess =  cssSelector("#saveSuccess").findElement.get
+
+
   def avatarEditable = {
     cssSelector("#avatarDiv").findElement match {
       case Some(element) => {
@@ -49,6 +56,13 @@ class ProfilePage(val port: Int)(implicit driver:WebDriver) extends Page with We
       }
 
     }
+
+
+  }
+
+  def updateAbout(text:String) = {
+    val about = cssSelector("#about").findElement.get.underlying
+    about.sendKeys(text)
   }
 
   def avatarDisplayed ={

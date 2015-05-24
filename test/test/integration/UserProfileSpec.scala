@@ -82,11 +82,20 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
     }
 
     "Display a save button when changes have been made to the profile" in {
-      fail("Not implemented")
+      signin("TrustedContributor","TrustedContributor")
+      go to profilePage
+      toogleEditMode
+      updateAbout("New about text")
+      saveButton mustBe 'displayed
     }
 
     "Save changes to the profile" in {
-      fail("Need to write this test")
+      signin("TrustedContributor","TrustedContributor")
+      go to profilePage
+      toogleEditMode
+      updateAbout("New about text")
+      save
+      saveSuccess mustBe 'displayed
     }
 
     "Be able to update a profile" in {

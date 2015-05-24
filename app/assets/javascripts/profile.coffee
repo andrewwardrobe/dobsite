@@ -17,9 +17,12 @@ define ['common','jquery','utilities'],(common,$,utils) ->
             self = this
             $(selector).attr 'class','editBtnOn'
             $("#about").attr 'contenteditable', 'true'
+            $("#about").on 'keyup', ()->
+                $("#saveBtn").show()
             $("#avatarDiv").attr 'contenteditable', 'true'
             self.createImageDropzone("#avatarDiv");
             self.editMode = true
+            $('#saveBtn').on 'click', self.save
 
         editModeOff:(selector) ->
             self = this
@@ -28,6 +31,7 @@ define ['common','jquery','utilities'],(common,$,utils) ->
             $("#avatarDiv").attr 'contenteditable', 'false'
             self.removeImageDropzone("#avatarDiv");
             self.editMode = false
+            $('#saveBtn').off 'click', self.save
 
         loadImage:(files, target,onSuccess) ->
             self = this
@@ -36,7 +40,6 @@ define ['common','jquery','utilities'],(common,$,utils) ->
             f = undefined
             while f = files[i]
               imageReader = new FileReader
-
               imageReader.onload = ((aFile) ->
                 (e) ->
                     $("#"+target).attr 'src', e.target.result
@@ -86,9 +89,34 @@ define ['common','jquery','utilities'],(common,$,utils) ->
 
             profile.loadImage event.dataTransfer.files, id, (data) ->
                 $("##{id}").attr 'src', data
+                $("#saveBtn").show()
 
             event.stopPropagation()
             event.preventDefault()
+
+
+        save: ()->
+            profId = $("#profileId").val()
+            user = $("#userId").val()
+            about = $("#about").text()
+            avtr = $("#avatar").attr 'src'
+            json = {
+                data:
+                    "id":profId,
+                    "userId":user,
+                    "about":about,
+                    "avatar":avtr
+
+                success:()->
+                    $("#saveBtn").hide()
+                    $("#saveSuccess").show()
+
+                error:()->
+                    $("#saveFailed").show()
+
+            }
+            console.log JSON.stringify json
+            jsRoutes.controllers.Authorised.updateProfile().ajax(json)
 
 
     }
