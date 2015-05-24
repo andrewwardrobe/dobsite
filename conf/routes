@@ -8,6 +8,7 @@ GET     /signout                     controllers.UserServices.signout
 GET     /signup                     controllers.UserServices.signup
 GET     /signedout                     controllers.UserServices.signedout
 GET     /profile                       controllers.Authorised.profile
+POST     /profile                       controllers.Authorised.updateProfile
 GET     /checkname/:name              controllers.UserServices.checkName(name :String)
 GET     /checkemail/:email              controllers.UserServices.checkEmail(email :String)
 

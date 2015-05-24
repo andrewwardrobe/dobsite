@@ -48,7 +48,7 @@ object UserServices extends Controller with LoginLogout with StandardAuthConfig 
     database.withSession { implicit session =>
       val insertId = UserAccounts.create(incAccount)
       val newProfile = new UserProfile(0,insertId,"","")
-      Profiles.save(newProfile)
+      Profiles.create(newProfile)
     }
     Redirect(routes.UserServices.login)
   }

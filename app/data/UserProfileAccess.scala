@@ -17,5 +17,9 @@ trait UserProfileAccess { this: UserProfileSchema =>
 
   def getByUserId(userId:Int)(implicit session: Session) = profiles.filter(_.userId === userId).firstOption
 
-  def save(account: UserProfile)(implicit session: Session) = profiles returning profiles.map(_.id) += account
+  def create(profile: UserProfile)(implicit session: Session) = profiles returning profiles.map(_.id) += profile
+
+  def update(profile: UserProfile)(implicit session: Session) = profiles.insertOrUpdate(profile)
+
+  def deleteAll(implicit session: Session) = profiles.delete
 }

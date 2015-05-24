@@ -32,7 +32,7 @@ object UserAccountHelper {
   def createProfile(userId:Int, about:String,avatar:String) = {
     database.withSession { implicit session =>
       val profile = new UserProfile(0, userId, about,avatar)
-      val id = Profiles.save(profile)
+      val id = Profiles.create(profile)
       new UserProfile(id, profile.userId, profile.about,profile.avatar)
     }
   }

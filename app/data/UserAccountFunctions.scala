@@ -108,6 +108,9 @@ trait UserAccountFunctions {this: UserAccountSchema =>
     }
   }
 
+  def deleteAll(implicit s: Session) = {
+    accounts.delete
+  }
 
   def getUserNameCount(name:String)(implicit s: Session) =  {
     accounts.filter(_.name.toLowerCase === name.toLowerCase).list.length

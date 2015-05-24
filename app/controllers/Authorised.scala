@@ -152,4 +152,18 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   }
 
 
+  def updateProfile = StackAction(AuthorityKey -> NormalUser) { implicit request =>
+    val profile = Profiles.form.bindFromRequest().get
+    val user = loggedIn
+    if (profile.userId == user.id) {
+
+        database.withSession { implicit session =>
+          Profiles.update(profile)
+          Ok("")
+        }
+      }
+       else Forbidden("You do not have permission to perform this request")
+    }
+
+
 }

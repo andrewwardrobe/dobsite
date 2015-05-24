@@ -81,6 +81,10 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       avatarEditable mustBe true
     }
 
+    "Display a save button when changes have been made to the profile" in {
+      fail("Not implemented")
+    }
+
     "Save changes to the profile" in {
       fail("Need to write this test")
     }
