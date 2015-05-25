@@ -4,7 +4,7 @@ import java.text.{SimpleDateFormat, DateFormat}
 import java.util.Date
 
 import com.daoostinboyeez.git.GitRepo
-import data.Content
+import data.{Tags, Content}
 import models.{ContentTypeMap,ContentPost}
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
@@ -191,9 +191,6 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       }
     }
 
-    "Add Data Tear down " in {
-      fail("Add Tags Delete All")
-    }
 
     "Tidy this up" in pending
   }
@@ -202,6 +199,14 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
   before{
     val repo = GitRepo.apply()
     repo.refresh
+  }
+
+  after{
+    database.withSession { implicit session =>
+      Tags.deleteLinks
+      Tags.deleteAll
+      Content.deleteAll
+    }
   }
 
 

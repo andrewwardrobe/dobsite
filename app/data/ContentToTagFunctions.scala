@@ -16,4 +16,5 @@ trait ContentToTagFunctions {this: ContentToTagSchema =>
     contentTags.insert(new ContentToTagLink(postId,tagId))
   }
 
+  def deleteLinks(implicit session: Session) = contentTags.delete
 }

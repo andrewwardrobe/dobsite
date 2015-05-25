@@ -152,6 +152,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
   def dataTearDown() = {
     database.withSession { implicit session =>
+
       Profiles.deleteAll
       UserAccounts.deleteAll
     }
