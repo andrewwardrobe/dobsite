@@ -29,6 +29,18 @@ object UserAccountHelper {
     }
   }
 
+  def createUserAndProfile(userId: String, password: String, role: String) = {
+    database.withSession { implicit session =>
+      val user = new UserAccount(1,  s"$userId@daoostinboyeez.com", password,userId, UserRole.valueOf(role))
+      val id = UserAccounts.create(user)
+      val profile = new UserProfile(0, id,"Some Test about","assets/images/crew/donalds_bw.jpg")
+      Profiles.create(profile)
+
+      new UserAccount(id,user.email,user.password,user.name,user.role)
+
+    }
+  }
+
   def createProfile(userId:Int, about:String,avatar:String) = {
     database.withSession { implicit session =>
       val profile = new UserProfile(0, userId, about,avatar)

@@ -118,6 +118,7 @@ define ['common','jquery','utilities'],(common,$,utils) ->
             console.log JSON.stringify json
             jsRoutes.controllers.Authorised.updateProfile().ajax(json)
 
+        loadPosts:()->
 
     }
     profile

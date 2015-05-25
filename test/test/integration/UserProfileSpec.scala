@@ -1,6 +1,8 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
+import data.{UserAccounts, Profiles}
+import models.UserAccount
 import org.scalatest._
 import org.scalatestplus.play._
 import play.api.db.DB
@@ -22,6 +24,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
   var bio = ""
 
+  var trust:UserAccount = _
   lazy val signInPage = new SignInPage(port)
   lazy val profilePage = new ProfilePage(port)
   import signInPage._
@@ -30,9 +33,10 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
   def setup() = {
     UserAccountHelper.createUser("Administrator","Administrator","Administrator")
     UserAccountHelper.createUser("Contributor","Contributor","Contributor")
-    val trust = UserAccountHelper.createUser("TrustedContributor","TrustedContributor","TrustedContributor")
+    trust = UserAccountHelper.createUser("TrustedContributor","TrustedContributor","TrustedContributor")
     UserAccountHelper.createProfile(trust.id,"this user is a fine member of da oostin boyeez","assets/images/crew/donalds_bw.jpg")
     UserAccountHelper.createUser("NormalUser","NormalUser","NormalUser")
+
   }
 
   before{
@@ -105,7 +109,13 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
     }
 
     "Display a list of the users posts" in {
-      fail("Not Implemented")
+      ContentHelper.createPost("Test Post 1","MC Donalds","Sample Post Content 1",1,Some(trust.id) )
+      ContentHelper.createPost("Test Post 2","MC Donalds","Sample Post Content 2",1,Some(trust.id) )
+      ContentHelper.createPost("Test Post 3","MC Donalds","Sample Post Content 3",2,Some(trust.id) )
+      signin("TrustedContributor","TrustedContributor")
+      go to profilePage
+
+      postLinks must not be empty
     }
 
   }
@@ -119,7 +129,8 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
   def dataTearDown() = {
     database.withSession { implicit session =>
-
+      Profiles.deleteAll
+      UserAccounts.deleteAll
     }
   }
 }

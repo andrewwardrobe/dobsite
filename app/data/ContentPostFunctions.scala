@@ -22,6 +22,11 @@ trait ContentPostFunctions {this: ContentPostSchema =>
   def getByType(typ: Int)(implicit s: Session) = { postTable.filter(_.postType === typ).list }
 
 
+  def getByUserLatestFirst(userId:Int)(implicit s: Session)  = {
+    postTable.filter( post => post.userId === userId
+    && post.isDraft === false).sortBy(_.dateCreated.desc).list
+  }
+
   //Does this belong here? cut it be moved to a trait?
   def getTags(id:String)(implicit s:Session) = {
     Tags.contentTags.filter(_.postId === id).flatMap(_.tagsFK).list

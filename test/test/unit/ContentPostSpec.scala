@@ -12,7 +12,7 @@ import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
-import test.helpers.ContentHelper
+import test.helpers.{UserAccountHelper, ContentHelper}
 
 import scala.slick.jdbc.JdbcBackend._
 
@@ -160,6 +160,20 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
         val post = ContentHelper.createPostWithTags("Post with tags","Some Content",ContentTypeMap("News"),"Leek,Freek,Gimp",None)
         post.tags must contain allOf ("Leek","Gimp","Freek")
 
+      }
+    }
+
+    "Be able to retrieve posts by user" in {
+      database.withSession { implicit session =>
+        val user = UserAccountHelper.createUserAndProfile("TestUser","TestUser","TrustedContributor")
+        val authorPost = ContentHelper.createPost("Test Post Leeeek","MC Donalds","Twatous Leek us",1,"",Some(user.id))
+        val draftPost = ContentHelper.createDraft("Draftus Post Leeeek","MC Donalds","Twatous Leek us",1,"",Some(user.id))
+        val nonAuthorPost = ContentHelper.createPost("Test Post Leeeek 2","MC Donalds","Twatous Leek us",1,"",None)
+
+        val posts = Content.getByUserLatestFirst(user.id)
+        posts must contain (authorPost)
+        posts must not contain (nonAuthorPost)
+        posts must not contain (draftPost)
       }
     }
 
