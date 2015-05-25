@@ -32,10 +32,10 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   def extraSetup = {
     database.withSession { implicit session =>
 
-      post1 = ContentHelper.createPost("DOB Test News Post","MC Donalds","ah ah blah",1)
-      post2 =  ContentHelper.createPost("2nd Post","MC Donalds","Jimbo jimbp",1)
-      post3 = ContentHelper.createPost("3rd Post","MC Donalds","Dis is Da Oostin Boyeez Leek",1)
-      post4 = ContentHelper.createDraft("4th Post","MC Donalds","Jambo jimbo Leek",1)
+      post1 = ContentHelper.createPost("DOB Test News Post","MC Donalds","ah ah blah",1,None)
+      post2 =  ContentHelper.createPost("2nd Post","MC Donalds","Jimbo jimbp",1,None)
+      post3 = ContentHelper.createPost("3rd Post","MC Donalds","Dis is Da Oostin Boyeez Leek",1,None)
+      post4 = ContentHelper.createDraft("4th Post","MC Donalds","Jambo jimbo Leek",1,None)
       repo.updateFile(post1.content,"Here is some data I just changed")
     }
   }

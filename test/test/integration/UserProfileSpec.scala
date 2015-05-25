@@ -104,6 +104,9 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
     }
 
+    "Display a list of the users posts" in {
+      fail("Not Implemented")
+    }
 
   }
 

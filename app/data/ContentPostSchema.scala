@@ -28,8 +28,9 @@ trait ContentPostSchema {
     def content = column[String]("CONTENT")
     def extraData = column[String]("EXTRA_DATA")
     def isDraft = column[Boolean]("DRAFT")
+    def userId = column[Option[Int]]("USER_ID",O.Nullable)
     def tags = Tags.contentTags.filter(_.postId === id).flatMap(_.tagsFK)
 
-    def * = (id,title,postType,dateCreated,author,content,extraData,isDraft) <> ((ContentPost.apply _).tupled, ContentPost.unapply _)
+    def * = (id,title,postType,dateCreated,author,content,extraData,isDraft,userId) <> ((ContentPost.apply _).tupled, ContentPost.unapply _)
   }
 }

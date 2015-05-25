@@ -33,8 +33,8 @@ class GazThreeSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSui
   }
   def dataSetup = {
     database.withSession { implicit session =>
-      val newsItem = ContentHelper.createPost("DOB Test News Post","Gaz Three","Gaz three post Leek",ContentTypeMap.get("Gaz Three"))
-      val nonNewsItem =  ContentHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",ContentTypeMap.get("Biography"))
+      val newsItem = ContentHelper.createPost("DOB Test News Post","Gaz Three","Gaz three post Leek",ContentTypeMap.get("Gaz Three"),None)
+      val nonNewsItem =  ContentHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",ContentTypeMap.get("Biography"),None)
     }
   }
 

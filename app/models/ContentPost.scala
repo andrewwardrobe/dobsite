@@ -17,7 +17,7 @@ import scala.collection.mutable.ListBuffer
 /**
  * Created by andrew on 11/10/14.
  */
-case class ContentPost(id: String, title: String, postType: Int, dateCreated: Date, author: String, content: String, extraData: String,isDraft: Boolean) {
+case class ContentPost(id: String, title: String, postType: Int, dateCreated: Date, author: String, content: String, extraData: String,isDraft: Boolean,userId:Option[Int]) {
 
   val repo = GitRepo.apply()
   def json: JsValue = Json.obj(
@@ -33,7 +33,8 @@ case class ContentPost(id: String, title: String, postType: Int, dateCreated: Da
                                                                       .addAttributes("div","align")
                                      )),
     "extraData" -> extraData,
-    "isDraft" -> isDraft
+    "isDraft" -> isDraft,
+    "userId" -> userId
   )
 
   def json(rev :String): JsValue = Json.obj(
@@ -49,7 +50,8 @@ case class ContentPost(id: String, title: String, postType: Int, dateCreated: Da
       .addAttributes("div","align")
     )),
     "extraData" -> extraData,
-    "isDraft" -> isDraft
+    "isDraft" -> isDraft,
+    "userId" -> userId
   )
 
   def getContent() = {
@@ -94,7 +96,8 @@ object ContentPost {
       "author" ->text,
       "content" -> text,
       "extraData" -> text,
-      "isDraft" -> boolean
+      "isDraft" -> boolean,
+      "userId" -> optional(number)
     )(ContentPost.apply)(ContentPost.unapply _)
   }
 }

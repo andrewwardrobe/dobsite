@@ -32,8 +32,8 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   import biographyPage._
   def extraSetup = {
     database.withSession { implicit session =>
-      ContentHelper.createBiography("MC Donalds","Sample Bio 1","assets/images/crew/donalds_bw.jpg")
-      val post = ContentHelper.createBiography("MC Leek","Sample Bio 2","assests/images/crew/donalds_bw.jpg")
+      ContentHelper.createBiography("MC Donalds","Sample Bio 1","assets/images/crew/donalds_bw.jpg",None)
+      val post = ContentHelper.createBiography("MC Leek","Sample Bio 2","assests/images/crew/donalds_bw.jpg",None)
       bio = post.id
     }
   }

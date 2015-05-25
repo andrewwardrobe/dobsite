@@ -29,20 +29,21 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
     "Be able to insert and retrieve posts items" in {
       database.withSession { implicit session =>
 
-        val newsItem = ContentHelper.createPost("DOB Test News Post","MC Donalds","News Content for db spec",1)
-        val nonNewsItem =  ContentHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music for dbspec",2)
+        val newsItem = ContentHelper.createPost("DOB Test News Post","MC Donalds","News Content for db spec",1,None)
+        val nonNewsItem =  ContentHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music for dbspec",2,None)
         val result = Content.get
         result.head mustEqual newsItem
       }
     }
+
     "Be able to retrieve posts ordered by creation date in reverse order" in {
       database.withSession{ implicit session =>
 
-        ContentHelper.createPost("Post 1","MC Donalds","Post 1",1,"")
-        ContentHelper.createPost("Post 2","MC Donalds","Post 2",1,"")
-        ContentHelper.createPost("Post 3","MC Donalds","Post 3",1,"")
-        ContentHelper.createPost("Post 4","MC Donalds","Post 4",1,"")
-        val mostRecent = ContentHelper.createPost("Post 6","MC Donalds","Post 5",1,"")
+        ContentHelper.createPost("Post 1","MC Donalds","Post 1",1,"",None)
+        ContentHelper.createPost("Post 2","MC Donalds","Post 2",1,"",None)
+        ContentHelper.createPost("Post 3","MC Donalds","Post 3",1,"",None)
+        ContentHelper.createPost("Post 4","MC Donalds","Post 4",1,"",None)
+        val mostRecent = ContentHelper.createPost("Post 6","MC Donalds","Post 5",1,"",None)
         val post = Content.getByDate.head
         post.dateCreated mustEqual mostRecent.dateCreated
       }
@@ -51,9 +52,9 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
     "Be able to retrieve posts ordered by creation date in reverse order and filter by type" in {
       database.withSession{ implicit session =>
 
-        ContentHelper.createPost("Post 32","MC Donalds","Post 3",1,"")
-        val mostRecentType1 = ContentHelper.createPost("Post 62","MC Donalds","Post 5",1,"")
-        ContentHelper.createPost("Post 43","MC Donalds","Post 4",2,"")
+        ContentHelper.createPost("Post 32","MC Donalds","Post 3",1,"",None)
+        val mostRecentType1 = ContentHelper.createPost("Post 62","MC Donalds","Post 5",1,"",None)
+        ContentHelper.createPost("Post 43","MC Donalds","Post 4",2,"",None)
         val post = Content.getByDate(1).head
         post mustEqual mostRecentType1
       }
@@ -62,12 +63,12 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
     "Be able to retrieve posts created before a particular date ordered by creation date in reverse order" in {
       database.withSession{ implicit session =>
 
-        ContentHelper.createPost("Post 21","MC Donalds","Post rwe1",1,"")
-        ContentHelper.createPost("Post 42","MC Donalds","Post rew2",1,"")
-        ContentHelper.createPost("Post 53","MC Donalds","Post ewr3",1,"")
-        ContentHelper.createPost("Post 44","MC Donalds","Postfs 4",1,"")
-        val target = ContentHelper.createPost("Post 65","MC Donalds","Postfsd 5",1,"")
-        ContentHelper.createPost("Post 6ewq5","MC Donalds","Postewqeqwfsd 5",1,"","20170803154423")
+        ContentHelper.createPost("Post 21","MC Donalds","Post rwe1",1,"",None)
+        ContentHelper.createPost("Post 42","MC Donalds","Post rew2",1,"",None)
+        ContentHelper.createPost("Post 53","MC Donalds","Post ewr3",1,"",None)
+        ContentHelper.createPost("Post 44","MC Donalds","Postfs 4",1,"",None)
+        val target = ContentHelper.createPost("Post 65","MC Donalds","Postfsd 5",1,"",None)
+        ContentHelper.createPost("Post 6ewq5","MC Donalds","Postewqeqwfsd 5",1,"","20170803154423",None)
         val df = new SimpleDateFormat("yyyyMMddHHmmss")
         val targetDate = df.parse("20170802154423")
 
@@ -80,13 +81,13 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
     "Be able to retrieve posts created before a particular date ordered by creation date in reverse order filtered by type" in {
       database.withSession{ implicit session =>
 
-        ContentHelper.createPost("Post 21","MC Donalds","wet rwe1",1,"")
-        ContentHelper.createPost("Post 42423","MC Donalds","23 rew2",1,"")
-        ContentHelper.createPost("Post 342","MC Donalds","43 ewr3",1,"")
-        val target = ContentHelper.createPost("Post 432","MC Donalds","432 4",2,"")
-        ContentHelper.createPost("Post 65","MC Donalds","wrw rwewe",1,"")
-        ContentHelper.createPost("Post 6ewq5","MC Donalds","Postewqeqwfsd 5",1,"","20170803154423")
-        ContentHelper.createPost("Postdsf 6ewq5","MC Donalds","fdsfsdfds 5",2,"","20170803154423")
+        ContentHelper.createPost("Post 21","MC Donalds","wet rwe1",1,"",None)
+        ContentHelper.createPost("Post 42423","MC Donalds","23 rew2",1,"",None)
+        ContentHelper.createPost("Post 342","MC Donalds","43 ewr3",1,"",None)
+        val target = ContentHelper.createPost("Post 432","MC Donalds","432 4",2,"",None)
+        ContentHelper.createPost("Post 65","MC Donalds","wrw rwewe",1,"",None)
+        ContentHelper.createPost("Post 6ewq5","MC Donalds","Postewqeqwfsd 5",1,"","20170803154423",None)
+        ContentHelper.createPost("Postdsf 6ewq5","MC Donalds","fdsfsdfds 5",2,"","20170803154423",None)
         val df = new SimpleDateFormat("yyyyMMddHHmmss")
         val targetDate = df.parse("20170802154423")
 
@@ -99,11 +100,11 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
     "Be able to limit number of items retrieved by type" in {
       database.withSession{ implicit session =>
 
-        ContentHelper.createPost("Post 215","MC Donalds","Jimbo Jambo 1",1,"")
-        ContentHelper.createPost("Post 216","MC Donalds","Jimbo Jambo 2",1,"")
-        ContentHelper.createPost("Post 217","MC Donalds","Jimbo Jambo 3",1,"")
-        ContentHelper.createPost("Post 218","MC Donalds","Jimbo Jambo 4",1,"")
-        ContentHelper.createPost("Post 219","MC Donalds","Jimbo Jambo 5",2,"")
+        ContentHelper.createPost("Post 215","MC Donalds","Jimbo Jambo 1",1,"",None)
+        ContentHelper.createPost("Post 216","MC Donalds","Jimbo Jambo 2",1,"",None)
+        ContentHelper.createPost("Post 217","MC Donalds","Jimbo Jambo 3",1,"",None)
+        ContentHelper.createPost("Post 218","MC Donalds","Jimbo Jambo 4",1,"",None)
+        ContentHelper.createPost("Post 219","MC Donalds","Jimbo Jambo 5",2,"",None)
 
         val posts = Content.getByDate(1,3)
 
@@ -114,12 +115,12 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
     "Be able to limit number of items retrieved by type before date" in {
       database.withSession{ implicit session =>
 
-        ContentHelper.createPost("Post 215","MC Donalds","Jimbo Jambo 1",1,"")
-        ContentHelper.createPost("Post 216","MC Donalds","Jimbo Jambo 2",1,"")
-        ContentHelper.createPost("Post 217","MC Donalds","Jimbo Jambo 3",1,"")
-        ContentHelper.createPost("Post 218","MC Donalds","Jimbo Jambo 4",1,"")
-        val latest = ContentHelper.createPost("Post 219","MC Donalds","Jimbo Jambo 5",1,"")
-        ContentHelper.createPost("Post 220","MC Donalds","Jimbo Jambo 6",1,"","20170803154423")
+        ContentHelper.createPost("Post 215","MC Donalds","Jimbo Jambo 1",1,"",None)
+        ContentHelper.createPost("Post 216","MC Donalds","Jimbo Jambo 2",1,"",None)
+        ContentHelper.createPost("Post 217","MC Donalds","Jimbo Jambo 3",1,"",None)
+        ContentHelper.createPost("Post 218","MC Donalds","Jimbo Jambo 4",1,"",None)
+        val latest = ContentHelper.createPost("Post 219","MC Donalds","Jimbo Jambo 5",1,"",None)
+        ContentHelper.createPost("Post 220","MC Donalds","Jimbo Jambo 6",1,"","20170803154423",None)
 
         val df = new SimpleDateFormat("yyyyMMddHHmmss")
         val targetDate = df.parse("20170802154423")
@@ -133,9 +134,9 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
     "Not retrieve drafts by default" in {
       database.withSession { implicit session =>
 
-        val draft = ContentHelper.createDraft("Draft Post", "MC Donalds", "Leeek 1", 1, "")
-        ContentHelper.createPost("Post 2166", "MC Donalds", "Leeek 2", 1, "")
-        ContentHelper.createPost("Post 2133", "MC Donalds", "Leeek 3", 1, "")
+        val draft = ContentHelper.createDraft("Draft Post", "MC Donalds", "Leeek 1", 1, "",None)
+        ContentHelper.createPost("Post 2166", "MC Donalds", "Leeek 2", 1, "",None)
+        ContentHelper.createPost("Post 2133", "MC Donalds", "Leeek 3", 1, "",None)
 
         val posts = Content.getByDate(1, new Date(), 10)
         posts must not contain draft
@@ -145,9 +146,9 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
     "Have a way of  retrieving drafts" in {
       database.withSession { implicit session =>
 
-        val draft = ContentHelper.createDraft("Draft Post", "MC Donalds", "Leeek 1", 1, "")
-        ContentHelper.createPost("Post 2166", "MC Donalds", "Leeek 2", 1, "")
-        ContentHelper.createPost("Post 2133", "MC Donalds", "Leeek 3", 1, "")
+        val draft = ContentHelper.createDraft("Draft Post", "MC Donalds", "Leeek 1", 1, "",None)
+        ContentHelper.createPost("Post 2166", "MC Donalds", "Leeek 2", 1, "",None)
+        ContentHelper.createPost("Post 2133", "MC Donalds", "Leeek 3", 1, "",None)
 
         val posts = Content.getByDateWithDrafts(1, new Date(), 10)
         posts must contain (draft)
@@ -156,7 +157,7 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
 
     "Be able to retrieve tags" in {
       database.withSession { implicit session =>
-        val post = ContentHelper.createPostWithTags("Post with tags","Some Content",ContentTypeMap("News"),"Leek,Freek,Gimp")
+        val post = ContentHelper.createPostWithTags("Post with tags","Some Content",ContentTypeMap("News"),"Leek,Freek,Gimp",None)
         post.tags must contain allOf ("Leek","Gimp","Freek")
 
       }

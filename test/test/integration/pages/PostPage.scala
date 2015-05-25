@@ -21,8 +21,6 @@ class PostPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest.s
 
   def post(id:String) = s"localhost:$port/post/$id"
 
-
-
   def postType = cssSelector("#postType").findElement.get.underlying.getAttribute("value")
 
   def title = cssSelector("#postTitle").findElement.get.text

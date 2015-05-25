@@ -27,7 +27,7 @@ class ContentHelperSpec extends PlaySpec with OneServerPerSuite with BeforeAndAf
       val df = new SimpleDateFormat("yyyyMMddHHmmss")
       val expectedDate = "20150418163545"
       val inputDate = df.parse(expectedDate)
-      val post = ContentHelper.createPost("Testing Dates","MC Donalds","Testing some dates",1,"",inputDate)
+      val post = ContentHelper.createPost("Testing Dates","MC Donalds","Testing some dates",1,"",inputDate,None)
       val actualDate = df.format(post.dateCreated)
 
       actualDate mustEqual expectedDate
@@ -38,7 +38,7 @@ class ContentHelperSpec extends PlaySpec with OneServerPerSuite with BeforeAndAf
   "Be able to create a post with a specifed date string" in {
     val df = new SimpleDateFormat("yyyyMMddHHmmss")
     val expectedDate = "20150418163545"
-    val post = ContentHelper.createPost("Testing Dates","MC Donalds","Testing some dates",1,"","20150418163545")
+    val post = ContentHelper.createPost("Testing Dates","MC Donalds","Testing some dates",1,"","20150418163545",None)
     val actualDate = df.format(post.dateCreated)
 
     actualDate mustEqual expectedDate

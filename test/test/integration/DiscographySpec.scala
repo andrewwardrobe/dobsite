@@ -71,7 +71,7 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
           | <li>Leek</li>
           |</ol>
         """.stripMargin
-      bio = ContentHelper.createDiscographyItem("Mit Da Queen Mutter",content,"assets/images/mdqm.jpg","Album")
+      bio = ContentHelper.createDiscographyItem("Mit Da Queen Mutter",content,"assets/images/mdqm.jpg","Album",None)
 
     }
   }

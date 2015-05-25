@@ -73,8 +73,8 @@ class NewsSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
 
   def dataSetup = {
     database.withSession { implicit session =>
-      val newsItem = ContentHelper.createPost("DOB Test News Post","MC Donalds","Some Example content blah blah blah 1234567",ContentTypeMap.get("News"))
-      val nonNewsItem =  ContentHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",ContentTypeMap.get("Music"))
+      val newsItem = ContentHelper.createPost("DOB Test News Post","MC Donalds","Some Example content blah blah blah 1234567",ContentTypeMap.get("News"),None)
+      val nonNewsItem =  ContentHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",ContentTypeMap.get("Music"),None)
     }
   }
 

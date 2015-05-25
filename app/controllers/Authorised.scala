@@ -75,7 +75,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
         if(user.role.hasPermission(ContentTypeMap(item.postType))) {
           val content = item.content
           val filename = repo.genFileName
-          val newItem = new ContentPost(UUID.randomUUID().toString(), item.title, item.postType, new Date(), item.author, filename, ContentPost.extraDataToJson(item.extraData),item.isDraft)
+          val newItem = new ContentPost(UUID.randomUUID().toString(), item.title, item.postType, new Date(), item.author, filename, ContentPost.extraDataToJson(item.extraData),item.isDraft,Some(user.id))
           repo.doFile(filename, content, ContentMeta.makeCommitMsg("Created", newItem))
           val res = database.withSession {
             implicit s =>
@@ -122,7 +122,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
       val filename = post.content
 
       //val tags = js \ "tags"
-      val newItem = new ContentPost(item.id, item.title, item.postType, post.dateCreated, item.author, filename, ContentPost.extraDataToJson(item.extraData),item.isDraft)
+      val newItem = new ContentPost(item.id, item.title, item.postType, post.dateCreated, item.author, filename, ContentPost.extraDataToJson(item.extraData),item.isDraft,item.userId)
       repo.updateFile(filename,content, ContentMeta.makeCommitMsg("Updated",newItem))
       Content.update(newItem)
       request.body.asFormUrlEncoded match {
