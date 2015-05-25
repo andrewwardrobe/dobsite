@@ -2,7 +2,7 @@ package models
 
 import java.util.{UUID, Date}
 import com.daoostinboyeez.git.GitRepo
-import data.{Content, ContentPostSchema, ContentPostFunctions}
+import data.{Content, ContentPostSchema, ContentAccessFunctions}
 import org.jsoup._
 import org.jsoup.safety.Whitelist
 import play.api.{Play, Logger}

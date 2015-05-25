@@ -1,7 +1,7 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
-import data.{UserAccounts, Profiles}
+import data.{Content, UserAccounts, Profiles}
 import models.UserAccount
 import org.scalatest._
 import org.scalatestplus.play._
@@ -116,6 +116,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       go to profilePage
 
       postLinks must not be empty
+      database.withSession{implicit session => Content.deleteAll}
     }
 
     "Display a list links of the edit pages of the users posts" in {
@@ -126,6 +127,18 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       go to profilePage
 
       editLinks must not be empty
+      database.withSession{implicit session => Content.deleteAll}
+    }
+
+    "Display a list links of the edit pages of the users drafts" in {
+      ContentHelper.createDraft("Test Post 1","MC Donalds","Sample Post Content 1",1,Some(trust.id) )
+      ContentHelper.createDraft("Test Post 2","MC Donalds","Sample Post Content 2",1,Some(trust.id) )
+      ContentHelper.createDraft("Test Post 3","MC Donalds","Sample Post Content 3",2,Some(trust.id) )
+      signin("TrustedContributor","TrustedContributor")
+      go to profilePage
+
+      draftLinks must not be empty
+      database.withSession{implicit session => Content.deleteAll}
     }
 
   }

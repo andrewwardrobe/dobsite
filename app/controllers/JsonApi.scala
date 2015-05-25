@@ -139,7 +139,7 @@ object JsonApi extends Controller {
 
 
   def getContentByUserLatestFirst(id:Int) = DBAction { implicit response=>
-    val posts = Content.getByUserLatestFirst(id)
+    val posts = Content.getLiveContentByUserLatestFirst(id)
     Ok(toJson(blogToJson(posts)))
   }
   def getContentByDateStart(typ: Int,startDate: String,max :Int)  = DBAction { implicit response =>

@@ -10,7 +10,7 @@ import scala.collection.mutable.ListBuffer
 /**
  * Created by andrew on 14/05/15.
  */
-trait ContentPostFunctions {this: ContentPostSchema =>
+trait ContentAccessFunctions {this: ContentPostSchema =>
   
   import play.api.db.slick.Config.driver.simple._
   val postTable = TableQuery[PostTable]
@@ -22,9 +22,14 @@ trait ContentPostFunctions {this: ContentPostSchema =>
   def getByType(typ: Int)(implicit s: Session) = { postTable.filter(_.postType === typ).list }
 
 
-  def getByUserLatestFirst(userId:Int)(implicit s: Session)  = {
+  def getLiveContentByUserLatestFirst(userId:Int)(implicit s: Session)  = {
     postTable.filter( post => post.userId === userId
     && post.isDraft === false).sortBy(_.dateCreated.desc).list
+  }
+
+  def getDraftContentByUserLatestFirst(userId:Int)(implicit s: Session)  = {
+    postTable.filter( post => post.userId === userId
+      && post.isDraft === true).sortBy(_.dateCreated.desc).list
   }
 
   //Does this belong here? cut it be moved to a trait?
@@ -129,6 +134,7 @@ trait ContentPostFunctions {this: ContentPostSchema =>
 
   def delete(id:String)(implicit  s: Session) = postTable.filter(_.id === id).delete
 
+  def deleteAll(implicit  s: Session) = postTable.delete
 
   def getByDateWithDrafts(typ: Int,beforeDate: Date )(implicit  s: Session) = {
     postTable.filter( post =>

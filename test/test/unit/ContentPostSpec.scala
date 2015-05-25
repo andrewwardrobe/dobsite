@@ -152,6 +152,7 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
 
         val posts = Content.getByDateWithDrafts(1, new Date(), 10)
         posts must contain (draft)
+        Content.deleteAll
       }
     }
 
@@ -170,13 +171,29 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
         val draftPost = ContentHelper.createDraft("Draftus Post Leeeek","MC Donalds","Twatous Leek us",1,"",Some(user.id))
         val nonAuthorPost = ContentHelper.createPost("Test Post Leeeek 2","MC Donalds","Twatous Leek us",1,"",None)
 
-        val posts = Content.getByUserLatestFirst(user.id)
-        posts must contain (authorPost)
-        posts must not contain (nonAuthorPost)
-        posts must not contain (draftPost)
+        val posts = Content.getLiveContentByUserLatestFirst(user.id)
+        posts must (contain (authorPost) and contain noneOf(nonAuthorPost,draftPost))
+
+
       }
     }
 
+    "Be able to retrieve drafts by user" in {
+      database.withSession { implicit session =>
+        val user = UserAccountHelper.createUserAndProfile("TestUser","TestUser","TrustedContributor")
+        val authorPost = ContentHelper.createPost("Test Post Leeeek","MC Donalds","Twatous Leek us",1,"",Some(user.id))
+        val draftPost = ContentHelper.createDraft("Draftus Post Leeeek","MC Donalds","Twatous Leek us",1,"",Some(user.id))
+        val nonAuthorPost = ContentHelper.createPost("Test Post Leeeek 2","MC Donalds","Twatous Leek us",1,"",None)
+
+        val posts = Content.getDraftContentByUserLatestFirst(user.id)
+        posts must (contain (draftPost) and contain noneOf(authorPost,nonAuthorPost))
+
+      }
+    }
+
+    "Add Data Tear down " in {
+      fail("Add Tags Delete All")
+    }
 
     "Tidy this up" in pending
   }
