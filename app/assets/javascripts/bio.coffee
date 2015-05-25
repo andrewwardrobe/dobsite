@@ -127,6 +127,7 @@ doEditMode = (bio) ->
         title = $("#bioName" +bio.id).text()
         textId = "#bioText" + bio.id
         content = $(textId).html()
+        userId =  $("#bioUser" +bio.id).text()
         $("#bioSuccess"+bio.id).hide()
         $("#bioFailure"+bio.id).hide()
         console.log event.target.id
@@ -141,7 +142,8 @@ doEditMode = (bio) ->
                 "filename":"",
                 "extraData":extraData,
                 "isDraft":false,
-                "tags":""
+                "tags":"",
+                "userId":userId
             success: (data) ->
                 $("#bioSuccess"+bio.id).show()
                 $("#bioSave"+bio.id).hide()
@@ -198,6 +200,10 @@ doTextAndImage = (bio, target) ->
     dateCreated = $("<input>")
     dateCreated.attr 'id', 'bioDate' + bio.id
     dateCreated.attr 'type', 'hidden'
+    bioUser =  $("<input>")
+    bioUser.attr 'id', 'bioUser' + bio.id
+    bioUser.attr 'type', 'hidden'
+    bioUser.val bio.userId
     bioExtra = $("<input>")
     bioExtra.attr 'id', 'bioExtra' + bio.id
     bioExtra.attr 'type', 'hidden'

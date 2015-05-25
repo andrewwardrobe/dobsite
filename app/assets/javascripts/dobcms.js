@@ -62,6 +62,7 @@ function save(){
     var extraData = $("#extraDataValues").val();
     var isDraft = $("#isDraft").hasClass("isDraftOn");
     var tags = $("#tagBox").val();
+    var userId = $("#userId").val();
     var json = {
            data: {
                   "id": id,
@@ -73,7 +74,8 @@ function save(){
                   "filename": "",
                   "extraData": extraData,
                   "isDraft": isDraft,
-                  "tags":tags
+                  "tags":tags,
+                  "userId":userId
            },
            success: function(data){
                 var d = $('<div>');
@@ -89,6 +91,7 @@ function save(){
                 $("#btnSuccessful").show();
                 $("*[id*='editAlert']").hide();
                 $("#draft").val(data.isDraft);
+                $("#userId").val(data.userId);
                 if(data.isDraft !== false){
                     $("#editAlertDraft").show();
                 }else{
@@ -277,6 +280,7 @@ function loadContentData(){
                    var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
                    $("#dateCreated").attr('value', dateStr);
                    $("#postType").val(data.postType);
+                   $("#userId").val(data.userId);
                    var isDraft;
                   if(data.isDraft !== false){
 
@@ -288,6 +292,7 @@ function loadContentData(){
 
                    $("#editAlertLive").show();
                    $("#draft").val(false);
+
                   }
                   doDraftButtonCss(isDraft);
                    var json = $.parseJSON(data.extraData);
