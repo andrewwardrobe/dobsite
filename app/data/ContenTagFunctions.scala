@@ -26,5 +26,7 @@ trait ContentTagFunctions { this: ContentTagSchema =>
   def getAll (implicit session: Session) = {
     tagsTable.list
   }
+
+  def deleteAll (implicit session: Session) = tagsTable.delete
 }
 
