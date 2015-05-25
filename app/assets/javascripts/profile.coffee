@@ -119,6 +119,26 @@ define ['common','jquery','utilities'],(common,$,utils) ->
             jsRoutes.controllers.Authorised.updateProfile().ajax(json)
 
         loadPosts:()->
+            userId = $("#userId").val()
+            json = {
+                success:(data)->
+                    $.each data, (idx,post) ->
+                        postDiv = $("<div>")
+                        newLink = $("<a>")
+                        newLink.attr 'id','postLink'+post.id
+                        newLink.attr 'href',post.id
+                        newLink.text post.title
+                        editLink = $("<a>")
+                        editLink.text "(edit)"
+                        editLink.attr 'id','editLink'+post.id
+                        editLink.attr 'href',"editor/"+post.id
+                        postDiv.append newLink
+                        postDiv.append " "
+                        postDiv.append editLink
+
+                        $("#myPosts").append postDiv
+            }
+            jsRoutes.controllers.JsonApi.getContentByUserLatestFirst(userId).ajax(json)
 
     }
     profile

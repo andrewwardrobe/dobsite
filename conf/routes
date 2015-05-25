@@ -53,6 +53,8 @@ GET     /json/admin/user/:id           controllers.AdminJsonApi.getUser(id: Stri
 GET     /json/news           controllers.JsonApi.getNews()
 GET     /json/content/tags/:id      controllers.JsonApi.getContentTags(id: String)
 GET     /json/content/:id           controllers.JsonApi.getPostById(id: String)
+GET     /json/content/byuser/:id         controllers.JsonApi.getContentByUserLatestFirst(id: Int)
+GET     /json/content/byuser/:id/desc         controllers.JsonApi.getContentByUserLatestFirst(id: Int)
 GET     /json/content/:id/revisions           controllers.JsonApi.getRevisionsWithDates(id: String)
 GET     /json/content/:id/revisions/:revId           controllers.JsonApi.getPostRevisionById(id: String, revId: String)
 GET     /json/content/bytype/:type           controllers.JsonApi.getContentByType(type: Int)

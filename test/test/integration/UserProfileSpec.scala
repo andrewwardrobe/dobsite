@@ -108,7 +108,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
     }
 
-    "Display a list of the users posts" in {
+    "Display a list of links to the users posts" in {
       ContentHelper.createPost("Test Post 1","MC Donalds","Sample Post Content 1",1,Some(trust.id) )
       ContentHelper.createPost("Test Post 2","MC Donalds","Sample Post Content 2",1,Some(trust.id) )
       ContentHelper.createPost("Test Post 3","MC Donalds","Sample Post Content 3",2,Some(trust.id) )
@@ -116,6 +116,16 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       go to profilePage
 
       postLinks must not be empty
+    }
+
+    "Display a list links of the edit pages of the users posts" in {
+      ContentHelper.createPost("Test Post 1","MC Donalds","Sample Post Content 1",1,Some(trust.id) )
+      ContentHelper.createPost("Test Post 2","MC Donalds","Sample Post Content 2",1,Some(trust.id) )
+      ContentHelper.createPost("Test Post 3","MC Donalds","Sample Post Content 3",2,Some(trust.id) )
+      signin("TrustedContributor","TrustedContributor")
+      go to profilePage
+
+      editLinks must not be empty
     }
 
   }

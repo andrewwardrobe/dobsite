@@ -40,18 +40,17 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
 
     "Change biography type to have value 3" in pending
 
-    "Save button should be available lin biography when editing title" in pending
-    "Save button should be available lin biography when editing tags" in pending
-    "Save button should be available lin biography when editing extraData" in pending
-    "Save button should be available lin biography when pressing a toolbar edit" in pending
+    "Save button should be available in biography when editing title" in pending
+    "Save button should be available in biography when editing tags" in pending
+    "Save button should be available in biography when editing extraData" in pending
+    "Save button should be available in biography when pressing a toolbar edit" in pending
 
 
     "Make Gaz three page a user profile page based on a with a blog post list based on a user alias filter" in pending
-          "\tMake a user profile feature" in pending
-          "\tMake a user alias feature" in pending
-                "\t\tOnly allow TrustedContributor and admin to have this feature" in pending
+    "Make a user alias feature" in pending
+          "\tOnly allow TrustedContributor and admin to have this feature" in pending
 
-    "Remove the Biography,Person and discography model types" in pending
+
 
     "Make a show in user profile check box on editor" in pending
 

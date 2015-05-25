@@ -62,6 +62,8 @@ class ProfilePage(val port: Int)(implicit driver:WebDriver) extends Page with We
 
   def postLinks = cssSelector("*[id*='postLink']").findAllElements
 
+  def editLinks = cssSelector("*[id*='editLink']").findAllElements
+
   def updateAbout(text:String) = {
     val about = cssSelector("#about").findElement.get.underlying
     about.sendKeys(text)
