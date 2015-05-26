@@ -40,13 +40,7 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
 
 
-    "Render Albums from AJAX calls" in {
 
-      go to discography
-      eventually {
-        discography.Albums must not be empty
-      }
-    }
 
     "Render Modals divs" in {
       go to discography
@@ -56,6 +50,13 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       eventually {
         discography.Tracks must not be empty
         discography.Modals must not be empty
+      }
+    }
+    "Render Albums from AJAX calls" in {
+
+      go to discography
+      eventually {
+        discography.Albums must not be empty
       }
     }
   }
