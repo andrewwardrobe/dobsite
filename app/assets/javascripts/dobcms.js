@@ -183,7 +183,12 @@ function addEditorScrollbar(){
     $("#editor").mCustomScrollbar();
 }
 
-
+function unSavedAlert(){
+      $("#saveButton").show();
+      $("#btnSuccessful").hide();
+      $("#btnFailure").hide();
+      $("#editAlertUnsaved").show();
+ }
 
 function preventEditorBlockQuote(){
   $("#editor").on("DOMNodeInserted",function(event){
@@ -194,16 +199,14 @@ function preventEditorBlockQuote(){
               $(target).attr('style','margin: 0 0 0 40px; border: none; padding: 0px;');
               break;
       }
+      //Do this when you have this class in a module
+   //unSavedAlert();
   });
 }
+
 function setupKeyUpEvents(){
 
-    function unSavedAlert(){
-         $("#saveButton").show();
-         $("#btnSuccessful").hide();
-         $("#btnFailure").hide();
-         $("#editAlertUnsaved").show();
-    }
+
     $("#editor").on("keyup",function(e){
 
         unSavedAlert();
