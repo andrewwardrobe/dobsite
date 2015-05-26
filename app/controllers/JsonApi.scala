@@ -138,10 +138,16 @@ object JsonApi extends Controller {
   }
 
 
+  def getDraftsByUserLatestFirst(id:Int) = DBAction { implicit response=>
+    val posts = Content.getDraftContentByUserLatestFirst(id)
+    Ok(toJson(blogToJson(posts)))
+  }
+
   def getContentByUserLatestFirst(id:Int) = DBAction { implicit response=>
     val posts = Content.getLiveContentByUserLatestFirst(id)
     Ok(toJson(blogToJson(posts)))
   }
+
   def getContentByDateStart(typ: Int,startDate: String,max :Int)  = DBAction { implicit response =>
     val contentList = startDate match {
       case s if s.isEmpty() || s == "" => { blogToJson(Content.getByDate(typ,new Date(),max)) }

@@ -139,6 +139,20 @@ define ['common','jquery','utilities'],(common,$,utils) ->
                         $("#myPosts").append postDiv
             }
             jsRoutes.controllers.JsonApi.getContentByUserLatestFirst(userId).ajax(json)
+        loadDrafts:()->
+            userId = $("#userId").val()
+            json = {
+                success:(data)->
+                    $.each data, (idx,post) ->
+                        postDiv = $("<div>")
+                        newLink = $("<a>")
+                        newLink.attr 'id','draftLink'+post.id
+                        newLink.attr 'href',"editor/"+post.id
+                        newLink.text post.title
+                        postDiv.append newLink
+                        $("#myDrafts").append postDiv
+            }
+            jsRoutes.controllers.JsonApi.getDraftsByUserLatestFirst(userId).ajax(json)
 
     }
     profile

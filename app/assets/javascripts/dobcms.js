@@ -111,8 +111,6 @@ function save(){
                $("#btnFailure").show();
            }
     };
-
-
     if(id == -1){
         jsRoutes.controllers.Authorised.submitBlog().ajax(json);
 
@@ -375,13 +373,10 @@ function loadTags(){
             console.log("Could not fetch tags");
         }
     };
-    console.log("Loading...");
-    console.log("URL "+jsRoutes.controllers.JsonApi.getContentTags(postId).url);
     jsRoutes.controllers.JsonApi.getContentTags(postId).ajax(json);
 }
 
 function load(){
-    console.log("hello");
     addEditorMenu();
     setupAdditionalToolbarHandlers();
     setupEditorBox();

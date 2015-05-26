@@ -6,7 +6,7 @@ import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.test.{FakeApplication, FakeRequest}
 import play.api.test.Helpers._
-import test.helpers.ContentHelper
+import test.helpers.{UserAccountHelper, ContentHelper}
 import test.{TestGlobal, TestConfig}
 
 /**
@@ -49,8 +49,11 @@ class JsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter{
       contentAsString(result) must include (post.id)
     }
 
-    "Be able to get postItems by type" in {
-
+    "Provide ability to get drafts by user" in {
+      val user = UserAccountHelper.createUserAndProfile("TestUser","TestUser","Contributor")
+      ContentHelper.createPost("Bio 3","andrew","Bio 1",ContentTypeMap.get("Biography"),Some(user.id))
+      val result = route(FakeRequest(GET, routes.JsonApi.getDraftsByUserLatestFirst(user.id).url)).get
+      status(result) mustBe (OK)
     }
 
   }
