@@ -197,13 +197,30 @@ function preventEditorBlockQuote(){
   });
 }
 function setupKeyUpEvents(){
+
+    function unSavedAlert(){
+         $("#saveButton").show();
+         $("#btnSuccessful").hide();
+         $("#btnFailure").hide();
+         $("#editAlertUnsaved").show();
+    }
     $("#editor").on("keyup",function(e){
 
-        $("#saveButton").show();
-        $("#btnSuccessful").hide();
-        $("#btnFailure").hide();
-        $("#editAlertUnsaved").show();
+        unSavedAlert();
     });
+    $("#postTitle").on('keyup',function(e){
+         unSavedAlert();
+    });
+    $("#tagBox").on('keyup',function(e){
+         unSavedAlert();
+    });
+    $("#extraDataValues").on('keyup',function(e){
+         unSavedAlert();
+    });
+    $("#editor").on('change',function(e){
+         unSavedAlert();
+    });
+
 }
 
 function setupEditorBox(){

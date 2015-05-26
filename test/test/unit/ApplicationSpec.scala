@@ -40,9 +40,6 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
 
     "Change biography type to have value 3" in pending
 
-    "Save button should be available in biography when editing title" in pending
-    "Save button should be available in biography when editing tags" in pending
-    "Save button should be available in biography when editing extraData" in pending
     "Save button should be available in biography when pressing a toolbar edit" in pending
 
 
