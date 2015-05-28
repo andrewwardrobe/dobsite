@@ -39,7 +39,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "jquery-ui" % "1.11.4",
   "mysql" % "mysql-connector-java" % "5.1.21",
   "net.sf.flexjson" % "flexjson" % "3.1",
-  "org.webjars" % "should.js" % "5.0.0" % "test"
+  "org.webjars" % "should.js" % "5.0.0"
 )
 
 Keys.fork in (Test) := true

@@ -2,9 +2,9 @@ global.requirejs = require("requirejs")
 
 requirejs.config(
   nodeRequire: require
-  baseUrl: __dirname
+  baseUrl: "assets/javascripts"
 )
 
 # A few modules that all tests will use
-global.should = requirejs("lib/should.js/should")
+global.should = requirejs("webjars/should.js/5.0.0/should")
 global.assert = require("assert")
