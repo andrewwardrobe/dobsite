@@ -38,12 +38,17 @@ libraryDependencies ++= Seq(
   "org.webjars" % "jquery" % "2.1.3",
   "org.webjars" % "jquery-ui" % "1.11.4",
   "mysql" % "mysql-connector-java" % "5.1.21",
-  "net.sf.flexjson" % "flexjson" % "3.1"
+  "net.sf.flexjson" % "flexjson" % "3.1",
+  "org.webjars" % "should.js" % "5.0.0" % "test"
 )
 
 Keys.fork in (Test) := true
 
+MochaKeys.requires += "./Setup"
+
 unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")
+
+addCommandAlias("ass", "test-only test.assets.*Spec*")
 
 addCommandAlias("unit", "test-only test.unit.*Spec")
 
