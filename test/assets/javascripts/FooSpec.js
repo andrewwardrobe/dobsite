@@ -1,5 +1,5 @@
 var assert = require("assert");
-var leek = require("leek");
+
 
 describe ('Array', function (){
     describe ('#indexOf()', function(){
@@ -19,10 +19,11 @@ describe('Array', function(){
 });
 
 describe('Array', function(){
+
   describe('#indexOf()', function(){
     it('should twat', function(){
-      assert.equal(leek.test(),"leek");
-      assert.equal(-1, [1,2,3].indexOf(0));
+        var leek = requirejs("javascripts/leek");
+        assert.equal(leek.test("sheek"),"leek sheek" );
     });
   });
 });

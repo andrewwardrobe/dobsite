@@ -39,10 +39,13 @@ libraryDependencies ++= Seq(
   "org.webjars" % "jquery-ui" % "1.11.4",
   "mysql" % "mysql-connector-java" % "5.1.21",
   "net.sf.flexjson" % "flexjson" % "3.1",
-  "org.webjars" % "should.js" % "5.0.0"
+  "org.webjars" % "should.js" % "5.0.0",
+  "org.webjars" % "rjs" % "2.1.11-1-trireme" % "test"
 )
 
 Keys.fork in (Test) := true
+
+pipelineStages := Seq(rjs, digest)
 
 MochaKeys.requires += "./Setup"
 

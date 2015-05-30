@@ -1,6 +1,5 @@
-define ['common','jquery','utilities'],(common,$,utils) ->
-    profile = {
-        test:()->
-            "leek"
+define ['common'],(common) -> {
+        test:(word)->
+            return "leek " +word
     }
-    profile
+
