@@ -8,7 +8,7 @@ Play2WarPlugin.play2WarSettings
 
 Play2WarKeys.servletVersion := "3.1"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val root = (project in file(".")).enablePlugins(PlayScala,SbtWeb)
 
 scalaVersion := "2.11.2"
 
@@ -18,6 +18,14 @@ libraryDependencies ++= Seq(
   cache,
   ws
 )
+
+lazy val copy_node_modules = taskKey[Unit]("Copys the node_module to the test target dir")
+
+copy_node_modules := {
+  val node_modules = new File("node_modules")
+  val target = new File("target/web/public/test/public/lib/")
+  IO.copyDirectory(node_modules,target,true, true)
+}
 
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick" % "0.8.0",
@@ -51,7 +59,7 @@ MochaKeys.requires += "./Setup"
 
 unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")
 
-addCommandAlias("ass", "test-only test.assets.*Spec*")
+addCommandAlias("js-test", ";web-assets:jseNpmNodeModules;copy_node_modules;mocha")
 
 addCommandAlias("unit", "test-only test.unit.*Spec")
 

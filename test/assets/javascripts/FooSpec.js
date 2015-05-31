@@ -23,6 +23,7 @@ describe('Array', function(){
   describe('#indexOf()', function(){
     it('should twat', function(){
         var leek = requirejs("javascripts/leek");
+        var cheerio = require("cheerio");
         assert.equal(leek.test("sheek"),"leek sheek" );
     });
   });

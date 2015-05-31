@@ -1,0 +1,27 @@
+{
+  "name": "dobsite",
+  "version": "1.0.0",
+  "description": "Da Oostin Boyeez Website",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andrewwardrobe/dobsite.git"
+  },
+  "author": "Andrew Wardrobe",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/andrewwardrobe/dobsite/issues"
+  },
+  "dependencies": {
+    "cheerio":"0.19.0"
+  },
+  "devDependencies": {
+    "cheerio":"0.19.0"
+  }
+}
