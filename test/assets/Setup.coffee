@@ -5,7 +5,9 @@ requirejs.config(
   baseUrl: __dirname
   paths : {
     "common":"mocha_require_common",
-    "jquery":"lib/jquery/jquery"
+    "jquery":"lib/jquery/jquery",
+    "utilities":"javascripts/utilities",
+    "leek":"javascripts/leek"
   }
 )
 

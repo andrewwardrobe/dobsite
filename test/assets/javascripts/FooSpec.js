@@ -20,11 +20,16 @@ describe('Array', function(){
 
 describe('Array', function(){
 
+
   describe('#indexOf()', function(){
+    console.log("hello");
     it('should twat', function(){
-        var leek = requirejs("javascripts/leek");
+        console.log("hello");
+        var leek = requirejs("leek");
         var cheerio = require("cheerio");
-        assert.equal(leek.test("sheek"),"leek sheek" );
+        var cheer = cheerio.load('<div id="dob">');
+        var text = leek.test("sheek");
+        assert.equal(text,"leek sheek" );
     });
   });
 });

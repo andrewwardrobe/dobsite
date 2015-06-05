@@ -1,5 +1,4 @@
-define ['common','puff'],(common,puff) -> {
+define ['common'],(common) -> {
         test:(word)->
             return "leek " +word
     }
-

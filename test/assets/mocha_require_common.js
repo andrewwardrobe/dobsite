@@ -9,17 +9,14 @@
             "bootstrap" : "//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min",
             "jsRoutes" : "javascriptRoutes",
             "jquery":"lib/jquery/jquery",
-            "utilities":"javascripts/utilities",
-            "cheerio":"lib/cheerio/lib/cheerio",
-            "parse":"lib/cheerio/lib/parse",
-            "utils":"lib/cheerio/lib/utils",
-            "static":"lib/cheerio/lib/static",
-            "attributes":"lib/cheerio/lib/api/attributes",
-            "css":"lib/cheerio/lib/api/css",
-            "forms":"lib/cheerio/lib/api/forms",
-            "manipulation":"lib/cheerio/lib/api/manipulation",
-            "transversing":"lib/cheerio/lib/api/transversing"
-        }
+            "puff":"javascripts/puff",
+            "node-jsdom":"lib/node-jsdom/lib/jsdom"
+        },
+        packages:[{
+            "name":"cheerio",
+            "main":"index",
+            "location":"lib/cheerio"
+        }]
     });
 
     requirejs.onError = function(err) {
