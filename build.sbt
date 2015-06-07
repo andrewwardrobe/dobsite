@@ -57,6 +57,8 @@ pipelineStages := Seq(rjs, digest)
 
 MochaKeys.requires += "./Setup"
 
+JsEngineKeys.engineType := JsEngineKeys.EngineType.Node
+
 unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")
 
 addCommandAlias("js-test", ";web-assets:jseNpmNodeModules;copy_node_modules;mocha")

@@ -10,12 +10,16 @@
             "jsRoutes" : "javascriptRoutes",
             "jquery":"lib/jquery/jquery",
             "puff":"javascripts/puff",
-            "node-jsdom":"lib/node-jsdom/lib/jsdom"
         },
+
         packages:[{
             "name":"cheerio",
             "main":"index",
             "location":"lib/cheerio"
+        },{
+            "name":"jsdom",
+            "main":"jsdom",
+            "location":"lib/node-jsdom/lib"
         }]
     });
 

@@ -1,6 +1,7 @@
 var assert = require("assert");
 
 
+
 describe ('Array', function (){
     describe ('#indexOf()', function(){
          it('should return -1 when the value is not present', function(){
@@ -19,21 +20,21 @@ describe('Array', function(){
 });
 
 describe('Array', function(){
-
-
   describe('#indexOf()', function(){
     console.log("hello");
     it('should twat', function(){
         console.log("hello");
+        var jsdom = require('jsdom').jsdom;
+        var doc = jsdom("<html><head></head><body></body></html>");
+        var window = doc.parentWindow;
+        global.window = window;
+        var $ = require("jquery")(window);
         var leek = requirejs("leek");
-        var cheerio = require("cheerio");
-        var cheer = cheerio.load('<div id="dob">');
         var text = leek.test("sheek");
         assert.equal(text,"leek sheek" );
     });
   });
 });
-
 
 describe('Array', function(){
   describe('#indexOf()', function(){

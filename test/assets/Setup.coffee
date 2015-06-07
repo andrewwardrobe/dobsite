@@ -7,7 +7,8 @@ requirejs.config(
     "common":"mocha_require_common",
     "jquery":"lib/jquery/jquery",
     "utilities":"javascripts/utilities",
-    "leek":"javascripts/leek"
+    "leek":"javascripts/leek",
+    "jsdom":"lib/jsdom/lib"
   }
 )
 
