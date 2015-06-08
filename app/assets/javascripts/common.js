@@ -16,7 +16,7 @@
             // Map the dependencies to CDNs or WebJars directly
             "bootstrap" : "//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min",
             "jsRoutes" : "javascriptRoutes",
-            "jquery":"webjars/jquery/2.1.3/jquery.min",
+            "jquery":"webjars/jquery/2.1.4/jquery.min",
         }
     });
 
