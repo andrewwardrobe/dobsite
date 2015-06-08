@@ -30,7 +30,6 @@ copy_node_modules := {
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick" % "0.8.0",
   "io.strongtyped"			%% 	"active-slick"	% "0.2.2",
-  "org.webjars" % "webjars-locator" % "0.23",
   "org.webjars" %% "webjars-play" % "2.3.0-3",
   "org.webjars" % "bootstrap" % "3.1.1-2",
   "org.seleniumhq.selenium" % "selenium-server" % "2.45.0" % "test",
@@ -56,9 +55,9 @@ Keys.fork in (Test) := true
 
 pipelineStages := Seq(rjs, digest)
 
-//MochaKeys.requires += "./Setup"
+MochaKeys.requires += "./Setup"
 
-//JsEngineKeys.engineType := JsEngineKeys.EngineType.Node
+JsEngineKeys.engineType := JsEngineKeys.EngineType.Node
 
 unmanagedResourceDirectories in Test <+= baseDirectory(_ / "target/web/public/test")
 

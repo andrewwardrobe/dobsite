@@ -25,13 +25,14 @@ describe('Array', function(){
     it('should twat', function(){
         console.log("hello");
         var jsdom = require('jsdom').jsdom;
-        var doc = jsdom("<html><head></head><body></body></html>");
+        var doc = jsdom("<html><head></head><body><div id=\"leek\"></div></body></html>");
         var window = doc.parentWindow;
         global.window = window;
         var $ = require("jquery")(window);
         var leek = requirejs("leek");
         var text = leek.test("sheek");
-        assert.equal(text,"leek sheek" );
+        var jimbo = doc.getElementById("leek").textContent;
+        assert.equal(jimbo,"leek sheek" );
     });
   });
 });
