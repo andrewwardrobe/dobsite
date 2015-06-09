@@ -1,13 +1,10 @@
 var assert = require("assert");
-//Setup jsdom with some initial html
-var jsdom = require('jsdom').jsdom;
+
+var jsdom = require('jsdom').jsdom;  //Setup jsdom with some initial html
 var doc = jsdom("<html><head></head><body><div id=\"leek\">leek</div></body></html>");
-//We need the window as jquery need a window
-var window = doc.parentWindow;
-//Set the global window to the jsdom create one so we can load jquery in our requirejs modules
-global.window = window;
-//since we made the global window we dont need to pass the window in to jquery
-var $ = require("jquery");
+var window = doc.parentWindow; //We need the window from jsdom as jquery needs a window
+global.window = window;     //Set the global window to the jsdom create one so we can load jquery in our requirejs modules
+var $ = require("jquery");     //since we made the global window we dont need to pass the window in to jquery
 
 
 describe ('Array', function (){
