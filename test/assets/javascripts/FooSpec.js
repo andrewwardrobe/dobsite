@@ -1,5 +1,13 @@
 var assert = require("assert");
-
+//Setup jsdom with some initial html
+var jsdom = require('jsdom').jsdom;
+var doc = jsdom("<html><head></head><body><div id=\"leek\">leek</div></body></html>");
+//We need the window as jquery need a window
+var window = doc.parentWindow;
+//Set the global window to the jsdom create one so we can load jquery in our requirejs modules
+global.window = window;
+//since we made the global window we dont need to pass the window in to jquery
+var $ = require("jquery");
 
 
 describe ('Array', function (){
@@ -24,17 +32,39 @@ describe('Array', function(){
     console.log("hello");
     it('should twat', function(){
         console.log("hello");
-        var jsdom = require('jsdom').jsdom;
-        var doc = jsdom("<html><head></head><body><div id=\"leek\"></div></body></html>");
-        var window = doc.parentWindow;
-        global.window = window;
-        var $ = require("jquery")(window);
+
+
+        //Can stub out jsRoutes like this but probably best to use sinon
+        global.jsRoutes = {
+            "controllers":{
+               "Application":"leeek",
+            }
+        };
         var leek = requirejs("leek");
         var text = leek.test("sheek");
-        var jimbo = doc.getElementById("leek").textContent;
+        var jimbo = $("#leek").text();
         assert.equal(jimbo,"leek sheek" );
     });
+
+    it("Should leek",function(){
+        assert.equal("le","leek sheek" );
+    });
   });
+
+  describe('Reloading', function(){
+      it('should reset the doc without breaking jquery', function(){
+
+        doc = jsdom("<html><head></head><body><div id=\"leek\">leek</div></body></html>");
+        var jimbo = doc.getElementById("leek").textContent;
+        var leek = requirejs("leek");
+        assert.equal(jimbo,"leek" );
+
+        [1,2,3].indexOf(5).should.equal(-1);
+        [1,2,3].indexOf(0).should.equal(-1);
+      });
+    });
+
+
 });
 
 describe('Array', function(){
