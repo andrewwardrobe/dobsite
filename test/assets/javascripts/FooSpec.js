@@ -1,12 +1,3 @@
-var assert = require("assert");
-
-var jsdom = require('jsdom').jsdom;  //Setup jsdom with some initial html
-var doc = jsdom("<html><head></head><body><div id=\"leek\">leek</div></body></html>");
-var window = doc.parentWindow; //We need the window from jsdom as jquery needs a window
-global.window = window;     //Set the global window to the jsdom create one so we can load jquery in our requirejs modules
-var $ = require("jquery");     //since we made the global window we dont need to pass the window in to jquery
-
-
 describe ('Array', function (){
     describe ('#indexOf()', function(){
          it('should return -1 when the value is not present', function(){
@@ -24,35 +15,39 @@ describe('Array', function(){
   });
 });
 
-describe('Array', function(){
-  describe('#indexOf()', function(){
-    console.log("hello");
-    it('should twat', function(){
+describe('Leek', function(){
+
+
+  describe('JS Test Framework', function(){
+
+    it('should be able to call function with underlying jquery', function(){
         console.log("hello");
 
-
-        //Can stub out jsRoutes like this but probably best to use sinon
-        global.jsRoutes = {
-            "controllers":{
-               "Application":"leeek",
-            }
-        };
         var leek = requirejs("leek");
         var text = leek.test("sheek");
+
         var jimbo = $("#leek").text();
         assert.equal(jimbo,"leek sheek" );
     });
 
-    it("Should leek",function(){
-        assert.equal("le","leek sheek" );
+    it("be able to stub a function",function(){
+
+        var stub = sinon.stub(global.jsRoutes.controllers.Application, "leek");
+        stub.returns("Andrew Wardrobe");
+
+        var leek = requirejs("leek");
+        leek.jsRoutesTest();
+        var actualOutput = $("#leek").text();
+
+        assert.equal(actualOutput,"Andrew Wardrobe" );
     });
   });
 
   describe('Reloading', function(){
       it('should reset the doc without breaking jquery', function(){
 
-        doc = jsdom("<html><head></head><body><div id=\"leek\">leek</div></body></html>");
-        var jimbo = doc.getElementById("leek").textContent;
+        document = jsdom("<html><head></head><body><div id=\"leek\">leek</div></body></html>");
+        var jimbo = document.getElementById("leek").textContent;
         var leek = requirejs("leek");
         assert.equal(jimbo,"leek" );
 

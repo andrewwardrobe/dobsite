@@ -23,6 +23,9 @@
   },
   "devDependencies": {
     "jsdom":"^3.0.1",
-    "jquery":"2.1.4"
+    "jquery": "2.1.4",
+    "sinon":"^1.14.1",
+    "chai":"^3.0.0",
+    "sinon-chai":"^2.8.0"
   }
 }
