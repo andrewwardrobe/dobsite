@@ -42,9 +42,7 @@ describe('Leek', function(){
             var text =  $("#leek").text();
             console.log("text: " +text);
             text.should.equal("sheek");
-        }).fail(function(err){
-                          console.log(err);
-                          });
+        });
 
 
     });
