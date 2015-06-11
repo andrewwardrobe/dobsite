@@ -17,8 +17,34 @@ describe('Array', function(){
 
 describe('Leek', function(){
 
+  var server = sinon.fakeServer.create();
+
+  server.autoRespond = true;
+  server.respondImmediately = true;
+
 
   describe('JS Test Framework', function(){
+
+    it('should be able to call function with underlying jquery', function(){
+        var leek = requirejs("leek");
+        server.respondWith("GET", "/dob/leek",
+                [200, {"Content-Type": "application/json"},
+                    '[{"leek":"sheek"}]'
+                    ]);
+
+        $.ajax({
+            url:"/dob/leek",
+            success:function (data){
+                console.log(data);
+            },
+            error:function(err){
+                console.log(err);
+            }
+        });
+        server.respond();
+        assert.equal($("#leek").text(),"sheek" );
+
+    });
 
     it('should be able to call function with underlying jquery', function(){
         console.log("hello");
