@@ -23,7 +23,11 @@ global.jsdom = require("jsdom").jsdom
 chai.use(sinonChai)
 #I have a emptyJsRoutes file
 global.jsRoutes = requirejs("jsRoutes");
-global.document = jsdom("<html><head></head><body><div id=\"leek\">leek</div></body></html>");
-
+global.document = jsdom("<html><head></head><body><div id=\"leek\">da oostin boyeez</div></body></html>");
+global.nock = require("nock");
 global.window = document.parentWindow;
-global.$ = require("jquery");
+global.$ = require("jquery")
+global.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest
+
+#I use this a so I can test my ajax
+global.sitebase = "https://www.daoostinboyeez.com"

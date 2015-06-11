@@ -23,4 +23,6 @@
     requirejs.onError = function(err) {
             console.log(err);
         };
+
+    global.sitebase = document.location.origin;
 })(requirejs);
