@@ -32,6 +32,7 @@ libraryDependencies ++= Seq(
   "io.strongtyped"			%% 	"active-slick"	% "0.2.2",
   "org.webjars" %% "webjars-play" % "2.3.0-3",
   "org.webjars" % "bootstrap" % "3.1.1-2",
+  "org.webjars" % "q" % "2.0.0",
   "org.seleniumhq.selenium" % "selenium-server" % "2.45.0" % "test",
   "org.seleniumhq.selenium" % "selenium-java" % "2.45.0" % "test",
   "org.scalatest" % "scalatest_2.11" % "2.2.1" % "test",
