@@ -1,11 +1,21 @@
-
-
-
 describe('Javascript Unit Testing', function(){
 
 
   describe('Examples', function(){
+var service;
 
+    before(function(){
+        service = nock(sitebase).get('/leek')
+                        .reply(200,{
+                             leek:"sheek",
+                             meek:"bleek"
+                         });
+    });
+
+    after(function(){
+       nock.restore();
+       nock.cleanAll();
+    });
 
     beforeEach(function(){
         $("body").append("<div id=\"leek\">leek</div>");
@@ -17,12 +27,6 @@ describe('Javascript Unit Testing', function(){
 
     it('testing DOM inserts from jQuery',function(done){
 
-         var service = nock(sitebase)
-                         .get('/leek')
-                         .reply(200,{
-                             leek:"sheek",
-                             meek:"bleek"
-                         });
 
             var leek = requirejs('leek');
             var result = leek.nockTest();
@@ -36,8 +40,7 @@ describe('Javascript Unit Testing', function(){
     });
 
     it('testing Ajax with promises',function(done){
-        var service = nock(sitebase)
-                .get('/leek')
+        service = nock(sitebase).get('/leek')
                 .reply(200,{
                     leek:"sheek",
                     meek:"bleek"
