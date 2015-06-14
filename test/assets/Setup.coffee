@@ -9,7 +9,7 @@ requirejs.config(
     "jquery":"lib/jquery/jquery",
     "leek":"javascripts/leek",
     "jsRoutes" : "javascripts/emptyjsRoutes",
-    "q" : "lib/q"
+    "q" : "lib/q/q"
   }
 )
 
@@ -45,10 +45,10 @@ $.support.cors = true
 $.ajaxSettings.xhr = () ->
   return new XMLHttpRequest()
 
+global.Q = require('q')
 
 #I use this a so I can test my ajax
 global.sitebase = "https://www.daoostinboyeez.com"
-global.Q = require('q')
 
 
 
