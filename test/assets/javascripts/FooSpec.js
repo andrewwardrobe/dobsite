@@ -2,23 +2,23 @@ describe('Javascript Unit Testing', function(){
 
 
   describe('Examples', function(){
-var service;
+    var service;
 
     before(function(){
-        service = nock(sitebase).get('/leek')
-                        .reply(200,{
-                             leek:"sheek",
-                             meek:"bleek"
-                         });
     });
 
     after(function(){
-       nock.restore();
-       nock.cleanAll();
+        nock.restore();
+        nock.cleanAll();
     });
 
     beforeEach(function(){
         $("body").append("<div id=\"leek\">leek</div>");
+        service = nock(sitebase).get('/leek')
+                                .reply(200,{
+                                     leek:"sheek",
+                                     meek:"bleek"
+                                 });
     });
 
     afterEach(function(){
@@ -26,8 +26,6 @@ var service;
     });
 
     it('testing DOM inserts from jQuery',function(done){
-
-
             var leek = requirejs('leek');
             var result = leek.nockTest();
             result.then(function(data){
@@ -40,21 +38,12 @@ var service;
     });
 
     it('testing Ajax with promises',function(done){
-        service = nock(sitebase).get('/leek')
-                .reply(200,{
-                    leek:"sheek",
-                    meek:"bleek"
-                }).get('*').reply(404);
-
         var leek = requirejs('leek');
         var result = leek.nockTest();
 
         return expect(result).to.eventually
                  .have.property('leek',"sheek")
                  .notify(done);
-
-
-
     });
 
     it('Testing an requirejs module that uses jQuery', function(){
@@ -66,7 +55,6 @@ var service;
     });
 
     it("stubing out jsRoutes",function(){
-
         //I have a jsfile with a empty js routes structure
         var stub = sinon.stub(global.jsRoutes.controllers.Application, "leek");
         stub.returns("Andrew Wardrobe");
