@@ -1,3 +1,3 @@
 require ["common"], (common) ->
-    require ["discography"], (disco) ->
+    require ["discography","jquery"], (disco,$) ->
         disco.loadData()

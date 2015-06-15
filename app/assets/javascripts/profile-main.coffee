@@ -1,5 +1,5 @@
 require ["common"], (common) ->
-    require ["profile"], (profile) ->
+    require ["profile",'jquery'], (profile,$) ->
         profile.setupEditHandler "#editBtn"
         profile.loadPosts()
         profile.loadDrafts()

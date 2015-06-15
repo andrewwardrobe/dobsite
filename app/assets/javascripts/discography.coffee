@@ -1,4 +1,4 @@
-define ['common','jquery','utilities'],(common,$,utils) ->
+define ['common','utilities'],(common,utils) ->
     {
         makeDiscographyTables:(data) ->
             $.each data, (index, disc) ->

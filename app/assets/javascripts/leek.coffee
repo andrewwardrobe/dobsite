@@ -1,4 +1,4 @@
-define ['common','jquery','puff'],(common,$,puff) -> {
+define ['common','puff'],(common,puff) -> {
         test:(word)->
             leek =  jsRoutes.controllers.Application
             $("#leek").text "leek "+word
@@ -6,12 +6,14 @@ define ['common','jquery','puff'],(common,$,puff) -> {
         jsRoutesTest:()->
             leek = jsRoutes.controllers.Application.leek();
             $("#leek").text leek
-        getTest:()->
-            console.log "In getTest()"
-            $.get "/dob/leek", (data) ->
-                console.log JSON.stringify data
-                $.each data, (idx, val) ->
-                    console.log JSON.stringify val
-                    $("#leek").text val.leek
+        nockTest:()->
+            console.log("in nock test 2: "+sitebase)
+            $.get(sitebase + "/leek", (data) ->
+                console.log("in nock test")
+                console.log("leek "+data.leek)
+                console.log $("#leek").text()
+                $("#leek").text data.leek
+            ).fail (err) ->
+                console.log(err)
     }
 
