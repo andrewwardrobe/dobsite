@@ -1,4 +1,4 @@
-define ['common','utilities'],(common,utils) ->
+define ['common','utilities','q'],(common,utils,Q) ->
     profile = {
         avatarImage : undefined
         editMode:false
