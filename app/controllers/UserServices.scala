@@ -22,18 +22,20 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
  */
 object UserServices extends Controller with LoginLogout with StandardAuthConfig {
 
-  val loginForm = {
-    database.withSession { implicit session =>
+  def loginForm(implicit session: Session) = {
+
       Form {
         mapping("email" -> text, "password" -> text)(UserAccounts.authenticate)(_.map(u => (u.email, "")))
           .verifying("Invalid email or password", result => result.isDefined)
-      }
+
     }
   }
 
 
   def login() = Action{  implicit request =>
-    Ok(views.html.login(loginForm))
+    database.withSession { implicit session =>
+      Ok(views.html.login(loginForm))
+    }
   }
 
   def signup = Action{ implicit request =>
@@ -64,13 +66,15 @@ def signedout = Action { implicit request =>
   }
 
   def authenticate = Action.async { implicit request =>
-    val submission = loginForm.bindFromRequest()
-    submission.fold(
-      formWithErrors => Future.successful(BadRequest(views.html.login(formWithErrors))),
-      user =>{
-        gotoLoginSucceeded(user.get.name)
-      }
-    )
+    database.withSession { implicit session =>
+      val submission = loginForm.bindFromRequest()
+      submission.fold(
+        formWithErrors => Future.successful(BadRequest(views.html.login(formWithErrors))),
+        user => {
+          gotoLoginSucceeded(user.get.name)
+        }
+      )
+    }
   }
 
   def checkName(name: String) = Action{ implicit request =>
