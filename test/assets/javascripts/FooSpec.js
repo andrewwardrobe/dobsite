@@ -74,12 +74,3 @@ describe('Javascript Unit Testing', function(){
   });
 
 });
-
-describe('Array', function(){
-  describe('#indexOf()', function(){
-    it('should jimbo jambo', function(){
-      [1,2,3].indexOf(5).should.equal(-1);
-      [1,2,3].indexOf(0).should.equal(-1);
-    });
-  });
-});
