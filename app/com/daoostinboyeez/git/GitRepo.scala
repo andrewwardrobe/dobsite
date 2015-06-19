@@ -15,6 +15,7 @@ import org.eclipse.jgit.treewalk.TreeWalk
 import play.api.{Logger, Play}
 import play.api.Play.current
 import scala.collection.JavaConversions._
+import scala.collection.immutable.VectorBuilder
 import scala.collection.mutable.ListBuffer
 import org.apache.commons.io
 
@@ -186,6 +187,22 @@ class GitRepo {
       reader.release()
       new String("")
     }
+  }
+
+  def lsFiles = {
+    val id = repo.resolve(Constants.HEAD)
+    val revWalk = new RevWalk(repo)
+    val commit = revWalk.parseCommit(id)
+    val revTree = commit.getTree()
+
+    val treeWalk = new TreeWalk(repo)
+    treeWalk.addTree(revTree)
+    treeWalk.setRecursive(true)
+    val buffer = new VectorBuilder[String]
+    while(treeWalk.next()){
+      buffer += treeWalk.getPathString
+    }
+    buffer.result()
   }
 }
 

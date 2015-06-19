@@ -13,7 +13,7 @@ import test._
 class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
-  val repo = GitRepo.apply()
+  lazy val repo = GitRepo.apply()
   
   "Content Repository" must {
     "Be able to show the current branch" in {
@@ -53,6 +53,11 @@ class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
       commitList.length must equal(2)
     }
 
+    "List all files in the repo" in {
+      val fileList = repo.lsFiles
+      info(fileList.toString())
+      fileList.length must equal (3)
+    }
 
   }
 
