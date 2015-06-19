@@ -14,7 +14,7 @@ class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   lazy val repo = GitRepo.apply()
-  
+
   "Content Repository" must {
     "Be able to show the current branch" in {
       val currBranch = repo.getBranch

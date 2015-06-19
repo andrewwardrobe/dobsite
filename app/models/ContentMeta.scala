@@ -2,6 +2,7 @@ package models
 
 import com.daoostinboyeez.site.exceptions.InvalidMetaJsonException
 import org.apache.commons.lang3.StringUtils
+import play.api.Logger
 import play.api.libs.json.{JsError, JsSuccess, Json, Writes}
 
 /**
@@ -19,15 +20,28 @@ object ContentMeta {
 
   def getMeta(commitMsg:String) = {
     val  meta =  StringUtils.substringBetween(commitMsg,"++++META++++\n","\n----META----")
-    meta
+    if (meta != null)
+      meta
+    else
+      ""
   }
 
-  def toPost(meta:String) = {
-    val json = Json.parse(getMeta(meta))
-    Json.fromJson[ContentPost](json) match {
-      case p: JsSuccess[ContentPost] => p.get
-      case err: JsError => throw new InvalidMetaJsonException("Error Deserialising Json :" +JsError.toFlatJson(err).toString())
+  def toPost(commit:String) = {
+    val meta = getMeta(commit)
+    if(meta!=null && meta!="") {
+      val json = Json.parse(meta)
+      val post = Json.fromJson[ContentPost](json) match {
+        case p: JsSuccess[ContentPost] => {
+          p.get
+        }
+        case err: JsError => {
+          throw new InvalidMetaJsonException("Error Deserialising Json :" + JsError.toFlatJson(err).toString())
+        }
+      }
+      post
     }
+    else
+      null
   }
 
   def makeCommitMsg(commitMsg: String, post: ContentPost) = {
