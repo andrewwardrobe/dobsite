@@ -204,6 +204,15 @@ class GitRepo {
     }
     buffer.result()
   }
+
+  def getLastCommitMsg(path:String) = {
+    val commits = git.log().addPath(path).call().toVector
+    if(!commits.isEmpty){
+      commits(0).getFullMessage()
+    }else{
+      ""
+    }
+  }
 }
 
 object GitRepo{

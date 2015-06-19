@@ -55,8 +55,12 @@ class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
     "List all files in the repo" in {
       val fileList = repo.lsFiles
-      info(fileList.toString())
-      fileList.length must equal (3)
+      fileList.length must equal (4)
+    }
+
+    "Get the commit message from the last time a file was commited" in {
+      val commitMsg = repo.getLastCommitMsg("leek")
+      commitMsg must equal ("Da Oostin Boyeez")
     }
 
   }
@@ -67,12 +71,12 @@ class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
     val firstFile = repo.createFile("Here is some data in a file")
     val secondFile = repo.createFile("Some other data")
 
-    repo.newFile("leek","Here is leek")
+    repo.newFile("leek","Here is leek","Initial edit")
 
     repo.updateFile(firstFile,"Here is some data in a file I just changed")
     repo.updateFile(secondFile,"Some other data, i just changed")
 
-    repo.updateFile("leek","Here is some more leeks")
+    repo.updateFile("leek","Here is some more leeks","Da Oostin Boyeez")
   }
 
   after {
