@@ -50,7 +50,6 @@ libraryDependencies ++= Seq(
   "net.sf.flexjson" % "flexjson" % "3.1",
   "org.webjars" % "should.js" % "5.0.0",
   "org.webjars" % "rjs" % "2.1.11-1-trireme" % "test"
-  
 )
 
 Keys.fork in (Test) := true
