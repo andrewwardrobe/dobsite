@@ -1,7 +1,8 @@
 package controllers
 
+import com.daoostinboyeez.git.GitRepo
 import controllers.Authorised._
-import data.UserAccounts
+import data.{ContentReloader, UserAccounts}
 import jp.t2v.lab.play2.auth.AuthElement
 import models.UserAccount
 import models.UserRole.Administrator
@@ -14,10 +15,15 @@ import play.api.mvc.Controller
  */
 object Admin extends Controller with AuthElement with StandardAuthConfig{
 
+  def reloadFromRepo = StackAction(AuthorityKey -> Administrator) {  implicit request =>
+    val reloader = new ContentReloader(GitRepo.apply())
+    reloader.reload
+    Ok("Done")
+  }
+
   def admin = StackAction(AuthorityKey -> Administrator) {  implicit request =>
     Ok(views.html.admin(""))
   }
-
 
   def changeRole(name: String,role:String) = StackAction(AuthorityKey -> Administrator) {  implicit request =>
 

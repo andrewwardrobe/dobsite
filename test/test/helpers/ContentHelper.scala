@@ -5,7 +5,7 @@ import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.GitRepo
 import data.{Tags, Content}
-import models.{ContentTag, ContentTypeMap, ContentPost}
+import models.{ContentMeta, ContentTag, ContentTypeMap, ContentPost}
 import play.api.Logger
 import play.api.Play.current
 import play.api.db.DB
@@ -51,8 +51,10 @@ object ContentHelper {
   }
 
   def createPost(title:String, author:String, content :String, typ: Int, extraData :String, date: Date,userId:Option[Int]):ContentPost = {
-    val filename = repo.createFile(content)
+    val filename = repo.genFileName
+
     val post = new ContentPost(UUID.randomUUID().toString(),title, typ, date, author, filename, extraData,false,userId)
+    repo.doFile(filename,content,ContentMeta.makeCommitMsg("Created", post))
     database.withSession { implicit s :Session =>
       Content.insert(post)
     }
@@ -65,8 +67,9 @@ object ContentHelper {
   }
 
   def createBiography(name:String, text :String, thumb :String,userId:Option[Int]) = {
-    val filename = repo.createFile(text)
+    val filename = repo.genFileName
     val post = new ContentPost(UUID.randomUUID().toString(),name, ContentTypeMap("Biography"), new Date(), "", filename, ContentPost.extraDataToJson(s"thumb=$thumb"), false,userId)
+    repo.doFile(filename,text,ContentMeta.makeCommitMsg("Created", post))
     val p = database.withSession { implicit s :Session =>
       Content.insert(post)
     }
@@ -74,8 +77,9 @@ object ContentHelper {
   }
 
   def createDiscographyItem(name:String, text :String, thumb :String, albumType :String,userId:Option[Int]) = {
-    val filename = repo.createFile(text)
+    val filename = repo.genFileName
     val post = new ContentPost(UUID.randomUUID().toString(),name, ContentTypeMap("Discography"), new Date(), "", filename, ContentPost.extraDataToJson(s"thumb=$thumb\ndiscType=$albumType"), false,userId)
+    repo.doFile(filename,text,ContentMeta.makeCommitMsg("Created", post))
     val p = database.withSession { implicit s :Session =>
       Content.insert(post)
     }
@@ -98,8 +102,9 @@ object ContentHelper {
   }
 
   def createDraft(title:String, author:String, content :String, typ: Int, extraData :String, date: Date,userId:Option[Int]):ContentPost = {
-    val filename = repo.createFile(content)
+    val filename = repo.genFileName
     val post = new ContentPost(UUID.randomUUID().toString(),title, typ, date, author, filename, extraData,true,userId)
+    repo.doFile(filename,content,ContentMeta.makeCommitMsg("Created", post))
     database.withSession { implicit s :Session =>
       Content.insert(post)
     }

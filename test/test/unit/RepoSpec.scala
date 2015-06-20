@@ -13,8 +13,8 @@ import test._
 class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
-  val repo = GitRepo.apply()
-  
+  lazy val repo = GitRepo.apply()
+
   "Content Repository" must {
     "Be able to show the current branch" in {
       val currBranch = repo.getBranch
@@ -53,6 +53,15 @@ class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
       commitList.length must equal(2)
     }
 
+    "List all files in the repo" in {
+      val fileList = repo.lsFiles
+      fileList.length must equal (4)
+    }
+
+    "Get the commit message from the last time a file was commited" in {
+      val commitMsg = repo.getLastCommitMsg("leek")
+      commitMsg must equal ("Da Oostin Boyeez")
+    }
 
   }
 
@@ -62,12 +71,12 @@ class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
     val firstFile = repo.createFile("Here is some data in a file")
     val secondFile = repo.createFile("Some other data")
 
-    repo.newFile("leek","Here is leek")
+    repo.newFile("leek","Here is leek","Initial edit")
 
     repo.updateFile(firstFile,"Here is some data in a file I just changed")
     repo.updateFile(secondFile,"Some other data, i just changed")
 
-    repo.updateFile("leek","Here is some more leeks")
+    repo.updateFile("leek","Here is some more leeks","Da Oostin Boyeez")
   }
 
   after {
