@@ -56,7 +56,7 @@ Keys.fork in (Test) := true
 
 pipelineStages := Seq(rjs, digest)
 
-//MochaKeys.requires += "./Setup"
+MochaKeys.requires += "./Setup"
 
 JsEngineKeys.engineType := JsEngineKeys.EngineType.Node
 
