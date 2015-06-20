@@ -58,6 +58,7 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
     "Facility to bulk load in posts" in pending
 
     "Facility to restore/migrate posts from meta in the commits" in pending
+    "\tRestore Tags" in pending
 
     "Facility to restore/migrate user accounts, store this in the git repo some how" in pending
 

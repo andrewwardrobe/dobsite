@@ -36,6 +36,7 @@ GET     /discography                controllers.Application.discography
 GET     /hansundjorg                controllers.Application.hansUndJorg
 
 GET     /javascriptRoutes     controllers.Application.javascriptRoutes
+GET     /admin/reload     controllers.Admin.reloadFromRepo
 GET     /admin     controllers.Admin.admin
 
 PUT     /admin/changerole/:user/:role     controllers.Admin.changeRole(user:String, role:String)
