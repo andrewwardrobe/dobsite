@@ -2,7 +2,7 @@
     "use strict";
 
     requirejs.config({
-        baseUrl : "assets/javascripts",
+        baseUrl : "/assets/javascripts",
         shim : {
             "jquery" : {
                 exports : "$"
