@@ -48,6 +48,7 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
           "\tOnly allow TrustedContributor and admin to have this feature" in pending
 
 
+    "Make every page have a user object and pass that to main" in pending
 
     "Make a show in user profile check box on editor" in pending
 
