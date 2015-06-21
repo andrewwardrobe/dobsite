@@ -43,12 +43,12 @@ class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
 
 
-    "Be able to list all commits along side its commit date" in {
+    "Be able to list all commits along side its commit date.coffee" in {
       val commitList = repo.findWithDate
       commitList.length must equal(7) //The setup does a commit so this should be 7
     }
 
-    "Be able to list all commits along side its commit date for a path" in {
+    "Be able to list all commits along side its commit date.coffee for a path" in {
       val commitList = repo.findWithDate ("leek")
       commitList.length must equal(2)
     }

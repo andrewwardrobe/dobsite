@@ -36,7 +36,7 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       }
     }
 
-    "Be able to retrieve posts ordered by creation date in reverse order" in {
+    "Be able to retrieve posts ordered by creation date.coffee in reverse order" in {
       database.withSession{ implicit session =>
 
         ContentHelper.createPost("Post 1","MC Donalds","Post 1",1,"",None)
@@ -49,7 +49,7 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       }
     }
 
-    "Be able to retrieve posts ordered by creation date in reverse order and filter by type" in {
+    "Be able to retrieve posts ordered by creation date.coffee in reverse order and filter by type" in {
       database.withSession{ implicit session =>
 
         ContentHelper.createPost("Post 32","MC Donalds","Post 3",1,"",None)
@@ -60,7 +60,7 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       }
     }
 
-    "Be able to retrieve posts created before a particular date ordered by creation date in reverse order" in {
+    "Be able to retrieve posts created before a particular date.coffee ordered by creation date.coffee in reverse order" in {
       database.withSession{ implicit session =>
 
         ContentHelper.createPost("Post 21","MC Donalds","Post rwe1",1,"",None)
@@ -78,7 +78,7 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       }
     }
 
-    "Be able to retrieve posts created before a particular date ordered by creation date in reverse order filtered by type" in {
+    "Be able to retrieve posts created before a particular date.coffee ordered by creation date.coffee in reverse order filtered by type" in {
       database.withSession{ implicit session =>
 
         ContentHelper.createPost("Post 21","MC Donalds","wet rwe1",1,"",None)
@@ -112,7 +112,7 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       }
     }
 
-    "Be able to limit number of items retrieved by type before date" in {
+    "Be able to limit number of items retrieved by type before date.coffee" in {
       database.withSession{ implicit session =>
 
         ContentHelper.createPost("Post 215","MC Donalds","Jimbo Jambo 1",1,"",None)

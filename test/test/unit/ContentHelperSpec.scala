@@ -23,7 +23,7 @@ class ContentHelperSpec extends PlaySpec with OneServerPerSuite with BeforeAndAf
   "Content Helper" must {
 
 
-    "Be able to create a post with a specifed date" in {
+    "Be able to create a post with a specifed date.coffee" in {
       val df = new SimpleDateFormat("yyyyMMddHHmmss")
       val expectedDate = "20150418163545"
       val inputDate = df.parse(expectedDate)
@@ -35,7 +35,7 @@ class ContentHelperSpec extends PlaySpec with OneServerPerSuite with BeforeAndAf
 
   }
 
-  "Be able to create a post with a specifed date string" in {
+  "Be able to create a post with a specifed date.coffee string" in {
     val df = new SimpleDateFormat("yyyyMMddHHmmss")
     val expectedDate = "20150418163545"
     val post = ContentHelper.createPost("Testing Dates","MC Donalds","Testing some dates",1,"","20150418163545",None)

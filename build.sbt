@@ -54,7 +54,7 @@ libraryDependencies ++= Seq(
 
 Keys.fork in (Test) := true
 
-pipelineStages := Seq(rjs, digest)
+pipelineStages := Seq(digest)
 
 MochaKeys.requires += "./Setup"
 

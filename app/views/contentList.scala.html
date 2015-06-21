@@ -1,9 +1,7 @@
 @(uri: String)(implicit session : Session)
 @scripts = {
-    <script src='@routes.Assets.at("javascripts/news.js")'></script>
-<script type="text/javascript">
-    getPosts("today",5,'@uri')
-</script>
+<script src='@routes.Assets.at("javascripts/require.js").url'
+        data-main='@routes.Assets.at("javascripts/news-main.js").url'></script>
 }
 
 @content = {
@@ -13,7 +11,7 @@
       <div  class="col-md-10  col-sm-offset-1 dob-main">
        <div id="posts" class="centered">
        </div>
-
+            <input id="contentURI" type="hidden" value="@uri" />
           <button id="pager" class="btn btn-primary" style="width:100%">More</a></li>
 
 
