@@ -22,13 +22,13 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
-  val repo = GitRepo.apply()
+  lazy val repo = GitRepo.apply()
 
   var bio = ""
 
   var setupDone: Boolean = false
-  val signIn = new SignInPage(port)
-  val biographyPage = new BiographyPage(port)
+  lazy val signIn = new SignInPage(port)
+  lazy val biographyPage = new BiographyPage(port)
   import biographyPage._
   def extraSetup = {
     database.withSession { implicit session =>

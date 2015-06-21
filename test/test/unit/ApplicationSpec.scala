@@ -55,7 +55,7 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
         "\tMake a soundcloud player feature on editor" in pending
 
 
-    "Facility to bulk load in posts" in pending
+    "Facility to bulk load in posts" in pending //this
 
     "Facility to restore/migrate posts from meta in the commits" in pending
     "\tRestore Tags" in pending
