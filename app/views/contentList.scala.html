@@ -1,4 +1,4 @@
-@(uri: String)(implicit session : Session)
+@(uri: String,user:Option[UserAccount])(implicit session : Session)
 @scripts = {
 <script src='@routes.Assets.at("javascripts/require.js").url'
         data-main='@routes.Assets.at("javascripts/news-main.js").url'></script>
@@ -21,4 +21,4 @@
 
 }
 
-@main("news",content,scripts)
+@main("news",content,scripts,user)

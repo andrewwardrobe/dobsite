@@ -36,12 +36,14 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
     Ok(views.html.index(maybeUser))
   }
 
-  def post(id :String) =  Action{ implicit request =>
-   Ok(views.html.post("",id))
+  def post(id :String) =  StackAction{ implicit request =>
+    val maybeUser: Option[User] = loggedIn
+   Ok(views.html.post("",id,maybeUser))
   }
 
-  def playground =  Action{ implicit request =>
-    Ok(views.html.playground(""))
+  def playground =  StackAction{ implicit request =>
+    val maybeUser: Option[User] = loggedIn
+    Ok(views.html.playground("",maybeUser))
   }
 
   def uploadedImage(file:String) = Action{ implicit response =>
@@ -77,30 +79,34 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
     Ok(filename.replace("public","assets"))
   }
 
-  def news = Action {  implicit request =>
-    Ok(views.html.contentList(routes.JsonApi.getContentByDate(ContentTypeMap.get("News")).url))
+  def news = StackAction {  implicit request =>
+    val maybeUser: Option[User] = loggedIn
+    Ok(views.html.contentList(routes.JsonApi.getContentByDate(ContentTypeMap.get("News")).url,maybeUser))
   }
 
-  def gazthree = Action {  implicit request =>
-    Ok(views.html.contentList(routes.JsonApi.getContentByDate(ContentTypeMap.get("Gaz Three")).url))
+  def gazthree = StackAction {  implicit request =>
+    val maybeUser: Option[User] = loggedIn
+    Ok(views.html.contentList(routes.JsonApi.getContentByDate(ContentTypeMap.get("Gaz Three")).url,maybeUser))
   }
 
-  def hansUndJorg = Action {  implicit request =>
-    Ok(views.html.huj(""))
+  def hansUndJorg = StackAction {  implicit request =>
+    val maybeUser: Option[User] = loggedIn
+    Ok(views.html.huj("",maybeUser))
   }
 
-  def discography = Action { implicit request =>
-    Ok(views.html.discography(""))
+  def discography = StackAction { implicit request =>
+    val maybeUser: Option[User] = loggedIn
+    Ok(views.html.discography("",maybeUser))
   }
 
   def biography = StackAction {  implicit request =>
     val maybeUser: Option[User] = loggedIn
     maybeUser match {
-      case None => {Ok (views.html.biography ("", 0) )}
+      case None => {Ok (views.html.biography ("", 0,maybeUser) )}
       case Some(user) => {
         user.hasPermission(TrustedContributor) match {
-          case false => Ok (views.html.biography ("", 0) )
-          case true => Ok (views.html.biography ("", 1) )
+          case false => Ok (views.html.biography ("", 0,maybeUser) )
+          case true => Ok (views.html.biography ("", 1,maybeUser) )
         }
       }
     }

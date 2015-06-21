@@ -1,4 +1,4 @@
-@(message: String, postId: String)(implicit session : Session)
+@(message: String, postId: String,user:Option[UserAccount])(implicit session : Session)
 
 @content = {
 <div class="row" >
@@ -31,4 +31,4 @@
 <script src='@routes.Assets.at("javascripts/require.js").url'
         data-main='@routes.Assets.at("javascripts/post-main.js").url'></script>
 }
-@main("Da Oostin Boyeez",content,scripts)
+@main("Da Oostin Boyeez",content,scripts,user)

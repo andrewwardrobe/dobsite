@@ -1,4 +1,4 @@
-@(form: Form[Option[models.UserAccount]])(implicit session : Session)
+@(form: Form[Option[models.UserAccount]],user:Option[UserAccount])(implicit session : Session)
 @scripts = {}
 
 @content = {
@@ -29,4 +29,4 @@
 
 }
 
-@main("Da Oostin Boyeez",content, scripts)
+@main("Da Oostin Boyeez",content, scripts,user)

@@ -47,9 +47,6 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
     "Make a user alias feature" in pending
           "\tOnly allow TrustedContributor and admin to have this feature" in pending
 
-
-    "Make every page have a user object and pass that to main" in pending
-
     "Make a show in user profile check box on editor" in pending
 
     "Make a music page based on a music tag filter + user filter" in pending

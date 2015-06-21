@@ -53,17 +53,19 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   }
 
   def newContent(contentType:String) = StackAction(AuthorityKey -> Contributor){  implicit request =>
+    val maybeUser  =  loggedIn
     val typ = ContentTypeMap.get(contentType)
-    Ok(views.html.editor("",ContentPost.blogForm,"-1",typ))
+    Ok(views.html.editor("",ContentPost.blogForm,"-1",typ,Some(maybeUser)))
   }
 
   def blogInput = StackAction(AuthorityKey -> Contributor){  implicit request =>
-    Ok(views.html.editor("",ContentPost.blogForm,"-1"))
+    val maybeUser = loggedIn
+    Ok(views.html.editor("",ContentPost.blogForm,"-1",1,Some(maybeUser)))
   }
 
   def blogUpdate(id: String) = StackAction(AuthorityKey -> Contributor) {  implicit request =>
-
-    Ok(views.html.editor("",ContentPost.blogForm,id))
+    val maybeUser = loggedIn
+    Ok(views.html.editor("",ContentPost.blogForm,id,1,Some(maybeUser)))
   }
 
 

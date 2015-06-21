@@ -1,4 +1,4 @@
-@(message: String)(implicit session : Session)
+@(message: String,user:Option[UserAccount])(implicit session : Session)
 @scripts = {}
 
 @content = {
@@ -12,4 +12,4 @@
 </script>
 }
 
-@main("Da Oostin Boyeez",content, scripts)
+@main("Da Oostin Boyeez",content, scripts,user)

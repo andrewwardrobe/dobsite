@@ -1,4 +1,4 @@
-@(message: String,editable: Int)(implicit session : Session)
+@(message: String,editable: Int, user :Option[UserAccount])(implicit session : Session)
 @scripts = {
 <script src='@routes.Assets.at("javascripts/require.js").url'
         data-main='@routes.Assets.at("javascripts/bio-main.js").url'></script>
@@ -21,4 +21,4 @@
 </div><!-- /.row -->
 }
 
-@main("Da Oostin Boyeez",content, scripts)
+@main("Da Oostin Boyeez",content, scripts,user)

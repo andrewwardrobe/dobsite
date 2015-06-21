@@ -1,4 +1,4 @@
-@(message: String)(implicit session : Session)
+@(message: String,user:Option[UserAccount])(implicit session : Session)
 
 @scripts = {
 <script src="@routes.Assets.at("javascripts/aloha.min.js")"></script>
@@ -64,4 +64,4 @@ aloha(document.querySelector('#leek'));
 
 }
 
-@main("Da Oostin Boyeez",content,scripts)
+@main("Da Oostin Boyeez",content,scripts,user)

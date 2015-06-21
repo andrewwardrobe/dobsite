@@ -22,7 +22,8 @@ object Admin extends Controller with AuthElement with StandardAuthConfig{
   }
 
   def admin = StackAction(AuthorityKey -> Administrator) {  implicit request =>
-    Ok(views.html.admin(""))
+    val user = loggedIn
+    Ok(views.html.admin("",user))
   }
 
   def changeRole(name: String,role:String) = StackAction(AuthorityKey -> Administrator) {  implicit request =>

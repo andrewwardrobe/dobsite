@@ -1,7 +1,8 @@
 package controllers
 
+import controllers.Application._
 import data.{Profiles, UserAccounts}
-import jp.t2v.lab.play2.auth.LoginLogout
+import jp.t2v.lab.play2.auth.{OptionalAuthElement, LoginLogout}
 import models.UserRole.InActiveUser
 import models.{UserProfile, UserRoleMapping, UserAccount}
 import play.api.data.Form
@@ -20,7 +21,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 /**
  * Created by andrew on 21/12/14.
  */
-object UserServices extends Controller with LoginLogout with StandardAuthConfig {
+object UserServices extends Controller with LoginLogout with OptionalAuthElement with StandardAuthConfig {
 
   def loginForm(implicit session: Session) = {
 
@@ -32,14 +33,16 @@ object UserServices extends Controller with LoginLogout with StandardAuthConfig 
   }
 
 
-  def login() = Action{  implicit request =>
+  def login() = StackAction{  implicit request =>
+    val maybeUser: Option[User] = loggedIn
     database.withSession { implicit session =>
-      Ok(views.html.login(loginForm))
+      Ok(views.html.login(loginForm,maybeUser))
     }
   }
 
-  def signup = Action{ implicit request =>
-    Ok(views.html.signup(signUpForm))
+  def signup = StackAction{ implicit request =>
+    val maybeUser: Option[User] = loggedIn
+    Ok(views.html.signup(signUpForm,maybeUser))
   }
 
   def register = DBAction{ implicit request =>
@@ -57,19 +60,20 @@ object UserServices extends Controller with LoginLogout with StandardAuthConfig 
 
 
 
-def signedout = Action { implicit request =>
-  Ok(views.html.signout("")).removingFromSession("username")
+def signedout = StackAction { implicit request =>
+  val maybeUser: Option[User] = loggedIn
+  Ok(views.html.signout("",maybeUser)).removingFromSession("username")
 }
 
   def signout = Action.async { implicit request =>
     gotoLogoutSucceeded
   }
 
-  def authenticate = Action.async { implicit request =>
+  def authenticate = Action.async{ implicit request =>
     database.withSession { implicit session =>
       val submission = loginForm.bindFromRequest()
       submission.fold(
-        formWithErrors => Future.successful(BadRequest(views.html.login(formWithErrors))),
+        formWithErrors => Future.successful(BadRequest(views.html.login(formWithErrors,None))),
         user => {
           gotoLoginSucceeded(user.get.name)
         }
