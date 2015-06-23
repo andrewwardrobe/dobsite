@@ -151,33 +151,26 @@ function addEditorMenu(){
 
 
 
-$(function(){
-
+function setupEditor(){
     var editor = $('#editor');
     $(editor).on('input',function(){
         window.editorChanged = true;
     });
-
     $(editor).wysiwyg({activeToolbarClass:"btn-dob-toolbar"});
-
-
     $('#revisions').affix({
           offset: {
             top: 350
           }
     });
+   getRevisions();
+}
 
 
-    getRevisions();
-
-
-});
-
-
-
+function stopDropDownPagination(){
   $('.dropdown-menu input, .dropdown label').click(function(e) {
     e.stopPropagation();
   });
+}
 
 function addEditorScrollbar(){
     $("#editor").mCustomScrollbar();
@@ -227,6 +220,8 @@ function setupKeyUpEvents(){
 }
 
 function setupEditorBox(){
+    setupEditor();
+    preventEditorBlockQuote();
     preventEditorBlockQuote();
     addEditorScrollbar();
     setupKeyUpEvents();
