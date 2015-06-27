@@ -28,7 +28,11 @@ import play.api.libs.json.Json._
 object Application extends Controller  with OptionalAuthElement with StandardAuthConfig{
 
 
+  def about = StackAction { implicit request =>
+    val maybeUser: Option[User] = loggedIn
 
+    Ok(views.html.about("",maybeUser))
+  }
 
   def index = StackAction { implicit request =>
     val maybeUser: Option[User] = loggedIn

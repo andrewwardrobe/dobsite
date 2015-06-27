@@ -1,0 +1,26 @@
+@(title:String, user: Option[UserAccount])(implicit session : Session)
+@content = {
+<div  class="col-md-12  col-sm-offset-1 dob-main">
+    <h1>About</h1>
+    <p>This site was built using the Play! Framework, Scala and Javascript and makes use of Twitter Bootstrap 3 by Andrew Wardrobe. If you would like to see the code it can be found <a href="https://github.com/andrewwardrobe/dobsite">here</a>
+        Feel Free to reuse any code, and/or send pull request for improvements/bugs.</p>
+
+    <p>The content on this site is created by multiple contributors, and generally is meant to be humorous. No offence is intended.
+        Any views expressed on this do not necessarily reflect the views of the contributors or site creator, but probably reflects there sense of humour.
+        This is not professional site.
+    </p>
+
+    <p>Da Oostin Boyeez, was created by Andrew Hogg, Andrew Wardrobe and Craig Wells</p>
+
+
+    <p>The font used on this site was created by Andrew Wardrobe with the excellent <a href="http://birdfont.org/">BirdFont</a>
+        and is licensed under an open font license the font source (*.bf files) are hosted in the site github repository<p/>
+    <p>The artwork on this site was most likely created by Andrew Wardrobe (especially if it's bad)</p>
+    <p>Please Support Open Source Development</p>
+</div>
+
+}
+
+@scripts = {
+}
+@main("Da Oostin Boyeez",content, scripts,user)
