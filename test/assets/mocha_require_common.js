@@ -10,7 +10,8 @@
             "jsRoutes" : "javascriptRoutes",
             "jquery":"lib/jquery/jquery",
             "puff":"javascripts/puff",
-             "q" : "lib/q/q"
+             "q" : "lib/q/q",
+            "helpers/date":"javascripts/helpers/date"
         },
 
         packages:[{

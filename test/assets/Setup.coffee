@@ -8,6 +8,7 @@ requirejs.config(
     "jsdom":"lib/jsdom/lib/",
     "jquery":"lib/jquery/jquery",
     "leek":"javascripts/leek",
+    "editor":"javascripts/editor",
     "jsRoutes" : "javascripts/emptyjsRoutes",
     "q" : "lib/q/q"
   }

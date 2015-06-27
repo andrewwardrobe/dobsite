@@ -52,6 +52,8 @@ function getRevisions(){
     jsRoutes.controllers.JsonApi.getRevisionsWithDates(id).ajax(json);
 }
 
+
+
 function save(){
     var dateStr = $("#dateCreated").val();
     var title = $("#postTitle").text();

@@ -6,7 +6,10 @@ define ['common'],(common) -> {
             leek:()->
         },
         JsonApi:{
-
+            getPostRevisionById:()->
+            getRevisionsWithDates:() -> {
+                ajax: ()->
+            }
         }
     }
 }
