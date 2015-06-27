@@ -123,7 +123,7 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
       goTo (editorPage)
       editorPage.addContent("some data")
       editorPage.save
-      eventually{ editorPage.saveSuccessful mustEqual (true) }
+      eventually{ editorPage.saveSuccessful mustEqual true }
     }
 
     "Be able to update a post" in {
@@ -140,7 +140,7 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
     "Be able to load a post" in {
       go to post(post3.id)
-      title mustBe ("3rd Post")
+      title mustBe "3rd Post"
       editorBoxText mustBe ("Dis is Da Oostin Boyeez Leek")
       postType mustBe ("News")
     }
