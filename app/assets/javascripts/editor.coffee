@@ -1,7 +1,7 @@
 define ['common','q','helpers/date'], (common,Q) -> {
   getRevisions:(id) ->
     self = this
-    result = Q.when jsRoutes.controllers.JsonApi.getRevisionsWithDates(1).ajax({})
+    result = Q.when jsRoutes.controllers.JsonApi.getRevisionsWithDates(id).ajax({})
     result.then (data) ->
       count = 1
       revisions = $("#revisions")
@@ -15,6 +15,8 @@ define ['common','q','helpers/date'], (common,Q) -> {
         link.text dte.DTString()
         revItem.append link
         revisions.append revItem
+        revItem.on 'click', ()->
+          self.loadContentPost $("#postId").val(), rev.commitId
       count++
     ,(err) ->
       console.log "Could not receive list of revisions #{err}"
@@ -40,15 +42,23 @@ define ['common','q','helpers/date'], (common,Q) -> {
 
   loadContentPost:(id,revisionId) ->
     self = this
-    if id != "-1"
+    if id != -1 && id != "-1"
+      console.log "id = #{JSON.stringify(id)}"
       result = Q.when jsRoutes.controllers.JsonApi.getPostRevisionById(id,revisionId).ajax({})
       result.then (data) ->
         $("#editor").html data.content
         $("#postId").val data.id
         $("#postTitle").text data.title
         $("#author").val data.author
-        dte = new Date data.dateCreated
+        console.log "draft #{data.isDraft}"
+        dt = data.dateCreated
+        console.log typeof dt
+        if typeof dt == "String"
+          dt = dt.replace "BST", ""
+
+        dte = new Date dt
         $("#dateCreated").val dte.yyyymmddDashes()
+
         if data.isDraft != false
           $("#editAlertDraft").show()
           $("#draft").val true
@@ -66,6 +76,73 @@ define ['common','q','helpers/date'], (common,Q) -> {
         $("#extraDataValues").val text
     else
       $("#editAlertNew").show()
+
+  getContentData:()->
+    dateStr = $("#dateCreated").val()
+    title = $("#postTitle").text()
+    content = $('#editor').cleanHtml()
+    postType = $("#postType").val()
+    id = $("#postId").val()
+    author = $("#author").val()
+    extraData = $("#extraDataValues").val()
+    isDraft = $("#isDraft").hasClass "isDraftOn"
+    tags = $("#tagBox").val()
+    userId = $("#userId").val()
+    json = {
+      data: {
+        "id": id,
+        "dateCreated": dateStr,
+        "title": title,
+        "content": content,
+        "author": author,
+        "postType": postType,
+        "filename": "",
+        "extraData": extraData,
+        "isDraft": isDraft,
+        "tags": tags,
+        "userId": userId
+      },
+      success:() ->
+    }
+    json
+
+  saveSucessfulHandler:(data) ->
+    d = $ '<div>'
+    $(d).text "Saved"
+    $(d).attr {'class':'alert alert-success','role':'alert','id':'res-success'}
+    $("#result").html ""
+    $("#postId").val data.id
+    $("#saveButton").hide()
+    $("#btnSuccessful").show()
+    $("*[id*='editAlert']").hide()
+    $("#draft").val data.isDraft
+    $("#userId").val data.userId
+    if data.isDraft != false
+      $("#editAlertDraft").show()
+    else
+     $("#editAlertLive").show()
+    this.getRevisions(data.id)
+
+  saveFailedHandler:(err) ->
+    d = $ '<div>'
+    $(d).text "Save Failed" + JSON.stringify err
+    $(d).attr { 'class':'alert alert-danger','role':'alert','id':'res-fail' }
+    $("#result").html ""
+    $("#result").append d
+    $("#postId").val err
+    $("#saveButton").hide()
+    $("#btnFailure").show()
+
+  save: () ->
+    postData = this.getContentData()
+    data = postData.data
+    if data.id == undefined || data.id == "-1" || data.id == -1
+      result = Q.when jsRoutes.controllers.Authorised.submitBlog().ajax postData
+      result.then this.saveSucessfulHandler , this.saveFailedHandler
+    else
+      console.log JSON.stringify postData
+      result = Q.when jsRoutes.controllers.Authorised.submitBlogUpdate().ajax postData
+      result.then this.saveSucessfulHandler , this.saveFailedHandler
 
   applyDraftButtonCss:(isDraft)->
     btn = $("#isDraft")
@@ -96,5 +173,42 @@ define ['common','q','helpers/date'], (common,Q) -> {
         $("#editAlertLive2Draft").hide()
         $("#editAlertDraft2Live").hide()
       this.applyDraftButtonCss(true)
+
+  unSavedChangesAlert:() ->
+    $("#saveButton").show()
+    $("#btnSuccessful").hide()
+    $("#btnFailure").hide()
+    $("#editAlertUnsaved").show()
+
+  applyToolbarHandlers:()->
+    self = this
+    require ['jquery-ui'],() ->
+      $("#isDraft"). on 'click', () ->
+        self.draftModeToggle()
+      toolbar = $('#toolbar')
+      expanderIcon = $("#expanderIcon")
+      $(toolbar).draggable { stack:"#editor" }
+
+      $("#btnSuccessful").hide()
+      $("#btnFailure").hide()
+
+      $(toolbar).on 'dragstart', ()->
+        $(toolbar).attr 'class','toolbar-compact'
+        tbSpace = $("#tbSpace") #why this?
+        $(tbSpace).hide()
+        $(tbSpace).show()
+        $(expanderIcon).attr 'class','fa fa-expand'
+
+      $("#expander").on 'click' , () ->
+        cls = $(expanderIcon).attr 'class'
+        if cls == "fa fa-compress"
+          $(toolbar).attr { "class":"toolbar-compact"}
+          $(expanderIcon).attr 'class','fa fa-expand'
+        else
+          $(toolbar).attr { "class":"toolbar", 'style':''}
+          $(expanderIcon).attr 'class','fa fa-compress'
+
+      $("#saveButton").on 'click', () ->
+        self.save()
 
 }
