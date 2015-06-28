@@ -197,9 +197,9 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
     "load the specified revision when the link is clicked" in {
       goTo (editorPage.post(post1.id))
+      click on id("editorMenu")
+      click on id(editorPage.revisionLinks(1).attribute("id").get)
       eventually{
-        click on id("editorMenu")
-        click on id(editorPage.revisionLinks(1).attribute("id").get)
         editorPage.editorBoxText must include ("ah ah blah")
       }
     }

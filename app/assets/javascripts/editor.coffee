@@ -17,7 +17,8 @@ define ['common','q','helpers/date'], (common,Q) -> {
         revisions.append revItem
         revItem.on 'click', ()->
           self.loadContentPost $("#postId").val(), rev.commitId
-      count++
+          $("#editAlertRevision").show()
+        count++
     ,(err) ->
       console.log "Could not receive list of revisions #{err}"
     result
@@ -43,16 +44,13 @@ define ['common','q','helpers/date'], (common,Q) -> {
   loadContentPost:(id,revisionId) ->
     self = this
     if id != -1 && id != "-1"
-      console.log "id = #{JSON.stringify(id)}"
       result = Q.when jsRoutes.controllers.JsonApi.getPostRevisionById(id,revisionId).ajax({})
       result.then (data) ->
         $("#editor").html data.content
         $("#postId").val data.id
         $("#postTitle").text data.title
         $("#author").val data.author
-        console.log "draft #{data.isDraft}"
         dt = data.dateCreated
-        console.log typeof dt
         if typeof dt == "String"
           dt = dt.replace "BST", ""
 
@@ -140,7 +138,6 @@ define ['common','q','helpers/date'], (common,Q) -> {
       result = Q.when jsRoutes.controllers.Authorised.submitBlog().ajax postData
       result.then this.saveSucessfulHandler , this.saveFailedHandler
     else
-      console.log JSON.stringify postData
       result = Q.when jsRoutes.controllers.Authorised.submitBlogUpdate().ajax postData
       result.then this.saveSucessfulHandler , this.saveFailedHandler
 
@@ -211,4 +208,29 @@ define ['common','q','helpers/date'], (common,Q) -> {
       $("#saveButton").on 'click', () ->
         self.save()
 
+  setupEditorBox :() ->
+    self = this
+    editor = $("#editor")
+    this.preventEditorBlockQuote()
+    $('#editor,#postTitle,#tagBox,#extraDataValues').on 'keyup', () ->
+      self.unSavedChangesAlert()
+    $(editor).on 'change', ()->
+      self.unSavedChangesAlert()
+    this.setupCustomScrollbar()
+
+  setupCustomScrollbar:()->
+    require ['jquery.mCustomScrollbar'], () ->
+      $("#editor").mCustomScrollbar()
+
+  warningBoxHandlers:()->
+    $(".alert-close").on 'click', (event) ->
+      $(event.target.parentNode).hide()
+
+  preventEditorBlockQuote:()->
+    $("#editor").on "DOMNodeInserted",(event) ->
+      target = event.target
+
+      switch target.nodeName
+       when "BLOCKQUOTE"
+          $(target).attr('style','margin: 0 0 0 40px; border: none; padding: 0px;')
 }
