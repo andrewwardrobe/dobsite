@@ -257,7 +257,6 @@ define ['common','q','helpers/date'], (common,Q) -> {
     console.log target
     while f = files[i]
       imageReader = new FileReader
-
       imageReader.onload = ((aFile) ->
         (e) ->
           img = $ "<img>"
@@ -275,8 +274,8 @@ define ['common','q','helpers/date'], (common,Q) -> {
           result.then (data) ->
               $("#result").html(data);
               $("#"+imageId).attr('src',"/"+data);
-          , (data) ->
-            $("#result").html(data);
+          , (error) ->
+            $("#result").html(error);
       )(f)
       imageReader.readAsDataURL(f)
       i++
