@@ -18,7 +18,7 @@
 					data: aFile
 				}).done(function (data) {
 					$("#result").html(data);
-					$("#"+imgName).attr('src',data);
+					$("#"+imgName).attr('src',"/"+data);
 					}).fail(function(data){
 						$("#result").html(data);
 				});
@@ -101,7 +101,7 @@
 					if (/^image\//.test(fileInfo.type)) {
 						var id = "rand" + (Math.random() + "").slice(2);
 						$.when(readFileIntoDataUrl(fileInfo, id)).done(function (dataUrl) {
-							alert(idx)
+							alert(idx);
 							//execCommand('insertimage', dataUrl);
 							function insertImage(imgSrc) {
 
@@ -121,9 +121,8 @@
                                 }
 
                                 return doc.getElementById(id);
-                            };
-
-                            insertImage(dataUrl);
+							}
+							insertImage(dataUrl);
 
 						}).fail(function (e) {
 							options.fileUploadError("file-reader", e);
