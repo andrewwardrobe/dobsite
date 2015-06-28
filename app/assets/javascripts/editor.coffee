@@ -1,4 +1,6 @@
 define ['common','q','helpers/date'], (common,Q) -> {
+  imageCount:1
+
   getRevisions:(id) ->
     self = this
     result = Q.when jsRoutes.controllers.JsonApi.getRevisionsWithDates(id).ajax({})
@@ -26,7 +28,7 @@ define ['common','q','helpers/date'], (common,Q) -> {
   setupEditor:()->
     require ['jquery.hotkeys'],() ->
       require ['bootstrap-wysiwyg'], () ->
-        $("#editor").wysiwyg { activeToolbarClass:"btn-dob-toolbar" }
+        $("#editor").wysiwyg { activeToolbarClass:"btn-dob-toolbar",dragAndDropImages: false }
     this.addEditorMenu()
 
   addEditorMenu:()->
@@ -217,6 +219,7 @@ define ['common','q','helpers/date'], (common,Q) -> {
     $(editor).on 'change', ()->
       self.unSavedChangesAlert()
     this.setupCustomScrollbar()
+    this.editorDragDrop()
 
   setupCustomScrollbar:()->
     require ['jquery.mCustomScrollbar'], () ->
@@ -233,4 +236,50 @@ define ['common','q','helpers/date'], (common,Q) -> {
       switch target.nodeName
        when "BLOCKQUOTE"
           $(target).attr('style','margin: 0 0 0 40px; border: none; padding: 0px;')
+
+
+  editorDragDrop:()->
+    self = this
+    editor = $("#editor")
+    $(editor).attr {'ondragenter':'return false','ondragover':'return false'}
+    $(editor).on 'drop',(event)->
+      target = event.target or event.srcElement
+      event.stopPropagation()
+      event.preventDefault()
+      self.uploadImage(event.originalEvent.dataTransfer.files, target.id)
+
+
+
+  uploadImage:(files,target)->
+    i = 0
+    self = this
+    f = undefined
+    console.log target
+    while f = files[i]
+      imageReader = new FileReader
+
+      imageReader.onload = ((aFile) ->
+        (e) ->
+          img = $ "<img>"
+          imageId = "imageName" + self.imageCount
+          self.imageCount++
+          $(img).attr {'id':imageId,"class":'images','src':e.target.result}
+          $("##{target}").append img
+          $("#"+target).attr 'src', e.target.result
+          result = Q.when $.ajax({
+            url: "/upload",
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            data: aFile
+            })
+          result.then (data) ->
+              $("#result").html(data);
+              $("#"+imageId).attr('src',"/"+data);
+          , (data) ->
+            $("#result").html(data);
+      )(f)
+      imageReader.readAsDataURL(f)
+      i++
+
 }
