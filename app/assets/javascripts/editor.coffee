@@ -265,7 +265,6 @@ define ['common','q','helpers/date'], (common,Q) -> {
           self.imageCount++
           $(img).attr {'id':imageId,"class":'images','src':e.target.result}
           $("##{target}").append img
-          $("#"+target).attr 'src', e.target.result
           result = Q.when $.ajax({
             url: "/upload",
             type: 'POST',
