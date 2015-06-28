@@ -1,5 +1,5 @@
 define ['common','q','helpers/date'], (common,Q) -> {
-  getRevisions:() ->
+  getRevisions:(id) ->
     self = this
     result = Q.when jsRoutes.controllers.JsonApi.getRevisionsWithDates(1).ajax({})
     result.then (data) ->
@@ -19,4 +19,9 @@ define ['common','q','helpers/date'], (common,Q) -> {
     ,(err) ->
       console.log "Could not receive list of revisions #{err}"
     result
+
+  setupEditor:()->
+    require ['javascripts/bootstrap-wysiwyg'], ()->
+      $("#editor").wysiwyg()
+
 }
