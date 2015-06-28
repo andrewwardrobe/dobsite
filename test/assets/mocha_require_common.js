@@ -11,7 +11,9 @@
             "jquery":"lib/jquery/jquery",
             "puff":"javascripts/puff",
              "q" : "lib/q/q",
-            "helpers/date":"javascripts/helpers/date"
+            "helpers/date":"javascripts/helpers/date",
+            "bootstrap-wysiwyg":"javascripts/bootstrap-wysiwyg",
+            "jquery.hotkeys":"javascripts/jquery.hotkeys"
         },
 
         packages:[{

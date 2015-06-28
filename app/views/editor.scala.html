@@ -16,14 +16,14 @@
 
 
         <div id="warnings">
-            <div id="editAlertNew" class="alert alert-info compact" role="alert">This a new post<a href="#" class="alert-close btnSuccessful pull-right">X</a></div>
-            <div id="editAlertLive" class=" alert-success compact" role="alert">This Post is live<a href="#" class="alert-close btnSuccessful pull-right">X</a></div>
-            <div id="editAlertDraft" class="alert alert-info compact" role="alert">This post a draft<a href="#" class="alert-close btnInfo pull-right">X</a></div>
-            <div id="editAlertUnsaved" class="alert alert-warning compact" role="alert">This post has unsaved changes<a href="#" class="alert-close btnWarning pull-right">X</a></div>
+            <div id="editAlertNew" class="alert alert-info compact" style="display:none" role="alert">This a new post<a href="#" class="alert-close btnSuccessful pull-right">X</a></div>
+            <div id="editAlertLive" class=" alert-success compact" style="display:none" role="alert">This Post is live<a href="#" class="alert-close btnSuccessful pull-right">X</a></div>
+            <div id="editAlertDraft" class="alert alert-info compact" style="display:none" role="alert">This post a draft<a href="#" class="alert-close btnInfo pull-right">X</a></div>
+            <div id="editAlertUnsaved" class="alert alert-warning compact" style="display:none" role="alert">This post has unsaved changes<a href="#" class="alert-close btnWarning pull-right">X</a></div>
 
-            <div id="editAlertDraft2Live" class="alert alert-info compact" role="alert">This post will become live on next save<a href="#" class="alert-close btnInfo pull-right">X</a></div>
-            <div id="editAlertLive2Draft" class="alert alert-warning compact" role="alert">By entering draft mode this post will no longer be visible when you hit save<a href="#" class="alert-close btnWarning pull-right">X</a></div>
-            <div id="editAlertRevision" class="alert alert-info compact" role="alert">You are viewing a revision<a href="#" class="alert-close btnInfo pull-right">X</a></div>
+            <div id="editAlertDraft2Live" class="alert alert-info compact" style="display:none" role="alert">This post will become live on next save<a href="#" class="alert-close btnInfo pull-right">X</a></div>
+            <div id="editAlertLive2Draft" class="alert alert-warning compact" style="display:none" role="alert">By entering draft mode this post will no longer be visible when you hit save<a href="#" class="alert-close btnWarning pull-right">X</a></div>
+            <div id="editAlertRevision" class="alert alert-info compact" style="display:none" role="alert">You are viewing a revision<a href="#" class="alert-close btnInfo pull-right">X</a></div>
         </div>
         @helper.form(action = routes.Authorised.submitBlog, 'id -> "blogForm" ){
         <input type="hidden" name="postId" id="postId" value="@postId" />
@@ -45,7 +45,7 @@
             <input type="hidden" name="draft" id="draft"/>
             <input type="hidden" name="userId" id="userId"/>
             <script type="text/javascript">
-                var d = new Date()
+                var d = new Date();
                 var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
                 document.getElementById("dateCreated").setAttribute('value',dateStr);
                 $("#postType").val(@postType)
@@ -93,11 +93,9 @@
 }
 
 @scripts = {
-<script src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery-ui.min.js"))' type="text/javascript"></script>
-
-<script src='@routes.Assets.at("javascripts/jquery.hotkeys.js")' type="text/javascript"></script>
-<script src='@routes.Assets.at("javascripts/bootstrap-wysiwyg.js")' type="text/javascript"></script>
-<script src='@routes.Assets.at("javascripts/dobcms.js")' type="text/javascript"></script>
+    <script src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery-ui.min.js"))' type="text/javascript"></script>
+    <script src='@routes.Assets.at("javascripts/jquery.hotkeys.js")' type="text/javascript"></script>
+    <script src='@routes.Assets.at("javascripts/require.js").url' data-main='@routes.Assets.at("javascripts/editor-main.js").url'></script>
 
 }
 @main("Da Oostin Boyeez",content, scripts,user)

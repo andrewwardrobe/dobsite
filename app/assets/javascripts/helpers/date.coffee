@@ -8,3 +8,5 @@ define () ->
       @getFullYear() + pad2(@getMonth() + 1) + pad2(@getDate()) + pad2(@getHours()) + pad2(@getMinutes()) + pad2(@getSeconds())
   Date::DTString  = ->
     "#{pad2(@getDate())}/#{pad2(@getMonth() + 1)}/#{pad2(@getFullYear())} #{pad2(@getHours())}:#{pad2(@getMinutes())}:#{pad2(@getSeconds())}"
+  Date::yyyymmddDashes = ->
+    "#{@getFullYear()}-#{pad2(@getMonth() + 1)}/#{pad2(@getDate())}"
