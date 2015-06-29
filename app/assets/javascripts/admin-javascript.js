@@ -1,25 +1,25 @@
 $("#userName").on('keyup',function(e){
-    var code = (e.keyCode || e.which);
+       var code = (e.keyCode || e.which);
 
-    // do nothing if it's an arrow key
-    if(code == 37 || code == 38 || code == 39 || code == 40) {
-        return;
-    }
+       // do nothing if it's an arrow key
+       if(code == 37 || code == 38 || code == 39 || code == 40) {
+           return;
+       }
 
-    var json = {
-        success: function(data){
-            var dataList = $("#userNameList");
-            $(dataList).html("");
-            for(var i = 0; i < data.length ; i++){
-                var opt = $("<option>");
-                $(opt).html(data[i]);
-                $(dataList).append(opt);
-            }
-        }
-    };
-    var name = $("#userName").val();
-    jsRoutes.controllers.AdminJsonApi.getUsers(name).ajax(json);
-});
+       var json = {
+           success: function(data){
+               var dataList = $("#userNameList");
+               $(dataList).html("");
+               for(var i = 0; i < data.length ; i++){
+                   var opt = $("<option>");
+                   $(opt).html(data[i]);
+                   $(dataList).append(opt);
+               }
+           }
+       };
+       var name = $("#userName").val();
+       jsRoutes.controllers.AdminJsonApi.getUsers(name).ajax(json);
+   });
 
 $("#btnLoad").on("click",function(e){
     var name = $("#userName").val();
