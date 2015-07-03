@@ -3,13 +3,17 @@
  */
 package controllers
 
+import java.util.{Date, UUID}
+
+import com.daoostinboyeez.git.GitRepo
 import controllers.Application._
-import data.UserAccounts
+import data.{Content, UserAccounts}
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
-import models.{UserAccount, ContentPost$}
+import models._
 
 import models.UserRole.{Administrator, Contributor, NormalUser}
+import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc.Controller
@@ -21,8 +25,9 @@ import play.api.db.slick.Config.driver.simple._
 import scala.slick.jdbc.JdbcBackend._
 import scala.text
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsArray, JsValue, Json}
 import play.api.libs.json.Json._
+
 
 object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig {
 
@@ -36,6 +41,30 @@ object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig 
   def getUser(name:String) = StackAction(AuthorityKey -> Administrator) { implicit request =>
     database.withSession{ implicit s =>
       Ok(toJson(UserAccounts.findByName(name).head.json))
+    }
+  }
+
+  def insertDiscographies() = StackAction(AuthorityKey -> Administrator) { implicit request =>
+    request.body.asText match {
+      case Some(text) => {
+        val json = Json.parse(text)
+        implicit val discFormat = Json.format[Discography]
+        val discs = json.validate[List[Discography]]
+        discs.get.foreach{ disc :Discography =>
+          val str = new StringBuilder()
+          str.append("<div id=\"content\"><ol>")
+          disc.tracks.foreach{ track =>
+            str.append(s"<li>${track}</li>")
+          }
+          str.append("</ol></div>")
+          val content = str.toString
+          val extraData = s"thumb=${disc.artwork}"
+          val post = new ContentPost(UUID.randomUUID().toString(), disc.title, ContentTypeMap("Discography"), new Date(), "Da Oostin Boyeez",content, ContentPost.extraDataToJson(extraData),false,None)
+          Content.save(post,GitRepo.apply(),None,None)
+        }
+        Ok("")
+      }
+      case None => BadRequest("No Request Body")
     }
   }
 }
