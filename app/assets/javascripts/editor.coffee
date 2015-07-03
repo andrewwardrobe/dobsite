@@ -137,7 +137,7 @@ define ['common','q','helpers/date'], (common,Q) -> {
     postData = this.getContentData()
     data = postData.data
     if data.id == undefined || data.id == "-1" || data.id == -1
-      result = Q.when jsRoutes.controllers.Authorised.submitBlog().ajax postData
+      result = Q.when jsRoutes.controllers.Authorised.submitPost().ajax postData
       result.then this.saveSucessfulHandler , this.saveFailedHandler
     else
       result = Q.when jsRoutes.controllers.Authorised.submitBlogUpdate().ajax postData

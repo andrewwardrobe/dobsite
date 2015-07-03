@@ -125,7 +125,7 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
     implicit request =>
 
       Ok(Routes.javascriptRouter("jsRoutes")(
-          routes.javascript.Authorised.submitBlog,
+          routes.javascript.Authorised.submitPost,
           routes.javascript.JsonApi.getPostById,
           routes.javascript.JsonApi.getContentByUserLatestFirst,
           routes.javascript.JsonApi.getDraftsByUserLatestFirst,

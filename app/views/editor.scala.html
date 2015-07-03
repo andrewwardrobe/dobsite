@@ -25,7 +25,7 @@
             <div id="editAlertLive2Draft" class="alert alert-warning compact" style="display:none" role="alert">By entering draft mode this post will no longer be visible when you hit save<a href="#" class="alert-close btnWarning pull-right">X</a></div>
             <div id="editAlertRevision" class="alert alert-info compact" style="display:none" role="alert">You are viewing a revision<a href="#" class="alert-close btnInfo pull-right">X</a></div>
         </div>
-        @helper.form(action = routes.Authorised.submitBlog, 'id -> "blogForm" ){
+        @helper.form(action = routes.Authorised.submitPost, 'id -> "blogForm" ){
         <input type="hidden" name="postId" id="postId" value="@postId" />
         <!-- Start Toolbar
             -->

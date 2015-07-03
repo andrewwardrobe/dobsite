@@ -10,6 +10,7 @@ import jp.t2v.lab.play2.auth.AuthElement
 import models._
 
 import models.UserRole.{InActiveUser, Administrator, Contributor, NormalUser}
+import org.openqa.jetty.http.SecurityConstraint.Nobody
 import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
@@ -69,39 +70,28 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   }
 
 
-  def submitBlog = StackAction(AuthorityKey -> Contributor) { implicit request =>
+  def submitPost = StackAction(AuthorityKey -> Contributor) { implicit request =>
     val user = loggedIn
     ContentPost.blogForm.bindFromRequest() match {
       case s: Form[ContentPost] => {
         val item = s.get
         if(user.role.hasPermission(ContentTypeMap(item.postType))) {
-          val content = item.content
-          val filename = repo.genFileName
-          val newItem = new ContentPost(UUID.randomUUID().toString(), item.title, item.postType, new Date(), item.author, filename, ContentPost.extraDataToJson(item.extraData),item.isDraft,Some(user.id))
-          repo.doFile(filename, content, ContentMeta.makeCommitMsg("Created", newItem))
-          val res = database.withSession {
-            implicit s =>
-              Content.insert(newItem)
-              request.body.asFormUrlEncoded match {
-                case None => {}
-                case Some(formData) => {
-                  formData.get("tags") match {
-                    case Some(tagData) => {
-                        tagData.foreach { tags =>
-                          tags.split(",").foreach { str:String =>
-                            val tag = Tags.create(str.trim)
-                            Tags.link(newItem.id, tag.id)
-                          }
-                        }
-                    }
-                    case _ => {}
-                  }
+          val tags : Option[Seq[String]] = request.body.asFormUrlEncoded match {
+            case None => { None }
+            case Some(formData) => {
+              formData.get("tags") match {
+                case Some(tagData) => {
+                  Some(tagData.toList)
                 }
-                case _ => Logger.info("Matched Neither")
+                case _ => {None}
               }
-              Ok(newItem.json)
+            }
+            case _ => None
           }
-          res
+
+          val newItem = Content.save(item,repo,Some(user.id),tags)
+          Ok(newItem.json)
+
         }else
           Unauthorized("You don't have the right privileges for "+ContentTypeMap(item.postType))
       }
@@ -111,10 +101,11 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
 
   def genFileName = {
     val date = new Date()
-    new String(""+date.getTime())
+    new String(""+date.getTime)
   }
 
 
+  //TODO: Reactor this to use the save from content
   def submitBlogUpdate = StackAction(AuthorityKey -> Contributor) { implicit request =>
     val item = ContentPost.blogForm.bindFromRequest().get
     val content = item.content

@@ -1,8 +1,11 @@
 package data
 
-import java.util.Date
+import java.util.{UUID, Date}
 
-import models.ContentPost
+import com.daoostinboyeez.git.GitRepo
+import controllers.Authorised._
+import models.{ContentMeta, ContentPost}
+import play.api.Logger
 import play.api.libs.json.Json
 
 import scala.collection.mutable.ListBuffer
@@ -152,4 +155,25 @@ trait ContentAccessFunctions {this: ContentPostSchema =>
 
   def clearAll(implicit  s: Session) = { postTable.delete }
   def update(post :ContentPost)(implicit s: Session) = { postTable.insertOrUpdate(post) }
+
+  def save(item:ContentPost,repo :GitRepo,userId:Option[Int],tags:Option[Seq[String]]) = {
+    val content = item.content
+    val filename = repo.genFileName
+    val newItem = new ContentPost(UUID.randomUUID().toString(), item.title, item.postType, new Date(), item.author, filename, ContentPost.extraDataToJson(item.extraData), item.isDraft,userId)
+    repo.doFile(filename, content, ContentMeta.makeCommitMsg("Created", newItem))
+    val res = database.withSession {
+      implicit s =>
+        Content.insert(newItem)
+        tags match {
+          case Some(tagData) => tagData.foreach { tags =>
+            tags.split(",").foreach { str: String =>
+              val tag = Tags.create(str.trim)
+              Tags.link(newItem.id, tag.id)
+            }
+          }
+          case None => {}
+        }
+    }
+    newItem
+  }
 }
