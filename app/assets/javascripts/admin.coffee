@@ -1,4 +1,4 @@
-define ['common','Q'], (common,Q)-> {
+define ['common','q'], (common , Q)-> {
     setupUserSearch:()->
         $("#userName").on 'keyup', (e) ->
             code = (e.keyCode or e.which)
@@ -10,10 +10,10 @@ define ['common','Q'], (common,Q)-> {
             result.then ()->
                 dataList = $("#userNameList")
                 $(dataList).html ""
-                   for  item  in data
-                       opt = $("<option>")
-                       $(opt).html item
-                       $(dataList).append opt
+                for  item  in data
+                  opt = $("<option>")
+                  $(opt).html item
+                  $(dataList).append opt
 
     setupLoadUserButton:()->
         $("#btnLoad").on "click", (e) ->
@@ -29,7 +29,7 @@ define ['common','Q'], (common,Q)-> {
                   $("#loadErrs").attr 'class','alert alert-danger skinnyAlert'
 
     setupChangeRoleButton:()->
-        $("#btnRole").on('click',() ->
+        $("#btnRole").on 'click',() ->
             name = $("#userName").val()
             role = $("#role").val()
             result = Q.when jsRoutes.controllers.Admin.changeRole(name,role).ajax {}
@@ -37,7 +37,7 @@ define ['common','Q'], (common,Q)-> {
                 console.log "Success"
                 $("#roleErrs").text "Role updated"
                 $("#roleErrs").attr 'class','alert alert-success skinnyAlert'
-               ,(errs){
+               ,(errs) ->
                     console.log "Fail "
                     for err in errs
                         console.log errs
@@ -55,7 +55,7 @@ define ['common','Q'], (common,Q)-> {
                for err in errs
                    console.log errs
 
-    setupPasswordChangeButton:() -?
+    setupPasswordChangeButton:() ->
         $("#btnPass").on 'click', () ->
             name = $("#userName").val()
             pass = $("#password").val()

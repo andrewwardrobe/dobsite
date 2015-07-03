@@ -26,7 +26,9 @@
     });
 
     requirejs.onError = function(err) {
-            console.log(err);
+            console.log(err.toString());
+            console.log(JSON.stringify(err,null,2));
+
         };
 
 

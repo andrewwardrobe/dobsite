@@ -1,3 +1,3 @@
 require ["common"], (common) ->
-    require ['admin','jquery'], (admin,$) ->
-        admin.setup()
+  require ['admin','jquery'], (admin,$) ->
+    admin.setup();

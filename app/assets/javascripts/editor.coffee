@@ -237,7 +237,6 @@ define ['common','q','helpers/date'], (common,Q) -> {
        when "BLOCKQUOTE"
           $(target).attr('style','margin: 0 0 0 40px; border: none; padding: 0px;')
 
-
   editorDragDrop:()->
     self = this
     editor = $("#editor")
@@ -247,8 +246,6 @@ define ['common','q','helpers/date'], (common,Q) -> {
       event.stopPropagation()
       event.preventDefault()
       self.uploadImage(event.originalEvent.dataTransfer.files, target.id)
-
-
 
   uploadImage:(files,target)->
     i = 0
