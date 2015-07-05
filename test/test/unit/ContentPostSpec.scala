@@ -178,6 +178,19 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       }
     }
 
+    "Be able to retrieve posts by author" in {
+      database.withSession { implicit session =>
+        val user = UserAccountHelper.createUserAndProfile("TestUser","TestUser","TrustedContributor")
+        val authorPost = ContentHelper.createPost("Test Post Leeeek","MC Donalds","Twatous Leek us",1,"",Some(user.id))
+        val nonAuthorPost = ContentHelper.createPost("Test Post Leeeek","Gary The Baldy","Twatous Leek us",1,"",Some(user.id))
+        val authorDraft = ContentHelper.createDraft("Test Post Leeeek","MC Donalds","Twatous Leek us",1,"",Some(user.id))
+        val posts = Content.getLiveContentByAuthorLatestFirst("MC Donalds")
+        posts must (contain (authorPost) and contain noneOf(nonAuthorPost,authorDraft))
+
+
+      }
+    }
+
     "Be able to retrieve drafts by user" in {
       database.withSession { implicit session =>
         val user = UserAccountHelper.createUserAndProfile("TestUser","TestUser","TrustedContributor")

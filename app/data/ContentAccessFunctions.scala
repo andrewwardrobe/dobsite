@@ -30,6 +30,10 @@ trait ContentAccessFunctions {this: ContentPostSchema =>
     && post.isDraft === false).sortBy(_.dateCreated.desc).list
   }
 
+  def getLiveContentByAuthorLatestFirst(author:String)(implicit s: Session)  = {
+    postTable.filter( post => post.author === author
+      && post.isDraft === false).sortBy(_.dateCreated.desc).list
+  }
   def getDraftContentByUserLatestFirst(userId:Int)(implicit s: Session)  = {
     postTable.filter( post => post.userId === userId
       && post.isDraft === true).sortBy(_.dateCreated.desc).list
@@ -98,6 +102,7 @@ trait ContentAccessFunctions {this: ContentPostSchema =>
   def getByDate(beforeDate: Date, max :Int)(implicit  s: Session) = {
     postTable.filter(post => post.dateCreated < beforeDate && post.isDraft === false).sortBy(_.dateCreated.desc).take(max).list
   }
+
 
 
 

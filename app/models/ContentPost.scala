@@ -100,6 +100,8 @@ object ContentPost {
       "userId" -> optional(number)
     )(ContentPost.apply)(ContentPost.unapply _)
   }
+
+
 }
 
 
