@@ -26,6 +26,11 @@ object Admin extends Controller with AuthElement with StandardAuthConfig{
     Ok(views.html.admin("",user))
   }
 
+  def bulkUploader = StackAction(AuthorityKey -> Administrator) {  implicit request =>
+    val user = loggedIn
+    Ok(views.html.bulkuploader("",user))
+  }
+
   def changeRole(name: String,role:String) = StackAction(AuthorityKey -> Administrator) {  implicit request =>
 
     database.withSession { implicit s =>

@@ -1,9 +1,11 @@
-[
+{
+  "discographies":[
   {
     "title":"Mit Da Queen Mutter",
     "tracks":["24 Stunden Deodorant","KY Jam","Folks",
       "Replacement Hip Hop","Candle in the Draft",
       "Misuse May Result In Sudden Death"],
+    "discType":"album",
     "artwork":"assets/images/mdqm.jpg"
   }
-]
+]}

@@ -6,6 +6,7 @@ import data.{Content, UserAccounts, Profiles}
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB
+import play.api.libs.json.Json
 import play.api.test.Helpers._
 import play.api.test.{FakeApplication, FakeHeaders, FakeRequest}
 import test.helpers.UserAccountHelper
@@ -27,17 +28,18 @@ class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAft
     "load discography data from json" in {
       val json =
         """
-          |[
+          |{"discographies":[
           |  {
           |    "title":"Mit Da Queen Mutter",
           |    "tracks":["24 Stunden Deororant","KY Jam","Folks",
           |      "Replacement Hip Hop","Candle in the Draft",
           |      "Misuse May Result In Sudden Death"],
+          |    "discType":"album",
           |    "artwork":"assets/images/mdqm.jpg"
           |  }
-          |]
+          |]}
         """.stripMargin
-      val result = route(FakeRequest(POST, controllers.routes.AdminJsonApi.insertDiscographies().url,FakeHeaders(),json).withLoggedIn(config)("Administrator")).get
+      val result = route(FakeRequest(POST, controllers.routes.AdminJsonApi.insertDiscographies().url,FakeHeaders(),Json.parse(json)).withLoggedIn(config)("Administrator")).get
       status(result) mustBe OK
       database.withSession { implicit session =>
         Content.get.length must equal(1)

@@ -25,7 +25,7 @@ import play.api.db.slick.Config.driver.simple._
 import scala.slick.jdbc.JdbcBackend._
 import scala.text
 
-import play.api.libs.json.{JsArray, JsValue, Json}
+import play.api.libs.json.{JsSuccess, JsArray, JsValue, Json}
 import play.api.libs.json.Json._
 
 
@@ -44,27 +44,32 @@ object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig 
     }
   }
 
-  def insertDiscographies() = StackAction(AuthorityKey -> Administrator) { implicit request =>
-    request.body.asText match {
-      case Some(text) => {
-        val json = Json.parse(text)
-        implicit val discFormat = Json.format[Discography]
-        val discs = json.validate[List[Discography]]
-        discs.get.foreach{ disc :Discography =>
-          val str = new StringBuilder()
-          str.append("<div id=\"content\"><ol>")
-          disc.tracks.foreach{ track =>
-            str.append(s"<li>${track}</li>")
-          }
-          str.append("</ol></div>")
-          val content = str.toString
-          val extraData = s"thumb=${disc.artwork}"
-          val post = new ContentPost(UUID.randomUUID().toString(), disc.title, ContentTypeMap("Discography"), new Date(), "Da Oostin Boyeez",content, ContentPost.extraDataToJson(extraData),false,None)
-          Content.save(post,GitRepo.apply(),None,None)
-        }
-        Ok("")
+  def processDiscographies(discs: Seq[Discography]) = {
+    discs.foreach { disc: Discography =>
+      val str = new StringBuilder()
+      str.append("<div id=\"content\"><ol>")
+      disc.tracks.foreach { track =>
+        str.append(s"<li>${track}</li>")
       }
-      case None => BadRequest("No Request Body")
+      str.append("</ol></div>")
+      val content = str.toString
+      val extraData = s"thumb=${disc.artwork}\ndiscType=${disc.discType}"
+      val post = new ContentPost(UUID.randomUUID().toString(), disc.title, ContentTypeMap("Discography"), new Date(), "Da Oostin Boyeez", content, extraData, false, None)
+      Content.save(post, GitRepo.apply(), None, None)
+    }
+    discs.length
+  }
+  def insertDiscographies() = StackAction(AuthorityKey -> Administrator) { implicit request =>
+    request.body.asJson match {
+      case Some(json) => {
+        implicit val discFormat = Json.format[Discography]
+        val discs = (json \ "discographies").validate[List[Discography]] match {
+          case p: JsSuccess[List[Discography]] => {processDiscographies(p.get)}
+        }
+
+        Ok(s"Inserted ${discs} discographies")
+      }
+      case None => {     BadRequest("No Request Body request body")      }
     }
   }
 }

@@ -17,4 +17,4 @@ import scala.collection.mutable.ListBuffer
 /**
  * Created by andrew on 11/10/14.
  */
-case class Discography(title:String,artwork:String,tracks: Seq[String])
+case class Discography(title:String,artwork:String,discType: String,tracks: Seq[String])

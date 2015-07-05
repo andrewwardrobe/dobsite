@@ -62,6 +62,7 @@
                 <li><a href="@routes.Authorised.profile" id="profileLink">Profile</a></li>
                 @if(user.role.name == "Administrator"){
                   <li><a href="@routes.Admin.admin" id="profileLink">Admin</a></li>
+                  <li><a href="@routes.Admin.bulkUploader" id="profileLink">Content Loader</a></li>
                 }
                 <li><a href="@routes.UserServices.signout" id="signout">Sign Out</a></li>
               </ul>

@@ -1,0 +1,22 @@
+@(title:String, user: UserAccount)(implicit session : Session)
+@content = {
+<div  class="col-md-12  col-sm-offset-1 dob-main">
+    <form>
+        <span class="btn btn-default">
+            <input type="file" id="discFile" name="discFile"/>
+
+        </span>
+        <input type="button" id="upload" class="btn btn-primary" value="Upload" />
+    </form>
+    <div id="result"></div>
+</div>
+
+<datalist id="userNameList">
+</datalsit>
+}
+
+@scripts = {
+    <script src='@routes.Assets.at("javascripts/require.js").url'
+    data-main='@routes.Assets.at("javascripts/loader-main.js").url'></script>
+}
+@main("Da Oostin Boyeez",content, scripts,Some(user))

@@ -52,6 +52,7 @@ POST        /admin/changepass                                 controllers.Admin.
 
 GET         /json/admin/users/:id                             controllers.AdminJsonApi.getUsers(id: String)
 GET         /json/admin/user/:id                              controllers.AdminJsonApi.getUser(id: String)
+GET         /bulkupload                              controllers.Admin.bulkUploader()
 
 POST         /json/admin/discographies/fromjson                controllers.AdminJsonApi.insertDiscographies()
 

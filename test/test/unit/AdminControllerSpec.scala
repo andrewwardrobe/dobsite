@@ -33,6 +33,11 @@ class AdminControllerSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
       val result = route(FakeRequest(GET, "/admin/reload",FakeHeaders(),"").withLoggedIn(config)("Administrator")).get
       status(result) mustBe OK
     }
+
+    "Provide a route to a bulk uplaoder"  in {
+      val result = route(FakeRequest(GET, controllers.routes.Admin.bulkUploader().url,FakeHeaders(),"").withLoggedIn(config)("Administrator")).get
+      status(result) mustBe OK
+    }
   }
 
   before{

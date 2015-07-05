@@ -141,7 +141,8 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
         routes.javascript.Admin.changePassword,
         routes.javascript.Admin.changeEmail,
         routes.javascript.AdminJsonApi.getUsers,
-        routes.javascript.AdminJsonApi.getUser
+        routes.javascript.AdminJsonApi.getUser,
+        routes.javascript.AdminJsonApi.insertDiscographies
         )
       ).as("text/javascript")
   }
