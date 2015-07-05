@@ -13,7 +13,8 @@ import jp.t2v.lab.play2.auth.AuthElement
 import models._
 
 import models.UserRole.{Administrator, Contributor, NormalUser}
-import play.api.Logger
+import play.api.{Play, Logger}
+import play.api.Play.current
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc.Controller
@@ -33,6 +34,8 @@ object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig 
   implicit val discFormat = Json.format[Discography]
   implicit val bioFormat = Json.format[Biography]
 
+  private val defaultAuthor = Play.application.configuration.getString("content.defaultauthor").getOrElse("Da Oostin Boyeez")
+
   def getUsers(name:String) = StackAction(AuthorityKey -> Administrator) { implicit request =>
     database.withSession{ implicit s =>
       Ok(toJson(UserAccounts.getUsersLike(name)))
@@ -49,7 +52,7 @@ object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig 
   def processBiographies(bios: Seq[Biography]) = {
     bios.foreach { bio: Biography =>
       val extraData = s"thumb=${bio.thumbnail}"
-      val post = new ContentPost(UUID.randomUUID().toString(), bio.name, ContentTypeMap("Discography"), new Date(), "Da Oostin Boyeez", bio.text, extraData, false, None)
+      val post = new ContentPost(UUID.randomUUID().toString(), bio.name, ContentTypeMap("Discography"), new Date(), defaultAuthor, bio.text, extraData, false, None)
       Content.save(post, GitRepo.apply(), None, None)
     }
     bios.length
@@ -65,7 +68,7 @@ object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig 
       str.append("</ol></div>")
       val content = str.toString
       val extraData = s"thumb=${disc.artwork}\ndiscType=${disc.discType}"
-      val post = new ContentPost(UUID.randomUUID().toString(), disc.title, ContentTypeMap("Discography"), new Date(), "Da Oostin Boyeez", content, extraData, false, None)
+      val post = new ContentPost(UUID.randomUUID().toString(), disc.title, ContentTypeMap("Discography"), new Date(), defaultAuthor, content, extraData, false, None)
       Content.save(post, GitRepo.apply(), None, None)
     }
     discs.length
