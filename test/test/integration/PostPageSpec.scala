@@ -67,7 +67,7 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     }
 
     "Display post tags" in {
-      val testPost = ContentHelper.createPostWithTags("Da Oostin Boyeez","Hello",ContentTypeMap("News"),"Da Oostin Boyeez,Jon Kevson",None)
+      val testPost = ContentHelper.createPostWithTags("Da Oostin Boyeez","Hello",ContentTypeMap("Blog"),"Da Oostin Boyeez,Jon Kevson",None)
       go to post(testPost.id)
       eventually{tagList must contain allOf("Jon Kevson","Da Oostin Boyeez")}
     }

@@ -20,7 +20,7 @@ class JsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter{
   var post: ContentPost = null
 
    before {
-    post = ContentHelper.createPost("Leek","andrew","jimmy",ContentTypeMap.get("News"),None)
+    post = ContentHelper.createPost("Leek","andrew","jimmy",ContentTypeMap.get("Blog"),None)
     ContentHelper.createPost("Bio 1","andrew","Bio 1",ContentTypeMap.get("Biography"),None)
     ContentHelper.createPost("Bio 2","andrew","Bio 1",ContentTypeMap.get("Biography"),None)
     ContentHelper.createPost("Bio 3","andrew","Bio 1",ContentTypeMap.get("Biography"),None)

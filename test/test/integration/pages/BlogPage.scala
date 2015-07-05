@@ -5,7 +5,7 @@ import org.scalatest.selenium.WebBrowser
 
 import scala.collection.mutable.ListBuffer
 
-class NewsPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest.selenium.Page with WebBrowser {
+class BlogPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest.selenium.Page with WebBrowser {
   val url = s"localhost:$port/news"
 
   def Items = {

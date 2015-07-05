@@ -7,7 +7,7 @@ import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test.helpers.ContentHelper
-import test.integration.pages.NewsPage
+import test.integration.pages.BlogPage
 import test.{TestConfig, TestGlobal}
 
 import scala.slick.jdbc.JdbcBackend._

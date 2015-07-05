@@ -158,7 +158,7 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
 
     "Be able to retrieve tags" in {
       database.withSession { implicit session =>
-        val post = ContentHelper.createPostWithTags("Post with tags","Some Content",ContentTypeMap("News"),"Leek,Freek,Gimp",None)
+        val post = ContentHelper.createPostWithTags("Post with tags","Some Content",ContentTypeMap("Blog"),"Leek,Freek,Gimp",None)
         post.tags must contain allOf ("Leek","Gimp","Freek")
 
       }

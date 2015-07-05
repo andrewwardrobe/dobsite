@@ -83,9 +83,9 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
     Ok(filename.replace("public","assets"))
   }
 
-  def news = StackAction {  implicit request =>
+  def blog = StackAction {  implicit request =>
     val maybeUser: Option[User] = loggedIn
-    Ok(views.html.contentList(routes.JsonApi.getContentByDate(ContentTypeMap.get("News")).url,maybeUser))
+    Ok(views.html.contentList(routes.JsonApi.getContentByDate(ContentTypeMap.get("Blog")).url,maybeUser))
   }
 
   def gazthree = StackAction {  implicit request =>

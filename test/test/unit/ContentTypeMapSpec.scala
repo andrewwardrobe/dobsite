@@ -20,17 +20,17 @@ class ContentTypeMapSpec extends PlaySpec with OneServerPerSuite with BeforeAndA
     ++ withPostTypeMapConfig, withGlobal = Some(TestGlobal))
 
   def withPostTypeMapConfig: Map[String,String] = {
-    Map("contenttypes.map"->"1 -> News,2 -> Music,3 -> Gaz Three,4 -> Biography" )
+    Map("contenttypes.map"->"1 -> Blog,2 -> Music,3 -> Gaz Three,4 -> Biography" )
   }
 
   "Content type Map" must {
     "Be able to map a post type id to its name" in {
       val postTypeName = ContentTypeMap(1)
-      postTypeName mustEqual("News")
+      postTypeName mustEqual("Blog")
     }
 
     "Be able to map a post type name to its id" in {
-      val postTypeId = ContentTypeMap("News")
+      val postTypeId = ContentTypeMap("Blog")
       postTypeId mustEqual(1)
     }
   }

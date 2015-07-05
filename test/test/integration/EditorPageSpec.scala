@@ -41,7 +41,7 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   }
 
   val editorPage = new EditorPage(port)
-  val newsPage = new NewsPage(port)
+  val newsPage = new BlogPage(port)
   val menuBar = new MenuBar(port)
 
   import editorPage._

@@ -26,12 +26,12 @@ class UserRoleSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
     "Be able to load inheirited roles" in {
       val role = UserRole.valueOf("TrustedContributor")
-      role.roles must contain ("News")
+      role.roles must contain ("Blog")
     }
 
     "Be able to load indirectly inhierited roles" in {
       val role = UserRole.valueOf("TrustedContributor")
-      role.roles must contain ("News")
+      role.roles must contain ("Blog")
     }
 
     "Confirm a permission" in {

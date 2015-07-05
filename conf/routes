@@ -21,7 +21,7 @@ POST        /signup                                           controllers.UserSe
 GET         /login                                            controllers.UserServices.login
 POST        /login                                            controllers.UserServices.authenticate
 
-GET         /news                                             controllers.Application.news
+GET         /news                                             controllers.Application.blog
 GET         /gazthree                                         controllers.Application.gazthree
 GET         /editor                                           controllers.Authorised.blogInput
 GET         /editor/new/:contentType                          controllers.Authorised.newContent(contentType: String)
