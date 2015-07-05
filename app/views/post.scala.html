@@ -1,24 +1,32 @@
-@(message: String, postId: String,user:Option[UserAccount])(implicit session : Session)
+@(post: ContentPost,tags: List[ContentTag], extraData: Map[String, String], user:Option[UserAccount])(implicit session : Session)
 
 @content = {
 <div class="row" >
 
     <div  class="col-md-10  col-sm-offset-1 dob-main">
-        <input type="hidden" name="postId" id="postId" value="@postId" />
-        <div class="pull-right"><a id="editLink" class="expander" href="@routes.Authorised.blogUpdate(postId)"><span class="fa fa-pencil"></span></a></div>
-        <h2 class="dob-post-title" id="postTitle" contenteditable="true"></h2>
-        <input type="hidden" value="1" id="postType" />
+        <input type="hidden" name="postId" id="postId" value="@post.id" />
+        <div class="pull-right"><a id="editLink" class="expander" href="@routes.Authorised.blogUpdate(post.id)"><span class="fa fa-pencil"></span></a></div>
+        <h2 class="dob-post-title" id="postTitle" contenteditable="true">@post.title</h2>
+        <input type="hidden" value="1" id="@post.postType" />
         <div>
-            Created On <div name="dateCreated" id="dateCreated"  size="auto" readonly="false" style="display:inline">Date</div> by  <div style="display:inline" name="author" id="author">author</div>
+            Created On <div name="dateCreated" id="dateCreated"  size="auto" readonly="false" style="display:inline">@post.dateCreated</div> by  <div style="display:inline" name="author" id="author">@post.author</div>
         </div>
         <input type="hidden" name="content" id="content" />
-        <div id="editor" class="mCustomScrollbar" data-mcs-theme="rounded" data-mcs-axis="y">
-            <div id="initText"></div>
+        <div id="editor">
+            @extraData.get("thumb") match {
+                case Some(img) => {
+                    <img id="bioImage" class="pull-left bioImage img-responsive" src="@img" />
+                }
+                case None =>{}
+            }
+            <div id="initText">@Html(post.getContent())</div>
         </div>
     </div>
     <div  class="col-md-10  col-sm-offset-1 dob-main">
         <div id="tags">
-
+            @for(tag <- tags){
+                <a id="tag_@tag.title">@tag.title</a>
+            }
         </div>
     </div>
 

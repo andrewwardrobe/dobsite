@@ -32,8 +32,7 @@ define ['common'],(common) -> {
             success: (data) ->
                 $.each data, (key,val) ->
                     link = $("<a>")
-                    link.attr 'href', '#'
-                    link.attr 'id', 'tag_'+val
+                    link.attr {'href':'#','id':'tag_'+val}
                     link.text val
                     $("#tags").append link
                     $("#tags").append document.createTextNode("  ")

@@ -8,11 +8,12 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 
 
-
+import _root_.data.Content
 import jp.t2v.lab.play2.auth.{OptionalAuthElement, AuthElement}
 import models.UserRole.TrustedContributor
 import models._
 import org.apache.commons.io.IOUtils
+import org.h2.mvstore.MVMap.MapBuilder
 import play.api._
 import play.api.data.Form
 import play.api.data.Forms._
@@ -21,8 +22,12 @@ import play.api.db.slick.Config.driver.simple._
 import play.api.libs.json.Json.parse
 import play.api.mvc._
 import play.api.Play.current
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import play.api.libs.json.Json._
+
+import scala.collection.immutable.HashMap
+import scala.collection.mutable
+import scala.util.Try
 
 
 object Application extends Controller  with OptionalAuthElement with StandardAuthConfig{
@@ -42,7 +47,18 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
 
   def post(id :String) =  StackAction{ implicit request =>
     val maybeUser: Option[User] = loggedIn
-   Ok(views.html.post("",id,maybeUser))
+    val (post, tags) =  database.withSession { implicit session =>
+      (Content.getById(id),Content.getTags(id))
+    }
+
+    if (post.isEmpty)
+      BadRequest("")
+    else {
+      val map = new mutable.HashMap[String, String]()
+
+      val extraData = Try(Json.parse(post.head.extraData).as[Map[String,String]]).getOrElse(Map())
+      Ok(views.html.post(post.head,tags, extraData, maybeUser))
+    }
   }
 
   def playground =  StackAction{ implicit request =>
