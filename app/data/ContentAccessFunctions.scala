@@ -34,6 +34,16 @@ trait ContentAccessFunctions {this: ContentPostSchema =>
     postTable.filter( post => post.author === author
       && post.isDraft === false).sortBy(_.dateCreated.desc).list
   }
+
+  def getLiveContentByAuthorLatestFirst(author:String,typ: Int,beforeDate: Date,max :Int )(implicit  s: Session) = {
+    postTable.filter( post =>
+      post.dateCreated < beforeDate
+        && post.postType === typ
+        && post.author === author
+        && post.isDraft === false
+    ).sortBy(_.dateCreated.desc).take(max).list
+  }
+
   def getDraftContentByUserLatestFirst(userId:Int)(implicit s: Session)  = {
     postTable.filter( post => post.userId === userId
       && post.isDraft === true).sortBy(_.dateCreated.desc).list

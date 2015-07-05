@@ -131,6 +131,25 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       }
     }
 
+    "Be able to limit number of items retrieved by type before date.coffee when retrieving by author" in {
+      database.withSession{ implicit session =>
+
+        ContentHelper.createPost("Post 215","MC Donalds","Jimbo Jambo 1",1,"",None)
+        ContentHelper.createPost("Post 216","MC Donalds","Jimbo Jambo 2",1,"",None)
+        ContentHelper.createPost("Post 217","Test Author","Jimbo Jambo 3",1,"",None)
+        ContentHelper.createPost("Post 218","MC Donalds","Jimbo Jambo 4",1,"",None)
+        val latest = ContentHelper.createPost("Post 219","MC Donalds","Jimbo Jambo 5",1,"",None)
+        ContentHelper.createPost("Post 220","MC Donalds","Jimbo Jambo 6",1,"","20170803154423",None)
+
+        val df = new SimpleDateFormat("yyyyMMddHHmmss")
+        val targetDate = df.parse("20170802154423")
+        val posts = Content.getLiveContentByAuthorLatestFirst("MC Donalds", 1,targetDate,3)
+
+        posts must have length(3)
+        posts.head.dateCreated mustEqual latest.dateCreated
+      }
+    }
+
     "Not retrieve drafts by default" in {
       database.withSession { implicit session =>
 
