@@ -44,11 +44,8 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
     }
   }
     //  !!!!!!!!! Todo List
-    "Refactor News Post type to be Blog Post" in pending
 
     "Change biography type to have value 3" in pending
-
-    "Save button should be available in biography when pressing a toolbar edit" in pending
 
 
     "Make Gaz three page a user profile page based on a with a blog post list based on a user alias filter" in pending
