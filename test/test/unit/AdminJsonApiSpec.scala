@@ -46,6 +46,22 @@ class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAft
       }
     }
 
+    "load biography data from json" in {
+      val json =
+        """
+          |{"biographies":[{
+          |    "name":"MC Donalds",
+          |    "text":"<p>Some example text</p> <p>Some more stuff</p>",
+          |    "thumbnail":"assets/images/crew/donalds_col.jpg"
+          |  }]
+          |}
+        """.stripMargin
+      val result = route(FakeRequest(POST, controllers.routes.AdminJsonApi.insertDiscographies().url,FakeHeaders(),Json.parse(json)).withLoggedIn(config)("Administrator")).get
+      status(result) mustBe OK
+      database.withSession { implicit session =>
+        Content.get.length must equal(1)
+      }
+    }
 
   }
   before{
