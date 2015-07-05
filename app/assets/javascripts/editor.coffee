@@ -277,4 +277,19 @@ define ['common','q','helpers/date'], (common,Q) -> {
       imageReader.readAsDataURL(f)
       i++
 
+  loadTags:(id)->
+    promise = Q.when jsRoutes.controllers.JsonApi.getContentTags(id).ajax({})
+    promise.then (data) ->
+      console.log "leek #{JSON.stringify(data)}"
+      $.each data, (key,val) ->
+        console.log "Loop #{val}"
+        text = $("#tagBox").val()
+        text = text + val
+        text = text + ", ";
+
+        $("#tagBox").val text
+
+      text = $("#tagBox").val()
+      text = text.replace /(^,)|(,$)|(, $)/g, ""
+      $("#tagBox").val text
 }
