@@ -21,6 +21,12 @@ trait UserAccountFunctions {this: UserAccountSchema =>
     } yield ua).list map { _.alias }
   }
 
+  def getProfile(user:UserAccount)(implicit s: Session) = {
+    (for {
+      p <- Profiles.profiles
+    } yield p).list.headOption
+  }
+
   def findById(id :Int)(implicit s: Session): Option[UserAccount] = {
     val acc = accounts.filter(_.id === id).list
     acc match {

@@ -1,7 +1,7 @@
 package test.unit
 
 import data.UserAccounts
-import models.UserRole
+import models.{UserProfile, UserRole}
 import models.UserRole.NormalUser
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
@@ -23,7 +23,12 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
   
   "User Account" must {
 
-      "Have associated user profiles" in pending
+      "Have associated user profiles" in {
+        val user = UserAccountHelper.createUserAndProfile("TestUser","TestUser","TrustedContributor")
+        database.withSession { implicit session =>
+          UserAccounts.getProfile(user) must not be None
+        }
+      }
       "Allow for user aliases" in {
         val user = UserAccountHelper.createUserWithAlias("Andrew","Andrew","pa$$word",UserRole.valueOf("Contributor"),"Gaz Three")
         database.withSession { implicit session =>
