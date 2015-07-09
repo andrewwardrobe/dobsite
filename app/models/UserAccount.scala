@@ -25,5 +25,6 @@ case class UserAccount(id: Int, email: String, password: String, name: String, r
   def hasPermission(required: UserRole) = {
     UserRole.roleHasAuthority(role,required)
   }
+
 }
 

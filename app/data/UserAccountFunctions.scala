@@ -15,6 +15,12 @@ trait UserAccountFunctions {this: UserAccountSchema =>
 
   val accounts  = TableQuery[UserAccountTable]
 
+  def getAliases(user:UserAccount)(implicit s: Session) = {
+    (for {
+      ua <- UserAliasDAO.userAlias
+    } yield ua).list map { _.alias }
+  }
+
   def findById(id :Int)(implicit s: Session): Option[UserAccount] = {
     val acc = accounts.filter(_.id === id).list
     acc match {

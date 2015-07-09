@@ -115,7 +115,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       signin("TrustedContributor","TrustedContributor")
       go to profilePage
 
-      postLinks must not be empty
+      eventually {postLinks must not be empty}
       database.withSession{implicit session => Content.deleteAll}
     }
 
