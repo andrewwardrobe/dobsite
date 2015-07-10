@@ -1,3 +1,10 @@
+/**
+ * Default (Template) Project
+ * Created by andrew on 21/02/15.
+ *
+ */
+
+
 package test.unit
 
 import data.UserAccounts
@@ -13,9 +20,7 @@ import test.helpers.UserAccountHelper
 
 import scala.slick.jdbc.JdbcBackend._
 
-/**
- * Created by andrew on 21/02/15.
- */
+
 class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))

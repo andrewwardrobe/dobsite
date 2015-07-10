@@ -13,7 +13,7 @@ trait ContentToTagSchema{
     def postId = column[String]("postId")
     def tagId = column[String]("tagId")
     def * = (postId, tagId) <> ((ContentToTagLink.apply _).tupled, ContentToTagLink.unapply)
-    //TODO: foreign keys
+
     def postFK = foreignKey("post_fk", postId,Content.postTable)(post => post.id)
     def tagsFK = foreignKey("tag_fk", tagId, Tags.tagsTable)(tags => tags.id)
   }
