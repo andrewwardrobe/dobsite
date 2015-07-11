@@ -17,7 +17,8 @@ trait UserAccountFunctions {this: UserAccountSchema =>
 
   def getAliases(user:UserAccount)(implicit s: Session) = {
     (for {
-      ua <- UserAliasDAO.userAlias
+      ua <- UserAliasDAO.userAlias if ua.userId === user.id
+
     } yield ua).list map { _.alias }
   }
 

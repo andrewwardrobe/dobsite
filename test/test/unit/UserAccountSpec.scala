@@ -45,17 +45,25 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
       database.withSession { implicit session =>
         UserAccounts.addAlias(user, "Leek")
-        UserAccounts.getAliases(user).head mustEqual "Gaz Three"
+        UserAccounts.getAliases(user).head mustEqual "Leek"
       }
     }
 
-
-      "Have a default alias" in pending
-
-
+    "Prevent reuse of alias'" in {
+      UserAccountHelper.createUserWithAlias("Andrew", "Andrew", "pa$$word", UserRole.valueOf("Contributor"), "Leek")
+      val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
+      database.withSession { implicit session =>
+        UserAccounts.addAlias(user, "Leek")
+        UserAccounts.getAliases(user) must not contain "Leek"
+      }
+    }
   }
 
-
+  after {
+    database.withSession { implicit session =>
+      UserAccounts.removeAllAliases
+    }
+  }
 
 
 }
