@@ -1,24 +1,22 @@
 package data
 
-import models.UserAlias
+import java.util.UUID
+
+import models.{UserAlias, UserAccount}
+import play.api.db.slick.Session
 
 /**
- * Created by andrew on 09/07/15.
+ *
+ * Created by andrew on 11/07/15.
+ *
  */
 trait UserAliasFunctions {
   this: UserAliasSchema =>
-
   import play.api.db.slick.Config.driver.simple._
 
-  def insert(alias: UserAlias)(implicit session: Session) = {
+
+  def addAlias(user: UserAccount, newAlias: String)(implicit session: Session) = {
+    val alias = new UserAlias(UUID.randomUUID.toString, user.id, newAlias)
     userAlias.insert(alias)
-  }
-
-  def get(implicit session: Session) = {
-    userAlias.list
-  }
-
-  def get(id: String)(implicit session: Session) = {
-    userAlias.filter(_.id === id).list
   }
 }

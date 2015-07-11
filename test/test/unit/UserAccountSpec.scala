@@ -40,7 +40,19 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
           UserAccounts.getAliases(user).head mustEqual "Gaz Three"
         }
       }
+
+    "Be able an assign an alias to a user" in {
+      val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
+      database.withSession { implicit session =>
+        UserAccounts.addAlias(user, "Leek")
+        UserAccounts.getAliases(user).head mustEqual "Gaz Three"
+      }
+    }
+
+
       "Have a default alias" in pending
+
+
   }
 
 
