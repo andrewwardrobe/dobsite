@@ -21,4 +21,6 @@ trait UserAccountSchema {
 
     def * = (id, email, password, name, role) <> ((UserAccount.apply _).tupled, UserAccount.unapply)
   }
+
+  val accounts = TableQuery[UserAccountTable]
 }

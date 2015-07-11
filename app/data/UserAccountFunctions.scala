@@ -12,9 +12,6 @@ trait UserAccountFunctions {this: UserAccountSchema =>
   import play.api.db.slick.Config.driver.simple._
 
 
-
-  val accounts  = TableQuery[UserAccountTable]
-
   def getAliases(user:UserAccount)(implicit s: Session) = {
     (for {
       ua <- UserAliasDAO.userAlias if ua.userId === user.id

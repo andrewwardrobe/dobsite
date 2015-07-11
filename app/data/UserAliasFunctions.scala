@@ -11,15 +11,20 @@ import play.api.db.slick.Session
  *
  */
 trait UserAliasFunctions {
-  this: UserAliasSchema =>
+  this: UserAliasSchema with UserAccountSchema =>
   import play.api.db.slick.Config.driver.simple._
 
-  def aliasAvailible(alias: String)(implicit session: Session) = {
-    userAlias.filter(_.alias === alias).list.isEmpty
+  def aliasAvailable(alias: String)(implicit session: Session) = {
+    if (userAlias.filter(_.alias === alias).list.isEmpty && accounts.filter(_.name === alias).list.isEmpty)
+      true
+    else
+      false
   }
+
+
   def addAlias(user: UserAccount, newAlias: String)(implicit session: Session) = {
     val alias = new UserAlias(UUID.randomUUID.toString, user.id, newAlias)
-    if (aliasAvailible(newAlias))
+    if (aliasAvailable(newAlias))
       userAlias.insert(alias)
   }
 

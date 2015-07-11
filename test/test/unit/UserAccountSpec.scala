@@ -57,6 +57,15 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
         UserAccounts.getAliases(user) must not contain "Leek"
       }
     }
+
+    "Prevent use of someone else's username as an alias" in {
+      UserAccountHelper.createUserWithAlias("Andrew", "Andrew", "pa$$word", UserRole.valueOf("Contributor"), "Leek")
+      val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
+      database.withSession { implicit session =>
+        UserAccounts.addAlias(user, "Andrew")
+        UserAccounts.getAliases(user) must not contain "Andrew"
+      }
+    }
   }
 
   after {
