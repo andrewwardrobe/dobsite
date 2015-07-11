@@ -61,7 +61,11 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
 
   def newAlertVisible = cssSelector("#editAlertNew").element.isDisplayed
 
-
+  def alias = {
+    (for {
+      e <- cssSelector("#author option").findAllElements
+    } yield e.attribute("value").get.trim).toList
+  }
 
   def draftMode = { val elemClass = id("isDraft").webElement.getAttribute("class")
     elemClass.contains("isDraftOn")

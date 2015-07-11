@@ -1,7 +1,7 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
-import models.{ContentTypeMap, ContentPost}
+import models.{UserRole, ContentTypeMap, ContentPost}
 import models.UserRole.TrustedContributor
 import org.openqa.selenium.By
 import org.openqa.selenium.support.ui.ExpectedConditions
@@ -53,10 +53,7 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     val signIn = new SignInPage(port)
     if(!setupDone) {
       repo.refresh
-      UserAccountHelper.createUser("Administrator","Administrator","Administrator")
-      UserAccountHelper.createUser("Contributor","Contributor","Contributor")
-      UserAccountHelper.createUser("TrustedContributor","TrustedContributor","TrustedContributor")
-      UserAccountHelper.createUser("NormalUser","NormalUser","NormalUser")
+      UserAccountHelper.createUserWithAlias("TrustedContributor", "TrustedContributor", "TrustedContributor", UserRole.valueOf("TrustedContributor"), "Da Oostin Boyeez")
       signIn.signin("TrustedContributor", "TrustedContributor")
       extraSetup
       setupDone = true
@@ -80,6 +77,10 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
       newAlertVisible mustEqual true
     }
 
+    "Display a list of the users alias if any" in {
+      go to editorPage
+      alias must contain allOf("Da Oostin Boyeez", "TrustedContributor")
+    }
 
     "Display a notification when a post is in draft" in {
       goTo (editorPage.post(post4.id))

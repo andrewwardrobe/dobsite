@@ -2,12 +2,16 @@ package data
 
 import models.{UserAccount, UserRole}
 import org.mindrot.jbcrypt.BCrypt
+import play.api.db.slick.Session
 import play.api.db.slick._
+
+import scala.slick.jdbc.JdbcBackend._
 
 /**
  * Created by andrew on 14/05/15.
  */
-trait UserAccountFunctions {this: UserAccountSchema =>
+trait UserAccountFunctions {
+  this: UserAccountSchema with DataBase =>
 
   import play.api.db.slick.Config.driver.simple._
 
@@ -17,6 +21,12 @@ trait UserAccountFunctions {this: UserAccountSchema =>
       ua <- UserAliasDAO.userAlias if ua.userId === user.id
 
     } yield ua).list map { _.alias }
+  }
+
+  def getUserAliases(user: UserAccount) = {
+    database.withSession { implicit session =>
+      getAliases(user)
+    }
   }
 
   def getProfile(user:UserAccount)(implicit s: Session) = {
