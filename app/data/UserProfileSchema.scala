@@ -18,4 +18,6 @@ trait UserProfileSchema {
 
     def postFK = foreignKey("USER_FK", userId,UserAccounts.accounts)(account => account.id)
   }
+
+  val profiles = TableQuery[UserProfileTable]
 }

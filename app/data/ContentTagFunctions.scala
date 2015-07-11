@@ -11,7 +11,6 @@ trait ContentTagFunctions { this: ContentTagSchema =>
 
   import java.util.UUID
 
-  val tagsTable = TableQuery[TagTable]
 
   def create(title:String)(implicit session: Session) = {
     val tag = new ContentTag(UUID.randomUUID.toString,title)

@@ -8,7 +8,7 @@ import models.UserProfile
  */
 trait UserProfileAccess { this: UserProfileSchema =>
   import play.api.db.slick.Config.driver.simple._
-  val profiles = TableQuery[UserProfileTable]
+
 
   //private val byId = t.createFinderBy( _.id )
   def get(id: Int)(implicit session: Session) = profiles.filter(_.id === id).first

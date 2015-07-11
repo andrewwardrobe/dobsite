@@ -5,7 +5,7 @@ import models.UserAlias
 /**
  * Created by andrew on 09/07/15.
  */
-trait UserAliasAcess {
+trait UserAliasAccess {
   this: UserAliasSchema =>
 
   import play.api.db.slick.Config.driver.simple._

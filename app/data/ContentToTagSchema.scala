@@ -18,4 +18,5 @@ trait ContentToTagSchema{
     def tagsFK = foreignKey("tag_fk", tagId, Tags.tagsTable)(tags => tags.id)
   }
 
+  val contentTags = TableQuery[PostTagsTable]
 }

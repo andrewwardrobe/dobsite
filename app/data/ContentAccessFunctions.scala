@@ -16,7 +16,6 @@ import scala.collection.mutable.ListBuffer
 trait ContentAccessFunctions {this: ContentPostSchema =>
   
   import play.api.db.slick.Config.driver.simple._
-  val postTable = TableQuery[PostTable]
 
 
   def get(implicit s: Session) = { postTable.list }

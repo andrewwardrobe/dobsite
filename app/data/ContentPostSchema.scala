@@ -17,10 +17,7 @@ trait ContentPostSchema {
       d => new java.util.Date(d.getTime)
     )
   class PostTable(tag:Tag) extends Table[ContentPost](tag,"posts"){
-
-
-
-    def id = column[String]("ID",O.PrimaryKey)
+    def id = column[String]("ID", O.PrimaryKey)
     def title = column[String]("ITEM_TITLE")
     def postType = column[Int]("TYPE")
     def dateCreated = column[Date]("DATE_CREATED")
@@ -33,4 +30,6 @@ trait ContentPostSchema {
 
     def * = (id,title,postType,dateCreated,author,content,extraData,isDraft,userId) <> ((ContentPost.apply _).tupled, ContentPost.unapply _)
   }
+
+  val postTable = TableQuery[PostTable]
 }

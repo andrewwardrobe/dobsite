@@ -9,9 +9,6 @@ import models.ContentToTagLink
 trait ContentToTagFunctions {this: ContentToTagSchema =>
   import play.api.db.slick.Config.driver.simple._
 
-
-  val contentTags = TableQuery[PostTagsTable]
-
   def link(postId: String, tagId :String)(implicit session: Session) = {
     contentTags.insert(new ContentToTagLink(postId,tagId))
   }

@@ -19,5 +19,6 @@ trait ContentTagSchema {
     def * = (id, title) <>((ContentTag.apply _).tupled, ContentTag.unapply)
   }
 
+  val tagsTable = TableQuery[TagTable]
 }
 
