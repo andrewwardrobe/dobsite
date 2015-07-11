@@ -115,9 +115,10 @@ def signedout = StackAction { implicit request =>
   val userNameIsAvailable: Constraint[String] = Constraint("constraints.nameavailable")({
     name =>
       val errors = database.withSession { implicit session =>
-        UserAccounts.getUserNameCount(name) match {
-          case 0 => Nil
-          case _ => Seq(ValidationError("Screen Name is already in use"))
+        if (UserAccounts.aliasAvailable(name)) {
+          Nil
+        } else {
+          Seq(ValidationError("Screen Name is already in use"))
         }
       }
       if(errors.isEmpty) {
