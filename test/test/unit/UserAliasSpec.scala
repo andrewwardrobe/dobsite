@@ -2,7 +2,8 @@ package test.unit
 
 import java.util.UUID
 
-import data.UserAliasDAO
+import com.daoostinboyeez.site.exceptions.AliasLimitReachedException
+import data.{UserAccounts, UserAliasDAO}
 import models.{UserAlias, UserRole}
 import models.UserRole.NormalUser
 import org.scalatest.BeforeAndAfter
@@ -31,6 +32,19 @@ class UserAliasSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter 
       database.withSession { implicit session =>
         UserAliasDAO.insert(userAlias)
         UserAliasDAO.get(id).head mustEqual userAlias
+      }
+    }
+
+    "Throw an error if the user has more alias than the limit" in {
+      val user = UserAccountHelper.createUser("Andrew", "pa$$word", "TrustedContributor")
+      val aliasLimit = user.getAliasLimit
+      database.withSession { implicit session =>
+        for (i <- 0 to aliasLimit) {
+          UserAccounts.addAlias(user, s"alias${i}")
+        }
+        intercept[AliasLimitReachedException] {
+          UserAccounts.addAlias(user, s"aliasExtra")
+        }
       }
     }
   }

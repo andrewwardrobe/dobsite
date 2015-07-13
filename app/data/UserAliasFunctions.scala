@@ -2,6 +2,7 @@ package data
 
 import java.util.UUID
 
+import com.daoostinboyeez.site.exceptions.AliasLimitReachedException
 import models.{UserAlias, UserAccount}
 import play.api.db.slick.Session
 
@@ -21,11 +22,19 @@ trait UserAliasFunctions {
       false
   }
 
+  def aliasCount(user: UserAccount)(implicit session: Session) = {
+    userAlias.filter(_.userId === user.id).list.length
+  }
 
   def addAlias(user: UserAccount, newAlias: String)(implicit session: Session) = {
     val alias = new UserAlias(UUID.randomUUID.toString, user.id, newAlias)
     if (aliasAvailable(newAlias)) {
-      userAlias.insert(alias)
+      if (aliasCount(user) > user.getAliasLimit) {
+        throw new AliasLimitReachedException("Limit Reached")
+      }
+      else {
+        userAlias.insert(alias)
+      }
       true
     } else {
       false

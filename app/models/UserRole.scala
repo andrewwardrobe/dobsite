@@ -42,6 +42,8 @@ class UserRole(role: String){
   def hasPermission(perm:String) = {
     roles.contains(perm)
   }
+
+  def aliasLimit = Play.application.configuration.getInt(s"userrole.$role.aliaslimit").getOrElse(0)
 }
 
 object UserRole {

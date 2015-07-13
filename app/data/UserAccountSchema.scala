@@ -19,7 +19,9 @@ trait UserAccountSchema {
     def name = column[String]("NAME")
     def role = column[UserRole]("ROLE")
 
-    def * = (id, email, password, name, role) <> ((UserAccount.apply _).tupled, UserAccount.unapply)
+    def aliasLimit = column[Option[Int]]("ALIAS_LIMIT", O.Nullable)
+
+    def * = (id, email, password, name, role, aliasLimit) <>((UserAccount.apply _).tupled, UserAccount.unapply)
   }
 
   val accounts = TableQuery[UserAccountTable]

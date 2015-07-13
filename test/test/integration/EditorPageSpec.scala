@@ -143,7 +143,7 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
       go to post(post3.id)
       title mustBe "3rd Post"
       editorBoxText mustBe ("Dis is Da Oostin Boyeez Leek")
-      postType mustBe ("News")
+      postType mustBe ("Blog")
     }
 
     "Display a drop down menu for editor things" in {

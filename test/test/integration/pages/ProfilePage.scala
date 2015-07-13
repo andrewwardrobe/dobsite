@@ -44,7 +44,7 @@ class ProfilePage(val port: Int)(implicit driver:WebDriver) extends Page with We
 
   def aliasList = {
     val aliasList = cssSelector("#aliasList").findElement.get.text
-    aliasList.split(",").toList
+    for {als <- aliasList.split(",").toList} yield als.trim
   }
 
   def addAlias(alias: String) = {

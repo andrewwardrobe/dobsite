@@ -136,8 +136,8 @@ def signedout = StackAction { implicit request =>
       "email" -> email.verifying(emailIsAvailable),
       "password" -> nonEmptyText(minLength = 6, maxLength = 100),
       "name" -> text.verifying(userNameIsAvailable),
-      "role" -> userRoleMap
-
+      "role" -> userRoleMap,
+      "aliasLimit" -> optional(number)
     )(UserAccount.apply)(UserAccount.unapply _)
   }
 }
