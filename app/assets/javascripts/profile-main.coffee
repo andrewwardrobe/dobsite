@@ -3,3 +3,4 @@ require ["common"], (common) ->
         profile.setupEditHandler "#editBtn"
         profile.loadPosts()
         profile.loadDrafts()
+        profile.addAliasHandler()

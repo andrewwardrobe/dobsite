@@ -42,6 +42,16 @@ class ProfilePage(val port: Int)(implicit driver:WebDriver) extends Page with We
 
   def saveSuccess =  cssSelector("#saveSuccess").findElement.get
 
+  def aliasList = {
+    val aliasList = cssSelector("#aliasList").findElement.get.text
+    aliasList.split(",").toList
+  }
+
+  def addAlias(alias: String) = {
+    val input = cssSelector("#aliasInput").findElement.get.underlying
+    input.sendKeys(alias)
+    click on id("addAlias");
+  }
 
   def avatarEditable = {
     cssSelector("#avatarDiv").findElement match {

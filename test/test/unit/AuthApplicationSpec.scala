@@ -83,6 +83,11 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
       status(result) mustBe OK
     }
 
+    "Allow users to create an alias" in {
+      val result = route(FakeRequest(POST, controllers.routes.Authorised.addAlias("Leeek").url, FakeHeaders(), "").withLoggedIn(config)("TrustedContributor")).get
+      status(result) mustBe OK
+    }
+
 
   }
   before{
@@ -99,6 +104,7 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
   after{
     database.withSession { implicit session =>
       Profiles.deleteAll
+      UserAccounts.removeAllAliases
       UserAccounts.deleteAll
     }
   }

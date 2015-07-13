@@ -14,8 +14,9 @@
             case None => {}
             case Some(userProfile) => {<input id="profileId" value="@userProfile.id" type="hidden"/>}
             }
-            <div style="display:inline" class="pull-right">
-                <a href="#" id="editBtn" class="editBtnOff"><span class="fa fa-pencil"></span></a>
+            <div style="display : inline" class="pull-right" style="display : inline-block">
+
+            <a href="#" id="editBtn" class="editBtnOff"><span class="fa fa-pencil"></span></a>
                 <a href="#" id="saveBtn" style="display:none" class="editBtnOff"><span class="fa fa-save"></span></a>
                 <a href="#" id="saveSuccess" style="display:none" class="btnSuccessful"><span class="fa fa-check-circle"></span></a>
                 <a href="#" id="saveFailed" style="display:none" class="btnFailure"><span class="fa fa-times-circle"></span></a>
@@ -36,6 +37,20 @@
                     case Some(userProfile) => {@userProfile.about}
                 }
             </div>
+            @defining(data.UserAccounts.getUserAliases(user)) { aliases =>
+                <div >Posts as: <div id="aliasList" style="display : inline"> @for(als <- aliases) {@als, }</div></div>
+            }
+            @if(user.role.hasAuthority("TrustedContributor")) {
+                <div class="input-group dob-input-group">
+                    <input type="text" id="aliasInput" class="form-control dob-control-grey">
+                    <span class="input-group-btn">
+                        <a href="#" id="addAlias" class="editBtnOff dropdown-toggle" data-toggle="dropdown" ><span class="fa fa-user-plus"></span>
+                            Add Alias</a>
+                    </span>
+
+                </div>
+                <div id="errs" style="display : inline"></div>
+            }
             <hr/>
             My Posts:
             <div id="myPosts">

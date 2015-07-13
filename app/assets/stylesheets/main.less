@@ -147,6 +147,12 @@ h1 {
     width: 175px;
 }
 
+.dob-control-white {
+  .dob-control-mix;
+  background-color: #ffffff;
+  color: #000000;
+}
+
 .skinnyAlert{
     padding-top: 3px;
     padding-bottom: 3px;
@@ -156,6 +162,17 @@ h1 {
 .dob-control-bad{
     background-color:@brand-danger ;
     .dob-control-mix;
+}
+
+.dob-control-grey {
+  .dob-control-mix;
+  background-color: @gray-dark;
+  width: 50px;
+}
+
+.dob-input-group {
+  width: 175px;
+  border-color: @gray-light;
 }
 
 .dob-control-ok{
@@ -198,18 +215,18 @@ h1 {
     background-color:@brand-danger ;
 }
 
-
-
-
-.dob-control{
+.dob-control-base {
     -moz-appearance:none;
-    background-color: #000000;
-    color:#fff;
     border:none;
     background:none;
     text-overflow:'';
     text-indent:0.01px;
     cursor:pointer;
+}
+
+.dob-control {
+  .dob-control-base;
+  color: #fff;
 }
 
 .dobselect {
@@ -223,17 +240,6 @@ h1 {
     box-shadow: 0 0 15px rgba(211, 211, 211, 1);
 }
 
-.dob-control-white{
-    background-color: #ffffff;
-    color:#000000;
-    border:none;
-    text-overflow:'';
-    text-indent:0.01px;
-    cursor:pointer;
-    height: 24px;
-    font-size: 12px;
-    width: 175px;
-}
 
 
 @font-face {
@@ -515,14 +521,14 @@ border-top: none;
     align:center;
     margin:5px;
  }
- 
+
 .bioCell{
     text-align:left;
     vertical-align: text-top;
     border-top: #000;
     border-top: none;
   }
-  
+
 .bioDiv{
   background:@gray-darker-trans;
   border-radius:5px;

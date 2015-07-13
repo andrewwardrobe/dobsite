@@ -24,8 +24,12 @@ trait UserAliasFunctions {
 
   def addAlias(user: UserAccount, newAlias: String)(implicit session: Session) = {
     val alias = new UserAlias(UUID.randomUUID.toString, user.id, newAlias)
-    if (aliasAvailable(newAlias))
+    if (aliasAvailable(newAlias)) {
       userAlias.insert(alias)
+      true
+    } else {
+      false
+    }
   }
 
   def removeAllAliases(implicit session: Session) = {

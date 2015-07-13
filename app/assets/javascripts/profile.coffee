@@ -12,6 +12,19 @@ define ['common','utilities','q'],(common,utils,Q) ->
                     self.editModeOn selector
                 else
                     self.editModeOff selector
+        addAliasHandler: ()->
+            $("#addAlias").on 'click', ()->
+                console.log "click"
+                alias = $("#aliasInput").val()
+                console.log alias
+                if alias != ""
+                    result = Q.when jsRoutes.controllers.Authorised.addAlias(alias).ajax({})
+                    result.then (data) ->
+                        $("#aliasList").append("#{data},")
+                    , (err) ->
+                        console.log(JSON.stringify(err))
+                        $("#errs").text(err.responseText)
+
 
         editModeOn:(selector) ->
             self = this

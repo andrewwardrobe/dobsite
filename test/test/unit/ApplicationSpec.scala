@@ -49,8 +49,6 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
 
 
     "Make Gaz three page a user profile page based on a with a blog post list based on a user alias filter" in pending
-    "Make a user alias feature" in pending
-          "\tOnly allow TrustedContributor and admin to have this feature" in pending
 
     "Make a show in user profile check box on editor" in pending
 

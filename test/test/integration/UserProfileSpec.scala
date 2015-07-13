@@ -2,7 +2,7 @@ package test.integration
 
 import com.daoostinboyeez.git.GitRepo
 import data.{Content, UserAccounts, Profiles}
-import models.UserAccount
+import models.{UserRole, UserAccount}
 import org.scalatest._
 import org.scalatestplus.play._
 import play.api.db.DB
@@ -33,7 +33,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
   def setup() = {
     UserAccountHelper.createUser("Administrator","Administrator","Administrator")
     UserAccountHelper.createUser("Contributor","Contributor","Contributor")
-    trust = UserAccountHelper.createUser("TrustedContributor","TrustedContributor","TrustedContributor")
+    trust = UserAccountHelper.createUserWithAlias("TrustedContributor", "TrustedContributor@dob.com", "TrustedContributor", UserRole.valueOf("TrustedContributor"), "Da Oostin Boyeez")
     UserAccountHelper.createProfile(trust.id,"this user is a fine member of da oostin boyeez","assets/images/crew/donalds_bw.jpg")
     UserAccountHelper.createUser("NormalUser","NormalUser","NormalUser")
 
@@ -85,6 +85,21 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       avatarEditable mustBe true
     }
 
+    "List aliases" in {
+      signin("TrustedContributor", "TrustedContributor")
+      go to profilePage
+      eventually {
+        aliasList must contain("Da Oostin Boyeez")
+      }
+    }
+    "Allow Trusted Contributors to add an alias" in {
+      signin("TrustedContributor", "TrustedContributor")
+      go to profilePage
+      addAlias("Gaz Three")
+      eventually {
+        aliasList must contain("Gaz Three")
+      }
+    }
     "Display a save button when changes have been made to the profile" in {
       signin("TrustedContributor","TrustedContributor")
       go to profilePage

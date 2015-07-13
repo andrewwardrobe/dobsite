@@ -4,7 +4,7 @@ import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.{GitRepo}
 import controllers.Application._
-import data.{Profiles, Tags, Content}
+import data.{UserAccounts, Profiles, Tags, Content}
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
 import models._
@@ -104,6 +104,15 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     new String(""+date.getTime)
   }
 
+  def addAlias(alias: String) = StackAction(AuthorityKey -> Contributor) { implicit request =>
+    val user = loggedIn
+    database.withSession { implicit session =>
+      UserAccounts.addAlias(user, alias) match {
+        case true => Ok(alias)
+        case false => BadRequest("Alias already in use")
+      }
+    }
+  }
 
   //TODO: Reactor this to use the save from content
   def submitBlogUpdate = StackAction(AuthorityKey -> Contributor) { implicit request =>

@@ -46,7 +46,7 @@ PUT         /admin/changeemail/:user/:email                   controllers.Admin.
 GET         /userroles                                        controllers.Authorised.getEditables
 
 POST        /admin/changepass                                 controllers.Admin.changePassword
-
+POST        /user/addalias/:alias        controllers.Authorised.addAlias(alias:String)
 
 #JSon API
 
