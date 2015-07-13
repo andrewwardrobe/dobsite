@@ -88,7 +88,18 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
       status(result) mustBe OK
     }
 
+    "Thorw a meaningful error message when on the alias limit" in {
+      database.withSession { implicit session =>
+        for (i <- 0 to user.getAliasLimit - 1) {
+          UserAccounts.addAlias(user, s"leek${i}")
+        }
 
+        val result = route(FakeRequest(POST, controllers.routes.Authorised.addAlias("Error One").url, FakeHeaders(), "").withLoggedIn(config)("TrustedContributor")).get
+        status(result) mustBe BAD_REQUEST
+        contentAsString(result) must include("Alias Limit Reached")
+      }
+
+    }
   }
   before{
     val repo = GitRepo.apply()

@@ -3,6 +3,7 @@ package controllers
 import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.{GitRepo}
+import com.daoostinboyeez.site.exceptions.AliasLimitReachedException
 import controllers.Application._
 import data.{UserAccounts, Profiles, Tags, Content}
 import jp.t2v.lab.play2.auth._
@@ -107,10 +108,15 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   def addAlias(alias: String) = StackAction(AuthorityKey -> Contributor) { implicit request =>
     val user = loggedIn
     database.withSession { implicit session =>
-      UserAccounts.addAlias(user, alias) match {
-        case true => Ok(alias)
-        case false => BadRequest("Alias already in use")
+      try {
+        UserAccounts.addAlias(user, alias) match {
+          case true => Ok(alias)
+          case false => BadRequest("Alias already in use")
+        }
+      } catch {
+        case ex: AliasLimitReachedException => BadRequest("Alias Limit Reached")
       }
+
     }
   }
 

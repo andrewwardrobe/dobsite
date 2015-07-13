@@ -39,7 +39,7 @@ class UserAliasSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter 
       val user = UserAccountHelper.createUser("Andrew", "pa$$word", "TrustedContributor")
       val aliasLimit = user.getAliasLimit
       database.withSession { implicit session =>
-        for (i <- 0 to aliasLimit) {
+        for (i <- 0 to aliasLimit - 1) {
           UserAccounts.addAlias(user, s"alias${i}")
         }
         intercept[AliasLimitReachedException] {
