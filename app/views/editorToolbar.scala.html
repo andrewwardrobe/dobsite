@@ -1,18 +1,18 @@
-@(title:String = "Toolbar")
-<div id="tbSpace" style="max-height:10px;r">
+@(title: String = "Toolbar", user: UserAccount)
+<div id="tbSpace" style="max-height : 40 px ;" class="toolbar">
     <div id="toolbar" title="toolbar" class="span10">
         <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
             <div class="centered">
-                <div  class="btn-group btn-group-xs">
+                <div class="btn-group btn-group-sm">
                     <a id="saveButton" class="btn expander" title="Save"><span id="saveSpan" class="fa fa-save"></span ></a>
                     <a id="btnSuccessful" class="btn btnSuccessful" title="Save"><span id="saveSpan" class="fa fa-check-circle"></span ></a>
                     <a id="btnFailure" class="btn btnFailure" title="Save"><span id="saveSpan" class="fa fa-times-circle"></span ></a>
                 </div>
-                <div class="btn-group btn-group-xs">
+                <div class="btn-group btn-group-sm">
                     <a class="btn expander" data-edit="undo" title="Undo (Ctrl/Cmd+Z)"><span class="fa fa-undo"></span ></a>
                     <a class="btn expander" data-edit="redo" title="Redo (Ctrl/Cmd+Y)"><span class="fa fa-repeat"></span ></a>
                 </div>
-                <div class="btn-group btn-group-xs">
+                <div class="btn-group btn-group-sm">
                     <a class="btn dropdown-toggle expander" data-toggle="dropdown" title="Font Size"><span class="fa fa-text-height"></span >&nbsp;<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a data-edit="fontSize 5"><font size="5">Large</font></a></li>
@@ -21,7 +21,7 @@
                         <li><input></li>
                     </ul>
                 </div>
-                <div class="btn-group btn-group-xs">
+                <div class="btn-group btn-group-sm">
                     <a class="btn expander" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><span class="fa fa-bold"></span></a>
                     <a class="btn expander" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><span class="fa fa-italic"></span ></a>
 
@@ -29,21 +29,21 @@
                     <a class="btn expander" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><span class="fa fa-underline"></span ></a>
 
                 </div>
-                <div class="btn-group btn-group-xs">
+                <div class="btn-group btn-group-sm">
                     <a class="btn expander" data-edit="insertunorderedlist" title="Bullet list"><span class="fa fa-list-ul"></span ></a>
                     <a class="btn expander" data-edit="insertorderedlist" title="Number list"><span class="fa fa-list-ol"></span ></a>
                     <a class="btn expander" data-edit="outdent" title="Reduce indent (Shift+Tab)"><span class="fa fa-outdent"></span ></a>
                     <a class="btn expander" data-edit="indent" title="Indent (Tab)"><span class="fa fa-indent"></span ></a>
                 </div>
-                <div class="btn-group btn-group-xs">
+                <div class="btn-group btn-group-sm">
                     <a data-edit="justifyleft" class="btn expander" aria-label="Left Align">
                         <span class="fa fa-align-left" aria-hidden="true"></span>
                     </a>
-                    <a class="btn expander btn-group-xs" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><span class="fa fa-align-center"></span ></a>
-                    <a class="btn expander btn-group-xs" data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><span class="fa fa-align-right"></span ></a>
-                    <a class="btn expander btn-group-xs" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><span class="fa fa-align-justify"></span ></a>
+                    <a class="btn expander btn-group-sm" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><span class="fa fa-align-center"></span ></a>
+                    <a class="btn expander btn-group-sm" data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><span class="fa fa-align-right"></span ></a>
+                    <a class="btn expander btn-group-sm" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><span class="fa fa-align-justify"></span ></a>
                 </div>
-                <div class="btn-group btn-group-xs">
+                <div class="btn-group btn-group-sm">
                     <a class="btn dropdown-toggle expander" data-toggle="dropdown" title="Hyperlink"><span class="fa fa-link"></span ></a>
                     <div class="dropdown-menu input-append">
                         <input class="span2 form-control dob-control-white" placeholder="URL" type="text" data-edit="createLink"/>
@@ -52,15 +52,36 @@
                     <a class="btn expander" data-edit="unlink" title="Remove Hyperlink"><span class="fa fa-chain-broken"></span ></a>
                 </div>
 
-                <div class="btn-group btn-group-xs">
+                <div class="btn-group btn-group-sm">
                     <a class="btn expander" title="Insert picture (or just drag & drop)" id="pictureBtn"><span class="glyphicon glyphicon-picture"></span ></a>
                 </div>
 
-                <div class="btn-group btn-group-xs pull-right">
+                <div class="btn-group btn-group-sm pull-right form-inline">
+                    <div class="form-group">
+                        @defining(data.UserAccounts.getUserAliases(user)) { aliases =>
+                            <div @if(aliases.isEmpty) {
+                                style="display:none"
+                            } else {
+                                style="display : inline"} >
+                                PostAs:<select id="author" class="form-control dob-control" style="display : inline" >
+                                <option value="@user.name" selected >@user.name</option>
+                                @for(als <- data.UserAccounts.getUserAliases(user)) {
+                                    <option value="@als">@als</option>
+                                }
+                            </select>
+                            </div>
+                        }
+                    <select id="postType" class="form-control dob-control" style="display : inline-block">
+                    @for(typ <- user.role.roles) {
+                        <option value="@models.ContentTypeMap(typ)">@typ</option>
+                    }
+                    </select>
 
                     <a class="btn isDraftOn" title="This Post is Draft" id="isDraft"><span id="draftIcon" class="fa fa-power-off"></span ></a>
                     <a class="btn expander" title="Toggle Toolbar Mode" id="expander"><span id="expanderIcon" class="fa fa-compress"></span ></a>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
