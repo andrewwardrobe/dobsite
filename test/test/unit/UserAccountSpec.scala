@@ -37,7 +37,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       "Allow for user aliases" in {
         val user = UserAccountHelper.createUserWithAlias("Andrew","Andrew","pa$$word",UserRole.valueOf("Contributor"),"Gaz Three")
         database.withSession { implicit session =>
-          UserAccounts.getAliases(user).head mustEqual "Gaz Three"
+          UserAccounts.getAliasesAsString(user).head mustEqual "Gaz Three"
         }
       }
 
@@ -45,7 +45,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
       database.withSession { implicit session =>
         UserAccounts.addAlias(user, "Leek")
-        UserAccounts.getAliases(user).head mustEqual "Leek"
+        UserAccounts.getAliasesAsString(user).head mustEqual "Leek"
       }
     }
 
@@ -54,7 +54,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
       database.withSession { implicit session =>
         UserAccounts.addAlias(user, "Leek")
-        UserAccounts.getAliases(user) must not contain "Leek"
+        UserAccounts.getAliasesAsString(user) must not contain "Leek"
       }
     }
 
@@ -63,7 +63,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
       database.withSession { implicit session =>
         UserAccounts.addAlias(user, "Andrew")
-        UserAccounts.getAliases(user) must not contain "Andrew"
+        UserAccounts.getAliasesAsString(user) must not contain "Andrew"
       }
     }
   }

@@ -58,14 +58,14 @@
 
                 <div class="btn-group btn-group-sm pull-right form-inline">
                     <div class="form-group">
-                        @defining(data.UserAccounts.getUserAliases(user)) { aliases =>
+                        @defining(data.UserAccounts.getUserAliasesAsString(user)) { aliases =>
                             <div @if(aliases.isEmpty) {
                                 style="display:none"
                             } else {
                                 style="display : inline"} >
                                 PostAs:<select id="author" class="form-control dob-control" style="display : inline" >
                                 <option value="@user.name" selected >@user.name</option>
-                                @for(als <- data.UserAccounts.getUserAliases(user)) {
+                                @for(als <- data.UserAccounts.getUserAliasesAsString(user)) {
                                     <option value="@als">@als</option>
                                 }
                             </select>

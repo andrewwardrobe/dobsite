@@ -16,16 +16,29 @@ trait UserAccountFunctions {
   import play.api.db.slick.Config.driver.simple._
 
 
-  def getAliases(user:UserAccount)(implicit s: Session) = {
+  def getAliasesAsString(user: UserAccount)(implicit s: Session) = {
     (for {
       ua <- UserAliasDAO.userAlias if ua.userId === user.id
 
     } yield ua).list map { _.alias }
   }
 
+  def getAliases(user: UserAccount)(implicit s: Session) = {
+    (for {
+      ua <- UserAliasDAO.userAlias if ua.userId === user.id
+
+    } yield ua).list
+  }
+
   def getUserAliases(user: UserAccount) = {
     database.withSession { implicit session =>
       getAliases(user)
+    }
+  }
+
+  def getUserAliasesAsString(user: UserAccount) = {
+    database.withSession { implicit session =>
+      getAliasesAsString(user)
     }
   }
 

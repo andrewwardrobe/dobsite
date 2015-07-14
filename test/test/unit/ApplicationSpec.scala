@@ -53,17 +53,22 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
     fail("Implement This")
   }
 
-    "Make Gaz three page a user profile page based on a with a blog post list based on a user alias filter" in pending
+  "Make Gaz three page a user profile page based on a with a blog post list based on a user alias filter" in pending
+
+  "Make a soundcloud player feature on editor" in pending
+  "Code section in editor" in pending
+  "Make alias contributor limit to 3, trustec cont should have 5" in pending
+  "Sort out user perms (additional roles field maybe)" in pending
+  "Front page" in pending
+  "User login page" in pending
+  "Sort out the font spacing etc" in pending
 
   "Change biography type to have value 3" in pending
     "Facility to restore/migrate posts from meta in the commits" in pending
     "\tRestore Tags" in pending
 
   "Make a music page based on a music tag filter + user filter" in pending
-  "\tMake a soundcloud player feature on editor" in pending
+  "Facility to restore/migrate user accounts, store this in the git repo some how" in pending
+  "Deployemt + migrate process" in pending
 
-
-
-
-    "Facility to restore/migrate user accounts, store this in the git repo some how" in pending
 }
