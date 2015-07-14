@@ -45,19 +45,10 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
   }
   //  !!!!!!!!! Todo: do this in order
 
-  "User Alias should have it own about" in {
-    info("Should be optional")
-    info("Show in profile page a expandable text")
-    info("make them editable")
-    info("hide them by defaut")
-    fail("Implement This")
-  }
-
   "Make Gaz three page a user profile page based on a with a blog post list based on a user alias filter" in pending
 
   "Make a soundcloud player feature on editor" in pending
   "Code section in editor" in pending
-  "Make alias contributor limit to 3, trustec cont should have 5" in pending
   "Sort out user perms (additional roles field maybe)" in pending
   "Front page" in pending
   "User login page" in pending
