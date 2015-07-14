@@ -38,7 +38,10 @@
                 }
             </div>
             @defining(data.UserAccounts.getUserAliases(user)) { aliases =>
-                <div >Posts as: <div id="aliasList" style="display : inline"> @for(als <- aliases) {@als, }</div></div>
+
+                <div @if(aliases.isEmpty) {
+                    style="display: none"}
+                >Posts as: <div id="aliasList" style="display : inline"> @for(als <- aliases) {@als.alias, }</div></div>
             }
             @if(user.role.hasAuthority("TrustedContributor")) {
                 <div class="input-group dob-input-group">

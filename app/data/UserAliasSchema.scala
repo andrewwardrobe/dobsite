@@ -18,11 +18,10 @@ trait UserAliasSchema {
     def userId = column[Int]("USERID")
     def alias = column[String]("ALIAS")
 
-    def about = column[Option[String]]("about", O.Nullable)
 
     def userFK = foreignKey("ACCOUNT_FK", userId,UserAccounts.accounts)(account => account.id)
 
-    def * = (id, userId, alias, about) <>((UserAlias.apply _).tupled, UserAlias.unapply _)
+    def * = (id, userId, alias) <>((UserAlias.apply _).tupled, UserAlias.unapply _)
   }
 
   val userAlias  = TableQuery[UserAliasTable]
