@@ -16,8 +16,7 @@
               <div class="dob-post row" id="@post.id"><a id="itemLink${post.id}" href="@routes.Application.post(post.id).url">
                   <h2 class="dob-post-title">@post.title</h2></a>
                   <hidden value="@post.postType" id="typId@post.id"></hidden>
-                  <div>Posted On: @post.dateCreated by @post.author
-                  </div>
+                  <div>Posted On: @post.dateCreated by <div id="author@post.id" style="display : inline">@post.author</div></div>
                   <div id="content">
                   @Html(post.getContent())
                   </div>
