@@ -33,7 +33,6 @@ object JsonApi extends Controller {
   val repo = GitRepo.apply()
 
 
-
   def getNews = DBAction { implicit response =>
     val newsList = blogToJson(Content.getNews)
     Ok(toJson(newsList))

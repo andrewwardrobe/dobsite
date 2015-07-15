@@ -1,4 +1,4 @@
-@(uri: String,user:Option[UserAccount])(implicit session : Session)
+@(mode: String, user: Option[UserAccount], posts: Seq[ContentPost])(implicit session: Session)
 @scripts = {
 <script src='@routes.Assets.at("javascripts/require.js").url'
         data-main='@routes.Assets.at("javascripts/news-main.js").url'></script>
@@ -9,10 +9,39 @@
    <div class="row" >
 
       <div  class="col-md-10  col-sm-offset-1 dob-main">
-       <div id="posts" class="centered">
+          <input id="mode" type="hidden" value="@mode" />
+          <div id="posts" class="centered">
+
+          @for(post <- posts) {
+              <div class="dob-post row" id="@{
+                  post.id
+              }"><a id="itemLink${post.id}" href="@routes.Application.post(post.id).url">
+                  <h2 class="dob-post-title">@{
+                      post.title
+                  }</h2></a> <hidden value="1" id="typId@{
+                  post.id
+              }"></hidden> <div>Posted On: @{
+                  post.dateCreated
+              } by @{
+                  post.author
+              }</div>
+                  <div id="content">
+                  @Html(post.getContent())
+                  </div>
+              </div>
+          }
        </div>
-            <input id="contentURI" type="hidden" value="@uri" />
-          <button id="pager" class="btn btn-primary" style="width:100%">More</a></li>
+          @defining(posts.lastOption) { lastPost =>
+              @lastPost match {
+                  case Some(post) => {
+                      <input id="lastPostDate" type="hidden" value="@post.dateCreated.format("yyyyMMddHHmmss")" />
+                  }
+                  case None => {
+                      <input id="lastPostDate" type="hidden" value="today" />
+                  }
+              }
+          }
+          <a id="pager" class="btn btn-primary" style="width : 100 %">More</a>
 
 
       </div><!-- /.dob-main -->

@@ -32,6 +32,7 @@ import scala.util.Try
 
 object Application extends Controller  with OptionalAuthElement with StandardAuthConfig{
 
+  lazy val numPosts = Play.configuration.getInt("blogroll.numposts").getOrElse(5)
 
   def about = StackAction { implicit request =>
     val maybeUser: Option[User] = loggedIn
@@ -99,14 +100,30 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
     Ok(filename.replace("public","assets"))
   }
 
-  def blog = StackAction {  implicit request =>
+  def blog = StackAction { implicit request =>
     val maybeUser: Option[User] = loggedIn
-    Ok(views.html.contentList(routes.JsonApi.getContentByDate(ContentTypeMap.get("Blog")).url,maybeUser))
+    val posts = database.withSession { implicit session =>
+      Content.getByDate(ContentTypeMap.get("Blog"), numPosts)
+    }
+    Ok(views.html.contentList("all", maybeUser, posts))
+
+  }
+
+  def author = StackAction { implicit request =>
+    val maybeUser: Option[User] = loggedIn
+    val posts = database.withSession { implicit session =>
+      Content.getByDate(ContentTypeMap.get("Blog"), numPosts)
+    }
+    Ok(views.html.contentList("all", maybeUser, posts))
+
   }
 
   def gazthree = StackAction {  implicit request =>
     val maybeUser: Option[User] = loggedIn
-    Ok(views.html.contentList(routes.JsonApi.getContentByDate(ContentTypeMap.get("Gaz Three")).url,maybeUser))
+    val posts = database.withSession { implicit session =>
+      Content.getByDate(ContentTypeMap.get("Blog"), 1)
+    }
+    Ok(views.html.contentList(routes.JsonApi.getContentByDate(ContentTypeMap.get("Blog")).url, maybeUser, posts))
   }
 
   def hansUndJorg = StackAction {  implicit request =>
@@ -159,7 +176,8 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
         routes.javascript.AdminJsonApi.getUsers,
         routes.javascript.AdminJsonApi.getUser,
         routes.javascript.AdminJsonApi.insertDiscographies,
-        routes.javascript.Authorised.addAlias
+        routes.javascript.Authorised.addAlias,
+        routes.javascript.JsonApi.getContentByDateStart
         )
       ).as("text/javascript")
   }
