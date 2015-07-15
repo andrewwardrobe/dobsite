@@ -3,80 +3,81 @@
 # ~~~~
 
 # Home page
-GET         /                                                 controllers.Application.index
-GET         /about                                            controllers.Application.about
-GET         /signout                                          controllers.UserServices.signout
-GET         /signup                                           controllers.UserServices.signup
-GET         /signedout                                        controllers.UserServices.signedout
-GET         /profile                                          controllers.Authorised.profile
-POST        /profile                                          controllers.Authorised.updateProfile
-GET         /checkname/:name                                  controllers.UserServices.checkName(name :String)
-GET         /checkemail/:email                                controllers.UserServices.checkEmail(email :String)
+GET         /                                                         controllers.Application.index
+GET         /about                                                    controllers.Application.about
+GET         /signout                                                  controllers.UserServices.signout
+GET         /signup                                                   controllers.UserServices.signup
+GET         /signedout                                                controllers.UserServices.signedout
+GET         /profile                                                  controllers.Authorised.profile
+POST        /profile                                                  controllers.Authorised.updateProfile
+GET         /checkname/:name                                          controllers.UserServices.checkName(name :String)
+GET         /checkemail/:email                                        controllers.UserServices.checkEmail(email :String)
 
-GET         /biography                                        controllers.Application.biography
+GET         /biography                                                controllers.Application.biography
 
-GET         /post/:id                                         controllers.Application.post(id:String)
-GET         /test                                             controllers.Application.playground
-POST        /signup                                           controllers.UserServices.register
-GET         /login                                            controllers.UserServices.login
-POST        /login                                            controllers.UserServices.authenticate
+GET         /post/:id                                                 controllers.Application.post(id:String)
+GET         /test                                                     controllers.Application.playground
+POST        /signup                                                   controllers.UserServices.register
+GET         /login                                                    controllers.UserServices.login
+POST        /login                                                    controllers.UserServices.authenticate
 
-GET         /news                                             controllers.Application.blog
-GET         /gazthree                                         controllers.Application.gazthree
-GET         /editor                                           controllers.Authorised.blogInput
-GET         /editor/new/:contentType                          controllers.Authorised.newContent(contentType: String)
-GET         /editor/:id                                       controllers.Authorised.blogUpdate(id: String)
+GET         /blog                                                     controllers.Application.blog
+GET         /blog/:author                                             controllers.Application.author(author:String)
+GET         /editor                                                   controllers.Authorised.blogInput
+GET         /editor/new/:contentType                                  controllers.Authorised.newContent(contentType: String)
+GET         /editor/:id                                               controllers.Authorised.blogUpdate(id: String)
 
-POST        /blog                                             controllers.Authorised.submitPost
-PUT         /blog                                             controllers.Authorised.submitBlogUpdate
-POST        /upload                                           controllers.Application.upload()
+POST        /blog                                                     controllers.Authorised.submitPost
+PUT         /blog                                                     controllers.Authorised.submitBlogUpdate
+POST        /upload                                                   controllers.Application.upload()
 
 
-GET         /discography                                      controllers.Application.discography
+GET         /discography                                              controllers.Application.discography
 
-GET         /hansundjorg                                      controllers.Application.hansUndJorg
+GET         /hansundjorg                                              controllers.Application.hansUndJorg
 
-GET         /javascriptRoutes                                 controllers.Application.javascriptRoutes
-GET         /admin/reload                                     controllers.Admin.reloadFromRepo
-GET         /admin                                            controllers.Admin.admin
+GET         /javascriptRoutes                                         controllers.Application.javascriptRoutes
+GET         /admin/reload                                             controllers.Admin.reloadFromRepo
+GET         /admin                                                    controllers.Admin.admin
 
-PUT         /admin/changerole/:user/:role                     controllers.Admin.changeRole(user:String, role:String)
-PUT         /admin/changeemail/:user/:email                   controllers.Admin.changeEmail(user:String, email:String)
+PUT         /admin/changerole/:user/:role                             controllers.Admin.changeRole(user:String, role:String)
+PUT         /admin/changeemail/:user/:email                           controllers.Admin.changeEmail(user:String, email:String)
 
-GET         /userroles                                        controllers.Authorised.getEditables
+GET         /userroles                                                controllers.Authorised.getEditables
 
-POST        /admin/changepass                                 controllers.Admin.changePassword
-POST        /user/addalias/:alias        controllers.Authorised.addAlias(alias:String)
+POST        /admin/changepass                                         controllers.Admin.changePassword
+POST        /user/addalias/:alias                                     controllers.Authorised.addAlias(alias:String)
 
 #JSon API
 
-GET         /json/admin/users/:id                             controllers.AdminJsonApi.getUsers(id: String)
-GET         /json/admin/user/:id                              controllers.AdminJsonApi.getUser(id: String)
-GET         /bulkupload                              controllers.Admin.bulkUploader()
+GET         /json/admin/users/:id                                     controllers.AdminJsonApi.getUsers(id: String)
+GET         /json/admin/user/:id                                      controllers.AdminJsonApi.getUser(id: String)
+GET         /bulkupload                                               controllers.Admin.bulkUploader()
 
-POST         /json/admin/discographies/fromjson                controllers.AdminJsonApi.insertDiscographies()
+POST        /json/admin/discographies/fromjson                        controllers.AdminJsonApi.insertDiscographies()
 
-GET         /json/news                                        controllers.JsonApi.getNews()
-GET         /json/content/tags/:id                            controllers.JsonApi.getContentTags(id: String)
-GET         /json/content/:id                                 controllers.JsonApi.getPostById(id: String)
-GET         /json/content/byuser/:id                          controllers.JsonApi.getContentByUserLatestFirst(id: Int)
-GET         /json/drafts/byuser/:id                           controllers.JsonApi.getDraftsByUserLatestFirst(id: Int)
-GET         /json/content/byuser/:id/desc                     controllers.JsonApi.getContentByUserLatestFirst(id: Int)
-GET         /json/content/:id/revisions                       controllers.JsonApi.getRevisionsWithDates(id: String)
-GET         /json/content/:id/revisions/:revId                controllers.JsonApi.getPostRevisionById(id: String, revId: String)
-GET         /json/content/bytype/:type                        controllers.JsonApi.getContentByType(type: Int)
-GET         /json/content/bydate/:type                        controllers.JsonApi.getContentByDate(type: Int)
-GET         /json/content/bydate/:type/:startDate/:max        controllers.JsonApi.getContentByDateStart(type: Int,startDate: String,max :Int)
-GET         /json/news/:id/:max                               controllers.JsonApi.getNewsByRange(id: String, max: Int)
+GET         /json/news                                                controllers.JsonApi.getNews()
+GET         /json/content/tags/:id                                    controllers.JsonApi.getContentTags(id: String)
+GET         /json/content/:id                                         controllers.JsonApi.getPostById(id: String)
+GET         /json/content/byuser/:id                                  controllers.JsonApi.getContentByUserLatestFirst(id: Int)
+GET         /json/drafts/byuser/:id                                   controllers.JsonApi.getDraftsByUserLatestFirst(id: Int)
+GET         /json/content/byuser/:id/desc                             controllers.JsonApi.getContentByUserLatestFirst(id: Int)
+GET         /json/content/:id/revisions                               controllers.JsonApi.getRevisionsWithDates(id: String)
+GET         /json/content/:id/revisions/:revId                        controllers.JsonApi.getPostRevisionById(id: String, revId: String)
+GET         /json/content/bytype/:type                                controllers.JsonApi.getContentByType(type: Int)
+GET         /json/content/bydate/:type                                controllers.JsonApi.getContentByDate(type: Int)
+GET         /json/content/bydate/:type/:startDate/:max                controllers.JsonApi.getContentByDateStart(type: Int,startDate: String,max :Int)
+GET         /json/content/author/:author/:type/:startDate/:max        controllers.JsonApi.getContentByAuthorDateStart(author: String,type: Int,startDate: String,max :Int)
+GET         /json/news/:id/:max                                       controllers.JsonApi.getNewsByRange(id: String, max: Int)
 
 # Home page
 #Be able to access any content via its id (change this later to be a cool redirecty thing)
 
-GET         /webjars/*file                                    controllers.WebJarAssets.at(file)
-GET         /assets/javascripts/webjars/*file                 controllers.WebJarAssets.at(file)
+GET         /webjars/*file                                            controllers.WebJarAssets.at(file)
+GET         /assets/javascripts/webjars/*file                         controllers.WebJarAssets.at(file)
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/images/uploaded/:file                     controllers.Application.uploadedImage(file)
+GET         /assets/images/uploaded/:file                             controllers.Application.uploadedImage(file)
 
-GET         /assets/*file                                     controllers.Assets.at(path="/public", file)
-GET         /:id                                              controllers.Application.post(id:String)
+GET         /assets/*file                                             controllers.Assets.at(path="/public", file)
+GET         /:id                                                      controllers.Application.post(id:String)
 

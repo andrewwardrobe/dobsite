@@ -159,7 +159,21 @@ object JsonApi extends Controller {
     Ok(toJson(contentList))
   }
 
-
+  def getContentByAuthorDateStart(author: String, typ: Int, startDate: String, max: Int) = DBAction { implicit response =>
+    val contentList = startDate match {
+      case s if s.isEmpty() || s == "" => {
+        blogToJson(Content.getLiveContentByAuthorLatestFirst(author, typ, new Date(), max))
+      }
+      case s if s == "today" => {
+        blogToJson(Content.getLiveContentByAuthorLatestFirst(author, typ, new Date(), max))
+      }
+      case _ => {
+        val df = new SimpleDateFormat("yyyyMMddHHmmss")
+        blogToJson(Content.getLiveContentByAuthorLatestFirst(author, typ, df.parse(startDate), max))
+      }
+    }
+    Ok(toJson(contentList))
+  }
 
 
 

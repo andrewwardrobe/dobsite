@@ -2,15 +2,17 @@ define ['common', 'q', 'helpers/date'], (common, Q) -> {
 setupClickHandler: (num) ->
   $("#pager").on 'click', ()->
     mode = $("#mode").val()
-    author = $("#author").val()
+    author = ""
+    if mode.split(":").length > 1
+      author = mode.split(":")[1]
     date = $("#lastPostDate").val()
-    console.log date
     promise = switch
       when mode == "all"
         Q.when jsRoutes.controllers.JsonApi.getContentByDateStart(1, date, num).ajax {}
+      when /author:.*/.test(mode)
+        Q.when jsRoutes.controllers.JsonApi.getContentByAuthorDateStart(author, 1, date, num).ajax {}
 
     promise.then (data) ->
-      console.log JSON.stringify(data)
       $.each data, (index, news) ->
         itm = $("<div>")
         $("#posts").append itm

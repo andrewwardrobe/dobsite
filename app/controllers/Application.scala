@@ -5,7 +5,7 @@ import java.io._
 import java.net.URLConnection
 import java.nio.file.{Path, Files}
 import java.text.SimpleDateFormat
-import java.util.Calendar
+import java.util.{Date, Calendar}
 
 
 import _root_.data.Content
@@ -32,7 +32,7 @@ import scala.util.Try
 
 object Application extends Controller  with OptionalAuthElement with StandardAuthConfig{
 
-  lazy val numPosts = Play.configuration.getInt("blogroll.numposts").getOrElse(5)
+  lazy val numPosts = Play.configuration.getInt("blogroll.numposts").getOrElse(1)
 
   def about = StackAction { implicit request =>
     val maybeUser: Option[User] = loggedIn
@@ -109,12 +109,12 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
 
   }
 
-  def author = StackAction { implicit request =>
+  def author(author: String) = StackAction { implicit request =>
     val maybeUser: Option[User] = loggedIn
     val posts = database.withSession { implicit session =>
-      Content.getByDate(ContentTypeMap.get("Blog"), numPosts)
+      Content.getLiveContentByAuthorLatestFirst(author, ContentTypeMap.get("Blog"), new Date(), numPosts)
     }
-    Ok(views.html.contentList("all", maybeUser, posts))
+    Ok(views.html.contentList(s"author:${author}", maybeUser, posts))
 
   }
 
@@ -177,7 +177,8 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
         routes.javascript.AdminJsonApi.getUser,
         routes.javascript.AdminJsonApi.insertDiscographies,
         routes.javascript.Authorised.addAlias,
-        routes.javascript.JsonApi.getContentByDateStart
+        routes.javascript.JsonApi.getContentByDateStart,
+        routes.javascript.JsonApi.getContentByAuthorDateStart
         )
       ).as("text/javascript")
   }
