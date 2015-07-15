@@ -26,12 +26,10 @@
               @if(posts.isEmpty) {
                   @defining(mode.split(":")) { parts =>
                       @if(parts.length > 1) {
-                          <h2>No Posts for @{
-                              parts(1)
-                          }</h2>
+                          <h2>No Posts for @parts(1)</h2>
                       } else {
                           <h2>No Posts for @mode</h2>
-                  }
+                      }
                   }
               }
 
@@ -47,8 +45,9 @@
                   }
               }
           }
-          <a id="pager" class="btn btn-primary" style="width : 100 %">More</a>
-
+          <div align="center">
+              <a id="pager" class="btn btn-primary dob-pager" >More</a>
+          </div>
 
       </div><!-- /.dob-main -->
 
