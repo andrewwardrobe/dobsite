@@ -1,3 +1,3 @@
 require ['common'], (common) ->
     require ['news','jquery'], (news,$) ->
-        news.setupClickHandler(1)
+        news.setupClickHandler(5)

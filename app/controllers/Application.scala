@@ -32,7 +32,7 @@ import scala.util.Try
 
 object Application extends Controller  with OptionalAuthElement with StandardAuthConfig{
 
-  lazy val numPosts = Play.configuration.getInt("blogroll.numposts").getOrElse(1)
+  lazy val numPosts = Play.configuration.getInt("blogroll.numposts").getOrElse(5)
 
   def about = StackAction { implicit request =>
     val maybeUser: Option[User] = loggedIn

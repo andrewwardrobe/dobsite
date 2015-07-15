@@ -18,18 +18,33 @@
               }"><a id="itemLink${post.id}" href="@routes.Application.post(post.id).url">
                   <h2 class="dob-post-title">@{
                       post.title
-                  }</h2></a> <hidden value="1" id="typId@{
-                  post.id
-              }"></hidden> <div>Posted On: @{
-                  post.dateCreated
-              } by @{
-                  post.author
-              }</div>
+                  }</h2></a>
+                  <hidden value="1" id="typId@{
+                      post.id
+                  }"></hidden>
+                  <div>Posted On: @{
+                      post.dateCreated
+                  } by @{
+                      post.author
+                  }</div>
                   <div id="content">
                   @Html(post.getContent())
                   </div>
               </div>
           }
+              @if(posts.isEmpty) {
+                  @defining(mode.split(":")) { parts =>
+                      @if(parts.length > 1) {
+                          <h2>No Posts for @{
+                              parts(1)
+                          }</h2>
+                      } else {
+                          <h2>No Posts for @{
+                              mode
+                          }</h2>
+                      }
+                  }
+              }
        </div>
           @defining(posts.lastOption) { lastPost =>
               @lastPost match {
