@@ -16,6 +16,15 @@ class BlogPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest.s
     itemList.toList
   }
 
+  def author(author: String) = {
+    s"localhost:$port/blog/$author"
+  }
+
+  def authors = {
+    for {
+      elem <- cssSelector("*[id*='author']").findAllElements.toList
+    } yield elem.text
+  }
 
   def itemLinks = {
    cssSelector("*[id*='itemLink']").findAllElements.toList

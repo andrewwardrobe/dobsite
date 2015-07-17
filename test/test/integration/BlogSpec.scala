@@ -68,12 +68,25 @@ class BlogSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
       }
     }
 
+    "When in author mode must display the authors post" in {
+      go to author("MC Donalds")
+      authors must contain only ("MC Donalds")
+    }
+
+    "When in author mode must not display other authors posts" in {
+      go to author("MC Donalds")
+      authors must not contain ("Pat Shleet")
+    }
 
   }
 
   def dataSetup = {
     database.withSession { implicit session =>
       val newsItem = ContentHelper.createPost("DOB Test News Post","MC Donalds","Some Example content blah blah blah 1234567",ContentTypeMap.get("Blog"),None)
+      ContentHelper.createPost("DOB Test News Post", "MC Donalds", "Some Example content blah blah blah 1234567", ContentTypeMap.get("Blog"), None)
+      ContentHelper.createPost("DOB Test News Post", "MC Donalds", "Some Example content blah blah blah 1234567", ContentTypeMap.get("Blog"), None)
+      ContentHelper.createPost("DOB Test News Post", "Pat Shleet", "Some Example content blah blah blah 1234567", ContentTypeMap.get("Blog"), None)
+      ContentHelper.createPost("DOB Test News Post", "MC Donalds", "Some Example content blah blah blah 1234567", ContentTypeMap.get("Blog"), None)
       val nonNewsItem =  ContentHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",ContentTypeMap.get("Music"),None)
     }
   }
