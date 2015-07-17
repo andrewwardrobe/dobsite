@@ -4,7 +4,7 @@ import java.util.{Date, UUID}
 
 import com.daoostinboyeez.git.GitRepo
 import controllers.StandardAuthConfig
-import data.{UserAccounts, Profiles}
+import data.{Content, UserAccounts, Profiles}
 import models.{UserProfile, UserAccount, ContentTypeMap, ContentPost}
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
@@ -117,6 +117,7 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
       Profiles.deleteAll
       UserAccounts.removeAllAliases
       UserAccounts.deleteAll
+      Content.deleteAll
     }
   }
 }

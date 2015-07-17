@@ -122,39 +122,37 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
 
   //TODO: Reactor this to use the save from content
   def submitBlogUpdate = StackAction(AuthorityKey -> Contributor) { implicit request =>
-    val item = ContentPost.blogForm.bindFromRequest().get
-    val content = item.content
-   //
-    database.withSession { implicit s =>
-      val post = Content.getById(item.id).head
-      val filename = post.content
-
-      //val tags = js \ "tags"
-      val newItem = new ContentPost(item.id, item.title, item.postType, post.dateCreated, item.author, filename, ContentPost.extraDataToJson(item.extraData),item.isDraft,item.userId)
-      repo.updateFile(filename,content, ContentMeta.makeCommitMsg("Updated",newItem))
-      Content.update(newItem)
-      request.body.asFormUrlEncoded match {
-        case None => {Logger.info("Couldn;t get data from request")}
-        case Some(formData) => {
-          formData.get("tags") match {
-            case Some(tagData) => {
-              tagData.foreach { tags:String =>
-                tags.split(",").foreach { str:String =>
-                  val tag = Tags.create(str.trim)
-                  Tags.link(newItem.id, tag.id)
+    val user = loggedIn
+    ContentPost.blogForm.bindFromRequest() match {
+      case s: Form[ContentPost] => {
+        val item = s.get
+        if (user.role.hasPermission(ContentTypeMap(item.postType))) {
+          val tags: Option[Seq[String]] = request.body.asFormUrlEncoded match {
+            case None => {
+              None
+            }
+            case Some(formData) => {
+              formData.get("tags") match {
+                case Some(tagData) => {
+                  Some(tagData.toList)
+                }
+                case _ => {
+                  None
                 }
               }
             }
-            case _ => {}
+            case _ => None
           }
-        }
-        case _ => Logger.info("Matched Niether")
+
+          val newItem = Content.save(item, repo, Some(user.id), tags)
+          Ok(newItem.json)
+
+        } else
+          Unauthorized("You don't have the right privileges for " + ContentTypeMap(item.postType))
       }
-      //tags.toString.split(",").foreach{ str:String =>
-      //  val tag = ContentTag.create(str.trim)
-      //  PostToTag.link(newItem.id, tag.id)
-     // }
-      Ok(newItem.json)
+      case _ => {
+        BadRequest("Invalid Post Data")
+      }
     }
 
   }

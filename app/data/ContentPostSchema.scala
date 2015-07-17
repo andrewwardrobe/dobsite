@@ -1,5 +1,6 @@
 package data
 
+import java.sql.Blob
 import java.util.Date
 
 import models.ContentPost
@@ -22,7 +23,8 @@ trait ContentPostSchema {
     def postType = column[Int]("TYPE")
     def dateCreated = column[Date]("DATE_CREATED")
     def author = column[String]("AUTHOR")
-    def content = column[String]("CONTENT")
+
+    def content = column[String]("CONTENT", O.DBType("TEXT"))
     def extraData = column[String]("EXTRA_DATA")
     def isDraft = column[Boolean]("DRAFT")
     def userId = column[Option[Int]]("USER_ID",O.Nullable)

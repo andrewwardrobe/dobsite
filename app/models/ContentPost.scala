@@ -55,11 +55,11 @@ case class ContentPost(id: String, title: String, postType: Int, dateCreated: Da
   )
 
   def getContent() = {
-    repo.getFile(content)
+    content
   }
 
   def getContent(commitId :String) = {
-    repo.getFile(content,commitId)
+    repo.getFile(id, commitId)
   }
 
   def tags(implicit s: Session) = {

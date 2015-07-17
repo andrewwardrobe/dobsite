@@ -90,7 +90,7 @@ trait ContentAccessFunctions {this: ContentPostSchema =>
   def getNews(implicit s: Session) = { postTable.filter(_.postType === 1).list }
 
   def insert(newsItem: ContentPost)(implicit s: Session) = {
-    postTable.insert(newsItem)
+    postTable.insertOrUpdate(newsItem)
     newsItem.id
   }
 
@@ -172,9 +172,12 @@ trait ContentAccessFunctions {this: ContentPostSchema =>
 
   def save(item:ContentPost,repo :GitRepo,userId:Option[Int],tags:Option[Seq[String]]) = {
     val content = item.content
-    val filename = repo.genFileName
-    val newItem = new ContentPost(UUID.randomUUID().toString(), item.title, item.postType, new Date(), item.author, filename, ContentPost.extraDataToJson(item.extraData), item.isDraft,userId)
-    repo.doFile(filename, content, ContentMeta.makeCommitMsg("Created", newItem))
+    val id = item.id match {
+      case "-1" => UUID.randomUUID.toString()
+      case _ => item.id
+    }
+    val newItem = new ContentPost(id, item.title, item.postType, new Date(), item.author, content, ContentPost.extraDataToJson(item.extraData), item.isDraft, userId)
+    repo.doFile(id, content, ContentMeta.makeCommitMsg("Created", newItem))
     val res = database.withSession {
       implicit s =>
         Content.insert(newItem)

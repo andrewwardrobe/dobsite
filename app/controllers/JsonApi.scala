@@ -94,11 +94,7 @@ object JsonApi extends Controller {
   }
 
   def getRevisionsWithDates(id: String) =  DBAction { implicit response =>
-    val post = Content.getById(id)
-    post.isEmpty match{
-      case false => {
-        val filename = post.head.content
-        val revisions = repo.findWithDate(filename)
+    val revisions = repo.findWithDate(id)
         revisions.isEmpty match {
           case false => {
             val json = ListBuffer[JsValue]()
@@ -109,10 +105,6 @@ object JsonApi extends Controller {
             Ok(toJson("None"))
           }
         }
-      }
-      case true => Ok(toJson("None"))
-    }
-
   }
 
   def blogToJson(blogs :Seq[ContentPost]) = {
