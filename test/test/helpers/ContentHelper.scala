@@ -55,7 +55,6 @@ object ContentHelper {
     database.withSession { implicit s :Session =>
       Content.save(post, repo, userId)
     }
-    post
   }
 
   def createPost(title:String, author:String, content :String, typ: Int, extraData :String, date: String,userId:Option[Int]):ContentPost = {
@@ -68,15 +67,13 @@ object ContentHelper {
     database.withSession { implicit s: Session =>
       Content.save(post, repo, userId)
     }
-    post
   }
 
   def createDiscographyItem(name:String, text :String, thumb :String, albumType :String,userId:Option[Int]) = {
     val post = new ContentPost(UUID.randomUUID().toString(), name, ContentTypeMap("Discography"), new Date(), "", text, ContentPost.extraDataToJson(s"thumb=$thumb\ndiscType=$albumType"), false, userId)
-    val p = database.withSession { implicit s :Session =>
+    database.withSession { implicit s: Session =>
       Content.save(post, repo, userId)
     }
-    post
   }
 
   def clearAll = {
@@ -99,7 +96,6 @@ object ContentHelper {
     database.withSession { implicit s :Session =>
       Content.save(post, repo, userId)
     }
-    post
   }
 
   def createDraft(title:String, author:String, content :String, typ: Int, extraData :String, date: String,userId:Option[Int]):ContentPost = {

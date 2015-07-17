@@ -36,7 +36,7 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
       post2 =  ContentHelper.createPost("2nd Post","MC Donalds","Jimbo jimbp",1,None)
       post3 = ContentHelper.createPost("3rd Post","MC Donalds","Dis is Da Oostin Boyeez Leek",1,None)
       post4 = ContentHelper.createDraft("4th Post","MC Donalds","Jambo jimbo Leek",1,None)
-      repo.updateFile(post1.content,"Here is some data I just changed")
+      repo.updateFile(post1.id, "Here is some data I just changed")
     }
   }
 

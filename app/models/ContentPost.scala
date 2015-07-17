@@ -85,10 +85,7 @@ object ContentPost {
     }
     str.append("}")
     val json = str.toString().replace(",}", "}")
-    if (json == "{}")
-      ""
-    else
-      json
+    json
   }
 
   val blogForm: Form[ContentPost] = Form {
