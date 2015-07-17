@@ -61,7 +61,7 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     }
 
     "Display the biography image when viewing biographies" in {
-      val bio = ContentHelper.createPost("Da Oostin Boyeez","MC Donalds","leek",ContentTypeMap("Biography"),"""{"thumb":"assets/images/crew/otis_col.png"}""",None)
+      val bio = ContentHelper.createBiography("Da Oostin Boyeez", "leek", "assets/images/crew/otis_col.png", None)
       go to post(bio.id)
       eventually{bioImagePresent mustEqual true}
     }

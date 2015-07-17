@@ -63,14 +63,14 @@ object ContentHelper {
   }
 
   def createBiography(name:String, text :String, thumb :String,userId:Option[Int]) = {
-    val post = new ContentPost(UUID.randomUUID().toString(), name, ContentTypeMap("Biography"), new Date(), "", text, ContentPost.extraDataToJson(s"thumb=$thumb"), false, userId)
+    val post = new ContentPost(UUID.randomUUID().toString(), name, ContentTypeMap("Biography"), new Date(), "", text, s"thumb=$thumb", false, userId)
     database.withSession { implicit s: Session =>
       Content.save(post, repo, userId)
     }
   }
 
   def createDiscographyItem(name:String, text :String, thumb :String, albumType :String,userId:Option[Int]) = {
-    val post = new ContentPost(UUID.randomUUID().toString(), name, ContentTypeMap("Discography"), new Date(), "", text, ContentPost.extraDataToJson(s"thumb=$thumb\ndiscType=$albumType"), false, userId)
+    val post = new ContentPost(UUID.randomUUID().toString(), name, ContentTypeMap("Discography"), new Date(), "", text, s"thumb=$thumb\ndiscType=$albumType", false, userId)
     database.withSession { implicit s: Session =>
       Content.save(post, repo, userId)
     }
