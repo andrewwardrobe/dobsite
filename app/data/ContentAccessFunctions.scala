@@ -170,13 +170,13 @@ trait ContentAccessFunctions {this: ContentPostSchema =>
   def clearAll(implicit  s: Session) = { postTable.delete }
   def update(post :ContentPost)(implicit s: Session) = { postTable.insertOrUpdate(post) }
 
-  def save(item:ContentPost,repo :GitRepo,userId:Option[Int],tags:Option[Seq[String]]) = {
+  def save(item: ContentPost, repo: GitRepo, userId: Option[Int], tags: Option[Seq[String]] = None) = {
     val content = item.content
     val id = item.id match {
       case "-1" => UUID.randomUUID.toString()
       case _ => item.id
     }
-    val newItem = new ContentPost(id, item.title, item.postType, new Date(), item.author, content, ContentPost.extraDataToJson(item.extraData), item.isDraft, userId)
+    val newItem = new ContentPost(id, item.title, item.postType, item.dateCreated, item.author, content, ContentPost.extraDataToJson(item.extraData), item.isDraft, userId)
     repo.doFile(id, content, ContentMeta.makeCommitMsg("Created", newItem))
     val res = database.withSession {
       implicit s =>

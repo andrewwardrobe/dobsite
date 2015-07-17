@@ -51,12 +51,9 @@ object ContentHelper {
   }
 
   def createPost(title:String, author:String, content :String, typ: Int, extraData :String, date: Date,userId:Option[Int]):ContentPost = {
-    val filename = repo.genFileName
-
-    val post = new ContentPost(UUID.randomUUID().toString(),title, typ, date, author, filename, extraData,false,userId)
-    repo.doFile(filename,content,ContentMeta.makeCommitMsg("Created", post))
+    val post = new ContentPost(UUID.randomUUID().toString(), title, typ, date, author, content, extraData, false, userId)
     database.withSession { implicit s :Session =>
-      Content.insert(post)
+      Content.save(post, repo, userId)
     }
     post
   }
@@ -67,21 +64,17 @@ object ContentHelper {
   }
 
   def createBiography(name:String, text :String, thumb :String,userId:Option[Int]) = {
-    val filename = repo.genFileName
-    val post = new ContentPost(UUID.randomUUID().toString(),name, ContentTypeMap("Biography"), new Date(), "", filename, ContentPost.extraDataToJson(s"thumb=$thumb"), false,userId)
-    repo.doFile(filename,text,ContentMeta.makeCommitMsg("Created", post))
-    val p = database.withSession { implicit s :Session =>
-      Content.insert(post)
+    val post = new ContentPost(UUID.randomUUID().toString(), name, ContentTypeMap("Biography"), new Date(), "", text, ContentPost.extraDataToJson(s"thumb=$thumb"), false, userId)
+    database.withSession { implicit s: Session =>
+      Content.save(post, repo, userId)
     }
     post
   }
 
   def createDiscographyItem(name:String, text :String, thumb :String, albumType :String,userId:Option[Int]) = {
-    val filename = repo.genFileName
-    val post = new ContentPost(UUID.randomUUID().toString(),name, ContentTypeMap("Discography"), new Date(), "", filename, ContentPost.extraDataToJson(s"thumb=$thumb\ndiscType=$albumType"), false,userId)
-    repo.doFile(filename,text,ContentMeta.makeCommitMsg("Created", post))
+    val post = new ContentPost(UUID.randomUUID().toString(), name, ContentTypeMap("Discography"), new Date(), "", text, ContentPost.extraDataToJson(s"thumb=$thumb\ndiscType=$albumType"), false, userId)
     val p = database.withSession { implicit s :Session =>
-      Content.insert(post)
+      Content.save(post, repo, userId)
     }
     post
   }
@@ -102,11 +95,9 @@ object ContentHelper {
   }
 
   def createDraft(title:String, author:String, content :String, typ: Int, extraData :String, date: Date,userId:Option[Int]):ContentPost = {
-    val filename = repo.genFileName
-    val post = new ContentPost(UUID.randomUUID().toString(),title, typ, date, author, filename, extraData,true,userId)
-    repo.doFile(filename,content,ContentMeta.makeCommitMsg("Created", post))
+    val post = new ContentPost(UUID.randomUUID().toString(), title, typ, date, author, content, extraData, true, userId)
     database.withSession { implicit s :Session =>
-      Content.insert(post)
+      Content.save(post, repo, userId)
     }
     post
   }
