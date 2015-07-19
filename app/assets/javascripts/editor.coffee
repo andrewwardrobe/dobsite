@@ -83,7 +83,7 @@ setupEditorLeek: ()->
   getContentData:()->
     dateStr = $("#dateCreated").val()
     title = $("#postTitle").text()
-    content = $('#editor').cleanHtml()
+    content = $('#editor').html()
     postType = $("#postType").val()
     id = $("#postId").val()
     author = $("#author").val()
@@ -117,6 +117,7 @@ setupEditorLeek: ()->
     $("#postId").val data.id
     $("#saveButton").hide()
     $("#btnSuccessful").show()
+    $("#save").attr {'class': 'fa fa-check-circle btnSuccessful'}
     $("*[id*='editAlert']").hide()
     $("#draft").val data.isDraft
     $("#userId").val data.userId
@@ -135,6 +136,7 @@ setupEditorLeek: ()->
     $("#postId").val err
     $("#saveButton").hide()
     $("#btnFailure").show()
+    $("#save").attr {'class': 'fa fa-times-circle btnFailure'}
 
   save: () ->
     postData = this.getContentData()
@@ -181,6 +183,7 @@ setupEditorLeek: ()->
     $("#btnSuccessful").hide()
     $("#btnFailure").hide()
     $("#editAlertUnsaved").show()
+    $("#save").attr {class: 'fa fa-save'}
 
   applyToolbarHandlers:()->
     self = this
@@ -297,11 +300,15 @@ setupEditorLeek: ()->
       $("#tagBox").val text
 
 setupEditor: ()->
+  self = this
   $("#editor").wysiwyg {
     toolbar: 'top-selection'
     buttons: {
       save: {
-
+        image: '<span id="save" class="fa fa-save"></span>',
+        showstatic: true,
+        click: () ->
+          self.save()
       },
       bold: {
         title: "bold",
