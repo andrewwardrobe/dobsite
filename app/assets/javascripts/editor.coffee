@@ -25,17 +25,7 @@ define ['common', 'q', 'helpers/date', 'wysiwyg-editor.min'], (common, Q) -> {
       console.log "Could not receive list of revisions #{err}"
     result
 
-  setupEditor:()->
-    $("#editor").wysiwyg {
-      toolbar: 'top-selection'
-      buttons: {
-        bold: {
-          title: "Bold",
-          image: '<span class="fa fa-bold"></span>'
-        }
-      }
-    }
-    this.addEditorMenu()
+
 
 
 setupEditorLeek: ()->
@@ -305,4 +295,77 @@ setupEditorLeek: ()->
       text = $("#tagBox").val()
       text = text.replace /(^,)|(,$)|(, $)/g, ""
       $("#tagBox").val text
+
+setupEditor: ()->
+  $("#editor").wysiwyg {
+    toolbar: 'top-selection'
+    buttons: {
+      save: {
+
+      },
+      bold: {
+        title: "bold",
+        image: '<span class="fa fa-bold"></span>',
+        showselection: true
+      },
+      italic: {
+        title: "italic",
+        image: '<span class="fa fa-italic"></span>',
+        showselection: true
+      },
+      underline: {
+        title: "underline",
+        image: '<span class="fa fa-underline"></span>',
+        showselection: true
+      },
+      strikethrough: {
+        title: "strikethrough",
+        image: '<span class="fa fa-strikethrough"></span>',
+        showselection: true
+      },
+      unorderedList: {
+        title: "numbered list",
+        image: '<span class="fa fa-list-ul"></span>',
+        showselection: true
+      },
+      orderedList: {
+        title: "bullet list",
+        image: '<span class="fa fa-list-ol"></span>',
+        showselection: true
+      },
+      indent: {
+        title: "indent",
+        image: '<span class="fa fa-indent"></span>',
+        showselection: true
+      },
+      outdent: {
+        title: "outdent",
+        image: '<span class="fa fa-outdent"></span>',
+        showselection: true
+      },
+      alignleft: {
+        title: "align left",
+        image: '<span class="fa fa-align-left"></span>',
+        showselection: true
+      },
+      aligncenter: {
+        title: "align center",
+        image: '<span class="fa fa-align-center"></span>',
+        showselection: true
+      },
+      alignright: {
+        title: "align right",
+        image: '<span class="fa fa-align-right"></span>',
+        showselection: true
+      },
+      alignjustify: {
+        title: "align justify",
+        image: '<span class="fa fa-align-justify"></span>',
+        showselection: true
+      },
+
+
+    }
+  }
+  this.addEditorMenu()
 }
