@@ -1,4 +1,4 @@
-define ['common'],(common) -> {
+define ['common', 'helpers/date'], (common) -> {
     imageDropped : (files, target) ->
         count = 1
         i = 0
@@ -217,8 +217,7 @@ define ['common'],(common) -> {
         bioExtra.attr 'value', this.extraDataJs2KeyVal bio.extraData
         textDiv.append bioExtra
         d = new Date(bio.dateCreated);
-        dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
-        dateCreated.attr 'value', dateStr
+        dateCreated.attr 'value', d.yyyymmdd()
         textDiv.append dateCreated
         author = $("<input>")
         author.attr 'id', 'bioAuthor' + bio.id

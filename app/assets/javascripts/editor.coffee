@@ -60,7 +60,7 @@ setupEditorLeek: ()->
           dt = dt.replace "BST", ""
 
         dte = new Date dt
-        $("#dateCreated").val dte.yyyymmddDashes()
+        $("#dateCreated").val dte.yyyymmdd()
 
         if data.isDraft != false
           $("#editAlertDraft").show()
@@ -129,7 +129,7 @@ setupEditorLeek: ()->
 
   saveFailedHandler:(err) ->
     d = $ '<div>'
-    $(d).text "Save Failed" + JSON.stringify err
+    $(d).text err.responseText
     $(d).attr { 'class':'alert alert-danger','role':'alert','id':'res-fail' }
     $("#result").html ""
     $("#result").append d

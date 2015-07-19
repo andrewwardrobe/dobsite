@@ -38,16 +38,11 @@
             <div class="col-md-2" style="display : inline-block" >
 
             </div>
-            <input type="hidden" name="dateCreated" id="dateCreated" />
+            @defining(new java.util.Date()) { date =>
+                <input type="hidden" name="dateCreated" id="dateCreated" value='@date.format("yyyyMMddHHmmss")'/>
+            }
             <input type="hidden" name="draft" id="draft"/>
             <input type="hidden" name="userId" id="userId"/>
-
-            <script type="text/javascript">
-                var d = new Date();
-                var dateStr = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
-                document.getElementById("dateCreated").setAttribute('value',dateStr);
-                $("#postType").val(@postType)
-            </script>
 
 
             <!--@helper.inputText(field = form("author"), args = 'class -> "form-control",'_label -> "Author") -->

@@ -93,7 +93,7 @@ object ContentPost {
       "id" -> text,
       "title" -> text,
       "postType" -> number,
-      "dateCreated" -> date,
+      "dateCreated" -> date("yyyyMMddHHmmss"),
       "author" ->text,
       "content" -> text,
       "extraData" -> text,

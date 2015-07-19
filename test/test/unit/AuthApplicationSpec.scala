@@ -36,28 +36,28 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
 
     "Allow Contributors to create news posts" in {
 
-      val json = Json.parse("""{"id":"f26c0ddc-214e-4d3a-a8c8-0deec3045e75","title":"title","postType":1,"dateCreated":"2012-04-21","author":"Andrew","content":"12345678","extraData":"{ \"thumb\":\"assets/leek.jpg\"}","isDraft":false}""")
+      val json = Json.parse( """{"id":"f26c0ddc-214e-4d3a-a8c8-0deec3045e75","title":"title","postType":1,"dateCreated":"20120412140513","author":"Andrew","content":"12345678","extraData":"{ \"thumb\":\"assets/leek.jpg\"}","isDraft":false}""")
       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitPost().url,FakeHeaders(),json).withLoggedIn(config)("Contributor")).get
       status(result) mustBe OK
     }
 
     "Not Allow normal users to create news posts" in {
 
-      val json = Json.parse("""{"id":"f26c0ddc-214e-4d3a-a8c8-0deec3045e75","title":"title","postType":1,"dateCreated":"2012-04-21","author":"Andrew","content":"12345678","extraData":"{ \"thumb\":\"assets/leek.jpg\"}","isDraft":false}""")
+      val json = Json.parse( """{"id":"f26c0ddc-214e-4d3a-a8c8-0deec3045e75","title":"title","postType":1,"dateCreated":"20120412140513","author":"Andrew","content":"12345678","extraData":"{ \"thumb\":\"assets/leek.jpg\"}","isDraft":false}""")
       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitPost().url,FakeHeaders(),json).withLoggedIn(config)("NormalUser")).get
       status(result) mustBe FORBIDDEN
     }
 
     "Not Allow contributors to create biography posts" in {
 
-      val json = Json.parse("""{"id":"f26c0ddc-214e-4d3a-a8c8-0deec3045e75","title":"title","postType":4,"dateCreated":"2012-04-21","author":"Andrew","content":"12345678","extraData":"{ \"thumb\":\"assets/leek.jpg\"}","isDraft":false}""")
+      val json = Json.parse( """{"id":"f26c0ddc-214e-4d3a-a8c8-0deec3045e75","title":"title","postType":4,"dateCreated":"20120412140513","author":"Andrew","content":"12345678","extraData":"{ \"thumb\":\"assets/leek.jpg\"}","isDraft":false}""")
       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitPost().url,FakeHeaders(),json).withLoggedIn(config)("Contributor")).get
       status(result) mustBe UNAUTHORIZED
     }
 
     "Allow TrustedContributors to create biography posts" in {
 
-      val json = Json.parse("""{"id":"f26c0ddc-214e-4d3a-a8c8-0deec3045e75","title":"title","postType":4,"dateCreated":"2012-04-21","author":"Andrew","content":"12345hhgjhg678","extraData":"{ \"thumb\":\"assets/leek.jpg\"}","isDraft":false}""")
+      val json = Json.parse( """{"id":"f26c0ddc-214e-4d3a-a8c8-0deec3045e75","title":"title","postType":4,"dateCreated":"20120412140513","author":"Andrew","content":"12345hhgjhg678","extraData":"{ \"thumb\":\"assets/leek.jpg\"}","isDraft":false}""")
       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitPost().url,FakeHeaders(),json).withLoggedIn(config)("TrustedContributor")).get
       status(result) mustBe OK
     }
