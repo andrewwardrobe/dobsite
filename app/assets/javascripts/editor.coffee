@@ -65,11 +65,11 @@ setupEditorLeek: ()->
         if data.isDraft != false
           $("#editAlertDraft").show()
           $("#draft").val true
-          self.applyDraftButtonCss true
+          $("#draftBtn").attr {class: "fa fa-power-off isDraftOn"}
         else
           $("#editAlertLive").show()
           $("#draft").val false
-          self.applyDraftButtonCss false
+          $("#draftBtn").attr {class: "fa fa-power-off isDraftOff"}
         extraData = JSON.parse data.extraData
         text = ""
         for key in extraData
@@ -88,7 +88,7 @@ setupEditorLeek: ()->
     id = $("#postId").val()
     author = $("#author").val()
     extraData = $("#extraDataValues").val()
-    isDraft = $("#isDraft").hasClass "isDraftOn"
+    isDraft = $("#draftBtn").hasClass "isDraftOn"
     tags = $("#tagBox").val()
     userId = $("#userId").val()
     json = {
@@ -148,19 +148,10 @@ setupEditorLeek: ()->
       result = Q.when jsRoutes.controllers.Authorised.submitBlogUpdate().ajax postData
       result.then this.saveSucessfulHandler , this.saveFailedHandler
 
-  applyDraftButtonCss:(isDraft)->
-    btn = $("#isDraft")
-    if isDraft
-      $(btn).removeClass "isDraftOff"
-      $(btn).addClass "isDraftOn"
-      $("#isDraft").attr 'title','This post is Draft'
-    else
-      $(btn).removeClass "isDraftOn"
-      $(btn).addClass "isDraftOff"
-      $("#isDraft").attr 'title','This post is Live'
+
 
   draftModeToggle:()->
-    isDraft = $("#isDraft").hasClass("isDraftOn")
+    isDraft = $("#draftBtn").hasClass("isDraftOn")
     if isDraft
       if $("#draft").val() == "true"
         $("#editAlertLive2Draft").hide()
@@ -168,7 +159,7 @@ setupEditorLeek: ()->
       else
         $("#editAlertLive2Draft").hide()
         $("#editAlertDraft2Live").hide()
-      this.applyDraftButtonCss(false)
+      $("#draftBtn").attr {class: "fa fa-power-off isDraftOff"}
     else
       if $("#draft").val() == "false"
         $("#editAlertLive2Draft").show()
@@ -176,7 +167,7 @@ setupEditorLeek: ()->
       else
         $("#editAlertLive2Draft").hide()
         $("#editAlertDraft2Live").hide()
-      this.applyDraftButtonCss(true)
+      $("#draftBtn").attr {class: "fa fa-power-off isDraftOn"}
 
   unSavedChangesAlert:() ->
     $("#saveButton").show()
@@ -304,12 +295,19 @@ setupEditor: ()->
   $("#editor").wysiwyg {
     toolbar: 'top-selection'
     buttons: {
+      draft: {
+        image: '<span id="draftBtn" class="fa fa-power-off isDraftOn"></span>'
+        showselection: false
+        click: ()->
+          self.draftModeToggle()
+      },
       save: {
         image: '<span id="save" class="fa fa-save"></span>',
         showstatic: true,
         click: () ->
           self.save()
       },
+
       bold: {
         title: "bold",
         image: '<span class="fa fa-bold"></span>',
@@ -370,6 +368,19 @@ setupEditor: ()->
         image: '<span class="fa fa-align-justify"></span>',
         showselection: true
       },
+      insertlink: {
+        title: "insert link",
+        image: '<span class="fa fa-link"></span >',
+        showselection: true
+      },
+      alias: {
+        html: $('#aliasDrop').html()
+        showselection: false
+      },
+      postType: {
+        html: $('#typeDrop').html()
+        showselection: false
+      }
 
 
     }

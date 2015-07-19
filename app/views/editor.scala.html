@@ -27,9 +27,7 @@
         @helper.form(action = routes.Authorised.submitPost, 'id -> "blogForm" ){
         <input type="hidden" name="postId" id="postId" value="@postId" />
         <!-- Start Toolbar
-            -->
-            @editorToolbar("Toolbar", user.get)
-
+          -->
         <div style="position:absolute">
         <!-- End Tool bar
           -->
@@ -85,6 +83,29 @@
     </div>
         }
     </div><!-- /.dob-main -->
+
+    <div id="aliasDrop" style="display : none">
+    @defining(data.UserAccounts.getUserAliasesAsString(user.get)) { aliases =>
+        <div @if(aliases.isEmpty) {
+            style="display:none"
+        } else {
+            style="display : inline"} >
+        <select id="author" class="dob-control small-select" style="display : inline" >
+            <option value="@user.get.name" selected >@user.get.name</option>
+            @for(als <- aliases) {
+                <option value="@als">@als</option>
+            }
+        </select>
+        </div>
+    }
+    </div>
+    <div id="typeDrop" style="display : none" >
+        <select id="postType" class="dob-control small-select" style="display : inline-block">
+        @for(typ <- user.get.role.roles) {
+            <option value="@models.ContentTypeMap(typ)" @if(models.ContentTypeMap(typ) == postType) {selected}>@typ </option>
+        }
+        </select>
+    </div>
 
 </div><!-- /.row -->
 

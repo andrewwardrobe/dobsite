@@ -45,7 +45,7 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
 
   def revisionLinks = cssSelector("*[id*='revLink']").findAllElements.toList
 
-  def toggleDraftMode = click on id("isDraft")
+  def toggleDraftMode = click on id("draftBtn")
 
   def liveAlertVisible = cssSelector("#editAlertLive").element.isDisplayed
 
@@ -67,12 +67,13 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
     } yield e.attribute("value").get.trim).toList
   }
 
-  def draftMode = { val elemClass = id("isDraft").webElement.getAttribute("class")
+  def draftMode = {
+    val elemClass = id("draftBtn").webElement.getAttribute("class")
     elemClass.contains("isDraftOn")
   }
 
   def save = {
-    click on id("saveButton")
+    click on id("save")
   }
 
   def postType = {
@@ -84,7 +85,8 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
 
 
   def saveSuccessful = {
-    cssSelector("#btnSuccessful").findElement.get.underlying.isDisplayed()
+    val saveClass = cssSelector("#save").findElement.get.attribute("class").get
+    saveClass.contains("fa-check-circle")
   }
 
   def highLightText(text:String) = { //Doesnt quite work
