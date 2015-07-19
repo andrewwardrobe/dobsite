@@ -1,4 +1,4 @@
-define ['common','q','helpers/date'], (common,Q) -> {
+define ['common', 'q', 'helpers/date', 'wysiwyg-editor.min'], (common, Q) -> {
   imageCount:1
 
   getRevisions:(id) ->
@@ -26,6 +26,19 @@ define ['common','q','helpers/date'], (common,Q) -> {
     result
 
   setupEditor:()->
+    $("#editor").wysiwyg {
+      toolbar: 'top-selection'
+      buttons: {
+        bold: {
+          title: "Bold",
+          image: '<span class="fa fa-bold"></span>'
+        }
+      }
+    }
+    this.addEditorMenu()
+
+
+setupEditorLeek: ()->
     require ['jquery.hotkeys'],() ->
       require ['bootstrap-wysiwyg'], () ->
         $("#editor").wysiwyg { activeToolbarClass:"btn-dob-toolbar",dragAndDropImages: false }
@@ -223,7 +236,7 @@ define ['common','q','helpers/date'], (common,Q) -> {
 
   setupCustomScrollbar:()->
     require ['jquery.mCustomScrollbar'], () ->
-      $("#editor").mCustomScrollbar()
+#$("#editor").mCustomScrollbar()
 
   warningBoxHandlers:()->
     $(".alert-close").on 'click', (event) ->

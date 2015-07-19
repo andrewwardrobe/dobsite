@@ -46,7 +46,8 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
   //Todo: do this in order
   "Make a soundcloud player feature on editor" in pending
   "Code section in editor" in pending
-  "Sort out user perms (additional roles field maybe)" in pending
+
+
   "Front page" in pending
   "User login page" in pending
   "Sort out the font spacing etc" in pending
