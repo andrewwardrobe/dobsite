@@ -1,4 +1,4 @@
-define ['common', 'q', 'helpers/date', 'wysiwyg-editor.min'], (common, Q) -> {
+define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor'], (common, Q) -> {
   imageCount:1
 
   getRevisions:(id) ->
@@ -294,6 +294,7 @@ setupEditor: ()->
   self = this
   $("#editor").wysiwyg {
     toolbar: 'top-selection'
+
     buttons: {
       draft: {
         image: '<span id="draftBtn" class="fa fa-power-off isDraftOn"></span>'
@@ -369,9 +370,10 @@ setupEditor: ()->
         showselection: true
       },
       insertlink: {
-        title: "insert link",
+        title: "link",
         image: '<span class="fa fa-link"></span >',
-        showselection: true
+        showselection: true,
+        showstatic: true
       },
       alias: {
         html: $('#aliasDrop').html()
@@ -383,6 +385,10 @@ setupEditor: ()->
       }
 
 
+    }
+    submit: {
+      title: 'Submit',
+      image: '\uf00c'
     }
   }
   this.addEditorMenu()
