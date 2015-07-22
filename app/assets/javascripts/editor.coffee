@@ -330,7 +330,9 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
     text = "//insert your code here"
     if sel != ""
       text = sel
-    this.pasteHtmlAtCaret("<pre id=\"#{id}\"><code>#{text}</code></pre><br>")
+      this.pasteHtmlAtCaret("<pre id=\"#{id}\"><code>#{text}</code></pre>")
+    else
+      this.pasteHtmlAtCaret("<pre id=\"#{id}\"><code>#{text}</code></pre><br/>")
     code = $("##{id}")
     $(code).each (i, block) ->
       hljs.highlightBlock block
