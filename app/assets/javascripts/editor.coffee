@@ -1,38 +1,38 @@
 define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.pack'], (common, Q) -> {
   imageCount:1
-# http://stackoverflow.com/questions/6690752/insert-html-at-caret-in-a-contenteditable-div
-pasteHtmlAtCaret: (html) ->
-  console.log "in func"
-  sel = undefined
-  range = undefined
-  if window.getSelection
-# IE9 and non-IE
-    sel = window.getSelection()
-    if sel.getRangeAt and sel.rangeCount
-      range = sel.getRangeAt(0)
-      range.deleteContents()
-      # Range.createContextualFragment() would be useful here but is
-      # non-standard and not supported in all browsers (IE9, for one)
-      el = document.createElement('div')
-      el.innerHTML = html
-      frag = document.createDocumentFragment()
-      node = undefined
-      lastNode = undefined
-      while node = el.firstChild
-        lastNode = frag.appendChild(node)
-      range.insertNode frag
-      # Preserve the selection
-      if lastNode
-        range = range.cloneRange()
-        range.setStartAfter lastNode
-        range.collapse true
-        sel.removeAllRanges()
-        sel.addRange range
+  # http://stackoverflow.com/questions/6690752/insert-html-at-caret-in-a-contenteditable-div
+  pasteHtmlAtCaret: (html) ->
+    console.log "in func"
+    sel = undefined
+    range = undefined
+    if window.getSelection
+  # IE9 and non-IE
+      sel = window.getSelection()
+      if sel.getRangeAt and sel.rangeCount
+        range = sel.getRangeAt(0)
+        range.deleteContents()
+        # Range.createContextualFragment() would be useful here but is
+        # non-standard and not supported in all browsers (IE9, for one)
+        el = document.createElement('div')
+        el.innerHTML = html
+        frag = document.createDocumentFragment()
+        node = undefined
+        lastNode = undefined
+        while node = el.firstChild
+          lastNode = frag.appendChild(node)
+        range.insertNode frag
+        # Preserve the selection
+        if lastNode
+          range = range.cloneRange()
+          range.setStartAfter lastNode
+          range.collapse true
+          sel.removeAllRanges()
+          sel.addRange range
 
-  else if document.selection and document.selection.type != 'Control'
-# IE < 9
-    document.selection.createRange().pasteHTML html
-  return undefined
+    else if document.selection and document.selection.type != 'Control'
+  # IE < 9
+      document.selection.createRange().pasteHTML html
+    return undefined
 
   getRevisions:(id) ->
     self = this
@@ -61,7 +61,7 @@ pasteHtmlAtCaret: (html) ->
 
 
 
-setupEditorLeek: ()->
+  setupEditorLeek: ()->
     require ['jquery.hotkeys'],() ->
       require ['bootstrap-wysiwyg'], () ->
         $("#editor").wysiwyg { activeToolbarClass:"btn-dob-toolbar",dragAndDropImages: false }
@@ -80,7 +80,6 @@ setupEditorLeek: ()->
     $("#rightSideNavBar").prepend listElem
 
   loadContentPost:(id,revisionId) ->
-    self = this
     if id != -1 && id != "-1"
       result = Q.when jsRoutes.controllers.JsonApi.getPostRevisionById(id,revisionId).ajax({})
       result.then (data) ->
@@ -308,26 +307,26 @@ setupEditorLeek: ()->
       i++
 
 # chang this to manipulate the br to \ns
-codeBlock: ()->
-  console.log "hello"
-  id = "leek1"
-  this.pasteHtmlAtCaret("<pre id=\"#{id}\"><code>int i = 0;</code></pre>")
-  code = $("##{id}")
-  $(code).each (i, block) ->
-    hljs.highlightBlock block
-  $(code).on 'click', (event) ->
-    console.log "clicked"
-    event.stopPropagation();
+  codeBlock: ()->
+    console.log "hello"
+    id = "leek1"
+    this.pasteHtmlAtCaret("<pre id=\"#{id}\"><code>int i = 0;</code></pre>")
+    code = $("##{id}")
+    $(code).each (i, block) ->
+      hljs.highlightBlock block
+    $(code).on 'click', (event) ->
+      console.log "clicked"
+      event.stopPropagation();
 
-  $("#editor").on 'click', () ->
-    elem = $($(code).html())
-    # make this br and the use
-    elem.find("br").each (idx) ->
-      $(this).replaceWith("\n")
-    console.log elem.html()
-    $(code).html "<code>#{elem.text()}</code>"
-    $(code).each (i, blk) ->
-      hljs.highlightBlock blk
+    $("#editor").on 'click', () ->
+      elem = $($(code).html())
+      # make this br and the use
+      elem.find("br").each () ->
+        $(this).replaceWith("\n")
+      console.log elem.html()
+      $(code).html "<code>#{elem.text()}</code>"
+      $(code).each (i, blk) ->
+        hljs.highlightBlock blk
 
 
 
@@ -348,112 +347,112 @@ codeBlock: ()->
       $("#tagBox").val text
 
 
-setupEditor: ()->
-  self = this
-  $("#editor").wysiwyg {
-    toolbar: 'top-selection'
+  setupEditor: ()->
+    self = this
+    $("#editor").wysiwyg {
+      toolbar: 'top-selection'
 
-    buttons: {
-      draft: {
-        image: '<span id="draftBtn" class="fa fa-power-off isDraftOn"></span>'
-        showselection: false
-        click: ()->
-          self.draftModeToggle()
-      },
-      save: {
-        image: '<span id="save" class="fa fa-save"></span>',
-        showstatic: true,
-        click: () ->
-          self.save()
-      },
+      buttons: {
+        draft: {
+          image: '<span id="draftBtn" class="fa fa-power-off isDraftOn"></span>'
+          showselection: false
+          click: ()->
+            self.draftModeToggle()
+        },
+        save: {
+          image: '<span id="save" class="fa fa-save"></span>',
+          showstatic: true,
+          click: () ->
+            self.save()
+        },
 
-      bold: {
-        title: "bold",
-        image: '<span class="fa fa-bold"></span>',
-        showselection: true
-      },
-      italic: {
-        title: "italic",
-        image: '<span class="fa fa-italic"></span>',
-        showselection: true
-      },
-      underline: {
-        title: "underline",
-        image: '<span class="fa fa-underline"></span>',
-        showselection: true
-      },
-      strikethrough: {
-        title: "strikethrough",
-        image: '<span class="fa fa-strikethrough"></span>',
-        showselection: true
-      },
-      unorderedList: {
-        title: "numbered list",
-        image: '<span class="fa fa-list-ul"></span>',
-        showselection: true
-      },
-      orderedList: {
-        title: "bullet list",
-        image: '<span class="fa fa-list-ol"></span>',
-        showselection: true
-      },
-      indent: {
-        title: "indent",
-        image: '<span class="fa fa-indent"></span>',
-        showselection: true
-      },
-      outdent: {
-        title: "outdent",
-        image: '<span class="fa fa-outdent"></span>',
-        showselection: true
-      },
-      alignleft: {
-        title: "align left",
-        image: '<span class="fa fa-align-left"></span>',
-        showselection: true
-      },
-      aligncenter: {
-        title: "align center",
-        image: '<span class="fa fa-align-center"></span>',
-        showselection: true
-      },
-      alignright: {
-        title: "align right",
-        image: '<span class="fa fa-align-right"></span>',
-        showselection: true
-      },
-      alignjustify: {
-        title: "align justify",
-        image: '<span class="fa fa-align-justify"></span>',
-        showselection: true
-      },
-      insertlink: {
-        title: "link",
-        image: '<span class="fa fa-link"></span >',
-        showselection: true,
-        showstatic: true
-      },
-      code: {
-        title: "code",
-        image: '<span class="fa fa-link"></span >',
-        click: (button) ->
-          self.codeBlock()
-      },
-      alias: {
-        html: $('#aliasDrop').html()
-        showselection: false
-      },
-      postType: {
-        html: $('#typeDrop').html()
-        showselection: false
+        bold: {
+          title: "bold",
+          image: '<span class="fa fa-bold"></span>',
+          showselection: true
+        },
+        italic: {
+          title: "italic",
+          image: '<span class="fa fa-italic"></span>',
+          showselection: true
+        },
+        underline: {
+          title: "underline",
+          image: '<span class="fa fa-underline"></span>',
+          showselection: true
+        },
+        strikethrough: {
+          title: "strikethrough",
+          image: '<span class="fa fa-strikethrough"></span>',
+          showselection: true
+        },
+        unorderedList: {
+          title: "numbered list",
+          image: '<span class="fa fa-list-ul"></span>',
+          showselection: true
+        },
+        orderedList: {
+          title: "bullet list",
+          image: '<span class="fa fa-list-ol"></span>',
+          showselection: true
+        },
+        indent: {
+          title: "indent",
+          image: '<span class="fa fa-indent"></span>',
+          showselection: true
+        },
+        outdent: {
+          title: "outdent",
+          image: '<span class="fa fa-outdent"></span>',
+          showselection: true
+        },
+        alignleft: {
+          title: "align left",
+          image: '<span class="fa fa-align-left"></span>',
+          showselection: true
+        },
+        aligncenter: {
+          title: "align center",
+          image: '<span class="fa fa-align-center"></span>',
+          showselection: true
+        },
+        alignright: {
+          title: "align right",
+          image: '<span class="fa fa-align-right"></span>',
+          showselection: true
+        },
+        alignjustify: {
+          title: "align justify",
+          image: '<span class="fa fa-align-justify"></span>',
+          showselection: true
+        },
+        insertlink: {
+          title: "link",
+          image: '<span class="fa fa-link"></span >',
+          showselection: true,
+          showstatic: true
+        },
+        code: {
+          title: "code",
+          image: '<span class="fa fa-link"></span >',
+          click: () ->
+            self.codeBlock()
+        },
+        alias: {
+          html: $('#aliasDrop').html()
+          showselection: false
+        },
+        postType: {
+          html: $('#typeDrop').html()
+          showselection: false
+        }
+
+
       }
-
-
+      submit: {
+        title: 'Submit',
+        image: '\uf00c'
+      }
     }
-    submit: {
-      title: 'Submit',
-      image: '\uf00c'
-    }
-    }
-  this.addEditorMenu()
+    this.addEditorMenu()
 }
