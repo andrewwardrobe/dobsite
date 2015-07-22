@@ -109,6 +109,10 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
             text += "#{key}=#{extraData[key]}"
         text.replace "\n$", ""
         $("#extraDataValues").val text
+        $("pre code").each (i, blk) ->
+          $(blk).on 'click', (event) ->
+            event.stopPropagation()
+          hljs.highlightBlock blk
     else
       $("#editAlertNew").show()
 
@@ -249,6 +253,10 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
       self.unSavedChangesAlert()
     this.setupCustomScrollbar()
     this.editorDragDrop()
+    $("#editor").on 'click', () ->
+      $("pre code").each (i, blk) ->
+        $(blk).html self.stripSpan $(blk).html()
+        hljs.highlightBlock blk
 
   setupCustomScrollbar:()->
     require ['jquery.mCustomScrollbar'], () ->
@@ -307,26 +315,31 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
       i++
 
 # chang this to manipulate the br to \ns
+  stripSpan:(html)->
+    elem = $(html)
+    # make this br and the use
+    elem.find("br").each () ->
+      $(this).replaceWith("\n")
+    "<code>#{elem.text()}</code>"
+
   codeBlock: ()->
+    self = this
     console.log "hello"
     id = "leek1"
-    this.pasteHtmlAtCaret("<pre id=\"#{id}\"><code>int i = 0;</code></pre>")
+    sel = window.getSelection().toString()
+    text = "//insert your code here"
+    if sel != ""
+      text = sel
+    this.pasteHtmlAtCaret("<pre id=\"#{id}\"><code>#{text}</code></pre><br>")
     code = $("##{id}")
     $(code).each (i, block) ->
       hljs.highlightBlock block
+
     $(code).on 'click', (event) ->
       console.log "clicked"
       event.stopPropagation();
 
-    $("#editor").on 'click', () ->
-      elem = $($(code).html())
-      # make this br and the use
-      elem.find("br").each () ->
-        $(this).replaceWith("\n")
-      console.log elem.html()
-      $(code).html "<code>#{elem.text()}</code>"
-      $(code).each (i, blk) ->
-        hljs.highlightBlock blk
+
 
 
 
@@ -434,7 +447,7 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
         },
         code: {
           title: "code",
-          image: '<span class="fa fa-link"></span >',
+          image: '<span class="fa fa-code"></span >',
           click: () ->
             self.codeBlock()
         },
