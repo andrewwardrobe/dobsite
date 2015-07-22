@@ -19,6 +19,7 @@
             // Map the dependencies to CDNs or WebJars directly
             "bootstrap" : "//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min",
             "jsRoutes" : "javascriptRoutes",
+            "highlight": "//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js",
             "jquery":"webjars/jquery/2.1.4/jquery.min",
             "jquery-ui":"webjars/jquery-ui/1.11.4/jquery-ui.min",
             "q" : "webjars/q/1.1.2/q"

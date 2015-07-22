@@ -10,8 +10,7 @@ function(hljs) {
         keywords: {
             typename: 'byte short char int long boolean float double void',
             literal : 'true false null',
-            keyword:
-                // groovy specific keywords
+            keyword: // groovy specific keywords
             'def as in assert trait ' +
                 // common keywords with Java
             'super this abstract static volatile transient public private protected synchronized final ' +
@@ -20,17 +19,18 @@ function(hljs) {
         },
 
         contains: [
+            hljs.COMMENT(
+                '/\\*\\*',
+                '\\*/',
+                {
+                    relevance: 0,
+                    contains: [{
+                        className: 'doctag',
+                        begin: '@[A-Za-z]+'
+                    }]
+                }
+            ),
             hljs.C_LINE_COMMENT_MODE,
-            {
-                className: 'javadoc',
-                begin: '/\\*\\*', end: '\\*//*',
-                relevance: 0,
-                contains: [
-                    {
-                        className: 'javadoctag', begin: '(^|\\s)@[A-Za-z]+'
-                    }
-                ]
-            },
             hljs.C_BLOCK_COMMENT_MODE,
             {
                 className: 'string',

@@ -1,5 +1,38 @@
-define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor'], (common, Q) -> {
+define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.pack'], (common, Q) -> {
   imageCount:1
+# http://stackoverflow.com/questions/6690752/insert-html-at-caret-in-a-contenteditable-div
+pasteHtmlAtCaret: (html) ->
+  console.log "in func"
+  sel = undefined
+  range = undefined
+  if window.getSelection
+# IE9 and non-IE
+    sel = window.getSelection()
+    if sel.getRangeAt and sel.rangeCount
+      range = sel.getRangeAt(0)
+      range.deleteContents()
+      # Range.createContextualFragment() would be useful here but is
+      # non-standard and not supported in all browsers (IE9, for one)
+      el = document.createElement('div')
+      el.innerHTML = html
+      frag = document.createDocumentFragment()
+      node = undefined
+      lastNode = undefined
+      while node = el.firstChild
+        lastNode = frag.appendChild(node)
+      range.insertNode frag
+      # Preserve the selection
+      if lastNode
+        range = range.cloneRange()
+        range.setStartAfter lastNode
+        range.collapse true
+        sel.removeAllRanges()
+        sel.addRange range
+
+  else if document.selection and document.selection.type != 'Control'
+# IE < 9
+    document.selection.createRange().pasteHTML html
+  return undefined
 
   getRevisions:(id) ->
     self = this
@@ -9,7 +42,7 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor'], (common, Q)
       revisions = $("#revisions")
       revisions.html ""
       $.each data, (idx,rev) ->
-        dte = new Date(rev.commitDate.replace("BST",""));
+        dte = new Date(rev.commitDate.replace("BST", ""))
         revItem = $("<li>")
         revItem.attr 'id', "revId#{count}"
         link = $("<a>")
@@ -232,7 +265,7 @@ setupEditorLeek: ()->
 
       switch target.nodeName
        when "BLOCKQUOTE"
-          $(target).attr('style','margin: 0 0 0 40px; border: none; padding: 0px;')
+         $(target).attr('style', 'margin: 0 0 0 40px border: none padding: 0px')
 
   editorDragDrop:()->
     self = this
@@ -266,13 +299,31 @@ setupEditorLeek: ()->
             data: aFile
             })
           result.then (data) ->
-              $("#result").html(data);
-              $("#"+imageId).attr('src',"/"+data);
+            $("#result").html(data)
+            $("#" + imageId).attr('src', "/" + data)
           , (error) ->
-            $("#result").html(error);
+            $("#result").html(error)
       )(f)
       imageReader.readAsDataURL(f)
       i++
+
+codeBlock: ()->
+  console.log "hello"
+  id = "leek1"
+  leek = this.pasteHtmlAtCaret("<pre id=\"#{id}\"><code>int i = 0;</code></pre>")
+  code = $("##{id}")
+  $(code).each (i, block) ->
+    hljs.highlightBlock block
+  $(code).on 'click', (event) ->
+    console.log "clicked"
+    event.stopPropagation();
+
+  $("#editor").on 'click', () ->
+    $(code).html "<code>#{$(code).text()}</code>"
+    $(code).each (i, blk) ->
+      hljs.highlightBlock blk
+
+
 
   loadTags:(id)->
     promise = Q.when jsRoutes.controllers.JsonApi.getContentTags(id).ajax({})
@@ -282,13 +333,14 @@ setupEditorLeek: ()->
         console.log "Loop #{val}"
         text = $("#tagBox").val()
         text = text + val
-        text = text + ", ";
+        text = text + ", "
 
         $("#tagBox").val text
 
       text = $("#tagBox").val()
       text = text.replace /(^,)|(,$)|(, $)/g, ""
       $("#tagBox").val text
+
 
 setupEditor: ()->
   self = this
@@ -375,6 +427,12 @@ setupEditor: ()->
         showselection: true,
         showstatic: true
       },
+      code: {
+        title: "code",
+        image: '<span class="fa fa-link"></span >',
+        click: (button) ->
+          self.codeBlock()
+      },
       alias: {
         html: $('#aliasDrop').html()
         showselection: false
@@ -385,11 +443,12 @@ setupEditor: ()->
       }
 
 
-    }
+
+      }
     submit: {
       title: 'Submit',
       image: '\uf00c'
     }
-  }
+    }
   this.addEditorMenu()
 }

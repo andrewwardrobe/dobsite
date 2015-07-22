@@ -12,22 +12,23 @@ function (hljs) {
     'aspectOf adviceexecution proceed cflowbelow cflow initialization preinitialization ' +
     'staticinitialization withincode target within execution getWithinTypeName handler ' +
     'thisJoinPoint thisJoinPointStaticPart thisEnclosingJoinPointStaticPart declare parents '+
-    'warning error soft precedence';
+    'warning error soft precedence thisAspectInstance';
   var SHORTKEYS = 'get set args call';
   return {
     keywords : KEYWORDS,
     illegal : /<\//,
     contains : [
-      {
-        className : 'javadoc',
-        begin : '/\\*\\*',
-        end : '\\*/',
-        relevance : 0,
-        contains : [{
-          className : 'javadoctag',
-          begin : '(^|\\s)@[A-Za-z]+'
-        }]
-      },
+      hljs.COMMENT(
+          '/\\*\\*',
+          '\\*/',
+          {
+            relevance: 0,
+            contains: [{
+              className: 'doctag',
+              begin: '@[A-Za-z]+'
+            }]
+          }
+      ),
       hljs.C_LINE_COMMENT_MODE,
       hljs.C_BLOCK_COMMENT_MODE,
       hljs.APOS_STRING_MODE,
@@ -38,7 +39,8 @@ function (hljs) {
         end : /[{;=]/,
         excludeEnd : true,
         illegal : /[:;"\[\]]/,
-        contains : [{
+        contains: [
+          {
             beginKeywords : 'extends implements pertypewithin perthis pertarget percflowbelow percflow issingleton'
           },
           hljs.UNDERSCORE_TITLE_MODE,
@@ -101,7 +103,7 @@ function (hljs) {
       {
         // the function class is a bit different for AspectJ compared to the Java language
         className : 'function',
-        begin : /\w+ +\w+(\.)?\w+\s*\([^\)]*\)\s*((throws)[\w\s\,]+)?[\{\;]/,
+        begin: /\w+ +\w+(\.)?\w+\s*\([^\)]*\)\s*((throws)[\w\s,]+)?[\{;]/,
         returnBegin : true,
         end : /[{;=]/,
         keywords : KEYWORDS,

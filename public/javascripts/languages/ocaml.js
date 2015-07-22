@@ -23,8 +23,7 @@ function(hljs) {
         'array bool bytes char exn|5 float int int32 int64 list lazy_t|5 nativeint|5 string unit ' +
         /* (some) types in Pervasives */
         'in_channel out_channel ref',
-      literal:
-        'true false',
+      literal: 'true false'
     },
     illegal: /\/\/|>>/,
     lexemes: '[a-z_]\\w*!?',
@@ -33,19 +32,21 @@ function(hljs) {
         className: 'literal',
         begin: '\\[(\\|\\|)?\\]|\\(\\)'
       },
-      {
-        className: 'comment',
-        begin: '\\(\\*', end: '\\*\\)',
-        contains: ['self'],
-      },
+      hljs.COMMENT(
+          '\\(\\*',
+          '\\*\\)',
+          {
+            contains: ['self']
+          }
+      ),
       { /* type variable */
         className: 'symbol',
-        begin: '\'[A-Za-z_](?!\')[\\w\']*',
+        begin: '\'[A-Za-z_](?!\')[\\w\']*'
         /* the grammar is ambiguous on how 'a'b should be interpreted but not the compiler */
       },
       { /* polymorphic variant */
         className: 'tag',
-        begin: '`[A-Z][\\w\']*',
+        begin: '`[A-Z][\\w\']*'
       },
       { /* module or constructor */
         className: 'type',

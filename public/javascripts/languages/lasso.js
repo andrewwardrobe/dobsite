@@ -36,11 +36,13 @@ function(hljs) {
       'skip split_thread sum take thread to trait type where with ' +
       'yield yieldhome'
   };
-  var HTML_COMMENT = {
-    className: 'comment',
-    begin: '<!--', end: '-->',
-    relevance: 0
-  };
+  var HTML_COMMENT = hljs.COMMENT(
+      '<!--',
+      '-->',
+      {
+        relevance: 0
+      }
+  );
   var LASSO_NOPROCESS = {
     className: 'preprocessor',
     begin: '\\[noprocess\\]',
@@ -60,12 +62,11 @@ function(hljs) {
     begin: '\'' + LASSO_IDENT_RE + '\''
   };
   var LASSO_CODE = [
+    hljs.COMMENT(
+        '/\\*\\*!',
+        '\\*/'
+    ),
     hljs.C_LINE_COMMENT_MODE,
-    {
-      className: 'javadoc',
-      begin: '/\\*\\*!', end: '\\*/',
-      contains: [hljs.PHRASAL_WORDS_MODE]
-    },
     hljs.C_BLOCK_COMMENT_MODE,
     hljs.inherit(hljs.C_NUMBER_MODE, {begin: hljs.C_NUMBER_RE + '|(-?infinity|nan)\\b'}),
     hljs.inherit(hljs.APOS_STRING_MODE, {illegal: null}),
