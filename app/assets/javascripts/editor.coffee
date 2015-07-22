@@ -307,10 +307,11 @@ setupEditorLeek: ()->
       imageReader.readAsDataURL(f)
       i++
 
+# chang this to manipulate the br to \ns
 codeBlock: ()->
   console.log "hello"
   id = "leek1"
-  leek = this.pasteHtmlAtCaret("<pre id=\"#{id}\"><code>int i = 0;</code></pre>")
+  this.pasteHtmlAtCaret("<pre id=\"#{id}\"><code>int i = 0;</code></pre>")
   code = $("##{id}")
   $(code).each (i, block) ->
     hljs.highlightBlock block
@@ -319,7 +320,12 @@ codeBlock: ()->
     event.stopPropagation();
 
   $("#editor").on 'click', () ->
-    $(code).html "<code>#{$(code).text()}</code>"
+    elem = $($(code).html())
+    # make this br and the use
+    elem.find("br").each (idx) ->
+      $(this).replaceWith("\n")
+    console.log elem.html()
+    $(code).html "<code>#{elem.text()}</code>"
     $(code).each (i, blk) ->
       hljs.highlightBlock blk
 
@@ -443,8 +449,7 @@ setupEditor: ()->
       }
 
 
-
-      }
+    }
     submit: {
       title: 'Submit',
       image: '\uf00c'
