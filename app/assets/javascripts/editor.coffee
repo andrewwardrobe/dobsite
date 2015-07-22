@@ -389,7 +389,18 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
           click: () ->
             self.save()
         },
-
+        undo:{
+          title: "undo",
+          image: '<span class="fa fa-undo"></span>',
+          click: ()->
+            document.execCommand "undo"
+        },
+        redo:{
+          title: "redo",
+          image: '<span class="fa fa-repeat"></span>',
+          click: ()->
+            document.execCommand "redo"
+        },
         bold: {
           title: "bold",
           image: '<span class="fa fa-bold"></span>',
