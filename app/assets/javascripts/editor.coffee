@@ -320,26 +320,35 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
     # make this br and the use
     elem.find("br").each () ->
       $(this).replaceWith("\n")
-    "<code>#{elem.text()}</code>"
+    "#{elem.text()}"
+
 
   codeBlock: ()->
     self = this
     console.log "hello"
     id = "leek1"
-    sel = window.getSelection().toString()
-    text = "//insert your code here"
-    if sel != ""
-      text = sel
-      this.pasteHtmlAtCaret("<pre id=\"#{id}\"><code>#{text}</code></pre>")
-    else
-      this.pasteHtmlAtCaret("<pre id=\"#{id}\"><code>#{text}</code></pre><br/>")
-    code = $("##{id}")
-    $(code).each (i, block) ->
-      hljs.highlightBlock block
+    sel = window.getSelection()
+    if $(sel.anchorNode).parents("pre code").length == 0
+      text = "//insert your code here"
+      if sel.toString() != ""
+        text = sel.toString()
+        this.pasteHtmlAtCaret("<pre id=\"#{id}\"><code>#{text}</code></pre>")
+      else
+        this.pasteHtmlAtCaret("<pre id=\"#{id}\"><code>#{text}</code></pre><br/>")
+      code = $("##{id}")
+      $(code).each (i, block) ->
+        hljs.highlightBlock block
 
-    $(code).on 'click', (event) ->
-      console.log "clicked"
-      event.stopPropagation();
+      $(code).on 'click', (event) ->
+        event.stopPropagation();
+    else
+      console.log "has parents"
+      node = $(sel.anchorNode).parents("pre code")[0]
+      console.log node.parentNode
+      html = self.stripSpan($(node).html())
+      $(node.parentNode).replaceWith "<br/>" + html.replace(/\n/g,"<br/>")
+
+
 
 
 
