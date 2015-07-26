@@ -316,12 +316,13 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
 
 # chang this to manipulate the br to \ns
   stripSpan:(html)->
+    console.log "HTML = #{html}"
     elem = $(html)
+    console.log "Elem = #{elem}"
     # make this br and the use
     elem.find("br").each () ->
       $(this).replaceWith("\n")
     "#{elem.text()}"
-
 
   codeBlock: ()->
     self = this
@@ -345,7 +346,7 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
       console.log "has parents"
       node = $(sel.anchorNode).parents("pre code")[0]
       console.log node.parentNode
-      html = self.stripSpan($(node).html())
+      html = self.stripSpan($(node.parentNode).html())
       $(node.parentNode).replaceWith "<br/>" + html.replace(/\n/g,"<br/>")
 
   loadTags:(id)->
