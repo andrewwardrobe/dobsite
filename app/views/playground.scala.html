@@ -5,6 +5,7 @@
 <div class="row" >
 
     <div  class="col-md-10  col-sm-offset-1 dob-main">
+        <!--
         <div id="playerDiv" >
 
             <a href="" id="scLink1"><span id="artist" ></span> - <span id="title" ></span></a><br>
@@ -42,23 +43,66 @@
               });
 */
 
-        </script>
-         </div><!-- /.dob-main -->
+            </script>
 
-        <pre id="codeBox" contenteditable="true"><code class="java">
-            public static int main(String[] args){
-            System.out.println("Hello World!");
-            return 0;
-            }
-        </code></pre>
 
-        <pre>
-            leek
-        </pre>
+
+
         <div id="jimmy"></div>
-        @helper.requireJs(core = routes.Assets.at("javascripts/require.js").url,
-        module = routes.Assets.at("javascripts/entry").url)
 
+        <div id="fp-carousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#fp-carousel" data-slide-to="0" class="active"></li>
+                <li data-target="#fp-carousel" data-slide-to="1"></li>
+                <li data-target="#fp-carousel" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                <div class="item active">
+                    <div class="container">
+                        <div class="carousel-caption fp-carousel-caption">
+                            <div class=" fp-container">
+                                <img class="first-slide img-responsive center-block" src="assets/images/dob_logo.png" alt="First slide">
+                                <p>Read the latest blogs from Da Oostin Boyeez</p>
+                                <p><a class="btn btn-lg btn-gray" href="@routes.Application.blog()" role="button">Go There</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="container">
+                        <div class="carousel-caption fp-carousel-caption">
+                            <div class=" fp-container">
+                                <img class="first-slide img-responsive center-block" src="assets/images/needlelogo.jpg" alt="First slide">
+                                <p>Read the latest from Gaz Three</p>
+                                <p><a class="btn btn-lg btn-gray" href="@routes.Application.author("Gaz Three")" role="button">Go There</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="container">
+                        <div class="carousel-caption fp-carousel-caption">
+                            <div class=" fp-container">
+                                <img class="first-slide img-responsive center-block" src="assets/images/fp-bio.png" alt="First slide">
+                                <p>Read Biographies of Da Oostin Boyeez</p>
+                                <p><a class="btn btn-lg btn-gray" href="@routes.Application.biography()" role="button">Go There</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="left carousel-control" href="#fp-carousel" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#fp-carousel" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+         @helper.requireJs(core = routes.Assets.at("javascripts/require.js").url,
+        module = routes.Assets.at("javascripts/entry").url)
+    </div><!-- /.dob-main -->
 
 </div><!-- /.row -->
 
@@ -78,4 +122,4 @@
 }
 
 
-@main("Da Oostin Boyeez",content,scripts,user)
+@main("",content,scripts,user)

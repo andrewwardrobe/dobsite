@@ -1,7 +1,8 @@
 @(user: Option[UserAccount])(implicit session : Session)
 
 @scripts = {
-
+    <script src='@routes.Assets.at("javascripts/require.js").url'
+    data-main='@routes.Assets.at("javascripts/bio-main.js").url'></script>
 }
 
 @content = {
@@ -19,7 +20,7 @@
                         <div class=" fp-container">
                             <img class="first-slide img-responsive center-block" src="assets/images/dob_logo.png" alt="First slide">
                             <p>Read the latest blogs from Da Oostin Boyeez</p>
-                            <p><a class="btn btn-lg btn-primary" href="@routes.Application.blog()" role="button">Go There</a></p>
+                            <p><a class="btn btn-lg btn-gray" href="@routes.Application.blog()" role="button">Go There</a></p>
                         </div>
                     </div>
                 </div>
@@ -30,7 +31,7 @@
                         <div class=" fp-container">
                             <img class="first-slide img-responsive center-block" src="assets/images/needlelogo.jpg" alt="First slide">
                             <p>Read the latest from Gaz Three</p>
-                            <p><a class="btn btn-lg btn-primary" href="@routes.Application.author("Gaz Three")" role="button">Go There</a></p>
+                            <p><a class="btn btn-lg btn-gray" href="@routes.Application.author("Gaz Three")" role="button">Go There</a></p>
                         </div>
                     </div>
                 </div>
@@ -41,7 +42,7 @@
                         <div class=" fp-container">
                             <img class="first-slide img-responsive center-block" src="assets/images/fp-bio.png" alt="First slide">
                             <p>Read Biographies of Da Oostin Boyeez</p>
-                            <p><a class="btn btn-lg btn-primary" href="@routes.Application.biography()" role="button">Go There</a></p>
+                            <p><a class="btn btn-lg btn-gray" href="@routes.Application.biography()" role="button">Go There</a></p>
                         </div>
                     </div>
                 </div>
