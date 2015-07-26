@@ -139,6 +139,11 @@ object JsonApi extends Controller {
     Ok(toJson(blogToJson(posts)))
   }
 
+  def getRandomPosts(typ:Int, max : Int) = DBAction { implicit response =>
+    val posts = Content.getRandomPosts(typ,max)
+    Ok(toJson(blogToJson(posts)))
+  }
+
   def getContentByDateStart(typ: Int,startDate: String,max :Int)  = DBAction { implicit response =>
     val contentList = startDate match {
       case s if s.isEmpty() || s == "" => { blogToJson(Content.getByDate(typ,new Date(),max)) }

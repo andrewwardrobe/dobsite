@@ -73,6 +73,10 @@ trait ContentAccessFunctions {this: ContentPostSchema =>
     ).sortBy(_.id.desc).take(5).list
   }
 
+  def getRandomPosts(typ :Int, numPosts: Int)(implicit s: Session) = {
+    val random = SimpleFunction.nullary[Double]("rand")
+    postTable.sortBy(x => random).take(numPosts).list
+  }
 
 
   def getXNewsItems(max: Int)(implicit s: Session) = {

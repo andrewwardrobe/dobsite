@@ -20,7 +20,7 @@
                         <div class=" fp-container">
                             <img class="first-slide img-responsive center-block" src="assets/images/dob_logo.png" alt="First slide">
                             <p>Read the latest blogs from Da Oostin Boyeez</p>
-                            <p><a class="btn btn-lg btn-gray" href="@routes.Application.blog()" role="button">Go There</a></p>
+                            <p><a class="btn btn-lg btn-gray" href="@routes.Application.blog()" role="button">Go</a></p>
                         </div>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                         <div class=" fp-container">
                             <img class="first-slide img-responsive center-block" src="assets/images/needlelogo.jpg" alt="First slide">
                             <p>Read the latest from Gaz Three</p>
-                            <p><a class="btn btn-lg btn-gray" href="@routes.Application.author("Gaz Three")" role="button">Go There</a></p>
+                            <p><a class="btn btn-lg btn-gray" href="@routes.Application.author("Gaz Three")" role="button">Go</a></p>
                         </div>
                     </div>
                 </div>
@@ -41,8 +41,19 @@
                     <div class="carousel-caption fp-carousel-caption">
                         <div class=" fp-container">
                             <img class="first-slide img-responsive center-block" src="assets/images/fp-bio.png" alt="First slide">
-                            <p>Read Biographies of Da Oostin Boyeez</p>
-                            <p><a class="btn btn-lg btn-gray" href="@routes.Application.biography()" role="button">Go There</a></p>
+                            <p>Da Oostin Boyeez Biographies</p>
+                            <p><a class="btn btn-lg btn-gray" href="@routes.Application.biography()" role="button">Go</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="container">
+                    <div class="carousel-caption fp-carousel-caption">
+                        <div class=" fp-container">
+                            <img class="first-slide img-responsive center-block" src="assets/images/fp-disco.png" alt="First slide">
+                            <p>Da Oostin Boyeez Discography</p>
+                            <p><a class="btn btn-lg btn-gray" href="@routes.Application.discography()" role="button">Go</a></p>
                         </div>
                     </div>
                 </div>
@@ -58,14 +69,17 @@
         </a>
     </div>
     <div class="row">
-        <div class="col-md-5 col-md-offset-1 fp-linkList">
+        <div class="col-md-4 col-md-offset-1 fp-linkList">
             Latest Blogs:
             <div id="latestBlogs" class="fp-inner">
 
             </div>
         </div>
-        <div id="randomBlogs" class="col-md-5">
+        <div class="col-md-4 col-md-offset-1 fp-linkList">
             Random Blogs:
+            <div id="randomBlogs" class="fp-inner">
+
+            </div>
         </div>
     </div>
 </div>

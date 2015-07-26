@@ -58,6 +58,7 @@ POST        /json/admin/discographies/fromjson                        controller
 
 GET         /json/news                                                controllers.JsonApi.getNews()
 GET         /json/content/tags/:id                                    controllers.JsonApi.getContentTags(id: String)
+GET         /json/content/random/:typ/:max                            controllers.JsonApi.getRandomPosts(typ:Int, max:Int)
 GET         /json/content/:id                                         controllers.JsonApi.getPostById(id: String)
 GET         /json/content/byuser/:id                                  controllers.JsonApi.getContentByUserLatestFirst(id: Int)
 GET         /json/drafts/byuser/:id                                   controllers.JsonApi.getDraftsByUserLatestFirst(id: Int)
