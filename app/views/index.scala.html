@@ -2,7 +2,7 @@
 
 @scripts = {
     <script src='@routes.Assets.at("javascripts/require.js").url'
-    data-main='@routes.Assets.at("javascripts/bio-main.js").url'></script>
+    data-main='@routes.Assets.at("javascripts/index-main.js").url'></script>
 }
 
 @content = {
@@ -58,8 +58,11 @@
         </a>
     </div>
     <div class="row">
-        <div id="latestBlogs" class="col-md-5 col-md-offset-1">
+        <div class="col-md-5 col-md-offset-1 fp-linkList">
             Latest Blogs:
+            <div id="latestBlogs" class="fp-inner">
+
+            </div>
         </div>
         <div id="randomBlogs" class="col-md-5">
             Random Blogs:
