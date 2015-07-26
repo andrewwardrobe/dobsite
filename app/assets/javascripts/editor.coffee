@@ -260,7 +260,7 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
 
   setupCustomScrollbar:()->
     require ['jquery.mCustomScrollbar'], () ->
-#$("#editor").mCustomScrollbar()
+      #$("#editor").mCustomScrollbar()
 
   warningBoxHandlers:()->
     $(".alert-close").on 'click', (event) ->
@@ -347,12 +347,6 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
       console.log node.parentNode
       html = self.stripSpan($(node).html())
       $(node.parentNode).replaceWith "<br/>" + html.replace(/\n/g,"<br/>")
-
-
-
-
-
-
 
   loadTags:(id)->
     promise = Q.when jsRoutes.controllers.JsonApi.getContentTags(id).ajax({})
