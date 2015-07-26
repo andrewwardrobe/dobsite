@@ -1,4 +1,4 @@
-@(title: String,content: Html, scripts: Html,loggedInUser: Option[UserAccount])(implicit session : Session)
+@(title: String,content: Html, scripts: Html,loggedInUser: Option[UserAccount], useBgImg: Boolean = true)(implicit session : Session)
 
 <!DOCTYPE html>
 
@@ -33,13 +33,13 @@
         <![endif]-->
     </head>
     <input type="hidden" id="pageName" value="@title"/>
-    <body class="bgimg">
+    <body @if(useBgImg){ class="bgimg" } >
     <div class="container-fluid">
         @navbar(loggedInUser)
     </div>
     <div class="container-fluid">
         <div class="dob-header">
-            <div align="center" ><!--<img src="@routes.Assets.at("images/dob_logo.png")">--><h1 class="massive">Da Oostin Boyeez</h1></div>
+            <div align="center" ><!--<img src="@routes.Assets.at("images/dob_logo.png")">--><h1 class="massive">@title</h1></div>
         </div>
         <div id="content" >
             @content
