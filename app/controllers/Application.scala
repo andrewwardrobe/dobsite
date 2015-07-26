@@ -105,7 +105,7 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
     val posts = database.withSession { implicit session =>
       Content.getByDate(ContentTypeMap.get("Blog"), numPosts)
     }
-    Ok(views.html.contentList("all", maybeUser, posts))
+    Ok(views.html.blog("all", maybeUser, posts))
 
   }
 
@@ -114,7 +114,7 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
     val posts = database.withSession { implicit session =>
       Content.getLiveContentByAuthorLatestFirst(author, ContentTypeMap.get("Blog"), new Date(), numPosts)
     }
-    Ok(views.html.contentList(s"author:${author}", maybeUser, posts))
+    Ok(views.html.blog(s"author:${author}", maybeUser, posts))
 
   }
 
@@ -123,7 +123,7 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
     val posts = database.withSession { implicit session =>
       Content.getByDate(ContentTypeMap.get("Blog"), 1)
     }
-    Ok(views.html.contentList(routes.JsonApi.getContentByDate(ContentTypeMap.get("Blog")).url, maybeUser, posts))
+    Ok(views.html.blog(routes.JsonApi.getContentByDate(ContentTypeMap.get("Blog")).url, maybeUser, posts))
   }
 
   def hansUndJorg = StackAction {  implicit request =>
