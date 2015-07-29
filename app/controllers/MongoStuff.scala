@@ -1,5 +1,6 @@
 package controllers
 
+import data.PostDAO
 import play.modules.reactivemongo.MongoController
 import play.modules.reactivemongo.json.collection.JSONCollection
 import play.modules.reactivemongo.json._
@@ -44,6 +45,17 @@ object MongoStuff extends Controller with MongoController with  OptionalAuthElem
 
   def getById(id:String) = Action.async {
     val postList = posts.find(Json.obj("_id" -> Json.obj("$oid" -> id))).cursor[MongoPost].collect[List]()
+    postList.map { pstList =>
+      Ok(toJson(pstList))
+    }.recover{
+      case ex: Exception => {
+        InternalServerError("Error" +ex.getMessage)
+      }
+    }
+  }
+
+  def getByTitle(title:String) = Action.async {
+    val postList = PostDAO.get(title)
     postList.map { pstList =>
       Ok(toJson(pstList))
     }.recover{
