@@ -49,7 +49,8 @@ libraryDependencies ++= Seq(
   "mysql" % "mysql-connector-java" % "5.1.35",
   "net.sf.flexjson" % "flexjson" % "3.1",
   "org.webjars" % "should.js" % "5.0.0",
-  "org.webjars" % "rjs" % "2.1.11-1-trireme" % "test"
+  "org.webjars" % "rjs" % "2.1.11-1-trireme" % "test",
+  "org.reactivemongo" %% "play2-reactivemongo" % "0.11.4.play23"
 )
 
 Keys.fork in Test := true

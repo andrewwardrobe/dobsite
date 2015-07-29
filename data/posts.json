@@ -1,0 +1,10 @@
+{
+  title: "Test Post",
+  postType: 1,
+  author:"Gaz Three",
+  content:"Shat blah blah",
+  extraData:"",
+  isDraft:false,
+  userId:45,
+  sheek:"",
+}
