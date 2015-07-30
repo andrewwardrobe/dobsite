@@ -53,7 +53,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "should.js" % "5.0.0",
   "org.webjars" % "rjs" % "2.1.11-1-trireme" % "test",
   "org.reactivemongo" %% "play2-reactivemongo" % "0.11.4.play23",
-  "com.github.simplyscala" %% "scalatest-embedmongo" % "0.2.2" % "test",
+  "com.github.simplyscala" %% "scalatest-embedmongo" % "0.2.2" % "test"
 )
 
 Keys.fork in Test := true
