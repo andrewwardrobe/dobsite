@@ -44,7 +44,7 @@ object MongoStuff extends Controller with MongoController with  OptionalAuthElem
   }
 
   def getById(id:String) = Action.async {
-    val postList = posts.find(Json.obj("_id" -> Json.obj("$oid" -> id))).cursor[MongoPost].collect[List]()
+    val postList = PostDAO.getById(id)
     postList.map { pstList =>
       Ok(toJson(pstList))
     }.recover{
