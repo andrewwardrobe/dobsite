@@ -9,3 +9,4 @@ import reactivemongo.bson.BSONObjectID
  */
 case class MongoPost(_id: BSONObjectID, title:String, postType: Int,author:String, content: String, extraData: String, isDraft: Boolean, userId:Option[Int])
 
+

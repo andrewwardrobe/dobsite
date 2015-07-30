@@ -10,5 +10,5 @@ import play.api.libs.json.Json
 object JsonFormats {
   import play.modules.reactivemongo.json.ImplicitBSONHandlers
   import play.modules.reactivemongo.json.BSONFormats._
-  implicit val format = Json.format[MongoPost]
+  implicit val postFormat = Json.format[MongoPost]
 }
