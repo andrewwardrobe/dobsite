@@ -22,7 +22,7 @@ class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite{
   "UserAccountHelper" must {
     "Be able to create an account" in {
       database.withSession { implicit session =>
-        UserAccountHelper.createUser("test", "test@test.com", "pa$$word", NormalUser)
+        UserAccountHelper.createUser("test", "test@test.com", "pa$$word", "NormalUser")
         UserAccounts.findByEmail("test@test.com") mustBe defined
       }
     }

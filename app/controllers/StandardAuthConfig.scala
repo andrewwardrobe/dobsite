@@ -69,7 +69,7 @@ trait StandardAuthConfig extends AuthConfig {
   }
 
   def authorize(user: User, authority: Authority)(implicit ctx: ExecutionContext): Future[Boolean] = Future.successful {
-    UserRole.roleHasAuthority(user.role,authority)
+    UserRole.roleHasAuthority(user.userRole,authority)
   }
 
   override lazy val cookieSecureOption: Boolean = play.api.Play.isProd(play.api.Play.current)

@@ -50,7 +50,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
 
   def getEditables = StackAction(AuthorityKey -> InActiveUser) { implicit request =>
     val user = loggedIn
-    val json = Json.obj("pages" -> Json.toJson(user.role.roles))
+    val json = Json.obj("pages" -> Json.toJson(user.userRole.roles))
     Ok(json)
   }
 
@@ -76,7 +76,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     ContentPost.blogForm.bindFromRequest() match {
       case s: Form[ContentPost] => {
         val item = s.get
-        if(user.role.hasPermission(ContentTypeMap(item.postType))) {
+        if(user.userRole.hasPermission(ContentTypeMap(item.postType))) {
           val tags : Option[Seq[String]] = request.body.asFormUrlEncoded match {
             case None => { None }
             case Some(formData) => {
@@ -126,7 +126,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     ContentPost.blogForm.bindFromRequest() match {
       case s: Form[ContentPost] => {
         val item = s.get
-        if (user.role.hasPermission(ContentTypeMap(item.postType))) {
+        if (user.userRole.hasPermission(ContentTypeMap(item.postType))) {
           val tags: Option[Seq[String]] = request.body.asFormUrlEncoded match {
             case None => {
               None

@@ -96,7 +96,7 @@
     </div>
     <div id="typeDrop" style="display : none" >
         <select id="postType" class="dob-control small-select" style="display : inline-block">
-        @for(typ <- user.get.role.roles) {
+        @for(typ <- user.get.userRole.roles) {
             <option value="@models.ContentTypeMap(typ)" @if(models.ContentTypeMap(typ) == postType) {selected}>@typ </option>
         }
         </select>

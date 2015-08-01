@@ -43,7 +43,7 @@
                     style="display: none"}
                 >Posts as: <div id="aliasList" style="display : inline"> @for(als <- aliases) {@als.alias, }</div></div>
             }
-            @if(user.role.hasAuthority("TrustedContributor")) {
+            @if(user.userRole.hasAuthority("TrustedContributor")) {
                 <div class="input-group dob-input-group">
                     <input type="text" id="aliasInput" class="form-control dob-control-grey">
                     <span class="input-group-btn">

@@ -39,7 +39,7 @@
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="addContent">Add Content<span class="caret"></span></a>
                 <ul id="editMenu" class="dropdown-menu" role="menu">
-                @for(role <- user.role.roles.sorted) {
+                @for(role <- user.userRole.roles.sorted) {
                   <li><a id="editLink@{role}" href="@routes.Authorised.newContent(role).url">@role</a></li>
                 }
                 </ul>
@@ -60,7 +60,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="userMenu">@user.name<span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li><a href="@routes.Authorised.profile" id="profileLink">Profile</a></li>
-                @if(user.role.name == "Administrator"){
+                @if(user.role == "Administrator"){
                   <li><a href="@routes.Admin.admin" id="profileLink">Admin</a></li>
                   <li><a href="@routes.Admin.bulkUploader" id="profileLink">Content Loader</a></li>
                 }

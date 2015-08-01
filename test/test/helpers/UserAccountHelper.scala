@@ -15,7 +15,7 @@ object UserAccountHelper {
 
   def database = Database.forDataSource(DB.getDataSource())
 
-  def createUser(userId: String, email :String, password: String, role: UserRole) = {
+  def createUser(userId: String, email :String, password: String, role: String) = {
     database.withSession { implicit session =>
       val user = new UserAccount(1,  email, password,userId, role)
       val id = UserAccounts.create(user)
@@ -26,7 +26,7 @@ object UserAccountHelper {
 
   def createUser(userId: String, password: String, role: String) = {
     database.withSession { implicit session =>
-      val user = new UserAccount(1,  s"$userId@daoostinboyeez.com", password,userId, UserRole.valueOf(role))
+      val user = new UserAccount(1,  s"$userId@daoostinboyeez.com", password,userId, role)
       val id = UserAccounts.create(user)
       new UserAccount(id,user.email,user.password,user.name,user.role)
     }
@@ -34,7 +34,7 @@ object UserAccountHelper {
 
   def createUserAndProfile(userId: String, password: String, role: String) = {
     database.withSession { implicit session =>
-      val user = new UserAccount(1,  s"$userId@daoostinboyeez.com", password,userId, UserRole.valueOf(role))
+      val user = new UserAccount(1,  s"$userId@daoostinboyeez.com", password,userId, role)
       val id = UserAccounts.create(user)
       val profile = new UserProfile(0, id,"Some Test about","assets/images/crew/donalds_bw.jpg")
       Profiles.create(profile)
@@ -44,7 +44,7 @@ object UserAccountHelper {
     }
   }
 
-  def createUserWithAlias(userId: String, email :String, password: String, role: UserRole,alias: String ) = {
+  def createUserWithAlias(userId: String, email :String, password: String, role: String,alias: String ) = {
     database.withSession { implicit session =>
       val user = new UserAccount(1,  email, password,userId, role)
       val id = UserAccounts.create(user)

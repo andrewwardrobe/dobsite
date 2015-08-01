@@ -14,23 +14,27 @@ import scala.util.matching.Regex
 /**
  * Created by andrew on 23/12/14.
  */
-case class UserAccount(id: Int, email: String, password: String, name: String, role: UserRole, aliasLimit: Option[Int] = None) {
+case class UserAccount(id: Int, email: String, password: String, name: String, role: String, aliasLimit: Option[Int] = None) {
   val json: JsValue = Json.obj(
     "id" -> id,
     "email" -> email,
     "name" -> name,
-    "role" -> role.name
+    "role" -> userRole.name
   )
 
   def hasPermission(required: UserRole) = {
-    UserRole.roleHasAuthority(role,required)
+    UserRole.roleHasAuthority(userRole,required)
+  }
+
+  def userRole = {
+    UserRole.valueOf(role)
   }
 
   def getAliasLimit = {
     aliasLimit match {
       case Some(x) => x
       case None => {
-        role.aliasLimit
+        userRole.aliasLimit
       }
     }
   }

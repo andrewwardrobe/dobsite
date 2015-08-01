@@ -35,7 +35,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
         }
       }
       "Allow for user aliases" in {
-        val user = UserAccountHelper.createUserWithAlias("Andrew","Andrew","pa$$word",UserRole.valueOf("Contributor"),"Gaz Three")
+        val user = UserAccountHelper.createUserWithAlias("Andrew","Andrew","pa$$word","Contributor","Gaz Three")
         database.withSession { implicit session =>
           UserAccounts.getAliasesAsString(user).head mustEqual "Gaz Three"
         }
@@ -50,7 +50,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
     }
 
     "Prevent reuse of alias'" in {
-      UserAccountHelper.createUserWithAlias("Andrew", "Andrew", "pa$$word", UserRole.valueOf("Contributor"), "Leek")
+      UserAccountHelper.createUserWithAlias("Andrew", "Andrew", "pa$$word", "Contributor", "Leek")
       val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
       database.withSession { implicit session =>
         UserAccounts.addAlias(user, "Leek")
@@ -59,7 +59,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
     }
 
     "Prevent use of someone else's username as an alias" in {
-      UserAccountHelper.createUserWithAlias("Andrew", "Andrew", "pa$$word", UserRole.valueOf("Contributor"), "Leek")
+      UserAccountHelper.createUserWithAlias("Andrew", "Andrew", "pa$$word", "Contributor", "Leek")
       val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
       database.withSession { implicit session =>
         UserAccounts.addAlias(user, "Andrew")

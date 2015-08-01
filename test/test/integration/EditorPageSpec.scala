@@ -53,7 +53,7 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     val signIn = new SignInPage(port)
     if(!setupDone) {
       repo.refresh
-      UserAccountHelper.createUserWithAlias("TrustedContributor", "TrustedContributor", "TrustedContributor", UserRole.valueOf("TrustedContributor"), "Da Oostin Boyeez")
+      UserAccountHelper.createUserWithAlias("TrustedContributor", "TrustedContributor", "TrustedContributor","TrustedContributor", "Da Oostin Boyeez")
       signIn.signin("TrustedContributor", "TrustedContributor")
       extraSetup
       setupDone = true

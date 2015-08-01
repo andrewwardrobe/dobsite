@@ -17,7 +17,7 @@ trait UserAccountSchema {
     def email = column[String]("EMAIL",O.NotNull)
     def password = column[String]("PASSWORD")
     def name = column[String]("NAME")
-    def role = column[UserRole]("ROLE")
+    def role = column[String]("ROLE")
 
     def aliasLimit = column[Option[Int]]("ALIAS_LIMIT", O.Nullable)
 

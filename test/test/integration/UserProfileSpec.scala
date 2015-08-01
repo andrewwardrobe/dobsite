@@ -33,7 +33,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
   def setup() = {
     UserAccountHelper.createUser("Administrator","Administrator","Administrator")
     UserAccountHelper.createUser("Contributor","Contributor","Contributor")
-    trust = UserAccountHelper.createUserWithAlias("TrustedContributor", "TrustedContributor@dob.com", "TrustedContributor", UserRole.valueOf("TrustedContributor"), "Da Oostin Boyeez")
+    trust = UserAccountHelper.createUserWithAlias("TrustedContributor", "TrustedContributor@dob.com", "TrustedContributor", "TrustedContributor", "Da Oostin Boyeez")
     UserAccountHelper.createProfile(trust.id,"this user is a fine member of da oostin boyeez","assets/images/crew/donalds_bw.jpg")
     UserAccountHelper.createUser("NormalUser","NormalUser","NormalUser")
 

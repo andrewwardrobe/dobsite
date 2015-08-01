@@ -90,7 +90,7 @@ trait UserAccountFunctions {
     import userAccount._
     val encPass = BCrypt.hashpw(password,BCrypt.gensalt())
     val insertAcc = accounts.length.run match {
-      case 0 => new UserAccount(id, email, encPass, name, UserRole.valueOf("Administrator"))
+      case 0 => new UserAccount(id, email, encPass, name,"Administrator")
       case _ => new UserAccount(id, email, encPass, name, role)
     }
     accounts returning accounts.map(_.id) += insertAcc
@@ -119,17 +119,17 @@ trait UserAccountFunctions {
     val newRole = UserRole.valueOf(roleType)
     newRole match {
       case _:UserRole =>
-        val updateAcc = new UserAccount(id, email, password, name, newRole)
+        val updateAcc = new UserAccount(id, email, password, name, roleType)
         accounts.insertOrUpdate(updateAcc)
         0
 
     }
   }
 
-  def create(userAccount: UserAccount, userRole:String)(implicit s: Session) =  {
+  def create(userAccount: UserAccount, requiredRole:String)(implicit s: Session) =  {
     import userAccount._
     val encPass = BCrypt.hashpw(password,BCrypt.gensalt())
-    val insertAcc = new UserAccount(id,email,encPass,name,UserRole.valueOf(userRole))
+    val insertAcc = new UserAccount(id,email,encPass,name,requiredRole)
     accounts returning accounts.map(_.id) += insertAcc
   }
 

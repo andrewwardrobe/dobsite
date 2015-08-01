@@ -72,7 +72,7 @@
                             </div>
                         }
                     <select id="postType" class="form-control dob-control" style="display : inline-block">
-                    @for(typ <- user.role.roles) {
+                    @for(typ <- user.userRole.roles) {
                         <option value="@models.ContentTypeMap(typ)">@typ</option>
                     }
                     </select>
