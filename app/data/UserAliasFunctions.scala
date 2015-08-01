@@ -23,11 +23,11 @@ trait UserAliasFunctions {
   }
 
   def aliasCount(user: UserAccount)(implicit session: Session) = {
-    userAlias.filter(_.userId === user.id).list.length
+    userAlias.filter(_.userId === user._id).list.length
   }
 
   def addAlias(user: UserAccount, newAlias: String)(implicit session: Session) = {
-    val alias = new UserAlias(UUID.randomUUID.toString, user.id, newAlias)
+    val alias = new UserAlias(UUID.randomUUID.toString, user._id, newAlias)
     if (aliasAvailable(newAlias)) {
       if (aliasCount(user) >= user.getAliasLimit) {
         throw new AliasLimitReachedException("Limit Reached")

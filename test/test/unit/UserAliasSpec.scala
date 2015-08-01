@@ -27,7 +27,7 @@ class UserAliasSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter 
     "Be able to insert and retrieve a UserAlias from the DB " in {
       val user = UserAccountHelper.createUser("Andrew","pa$$word","Contributor")
       val id = UUID.randomUUID.toString
-      val userAlias = new UserAlias(id,user.id,"Jimbo")
+      val userAlias = new UserAlias(id,user._id,"Jimbo")
 
       database.withSession { implicit session =>
         UserAliasDAO.insert(userAlias)

@@ -43,7 +43,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   def profile = StackAction(AuthorityKey -> InActiveUser) { implicit request =>
     database.withSession { implicit session =>
       val user = loggedIn
-      val profile = Profiles.getByUserId(user.id)
+      val profile = Profiles.getByUserId(user._id)
       Ok(views.html.profile("", user, profile))
     }
   }
@@ -90,7 +90,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
             case _ => None
           }
 
-          val newItem = Content.save(item,repo,Some(user.id),tags)
+          val newItem = Content.save(item,repo,Some(user._id),tags)
           Ok(newItem.json)
 
         }else
@@ -144,7 +144,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
             case _ => None
           }
 
-          val newItem = Content.save(item, repo, Some(user.id), tags)
+          val newItem = Content.save(item, repo, Some(user._id), tags)
           Ok(newItem.json)
 
         } else
@@ -161,7 +161,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   def updateProfile = StackAction(AuthorityKey -> NormalUser) { implicit request =>
     val profile = Profiles.form.bindFromRequest().get
     val user = loggedIn
-    if (profile.userId == user.id) {
+    if (profile.userId == user._id) {
 
         database.withSession { implicit session =>
           Profiles.update(profile)

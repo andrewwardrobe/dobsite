@@ -18,14 +18,14 @@ trait UserAccountFunctions {
 
   def getAliasesAsString(user: UserAccount)(implicit s: Session) = {
     (for {
-      ua <- UserAliasDAO.userAlias if ua.userId === user.id
+      ua <- UserAliasDAO.userAlias if ua.userId === user._id
 
     } yield ua).list map { _.alias }
   }
 
   def getAliases(user: UserAccount)(implicit s: Session) = {
     (for {
-      ua <- UserAliasDAO.userAlias if ua.userId === user.id
+      ua <- UserAliasDAO.userAlias if ua.userId === user._id
 
     } yield ua).list
   }
@@ -90,8 +90,8 @@ trait UserAccountFunctions {
     import userAccount._
     val encPass = BCrypt.hashpw(password,BCrypt.gensalt())
     val insertAcc = accounts.length.run match {
-      case 0 => new UserAccount(id, email, encPass, name,"Administrator")
-      case _ => new UserAccount(id, email, encPass, name, role)
+      case 0 => new UserAccount(_id, email, encPass, name, "Administrator")
+      case _ => new UserAccount(_id, email, encPass, name, role)
     }
     accounts returning accounts.map(_.id) += insertAcc
   }
@@ -103,14 +103,14 @@ trait UserAccountFunctions {
   def newPasswd(userAccount: UserAccount, passwd: String) (implicit s: Session)= {
     val encPass = BCrypt.hashpw(passwd,BCrypt.gensalt())
     import userAccount._
-    val updateAcc = new UserAccount(id, email, encPass, name, role)
+    val updateAcc = new UserAccount(_id, email, encPass, name, role)
     accounts.insertOrUpdate(updateAcc)
   }
 
   def newEmail(userAccount: UserAccount,newEmail: String) (implicit s: Session)= {
 
     import userAccount._
-    val updateAcc = new UserAccount(id, newEmail, password, name, role)
+    val updateAcc = new UserAccount(_id, newEmail, password, name, role)
     accounts.insertOrUpdate(updateAcc)
   }
 
@@ -119,7 +119,7 @@ trait UserAccountFunctions {
     val newRole = UserRole.valueOf(roleType)
     newRole match {
       case _:UserRole =>
-        val updateAcc = new UserAccount(id, email, password, name, roleType)
+        val updateAcc = new UserAccount(_id, email, password, name, roleType)
         accounts.insertOrUpdate(updateAcc)
         0
 
@@ -129,7 +129,7 @@ trait UserAccountFunctions {
   def create(userAccount: UserAccount, requiredRole:String)(implicit s: Session) =  {
     import userAccount._
     val encPass = BCrypt.hashpw(password,BCrypt.gensalt())
-    val insertAcc = new UserAccount(id,email,encPass,name,requiredRole)
+    val insertAcc = new UserAccount(_id, email, encPass, name, requiredRole)
     accounts returning accounts.map(_.id) += insertAcc
   }
 

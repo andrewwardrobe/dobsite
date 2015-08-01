@@ -49,7 +49,7 @@ object UserServices extends Controller with LoginLogout with OptionalAuthElement
     val newAccount = signUpForm.bindFromRequest().get
     //validate the user account
     import newAccount._
-    val incAccount = new UserAccount(id, email, password, name, "InActiveUser")
+    val incAccount = new UserAccount(_id, email, password, name, "InActiveUser")
     database.withSession { implicit session =>
       val insertId = UserAccounts.create(incAccount)
       val newProfile = new UserProfile(0,insertId,"","")

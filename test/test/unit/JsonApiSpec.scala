@@ -51,8 +51,8 @@ class JsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter{
 
     "Provide ability to get drafts by user" in {
       val user = UserAccountHelper.createUserAndProfile("TestUser","TestUser","Contributor")
-      ContentHelper.createPost("Bio 3","andrew","Bio 1",ContentTypeMap.get("Biography"),Some(user.id))
-      val result = route(FakeRequest(GET, routes.JsonApi.getDraftsByUserLatestFirst(user.id).url)).get
+      ContentHelper.createPost("Bio 3","andrew","Bio 1",ContentTypeMap.get("Biography"),Some(user._id))
+      val result = route(FakeRequest(GET, routes.JsonApi.getDraftsByUserLatestFirst(user._id).url)).get
       status(result) mustBe (OK)
     }
 

@@ -31,8 +31,8 @@ import play.api.libs.json.Json._
 
 
 object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig {
-  implicit val discFormat = Json.format[Discography]
-  implicit val bioFormat = Json.format[Biography]
+
+  import models.JsonFormats._
 
   private val defaultAuthor = Play.application.configuration.getString("content.defaultauthor").getOrElse("Da Oostin Boyeez")
 
@@ -45,7 +45,7 @@ object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig 
 
   def getUser(name:String) = StackAction(AuthorityKey -> Administrator) { implicit request =>
     database.withSession{ implicit s =>
-      Ok(toJson(UserAccounts.findByName(name).head.json))
+      Ok(toJson(UserAccounts.findByName(name).head))
     }
   }
 

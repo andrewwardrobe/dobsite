@@ -107,7 +107,7 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
     UserAccountHelper.createUser("Administrator","Administrator","Administrator")
     UserAccountHelper.createUser("Contributor","Contributor","Contributor")
     user = UserAccountHelper.createUser("TrustedContributor","TrustedContributor","TrustedContributor")
-    userProfile = UserAccountHelper.createProfile(user.id,"A fine oostin boyee","assets/images/leek.png")
+    userProfile = UserAccountHelper.createProfile(user._id,"A fine oostin boyee","assets/images/leek.png")
     UserAccountHelper.createUser("NormalUser","NormalUser","NormalUser")
 
   }

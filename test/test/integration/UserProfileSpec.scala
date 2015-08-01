@@ -34,7 +34,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
     UserAccountHelper.createUser("Administrator","Administrator","Administrator")
     UserAccountHelper.createUser("Contributor","Contributor","Contributor")
     trust = UserAccountHelper.createUserWithAlias("TrustedContributor", "TrustedContributor@dob.com", "TrustedContributor", "TrustedContributor", "Da Oostin Boyeez")
-    UserAccountHelper.createProfile(trust.id,"this user is a fine member of da oostin boyeez","assets/images/crew/donalds_bw.jpg")
+    UserAccountHelper.createProfile(trust._id,"this user is a fine member of da oostin boyeez","assets/images/crew/donalds_bw.jpg")
     UserAccountHelper.createUser("NormalUser","NormalUser","NormalUser")
 
   }
@@ -124,9 +124,9 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
     }
 
     "Display a list of links to the users posts" in {
-      ContentHelper.createPost("Test Post 1","MC Donalds","Sample Post Content 1",1,Some(trust.id) )
-      ContentHelper.createPost("Test Post 2","MC Donalds","Sample Post Content 2",1,Some(trust.id) )
-      ContentHelper.createPost("Test Post 3","MC Donalds","Sample Post Content 3",2,Some(trust.id) )
+      ContentHelper.createPost("Test Post 1","MC Donalds","Sample Post Content 1",1,Some(trust._id) )
+      ContentHelper.createPost("Test Post 2","MC Donalds","Sample Post Content 2",1,Some(trust._id) )
+      ContentHelper.createPost("Test Post 3","MC Donalds","Sample Post Content 3",2,Some(trust._id) )
       signin("TrustedContributor","TrustedContributor")
       go to profilePage
 
@@ -135,9 +135,9 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
     }
 
     "Display a list links of the edit pages of the users posts" in {
-      ContentHelper.createPost("Test Post 1","MC Donalds","Sample Post Content 1",1,Some(trust.id) )
-      ContentHelper.createPost("Test Post 2","MC Donalds","Sample Post Content 2",1,Some(trust.id) )
-      ContentHelper.createPost("Test Post 3","MC Donalds","Sample Post Content 3",2,Some(trust.id) )
+      ContentHelper.createPost("Test Post 1","MC Donalds","Sample Post Content 1",1,Some(trust._id) )
+      ContentHelper.createPost("Test Post 2","MC Donalds","Sample Post Content 2",1,Some(trust._id) )
+      ContentHelper.createPost("Test Post 3","MC Donalds","Sample Post Content 3",2,Some(trust._id) )
       signin("TrustedContributor","TrustedContributor")
       go to profilePage
 
@@ -146,9 +146,9 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
     }
 
     "Display a list links of the edit pages of the users drafts" in {
-      ContentHelper.createDraft("Test Post 1","MC Donalds","Sample Post Content 1",1,Some(trust.id) )
-      ContentHelper.createDraft("Test Post 2","MC Donalds","Sample Post Content 2",1,Some(trust.id) )
-      ContentHelper.createDraft("Test Post 3","MC Donalds","Sample Post Content 3",2,Some(trust.id) )
+      ContentHelper.createDraft("Test Post 1","MC Donalds","Sample Post Content 1",1,Some(trust._id) )
+      ContentHelper.createDraft("Test Post 2","MC Donalds","Sample Post Content 2",1,Some(trust._id) )
+      ContentHelper.createDraft("Test Post 3","MC Donalds","Sample Post Content 3",2,Some(trust._id) )
       signin("TrustedContributor","TrustedContributor")
       go to profilePage
 

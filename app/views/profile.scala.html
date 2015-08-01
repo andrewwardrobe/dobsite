@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-md-10 col-md-offset-1 dob-main centered">
         <div>
-            <input id="userId" value="@user.id" type="hidden"/>
+            <input id="userId" value="@user._id" type="hidden"/>
             @profile match {
             case None => {}
             case Some(userProfile) => {<input id="profileId" value="@userProfile.id" type="hidden"/>}

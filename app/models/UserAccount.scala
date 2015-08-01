@@ -14,9 +14,9 @@ import scala.util.matching.Regex
 /**
  * Created by andrew on 23/12/14.
  */
-case class UserAccount(id: Int, email: String, password: String, name: String, role: String, aliasLimit: Option[Int] = None) {
+case class UserAccount(_id: Int, email: String, password: String, name: String, role: String, aliasLimit: Option[Int] = None) {
   val json: JsValue = Json.obj(
-    "id" -> id,
+    "id" -> _id,
     "email" -> email,
     "name" -> name,
     "role" -> userRole.name
