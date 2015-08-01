@@ -4,6 +4,7 @@ import models.{UserAccount, UserRole}
 import org.mindrot.jbcrypt.BCrypt
 import play.api.db.slick.Session
 import play.api.db.slick._
+import play.api.libs.json.Json
 
 import scala.slick.jdbc.JdbcBackend._
 
@@ -158,5 +159,18 @@ trait UserAccountFunctions {
     query.list
   }
 
+  def getAliases(user:UserAccount)={
+    UserProfiles.find(Json.obj("userId" -> user)).map{ profiles =>
+      profiles.length match {
+        case 0 => List();
+        case _ =>
+          profiles.head.aliases match {
+            case None => List()
+            case Some(aliases) => aliases
+          }
+      }
+
+    }
+  }
 
 }

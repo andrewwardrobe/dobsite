@@ -13,5 +13,6 @@ object JsonFormats {
   implicit val postFormat = Json.format[MongoPost]
   implicit val discFormat = Json.format[Discography]
   implicit val bioFormat = Json.format[Biography]
-  implicit val userForormat = Json.format[UserAccount]
+  implicit val userForrmat = Json.format[UserAccount]
+  implicit val profileFormat = Json.format[Profile]
 }
