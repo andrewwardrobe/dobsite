@@ -8,19 +8,15 @@ import play.api.db.slick._
 
 import play.api.Play.current
 import play.api.libs.json.{Json, JsValue}
+import reactivemongo.bson.BSONObjectID
 import scala.text._
 import scala.util.matching.Regex
 
 /**
  * Created by andrew on 23/12/14.
  */
-case class UserAccount(_id: Int, email: String, password: String, name: String, role: String, aliasLimit: Option[Int] = None) {
-  val json: JsValue = Json.obj(
-    "id" -> _id,
-    "email" -> email,
-    "name" -> name,
-    "role" -> userRole.name
-  )
+case class UserAccount(_id: BSONObjectID, email: String, password: String, name: String, role: String, aliasLimit: Option[Int] = None) {
+
 
   def hasPermission(required: UserRole) = {
     UserRole.roleHasAuthority(userRole,required)

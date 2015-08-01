@@ -1,6 +1,8 @@
 package data
 
-import models.MongoPost
+import data.UserAccounts._
+import models.{UserAccount, MongoPost}
+import org.mindrot.jbcrypt.BCrypt
 import play.api.Play.current
 import java.util.{NoSuchElementException, Date}
 
@@ -13,6 +15,8 @@ import play.modules.reactivemongo.json.ImplicitBSONHandlers
 import play.modules.reactivemongo.json.BSONFormats._
 import play.api.Play.current
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import reactivemongo.bson.BSONDocument
+import reactivemongo.core.commands.Count
 
 import scala.concurrent.Future
 
@@ -64,5 +68,16 @@ class DAOBase[T](val collectionName : String) {
 
   def delete(id: String)(implicit format: OFormat[T]) = {
     collection.remove(Json.obj("_id" -> Json.obj("$oid" -> id)))
+  }
+
+  def deleteAll = {
+    collection.remove(Json.obj())
+  }
+
+  def count(query :JsValue) = {
+    val doc = BSONFormats.toBSON(query).get.asInstanceOf[BSONDocument]
+    collection.db.command(
+      Count(collection.name, Some(doc))
+    )
   }
 }

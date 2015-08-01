@@ -76,14 +76,12 @@ trait UserAccountFunctions {
   }
 
   def authenticate(email: String, password: String)(implicit s: Session): Option[UserAccount] = {
-
     email.contains("@") match {
       case true =>
         findByEmail(email).filter { account => BCrypt.checkpw(password, account.password)}
       case false =>
         findByName(email).filter { account => BCrypt.checkpw(password, account.password)}
     }
-    //Some(new UserAccount(1,"Test User","None","MC Donalds",UserRole.valueOf("NormalUser")))
   }
 
   def create(userAccount: UserAccount)(implicit s: Session) =  {
