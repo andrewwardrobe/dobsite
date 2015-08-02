@@ -5,7 +5,7 @@ import java.util.{UUID, Date}
 import com.daoostinboyeez.git.{GitRepo}
 import com.daoostinboyeez.site.exceptions.AliasLimitReachedException
 import controllers.Application._
-import data.{UserAccounts, Profiles, Tags, Content}
+import data._
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
 import models._
@@ -22,8 +22,9 @@ import play.api.db.slick.DBAction
 
 import play.api.db.slick._
 import play.api.db.slick.Config.driver.simple._
+import scala.concurrent.Future
 import scala.slick.jdbc.JdbcBackend._
-
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
 
 /**
@@ -40,11 +41,12 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     Ok(views.html.index(Some(user)))
   }
 
-  def profile = StackAction(AuthorityKey -> InActiveUser) { implicit request =>
+  def profile = AsyncStack(AuthorityKey -> InActiveUser) { implicit request =>
     database.withSession { implicit session =>
       val user = loggedIn
-      val profile = Profiles.getByUserId(user._id)
-      Ok(views.html.profile("", user, profile))
+      UserProfiles.getByUserId(user._id).map { profiles =>
+          Ok(views.html.profile("", user, profiles.headOption))
+      }
     }
   }
 
@@ -90,7 +92,8 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
             case _ => None
           }
 
-          val newItem = Content.save(item,repo,Some(user._id),tags)
+//          val newItem = Content.save(item,repo,Some(user._id),tags) change this back later
+          val newItem = Content.save(item,repo,None,tags)
           Ok(newItem.json)
 
         }else
@@ -105,21 +108,16 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     new String(""+date.getTime)
   }
 
-  def addAlias(alias: String) = StackAction(AuthorityKey -> Contributor) { implicit request =>
+  def addAlias(alias: String) = AsyncStack(AuthorityKey -> Contributor) { implicit request =>
     val user = loggedIn
-    database.withSession { implicit session =>
       try {
-        UserAccounts.addAlias(user, alias) match {
-          case true => Ok(alias)
-          case false => BadRequest("Alias already in use")
+        UserProfiles.addAlias(user, alias).map { result =>
+          Ok(alias)
         }
       } catch {
-        case ex: AliasLimitReachedException => BadRequest("Alias Limit Reached")
+        case ex: AliasLimitReachedException => Future.successful(BadRequest("Alias Limit Reached"))
       }
-
-    }
   }
-
   //TODO: Reactor this to use the save from content
   def submitBlogUpdate = StackAction(AuthorityKey -> Contributor) { implicit request =>
     val user = loggedIn
@@ -144,7 +142,8 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
             case _ => None
           }
 
-          val newItem = Content.save(item, repo, Some(user._id), tags)
+         //put this back  val newItem = Content.save(item, repo, Some(user._id), tags)//
+          val newItem = Content.save(item, repo, None, tags)
           Ok(newItem.json)
 
         } else

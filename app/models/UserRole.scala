@@ -59,13 +59,14 @@ object UserRole {
   case object Contributor extends UserRole("Contributor")
   case object TrustedContributor extends UserRole("TrustedContributor")
   case object InActiveUser extends UserRole("InActiveUser")
+  case object InvalidUser extends UserRole("InvalidRole")
   def valueOf(value: String): UserRole = value match {
     case "Administrator" => Administrator
     case "NormalUser" => NormalUser
     case "TrustedContributor" => TrustedContributor
     case "Contributor" => Contributor
     case "InActiveUser" => InActiveUser
-    case _ => throw new IllegalArgumentException(value)
+    case _ => InvalidUser
   }
 
   def roleHasAuthority(role: UserRole, authority: UserRole) = {

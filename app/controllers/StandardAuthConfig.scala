@@ -32,25 +32,18 @@ trait StandardAuthConfig extends AuthConfig {
 
   val idTag: ClassTag[Id] = classTag[Id]
 
-  def resolveUser(id: Id)(implicit ctx: ExecutionContext): Future[Option[User]] = { database.withSession{ implicit s =>
-    Future.successful(UserAccounts.findByName(id))
-  } }
+  def resolveUser(id: Id)(implicit ctx: ExecutionContext): Future[Option[User]] = {
+    UserAccounts.findByName(id).map { users =>
+      users.headOption
+    }
+  }
 
   def loginSucceeded(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] = {
     val uri = request.session.get("access_uri").getOrElse(routes.Application.index()).toString()
     val req = request match {
       case r:Request[_] => r
     }
-    val email = req.body.asInstanceOf[AnyContentAsFormUrlEncoded].data("email")(0)
-    val user = database.withSession { implicit s =>
-      email.contains("@") match {
-        case true =>
-          UserAccounts.getUserName(email).get
-        case false =>
-          email
-      }
-    }
-    Future.successful(Redirect(uri).withSession(request.session - "access_uri").withSession("username" -> user))
+    Future.successful(Redirect(uri).withSession(request.session - "access_uri"))
 
   }
 

@@ -12,14 +12,11 @@ import play.api.db.slick.Session
  *
  */
 trait UserAliasFunctions {
-  this: UserAliasSchema with UserAccountSchema =>
+  this: UserAliasSchema =>
   import play.api.db.slick.Config.driver.simple._
 
   def aliasAvailable(alias: String)(implicit session: Session) = {
-    if (userAlias.filter(_.alias === alias).list.isEmpty && accounts.filter(_.name === alias).list.isEmpty)
-      true
-    else
-      false
+    true
   }
 
   def aliasCount(user: UserAccount)(implicit session: Session) = {

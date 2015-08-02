@@ -4,11 +4,14 @@ import com.daoostinboyeez.git.GitRepo
 import controllers.Authorised._
 import data.{ContentReloader, UserAccounts}
 import jp.t2v.lab.play2.auth.AuthElement
-import models.UserAccount
-import models.UserRole.Administrator
+import models.{UserRole, UserAccount}
+import models.UserRole.{InvalidUser, Administrator}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc.Controller
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
+
+import scala.concurrent.Future
 
 /**
  * Created by andrew on 25/01/15.
@@ -31,27 +34,32 @@ object Admin extends Controller with AuthElement with StandardAuthConfig{
     Ok(views.html.bulkuploader("",user))
   }
 
-  def changeRole(name: String,role:String) = StackAction(AuthorityKey -> Administrator) {  implicit request =>
+  def changeRole(name: String,role:String) = AsyncStack(AuthorityKey -> Administrator) {  implicit request =>
 
-    database.withSession { implicit s =>
-      val user = UserAccounts.findByName(name).get
-      UserAccounts.changeRole(user, role)
-    } match {
-      case 0 => Ok("")
-      case 1=> BadRequest("Unknown User Role")
+    UserAccounts.findByEmail(name).map { users =>
+      users.headOption match {
+        case None => BadRequest("Unknown User")
+        case Some(user) => {
+          UserRole.valueOf(role) match {
+            case InvalidUser => BadRequest("Unknown User Role")
+            case _ => {
+              UserAccounts.changeRole(user, role)
+              Ok("User Role changed")
+            }
+          }
+        }
+      }
     }
   }
 
-  def changeEmail(name: String, email:String) = StackAction(AuthorityKey -> Administrator) { implicit request =>
-
-    database.withSession { implicit s =>
-      UserAccounts.getEmailCount(email) match {
-        case 0 =>
-          val user = UserAccounts.findByName(name).get
+  def changeEmail(name: String, email:String) = AsyncStack(AuthorityKey -> Administrator) { implicit request =>
+    UserAccounts.findByName(name).map { result =>
+      result.headOption match {
+        case Some(user) => {
           UserAccounts.newEmail(user, email)
           Ok("Email Updated")
-        case _ =>
-          BadRequest("Email In Use")
+        }
+        case None => BadRequest("Account Not Found")
       }
     }
   }
@@ -66,16 +74,21 @@ object Admin extends Controller with AuthElement with StandardAuthConfig{
     )(PassChange.apply)(PassChange.unapply)
   }
 
-  def changePassword = StackAction(AuthorityKey -> Administrator) { implicit request =>
+  def changePassword = AsyncStack(AuthorityKey -> Administrator) { implicit request =>
     val data: PassChange = changePassForm.bindFromRequest().get
     if (data.password != data.confirm) {
-      BadRequest("Passwords Do Not Match")
+      Future.successful(BadRequest("Passwords Do Not Match"))
     } else {
-      database.withSession { implicit s =>
-        val user = UserAccounts.findByName(data.userName).head
-        UserAccounts.newPasswd(user, data.password)
+      UserAccounts.findByName(data.userName).map { result =>
+        result.headOption match {
+          case Some(user) => {
+            UserAccounts.newPasswd(user,data.password)
+            Ok("Password Updated")
+          }
+          case None =>
+            BadRequest("User Account Not Found")
+        }
       }
-      Ok("Password Updated")
     }
   }
 }

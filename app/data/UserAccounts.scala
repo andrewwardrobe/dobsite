@@ -1,14 +1,14 @@
 package data
 
 import data.Users._
-import models.UserAccount
+import models.{UserRole, UserAccount}
 import org.mindrot.jbcrypt.BCrypt
 import play.api.db.DB
 import play.api.libs.json.Json
 import reactivemongo.bson.BSONDocument
 import reactivemongo.core.commands.Count
 
-import scala.concurrent.Await
+import scala.concurrent.{Future, Await}
 import scala.slick.jdbc.JdbcBackend._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import scala.concurrent.duration.DurationInt
@@ -42,7 +42,11 @@ object UserAccounts extends DAOBase[UserAccount]("users") {
     }
   }
 
+  //Todo Change role
 
+  def changeRole(user: UserAccount, roleType :String) = {
+    update(user._id.toString(),user.copy(role = roleType))
+  }
 
   def create(user: UserAccount) = {
     val encPass = BCrypt.hashpw(user.password, BCrypt.gensalt())
@@ -77,6 +81,9 @@ object UserAccounts extends DAOBase[UserAccount]("users") {
     count(Json.obj("email" -> email ))
   }
 
+  def getUsersLike(name :String) ={
+    find(Json.obj( "name" -> Json.obj("$regex" -> s"^${name}.*")))
+  }
 }
 
 

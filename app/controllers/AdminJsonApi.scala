@@ -28,7 +28,7 @@ import scala.text
 
 import play.api.libs.json._
 import play.api.libs.json.Json._
-
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
 object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig {
 
@@ -36,16 +36,20 @@ object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig 
 
   private val defaultAuthor = Play.application.configuration.getString("content.defaultauthor").getOrElse("Da Oostin Boyeez")
 
-  def getUsers(name:String) = StackAction(AuthorityKey -> Administrator) { implicit request =>
-    database.withSession{ implicit s =>
-      Ok(toJson(UserAccounts.getUsersLike(name)))
+  def getUsers(name:String) = AsyncStack(AuthorityKey -> Administrator) { implicit request =>
+    UserAccounts.getUsersLike(name).map { users =>
+      Ok(toJson(users))
     }
+
   }
 
 
-  def getUser(name:String) = StackAction(AuthorityKey -> Administrator) { implicit request =>
-    database.withSession{ implicit s =>
-      Ok(toJson(UserAccounts.findByName(name).head))
+  def getUser(name:String) = AsyncStack(AuthorityKey -> Administrator) { implicit request =>
+    UserAccounts.findByName(name).map { users =>
+      users.headOption match {
+        case Some(user) => Ok(toJson(user))
+        case None => NotFound("User Not Found")
+      }
     }
   }
 
