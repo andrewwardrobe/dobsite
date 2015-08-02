@@ -2,7 +2,7 @@ package test.unit
 
 import com.daoostinboyeez.git.GitRepo
 import controllers.StandardAuthConfig
-import data.{UserAccounts, Profiles}
+import data.{UserProfiles, UserAccounts}
 import jp.t2v.lab.play2.auth.test.Helpers._
 import models.{ContentPost}
 import org.scalatest.BeforeAndAfter
@@ -52,7 +52,7 @@ class AdminControllerSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
 
   after{
     database.withSession { implicit session =>
-      Profiles.deleteAll
+      UserProfiles.deleteAll
       UserAccounts.deleteAll
     }
   }

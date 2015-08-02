@@ -2,7 +2,7 @@ package test.unit
 
 import com.daoostinboyeez.git.GitRepo
 import controllers.StandardAuthConfig
-import data.{Content, UserAccounts, Profiles}
+import data.{Content, UserAccounts, UserProfiles}
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB
@@ -74,7 +74,7 @@ class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAft
   after{
     database.withSession { implicit session =>
       Content.deleteAll
-      Profiles.deleteAll
+      UserProfiles.deleteAll
       UserAccounts.deleteAll
 
     }

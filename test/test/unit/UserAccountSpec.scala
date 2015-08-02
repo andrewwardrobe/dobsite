@@ -7,7 +7,7 @@
 
 package test.unit
 
-import data.UserAccounts
+import data.{UserProfiles, UserAccounts}
 import models.{UserProfile, UserRole}
 import models.UserRole.NormalUser
 import org.scalatest.BeforeAndAfter
@@ -31,7 +31,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       "Have associated user profiles" in {
         val user = UserAccountHelper.createUserAndProfile("TestUser","TestUser","TrustedContributor")
         database.withSession { implicit session =>
-          UserAccounts.getProfile(user) must not be None
+          UserProfiles.getByUserId(user._id) must not be None
         }
       }
       "Allow for user aliases" in {
@@ -44,7 +44,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
     "Be able an assign an alias to a user" in {
       val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
       database.withSession { implicit session =>
-        UserAccounts.addAlias(user, "Leek")
+        UserProfiles.addAlias(user, "Leek")
         UserAccounts.getAliasesAsString(user).head mustEqual "Leek"
       }
     }
@@ -53,7 +53,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       UserAccountHelper.createUserWithAlias("Andrew", "Andrew", "pa$$word", "Contributor", "Leek")
       val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
       database.withSession { implicit session =>
-        UserAccounts.addAlias(user, "Leek")
+        UserProfiles.addAlias(user, "Leek")
         UserAccounts.getAliasesAsString(user) must not contain "Leek"
       }
     }
@@ -62,7 +62,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       UserAccountHelper.createUserWithAlias("Andrew", "Andrew", "pa$$word", "Contributor", "Leek")
       val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
       database.withSession { implicit session =>
-        UserAccounts.addAlias(user, "Andrew")
+        UserProfiles.addAlias(user, "Andrew")
         UserAccounts.getAliasesAsString(user) must not contain "Andrew"
       }
     }
@@ -70,7 +70,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
 
   after {
     database.withSession { implicit session =>
-      UserAccounts.removeAllAliases
+      UserProfiles.deleteAll
     }
   }
 

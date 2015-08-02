@@ -32,6 +32,8 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
  */
 object Authorised extends Controller with AuthElement with StandardAuthConfig {
 
+ import models.JsonFormats._
+ import models.Forms._
 
   val repo = GitRepo.apply()
 
@@ -56,20 +58,27 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     Ok(json)
   }
 
-  def newContent(contentType:String) = StackAction(AuthorityKey -> Contributor){  implicit request =>
+  def newContent(contentType:String) = AsyncStack(AuthorityKey -> Contributor){  implicit request =>
     val maybeUser  =  loggedIn
     val typ = ContentTypeMap.get(contentType)
-    Ok(views.html.editor("",ContentPost.blogForm,"-1",typ,Some(maybeUser)))
+    UserProfiles.getByUserId(maybeUser._id).map { profiles =>
+      Ok(views.html.editor("",ContentPost.blogForm,"-1",typ,Some(maybeUser),profiles.headOption))
+    }
+
   }
 
-  def blogInput = StackAction(AuthorityKey -> Contributor){  implicit request =>
+  def blogInput = AsyncStack(AuthorityKey -> Contributor){  implicit request =>
     val maybeUser = loggedIn
-    Ok(views.html.editor("",ContentPost.blogForm,"-1",1,Some(maybeUser)))
+    UserProfiles.getByUserId(maybeUser._id).map { profiles =>
+      Ok(views.html.editor("",ContentPost.blogForm,"-1",1,Some(maybeUser),profiles.headOption))
+    }
   }
 
-  def blogUpdate(id: String) = StackAction(AuthorityKey -> Contributor) {  implicit request =>
+  def blogUpdate(id: String) = AsyncStack(AuthorityKey -> Contributor) {  implicit request =>
     val maybeUser = loggedIn
-    Ok(views.html.editor("",ContentPost.blogForm,id,1,Some(maybeUser)))
+    UserProfiles.getByUserId(maybeUser._id).map { profiles =>
+      Ok(views.html.editor("",ContentPost.blogForm,"-1",1,Some(maybeUser),profiles.headOption))
+    }
   }
 
 
@@ -158,17 +167,14 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
 
 
   def updateProfile = StackAction(AuthorityKey -> NormalUser) { implicit request =>
-    val profile = Profiles.form.bindFromRequest().get
+    val profile = profileForm.bindFromRequest().get
     val user = loggedIn
     if (profile.userId == user._id) {
-
-        database.withSession { implicit session =>
-          Profiles.update(profile)
+          UserProfiles.update(profile._id.toString(),profile)
           Ok("")
-        }
-      }
-       else Forbidden("You do not have permission to perform this request")
-    }
+    } else
+      Forbidden("You do not have permission to perform this request")
+  }
 
 
 }

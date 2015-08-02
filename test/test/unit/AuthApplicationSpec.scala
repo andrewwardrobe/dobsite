@@ -4,8 +4,8 @@ import java.util.{Date, UUID}
 
 import com.daoostinboyeez.git.GitRepo
 import controllers.StandardAuthConfig
-import data.{Content, UserAccounts, Profiles}
-import models.{UserProfile, UserAccount, ContentTypeMap, ContentPost}
+import data.{UserProfiles, Content, UserAccounts}
+import models._
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.libs.json.Json
@@ -63,18 +63,18 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
     }
 
     "Allow Users to update the profile" in {
-      val updateProfile = new UserProfile(userProfile.id,userProfile.userId,"New user info",userProfile.avatar)
-      val result = route(FakeRequest(POST, controllers.routes.Authorised.updateProfile.url,FakeHeaders(),Profiles.toJson(updateProfile)).withLoggedIn(config)("TrustedContributor")).get
+      val updateProfile = userProfile.copy(about = "New user info")
+      val result = route(FakeRequest(POST, controllers.routes.Authorised.updateProfile.url,FakeHeaders(),UserProfiles.toJson(updateProfile)).withLoggedIn(config)("TrustedContributor")).get
       status(result) mustBe OK
       database.withSession { implicit session =>
-        val retrievedProfile = Profiles.get(updateProfile.id)
+        val retrievedProfile = UserProfiles.get(updateProfile.id)
         retrievedProfile mustEqual updateProfile
       }
     }
 
     "Prevent Users from updating others profiles" in {
-      val updateProfile = new UserProfile(userProfile.id,userProfile.userId,"New user info",userProfile.avatar)
-      val result = route(FakeRequest(POST, controllers.routes.Authorised.updateProfile.url,FakeHeaders(),Profiles.toJson(updateProfile)).withLoggedIn(config)("Contributor")).get
+      val updateProfile = userProfile.copy(about = "New user info")
+      val result = route(FakeRequest(POST, controllers.routes.Authorised.updateProfile.url,FakeHeaders(),UserProfiles.toJson(updateProfile)).withLoggedIn(config)("Contributor")).get
       status(result) mustBe FORBIDDEN
     }
 
@@ -91,7 +91,7 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
     "Thorw a meaningful error message when on the alias limit" in {
       database.withSession { implicit session =>
         for (i <- 0 to user.getAliasLimit - 1) {
-          UserAccounts.addAlias(user, s"leek${i}")
+          UserProfiles.addAlias(user, s"leek${i}")
         }
 
         val result = route(FakeRequest(POST, controllers.routes.Authorised.addAlias("Error One").url, FakeHeaders(), "").withLoggedIn(config)("TrustedContributor")).get
@@ -114,7 +114,7 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
 
   after{
     database.withSession { implicit session =>
-      Profiles.deleteAll
+      UserProfiles.deleteAll
       UserAccounts.removeAllAliases
       UserAccounts.deleteAll
       Content.deleteAll

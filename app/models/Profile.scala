@@ -8,3 +8,4 @@ import reactivemongo.bson.BSONObjectID
  *
  */
 case class Profile(_id:BSONObjectID,userId: BSONObjectID, about:String, avatar:String, aliases : Option[Seq[String]])
+

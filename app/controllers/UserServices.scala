@@ -1,7 +1,7 @@
 package controllers
 
 import controllers.Application._
-import data.{UserProfiles, Profiles, UserAccounts}
+import data.{UserProfiles, UserAccounts}
 import jp.t2v.lab.play2.auth.{OptionalAuthElement, LoginLogout}
 import models.UserRole.InActiveUser
 import models.{Profile, UserProfile, UserRoleMapping, UserAccount}
@@ -137,7 +137,7 @@ def signedout = StackAction { implicit request =>
 
   val signUpForm: Form[UserAccount] = Form {
     mapping(
-      "id" -> number,
+      "id" -> ignored(BSONObjectID.generate),
       "email" -> email.verifying(emailIsAvailable),
       "password" -> nonEmptyText(minLength = 6, maxLength = 100),
       "name" -> text.verifying(userNameIsAvailable),

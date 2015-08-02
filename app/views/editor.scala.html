@@ -1,4 +1,4 @@
-@(message: String, form: Form[ContentPost], postId: String, postType:Int = -1,user:Option[UserAccount])(implicit session : Session)
+@(message: String, form: Form[ContentPost], postId: String, postType:Int = -1,user:Option[UserAccount],profile: Option[Profile])(implicit session : Session)
 
 
 @username = {
@@ -80,7 +80,7 @@
     </div><!-- /.dob-main -->
 
     <div id="aliasDrop" style="display : none">
-    @defining(data.UserAccounts.getUserAliasesAsString(user.get)) { aliases =>
+    @defining(profile.get.aliases.getOrElse(List())) { aliases =>
         <div @if(aliases.isEmpty) {
             style="display:none"
         } else {
