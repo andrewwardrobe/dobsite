@@ -84,18 +84,19 @@ def signedout = StackAction { implicit request =>
     }
   }
 
-  def checkName(name: String) = Action{ implicit request =>
-    val count = database.withSession { implicit s =>
-      UserAccounts.getUserNameCount(name)
+  def checkName(name: String) = Action.async { implicit request =>
+    UserAccounts.getUserNameCount(name).map { count =>
+     Ok("" + count)
     }
-    Ok(""+count)
   }
 
-  def checkEmail(email: String) = Action{ implicit request =>
-    val count = database.withSession { implicit s =>
-      UserAccounts.getEmailCount(email)
+  def checkEmail(email: String) = Action.async{ implicit request =>
+    UserAccounts.getEmailCount(email).map { count =>
+      Ok(""+count)
     }
-    Ok(""+count)
+
+
+
   }
 
   val userRoleMap = new UserRoleMapping()

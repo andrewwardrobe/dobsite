@@ -11,6 +11,7 @@ import data.{UserProfiles, UserAccounts}
 import models.{UserProfile, UserRole}
 import models.UserRole.NormalUser
 import org.scalatest.BeforeAndAfter
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB
 import play.api.test.FakeApplication
@@ -18,10 +19,11 @@ import play.api.test.Helpers._
 import test._
 import test.helpers.UserAccountHelper
 
+import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend._
+import scala.concurrent.duration.DurationInt
 
-
-class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
+class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures  {
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
@@ -36,16 +38,16 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       }
       "Allow for user aliases" in {
         val user = UserAccountHelper.createUserWithAlias("Andrew","Andrew","pa$$word","Contributor","Gaz Three")
-        database.withSession { implicit session =>
-          UserAccounts.getAliasesAsString(user).head mustEqual "Gaz Three"
-        }
+
+         UserProfiles.getAliasesAsString(user).futureValue.head mustEqual "Gaz Three"
+
       }
 
     "Be able an assign an alias to a user" in {
       val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
       database.withSession { implicit session =>
         UserProfiles.addAlias(user, "Leek")
-        UserAccounts.getAliasesAsString(user).head mustEqual "Leek"
+        UserProfiles.getAliasesAsString(user).futureValue.head mustEqual "Leek"
       }
     }
 
@@ -54,7 +56,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
       database.withSession { implicit session =>
         UserProfiles.addAlias(user, "Leek")
-        UserAccounts.getAliasesAsString(user) must not contain "Leek"
+        UserProfiles.getAliasesAsString(user).futureValue must not contain "Leek"
       }
     }
 
@@ -63,7 +65,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
       database.withSession { implicit session =>
         UserProfiles.addAlias(user, "Andrew")
-        UserAccounts.getAliasesAsString(user) must not contain "Andrew"
+        UserProfiles.getAliasesAsString(user).futureValue must not contain "Andrew"
       }
     }
   }

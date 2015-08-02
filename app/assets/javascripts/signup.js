@@ -189,7 +189,7 @@ $('#signupForm').submit(function(){
     if(checkPassword() && doNameValidation() && doEmailValidation){
         result = true;
     }else{
-        alert("Invalid Password");
+        alert("Validation Failed");
         result = false;
     }
 

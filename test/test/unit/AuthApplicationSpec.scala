@@ -21,15 +21,17 @@ import jp.t2v.lab.play2.auth.test.Helpers._
  * Created by andrew on 14/09/14.
  */
 class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter{
+  import models.JsonFormats._
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
+
 
   object config extends StandardAuthConfig
 
   implicit val postFormat = Json.format[ContentPost]
 
   var user: UserAccount = _
-  var userProfile :UserProfile = _
+  var userProfile :Profile = _
 
   "Auth Application" should {
 
@@ -64,17 +66,17 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
 
     "Allow Users to update the profile" in {
       val updateProfile = userProfile.copy(about = "New user info")
-      val result = route(FakeRequest(POST, controllers.routes.Authorised.updateProfile.url,FakeHeaders(),UserProfiles.toJson(updateProfile)).withLoggedIn(config)("TrustedContributor")).get
+      val result = route(FakeRequest(POST, controllers.routes.Authorised.updateProfile.url,FakeHeaders(),Json.toJson(updateProfile)).withLoggedIn(config)("TrustedContributor")).get
       status(result) mustBe OK
       database.withSession { implicit session =>
-        val retrievedProfile = UserProfiles.get(updateProfile.id)
+        val retrievedProfile = UserProfiles.getById(updateProfile._id.toString())
         retrievedProfile mustEqual updateProfile
       }
     }
 
     "Prevent Users from updating others profiles" in {
       val updateProfile = userProfile.copy(about = "New user info")
-      val result = route(FakeRequest(POST, controllers.routes.Authorised.updateProfile.url,FakeHeaders(),UserProfiles.toJson(updateProfile)).withLoggedIn(config)("Contributor")).get
+      val result = route(FakeRequest(POST, controllers.routes.Authorised.updateProfile.url,FakeHeaders(),Json.toJson(updateProfile)).withLoggedIn(config)("Contributor")).get
       status(result) mustBe FORBIDDEN
     }
 
@@ -115,7 +117,6 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
   after{
     database.withSession { implicit session =>
       UserProfiles.deleteAll
-      UserAccounts.removeAllAliases
       UserAccounts.deleteAll
       Content.deleteAll
     }

@@ -17,7 +17,8 @@ object UserProfiles extends DAOBase[Profile]("profiles"){
   }
 
   def getByUserId(id: BSONObjectID) = {
-    find(Json.obj("userId" -> Json.obj("$oid" -> id.toString())))
+    val query = Json.obj("userId" -> Json.obj("$oid" -> id.stringify))
+    find(query)
   }
 
   def addAlias(user: UserAccount,alias :String) = {
@@ -37,6 +38,12 @@ object UserProfiles extends DAOBase[Profile]("profiles"){
         case 0 => true
         case _ => false
       }
+    }
+  }
+
+  def getAliasesAsString(user: UserAccount) = {
+    getByUserId(user._id).map{ users =>
+      users.head.aliases.getOrElse(Vector())
     }
   }
 }

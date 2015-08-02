@@ -9,7 +9,7 @@ import play.api.Play.current
 object Global extends GlobalSettings {
 
   override def onStart(app: Application) {
-    //Logger.info("Application Started")
+    Logger.info("Application Started")
   }
 
   override def onStop(app: Application) {

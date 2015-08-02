@@ -44,12 +44,11 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   }
 
   def profile = AsyncStack(AuthorityKey -> InActiveUser) { implicit request =>
-    database.withSession { implicit session =>
       val user = loggedIn
       UserProfiles.getByUserId(user._id).map { profiles =>
           Ok(views.html.profile("", user, profiles.headOption))
       }
-    }
+
   }
 
   def getEditables = StackAction(AuthorityKey -> InActiveUser) { implicit request =>

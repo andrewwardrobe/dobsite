@@ -171,7 +171,6 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
     database.withSession { implicit session =>
 
       UserProfiles.deleteAll
-      UserAccounts.removeAllAliases
       UserAccounts.deleteAll
     }
   }

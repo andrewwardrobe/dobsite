@@ -11,7 +11,9 @@ import play.api.test.Helpers._
 import test._
 import test.helpers.{UserAccountHelper, ContentHelper}
 
+import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend._
+import scala.concurrent.duration.DurationInt
 
 class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite{
 
@@ -23,7 +25,8 @@ class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite{
     "Be able to create an account" in {
       database.withSession { implicit session =>
         UserAccountHelper.createUser("test", "test@test.com", "pa$$word", "NormalUser")
-        UserAccounts.findByEmail("test@test.com") mustBe defined
+        val res = Await.result(UserAccounts.findByEmail("test@test.com"),10 seconds)
+        res must not be empty
       }
     }
   }
