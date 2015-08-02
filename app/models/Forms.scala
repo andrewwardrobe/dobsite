@@ -20,4 +20,18 @@ object Forms {
       "aliases" -> optional(seq(text))
     )(Profile.apply)(Profile.unapply _)
   }
+
+  val blogForm: Form[MongoPost] = Form {
+    mapping (
+      "id" -> ignored(BSONObjectID.generate :BSONObjectID),
+      "title" -> text,
+      "postType" -> number,
+      "dateCreated" -> date("yyyyMMddHHmmss"),
+      "author" ->text,
+      "content" -> text,
+      "extraData" -> text,
+      "isDraft" -> boolean,
+      "userId" -> optional(number)
+    )(MongoPost.apply)(MongoPost.unapply _)
+  }
 }

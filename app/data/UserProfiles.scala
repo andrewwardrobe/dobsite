@@ -26,7 +26,8 @@ object UserProfiles extends DAOBase[Profile]("profiles"){
       users.headOption match {
         case Some(profile) => {
           val aliasList = profile.aliases.getOrElse(Nil) ++: List(alias)
-          update(profile._id.toString(),profile.copy(aliases = Some(aliasList)))
+          val updated = profile.copy(aliases = Some(aliasList))
+          update(profile._id.stringify,updated)
         }
       }
     }

@@ -1,5 +1,7 @@
 package controllers
 
+import java.util.Date
+
 import data.PostDAO
 import play.api.data.Form
 import play.api.data.Forms._
@@ -39,6 +41,7 @@ object MongoStuff extends Controller with MongoController with  OptionalAuthElem
       "id" -> ignored(BSONObjectID.generate :BSONObjectID),
       "title" -> text,
       "postType" -> number,
+      "dateCreated" -> date("yyyyMMddHHmmss"),
       "author" ->text,
       "content" -> text,
       "extraData" -> text,
@@ -81,7 +84,7 @@ object MongoStuff extends Controller with MongoController with  OptionalAuthElem
   }
 
   def save() = Action.async {
-    val leek = new MongoPost(BSONObjectID.generate,"Leek Post",1,"Andrew","Twat Bat", "", false, Some(43))
+    val leek = new MongoPost(BSONObjectID.generate,"Leek Post",1,new Date(),"Andrew","Twat Bat", "", false, Some(43))
     val result = PostDAO.insert(leek)
     result.map { res =>
       Ok("Inseted" +res.toString)
