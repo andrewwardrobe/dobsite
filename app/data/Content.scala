@@ -13,4 +13,10 @@ object Content extends DAOBase[MongoPost]("posts"){
   def findByType(typeId: Int) = {
     find(Json.obj("typeId" -> typeId ))
   }
+
+  //Todo write this
+  def save = {
+
+  }
+
 }

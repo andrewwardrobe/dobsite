@@ -1,6 +1,5 @@
 package data
 
-import data.Users._
 import models.{UserRole, UserAccount}
 import org.mindrot.jbcrypt.BCrypt
 import play.api.db.DB

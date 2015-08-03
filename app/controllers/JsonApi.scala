@@ -70,36 +70,40 @@ object JsonApi extends Controller {
   }
 
   //Todo delete this function
-  def getContentTags(id:String) = DBAction { implicit response =>
-    val json = Content.getTagsAsJson(id)
-    Ok(toJson(json))
-  }
-
-  def getPostRevisionById(id: String, revId : String) = DBAction { implicit response =>
-    Ok(toJson(Content.getById(id).head.json(revId)))
-  }
-
-  def getRevisions(id: String) =  DBAction { implicit response =>
-    val post = Content.getById(id)
-      post.isEmpty match{
-        case false => {
-          val filename = post.head.content
-          val revisions = repo.findRevDates(filename)
-          revisions.isEmpty match {
-            case false => {
-              Ok(toJson(revisions))
-            }
-            case true => {
-              Ok(toJson("None"))
-            }
-          }
+  def getContentTags(id:String) = Action.async { implicit response =>
+    Content.getById(id).map { posts =>
+      posts.headOption match {
+        case Some(post) => post.tags match {
+          case Some(tags) => Ok(toJson(tags))
+          case None => NoContent
         }
-        case true => Ok(toJson("None"))
+        case None => NotFound(s"Cannot Find Post with id $id")
       }
-
+    }
   }
 
-  def getRevisionsWithDates(id: String) =  DBAction { implicit response =>
+  def getPostRevisionById(id: String, revId : String) = Action.async { implicit response =>
+    Content.getById(id).map { posts =>
+      posts.headOption match {
+        case Some(post) => Ok(toJson(post.revision(revId,repo)))
+      }
+    }
+  }
+
+  //Todo should this be a future??
+  def getRevisions(id: String) =  Action { implicit response =>
+    val revisions = repo.findRevDates(id)
+    revisions.isEmpty match {
+      case false => {
+        Ok(toJson(revisions))
+      }
+      case true => {
+        Ok(toJson("None"))
+      }
+    }
+  }
+  //Todo should this be a future??
+  def getRevisionsWithDates(id: String) =  Action { implicit response =>
     val revisions = repo.findWithDate(id)
         revisions.isEmpty match {
           case false => {
@@ -119,64 +123,87 @@ object JsonApi extends Controller {
     blogsJson.toList
   }
 
-  def getNewsByRange(start: String, num: Int) = DBAction { implicit response =>
-    if(start != -1) {
-      val newsList = blogToJson(Content.getXNewsItemsFromId(start, num))
-      Ok(toJson(newsList))
-    }else {
-      val newsList = blogToJson(Content.getXNewsItems(num))
-      Ok(toJson(newsList))
+
+
+  def getContentByDate(typ: Int)  = Action.async { implicit response =>
+    val query = Json.obj(
+      "typeId" -> typ
+    )
+    Content.find(query,Json.obj("dateCreated" -> -1 )).map { posts =>
+      Ok(toJson(posts))
     }
   }
 
-  def getContentByDate(typ: Int)  = DBAction { implicit response =>
-    val contentList = blogToJson(Content.getByDate(typ))
-    Ok(toJson(contentList))
-  }
 
-
-  def getDraftsByUserLatestFirst(id:Int) = DBAction { implicit response=>
-    Content.find
-    val posts = Content.getDraftContentByUserLatestFirst(id)
-    Ok(toJson(blogToJson(posts)))
-  }
-
-  def getContentByUserLatestFirst(id:Int) = DBAction { implicit response=>
-    val posts = Content.getLiveContentByUserLatestFirst(id)
-    Ok(toJson(blogToJson(posts)))
-  }
-
-  def getRandomPosts(typ:Int, max : Int) = DBAction { implicit response =>
-    val posts = Content.getRandomPosts(typ,max)
-    Ok(toJson(blogToJson(posts)))
-  }
-
-  def getContentByDateStart(typ: Int,startDate: String,max :Int)  = DBAction { implicit response =>
-    val contentList = startDate match {
-      case s if s.isEmpty() || s == "" => Content.find(Json.obj( "postType" -> typ),QueryOpts(batchSizeN = max))
-      case s if s == "today" => { blogToJson(Content.getByDate(typ,new Date(),max)) }
-      case _ => {
-        val df = new SimpleDateFormat("yyyyMMddHHmmss")
-        blogToJson(Content.getByDate(typ,df.parse(startDate),max))
-      }
+  def getDraftsByUserLatestFirst(id:String) = Action.async { implicit response=>
+    val query = Json.obj(
+      "userId" -> Json.obj("$oid" -> id),
+      "isDraft" -> true
+    )
+    Content.find(query,Json.obj("dateCreated" -> -1 )).map { posts =>
+      Ok(toJson(posts))
     }
-    Ok(toJson(contentList))
   }
 
-  def getContentByAuthorDateStart(author: String, typ: Int, startDate: String, max: Int) = DBAction { implicit response =>
-    val contentList = startDate match {
+  def getContentByUserLatestFirst(id:String) = Action.async { implicit response=>
+    val query = Json.obj(
+      "userId" -> Json.obj("$oid" -> id),
+      "isDraft" -> false
+    )
+    Content.find(query,Json.obj("dateCreated" -> -1 )).map { posts =>
+      Ok(toJson(posts))
+    }
+  }
+
+  def getRandomPosts(typ:Int, max : Int) = Action.async { implicit response =>
+    Content.findByType(typ).map { articles =>
+      Ok(toJson(articles))
+    }
+  }
+
+  def getContentByDateStart(typ: Int,startDate: String,max :Int)  = Action.async { implicit response =>
+    val date = startDate match {
       case s if s.isEmpty() || s == "" => {
-        blogToJson(Content.getLiveContentByAuthorLatestFirst(author, typ, new Date(), max))
+        new Date()
       }
       case s if s == "today" => {
-        blogToJson(Content.getLiveContentByAuthorLatestFirst(author, typ, new Date(), max))
+        new Date()
       }
       case _ => {
         val df = new SimpleDateFormat("yyyyMMddHHmmss")
-        blogToJson(Content.getLiveContentByAuthorLatestFirst(author, typ, df.parse(startDate), max))
+        df.parse(startDate)
       }
     }
-    Ok(toJson(contentList))
+    val query = Json.obj(
+      "typeId" -> typ,
+      "dateCreated" -> Json.obj("$lt" -> Json.obj("$date" -> date))
+    )
+    Content.find(query, Json.obj("dateCreated" -> -1 ), max).map{ posts =>
+      Ok(toJson(posts))
+    }
+  }
+
+  def getContentByAuthorDateStart(author: String, typ: Int, startDate: String, max: Int) = Action.async { implicit response =>
+    val date = startDate match {
+      case s if s.isEmpty() || s == "" => {
+        new Date()
+      }
+      case s if s == "today" => {
+       new Date()
+      }
+      case _ => {
+        val df = new SimpleDateFormat("yyyyMMddHHmmss")
+        df.parse(startDate)
+      }
+    }
+    val query = Json.obj(
+      "typeId" -> typ,
+      "author" -> author,
+      "dateCreated" -> Json.obj("$lt" -> Json.obj("$date" -> date))
+    )
+    Content.find(query, Json.obj("dateCreated" -> -1 ), max).map{ posts =>
+      Ok(toJson(posts))
+    }
   }
 
 

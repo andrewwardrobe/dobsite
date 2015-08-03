@@ -45,6 +45,19 @@ class DAOBase[T](val collectionName : String) {
     items
   }
 
+  def find(query :JsObject,  max :Int)(implicit format: OFormat[T]) = {
+    val documents = collection.find(query).options(QueryOpts().batchSize(max))
+    try {
+      val cursor = documents.cursor[T]
+      cursor.collect[Vector]()
+    }catch{
+      case ex : NoSuchElementException =>
+        Future {
+          Vector()
+        }
+    }
+  }
+
   def find(query :JsObject,  queryOptions :QueryOpts)(implicit format: OFormat[T]) = {
     val documents = collection.find(query).options(queryOptions)
     try {

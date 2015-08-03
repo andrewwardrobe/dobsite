@@ -48,18 +48,7 @@ trait ContentAccessFunctions {this: ContentPostSchema =>
       && post.isDraft === true).sortBy(_.dateCreated.desc).list
   }
 
-  //Does this belong here? cut it be moved to a trait?
-  def getTags(id:String)(implicit s:Session) = {
-    Tags.contentTags.filter(_.postId === id).flatMap(_.tagsFK).list
-  }
 
-  def getTagsAsJson(id:String)(implicit s:Session) = {
-    val lb = new ListBuffer[String]
-    getTags(id).foreach { t =>
-      lb += t.title
-    }
-    Json.toJson(lb.toList)
-  }
 
   def getXNewsItemsFromId(id: String, max: Int)(implicit s: Session) = {
     getXItemsFromId(id,max,1)

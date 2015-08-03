@@ -24,6 +24,7 @@ import org.apache.commons.io
 /**
  * Created by andrew on 25/01/15.
  */
+//Todo make a base class for this
 class GitRepo {
 
   val repoLocation = Play.application.configuration.getString("git.repo.dir").getOrElse("content/.git")

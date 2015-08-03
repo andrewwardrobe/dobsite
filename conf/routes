@@ -64,16 +64,16 @@ GET         /json/news                                                controller
 GET         /json/content/tags/:id                                    controllers.JsonApi.getContentTags(id: String)
 GET         /json/content/random/:typ/:max                            controllers.JsonApi.getRandomPosts(typ:Int, max:Int)
 GET         /json/content/:id                                         controllers.JsonApi.getPostById(id: String)
-GET         /json/content/byuser/:id                                  controllers.JsonApi.getContentByUserLatestFirst(id: Int)
-GET         /json/drafts/byuser/:id                                   controllers.JsonApi.getDraftsByUserLatestFirst(id: Int)
-GET         /json/content/byuser/:id/desc                             controllers.JsonApi.getContentByUserLatestFirst(id: Int)
+GET         /json/content/byuser/:id                                  controllers.JsonApi.getContentByUserLatestFirst(id: String)
+GET         /json/drafts/byuser/:id                                   controllers.JsonApi.getDraftsByUserLatestFirst(id: String)
+GET         /json/content/byuser/:id/desc                             controllers.JsonApi.getContentByUserLatestFirst(id: String)
 GET         /json/content/:id/revisions                               controllers.JsonApi.getRevisionsWithDates(id: String)
 GET         /json/content/:id/revisions/:revId                        controllers.JsonApi.getPostRevisionById(id: String, revId: String)
 GET         /json/content/bytype/:type                                controllers.JsonApi.getContentByType(type: Int)
 GET         /json/content/bydate/:type                                controllers.JsonApi.getContentByDate(type: Int)
 GET         /json/content/bydate/:type/:startDate/:max                controllers.JsonApi.getContentByDateStart(type: Int,startDate: String,max :Int)
 GET         /json/content/author/:author/:type/:startDate/:max        controllers.JsonApi.getContentByAuthorDateStart(author: String,type: Int,startDate: String,max :Int)
-GET         /json/news/:id/:max                                       controllers.JsonApi.getNewsByRange(id: String, max: Int)
+
 
 # Home page
 #Be able to access any content via its id (change this later to be a cool redirecty thing)

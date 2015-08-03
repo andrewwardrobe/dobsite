@@ -1,11 +1,11 @@
-@(post: ContentPost,tags: List[ContentTag], extraData: Map[String, String], user:Option[UserAccount])(implicit session : Session)
+@(post: MongoPost, extraData: Map[String, String], user:Option[UserAccount])(implicit session : Session)
 
 @content = {
 <div class="row" >
 
     <div  class="col-md-10  col-sm-offset-1 dob-main">
-        <input type="hidden" name="postId" id="postId" value="@post.id" />
-        <div class="pull-right"><a id="editLink" class="expander" href="@routes.Authorised.blogUpdate(post.id)"><span class="fa fa-pencil"></span></a></div>
+        <input type="hidden" name="postId" id="postId" value="@post._id.stringify" />
+        <div class="pull-right"><a id="editLink" class="expander" href="@routes.Authorised.blogUpdate(post._id.stringify)"><span class="fa fa-pencil"></span></a></div>
         <h2 class="dob-post-title" id="postTitle" contenteditable="true">@post.title</h2>
         <input type="hidden" value="1" id="@post.postType" />
         <div>
@@ -19,13 +19,18 @@
                 }
                 case None =>{}
             }
-            <div id="initText">@Html(post.getContent())</div>
+            <div id="initText">@Html(post.content)</div>
         </div>
     </div>
     <div  class="col-md-10  col-sm-offset-1 dob-main">
         <div id="tags">
-            @for(tag <- tags){
-                <a id="tag_@tag.title">@tag.title</a>
+            @post.tags match {
+                case Some(tags) => {
+                    @for(tag <- tags){
+                        <a id="tag_@tag">@tag</a>
+                    }
+                }
+                case None => {}
             }
         </div>
     </div>
