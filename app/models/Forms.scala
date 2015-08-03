@@ -4,6 +4,8 @@ import play.api.data.Form
 import play.api.data.Forms._
 import reactivemongo.bson.BSONObjectID
 
+import scala.util.{Failure, Success}
+
 
 /**
  *
@@ -11,15 +13,25 @@ import reactivemongo.bson.BSONObjectID
  *
  */
 object Forms {
+
+  def bsonMapper(id:String) = {
+    val bson = BSONObjectID.parse(id)
+    bson match {
+      case Success(obj) => obj
+      case Failure(ex) => BSONObjectID.generate
+    }
+  }
   val profileForm : Form[Profile] = Form {
     mapping (
-      "id" -> ignored(BSONObjectID.generate), //Todo this will cause issues
-      "userId" -> ignored(BSONObjectID.generate), //Todo so will this
+      "id" -> text.transform[BSONObjectID]({ s => bsonMapper(s)},{b => b.stringify}),
+      "userId" -> text.transform[BSONObjectID]({ s => bsonMapper(s)},{b => b.stringify}),
       "about" -> text,
       "avatar" -> text,
       "aliases" -> optional(seq(text))
     )(Profile.apply)(Profile.unapply _)
   }
+
+  //Todo do use mapper. transotrm
 
   val blogForm: Form[MongoPost] = Form {
     mapping (

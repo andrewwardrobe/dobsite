@@ -169,7 +169,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     val profile = profileForm.bindFromRequest().get
     val user = loggedIn
     if (profile.userId == user._id) {
-          UserProfiles.update(profile._id.toString(),profile)
+          UserProfiles.update(profile._id.stringify,profile)
           Ok("")
     } else
       Forbidden("You do not have permission to perform this request")

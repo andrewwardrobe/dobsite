@@ -45,7 +45,7 @@ object UserAccounts extends DAOBase[UserAccount]("users") {
   //Todo Change role
 
   def changeRole(user: UserAccount, roleType :String) = {
-    update(user._id.toString(),user.copy(role = roleType))
+    update(user._id.stringify,user.copy(role = roleType))
   }
 
   def create(user: UserAccount) = {
@@ -66,11 +66,11 @@ object UserAccounts extends DAOBase[UserAccount]("users") {
 
   def newPasswd(userAccount: UserAccount, passwd: String) = {
     val encPass = BCrypt.hashpw(passwd, BCrypt.gensalt())
-    update(userAccount._id.toString(), userAccount.copy(password = passwd))
+    update(userAccount._id.stringify, userAccount.copy(password = passwd))
   }
 
   def newEmail(userAccount: UserAccount, newEmail: String) = {
-    update(userAccount._id.toString(), userAccount.copy(email = newEmail))
+    update(userAccount._id.stringify, userAccount.copy(email = newEmail))
   }
 
   def getUserNameCount(name:String) = {
