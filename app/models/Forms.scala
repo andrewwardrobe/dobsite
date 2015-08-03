@@ -43,7 +43,8 @@ object Forms {
       "content" -> text,
       "extraData" -> text,
       "isDraft" -> boolean,
-      "userId" -> optional(number)
+      "userId" -> optional(text.transform[BSONObjectID]({ s => bsonMapper(s)},{b => b.stringify})),
+      "tags" -> optional(seq(text))
     )(MongoPost.apply)(MongoPost.unapply _)
   }
 }

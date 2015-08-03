@@ -15,6 +15,7 @@ import play.modules.reactivemongo.json.ImplicitBSONHandlers
 import play.modules.reactivemongo.json.BSONFormats._
 import play.api.Play.current
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import reactivemongo.api.QueryOpts
 import reactivemongo.bson.BSONDocument
 import reactivemongo.core.commands.Count
 
@@ -42,6 +43,58 @@ class DAOBase[T](val collectionName : String) {
         }
     }
     items
+  }
+
+  def find(query :JsObject,  queryOptions :QueryOpts)(implicit format: OFormat[T]) = {
+    val documents = collection.find(query).options(queryOptions)
+    try {
+      val cursor = documents.cursor[T]
+      cursor.collect[Vector]()
+    }catch{
+      case ex : NoSuchElementException =>
+        Future {
+          Vector()
+        }
+    }
+  }
+
+  def find(query :JsObject, sortOptions :JsObject)(implicit format: OFormat[T]) = {
+    val documents = collection.find(query).sort(sortOptions)
+    try {
+      val cursor = documents.cursor[T]
+      cursor.collect[Vector]()
+    }catch{
+      case ex : NoSuchElementException =>
+        Future {
+          Vector()
+        }
+    }
+  }
+
+  def find(query :JsObject, sortOptions :JsObject, queryOptions :QueryOpts)(implicit format: OFormat[T]) = {
+    val documents = collection.find(query).sort(sortOptions).options(queryOptions)
+    try {
+      val cursor = documents.cursor[T]
+      cursor.collect[Vector]()
+    }catch{
+      case ex : NoSuchElementException =>
+        Future {
+          Vector()
+        }
+    }
+  }
+
+  def find(query :JsObject, sortOptions :JsObject, batchSize :Int)(implicit format: OFormat[T]) = {
+    val documents = collection.find(query).sort(sortOptions).options(QueryOpts().batchSize(batchSize))
+    try {
+      val cursor = documents.cursor[T]
+      cursor.collect[Vector]()
+    }catch{
+      case ex : NoSuchElementException =>
+        Future {
+          Vector()
+        }
+    }
   }
 
   def getById(id: String)(implicit format: OFormat[T]) ={ //Also handle invalid ads
