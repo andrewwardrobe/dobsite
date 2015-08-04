@@ -128,9 +128,11 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   }
   //TODO: Reactor this to use the save from content
   def submitBlogUpdate = StackAction(AuthorityKey -> Contributor) { implicit request =>
+
+    //Todo Do jsoup white listing on the content and title before saving
     val user = loggedIn
     ContentPost.blogForm.bindFromRequest() match {
-      case s: Form[ContentPost] => {
+      case s: Form[MongoPost] => {
         val item = s.get
         if (user.userRole.hasPermission(ContentTypeMap(item.postType))) {
           val tags: Option[Seq[String]] = request.body.asFormUrlEncoded match {

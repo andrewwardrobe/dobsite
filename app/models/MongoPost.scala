@@ -36,6 +36,11 @@ case class MongoPost(_id: BSONObjectID, title:String, postType: Int, dateCreated
     json
   }
 
+  def cleanUp = {
+    //Todo Jsoup cleaning
+    lkl;
+  }
+
 }
 
 

@@ -13,7 +13,7 @@ import scala.slick.jdbc.JdbcBackend._
  */
 class ContentReloader(repo: GitRepo){
 
-  private def database = Database.forDataSource(DB.getDataSource())
+  import models.JsonFormats._
 
 
   def reload = {
@@ -27,9 +27,7 @@ class ContentReloader(repo: GitRepo){
     val commitMsg = repo.getLastCommitMsg(file)
     val post = ContentMeta.toPost(commitMsg)
       if(post != null) {
-        database.withSession { implicit session =>
           Content.insert(post)
-        }
       }
   }
 }
