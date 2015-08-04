@@ -4,7 +4,7 @@ package controllers
 import java.text.SimpleDateFormat
 import java.util.Date
 
-import data.Content
+import _root_.data.{ContentQueries, Content}
 import com.daoostinboyeez.git.GitRepo
 import models._
 import play.api._
@@ -29,7 +29,6 @@ object JsonApi extends Controller {
 
  import models.JsonFormats._
   //implicit val tagFormat = Json.format[ContentTag]
-  implicit val newsFormat =  Json.format[ContentPost]
   implicit val commitFormat =  Json.format[ContentMeta]
   val repo = GitRepo.apply()
 
@@ -117,18 +116,9 @@ object JsonApi extends Controller {
         }
   }
 
-  def blogToJson(blogs :Seq[ContentPost]) = {
-    val blogsJson = ListBuffer[JsValue]()
-    blogs.foreach(blogsJson += _.json)
-    blogsJson.toList
-  }
-
-
 
   def getContentByDate(typ: Int)  = Action.async { implicit response =>
-    val query = Json.obj(
-      "typeId" -> typ
-    )
+    val query = ContentQueries.byType(typ)
     Content.find(query,Json.obj("dateCreated" -> -1 )).map { posts =>
       Ok(toJson(posts))
     }
@@ -196,11 +186,7 @@ object JsonApi extends Controller {
         df.parse(startDate)
       }
     }
-    val query = Json.obj(
-      "typeId" -> typ,
-      "author" -> author,
-      "dateCreated" -> Json.obj("$lt" -> Json.obj("$date" -> date))
-    )
+    val query = ContentQueries.liveContentByAuthorBeforeDate(author,typ,date)
     Content.find(query, Json.obj("dateCreated" -> -1 ), max).map{ posts =>
       Ok(toJson(posts))
     }

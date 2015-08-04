@@ -29,10 +29,13 @@ import scala.collection.immutable.HashMap
 import scala.collection.mutable
 import scala.util.Try
 import play.api.libs.json.Json._
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
 object Application extends Controller  with OptionalAuthElement with StandardAuthConfig{
 
+  import models.JsonFormats._
   lazy val numPosts = Play.configuration.getInt("blogroll.numposts").getOrElse(5)
+
 
   def about = StackAction { implicit request =>
     val maybeUser: Option[User] = loggedIn
@@ -46,19 +49,16 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
     Ok(views.html.index(maybeUser))
   }
 
-  def post(id :String) =  StackAction{ implicit request =>
+  def post(id :String) =  AsyncStack{ implicit request =>
     val maybeUser: Option[User] = loggedIn
-    val (post, tags) =  database.withSession { implicit session =>
-      (Content.getById(id),Content.getTags(id))
-    }
-
-    if (post.isEmpty)
-      BadRequest("")
-    else {
-      val map = new mutable.HashMap[String, String]()
-
-      val extraData = Try(Json.parse(post.head.extraData).as[Map[String,String]]).getOrElse(Map())
-      Ok(views.html.post(post.head,tags, extraData, maybeUser))
+    Content.getById(id).map { posts =>
+      posts.headOption match {
+        case Some(post) =>{
+          val extraData = Try(Json.parse(post.extraData).as[Map[String,String]]).getOrElse(Map())
+          Ok(views.html.post(post, extraData, maybeUser))
+        }
+        case None => NotFound("Could Not Find Post") //Todo custom page for 404 and bad request
+      }
     }
   }
 
@@ -100,13 +100,15 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
     Ok(filename.replace("public","assets"))
   }
 
-  def blog = StackAction { implicit request =>
+  def blog = AsyncStack { implicit request =>
     val maybeUser: Option[User] = loggedIn
-    val posts = database.withSession { implicit session =>
-      Content.getByDate(ContentTypeMap.get("Blog"), numPosts)
-    }
-    Ok(views.html.blog("all", maybeUser, posts))
 
+    val query = Json.obj( //Todo make queries object holding common queries  when you refactor
+      "typeId" -> ContentTypeMap.get("Blog")
+    )
+    Content.find(query,Json.obj("dateCreated" -> -1 )).map { posts =>
+      Ok(views.html.blog("all", maybeUser, posts))
+    }
   }
 
   def author(author: String) = StackAction { implicit request =>
