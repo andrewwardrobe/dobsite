@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat
 import java.util.{Date, Calendar}
 
 
-import _root_.data.Content
+import _root_.data.{ContentQueries, Content}
 import jp.t2v.lab.play2.auth.{OptionalAuthElement, AuthElement}
 import models.UserRole.TrustedContributor
 import models._
@@ -103,29 +103,19 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
   def blog = AsyncStack { implicit request =>
     val maybeUser: Option[User] = loggedIn
 
-    val query = Json.obj( //Todo make queries object holding common queries  when you refactor
-      "typeId" -> ContentTypeMap.get("Blog")
-    )
+    val query = ContentQueries.byType(ContentTypeMap("Blog"))
+
     Content.find(query,Json.obj("dateCreated" -> -1 )).map { posts =>
       Ok(views.html.blog("all", maybeUser, posts))
     }
   }
 
-  def author(author: String) = StackAction { implicit request =>
+  def author(author: String) = AsyncStack { implicit request =>
     val maybeUser: Option[User] = loggedIn
-    val posts = database.withSession { implicit session =>
-      Content.getLiveContentByAuthorLatestFirst(author, ContentTypeMap.get("Blog"), new Date(), numPosts)
+    val query = ContentQueries.liveContentByAuthorBeforeDate(author, ContentTypeMap("Blog"), new Date())
+    Content.find(query,Json.obj("dateCreated" -> -1)).map { posts =>
+      Ok(views.html.blog(s"author:${author}", maybeUser, posts))
     }
-    Ok(views.html.blog(s"author:${author}", maybeUser, posts))
-
-  }
-
-  def gazthree = StackAction {  implicit request =>
-    val maybeUser: Option[User] = loggedIn
-    val posts = database.withSession { implicit session =>
-      Content.getByDate(ContentTypeMap.get("Blog"), 1)
-    }
-    Ok(views.html.blog(routes.JsonApi.getContentByDate(ContentTypeMap.get("Blog")).url, maybeUser, posts))
   }
 
   def hansUndJorg = StackAction {  implicit request =>

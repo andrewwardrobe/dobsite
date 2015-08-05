@@ -2,8 +2,8 @@ package test.unit
 
 import com.daoostinboyeez.git.GitRepo
 import data.UserAccounts
-import models.UserRole.NormalUser
-import models.{UserAccount, ContentPost}
+import org.scalatest.concurrent.ScalaFutures
+
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB
 import play.api.test.FakeApplication
@@ -15,7 +15,7 @@ import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend._
 import scala.concurrent.duration.DurationInt
 
-class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite{
+class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite with ScalaFutures{
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
@@ -23,11 +23,11 @@ class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite{
 
   "UserAccountHelper" must {
     "Be able to create an account" in {
-      database.withSession { implicit session =>
+
         UserAccountHelper.createUser("test", "test@test.com", "pa$$word", "NormalUser")
-        val res = Await.result(UserAccounts.findByEmail("test@test.com"),10 seconds)
+        val res = UserAccounts.findByEmail("test@test.com").futureValue
         res must not be empty
-      }
+
     }
   }
 

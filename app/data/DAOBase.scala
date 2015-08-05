@@ -31,6 +31,10 @@ class DAOBase[T](val collectionName : String) {
 
   protected lazy val collection = ReactiveMongoPlugin.db.collection[JSONCollection](collectionName)
 
+  def get(implicit format: OFormat[T]) = {
+    find(Json.obj())
+  }
+
   def find(query :JsObject)(implicit format: OFormat[T]) = {
     val documents = collection.find(query)
     val items = try {
@@ -142,6 +146,13 @@ class DAOBase[T](val collectionName : String) {
 
   def count(query :JsValue) = {
     val doc = BSONFormats.toBSON(query).get.asInstanceOf[BSONDocument]
+    collection.db.command(
+      Count(collection.name, Some(doc))
+    )
+  }
+
+  def count() = {
+    val doc = BSONFormats.toBSON(Json.obj()).get.asInstanceOf[BSONDocument]
     collection.db.command(
       Count(collection.name, Some(doc))
     )

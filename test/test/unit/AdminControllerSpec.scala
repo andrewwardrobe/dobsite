@@ -4,7 +4,7 @@ import com.daoostinboyeez.git.GitRepo
 import controllers.StandardAuthConfig
 import data.{UserProfiles, UserAccounts}
 import jp.t2v.lab.play2.auth.test.Helpers._
-import models.{ContentPost}
+import models.{MongoPost}
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB
@@ -25,7 +25,7 @@ class AdminControllerSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
 
   object config extends StandardAuthConfig
 
-  implicit val postFormat = Json.format[ContentPost]
+  import models.JsonFormats._
 
   "Admin Controller" should {
 

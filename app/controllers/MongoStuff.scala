@@ -17,7 +17,7 @@ import scala.collection.mutable.ListBuffer
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import jp.t2v.lab.play2.auth.OptionalAuthElement
-import models.{ContentPost, MongoPost}
+import models.{ MongoPost}
 import play.api.libs.json.{JsValue, JsArray, JsObject, Json}
 import play.api.mvc.{Action, Controller}
 import play.api.libs.json.Json._
@@ -36,19 +36,6 @@ object MongoStuff extends Controller with MongoController with  OptionalAuthElem
 
   def posts : JSONCollection = db.collection[JSONCollection]("posts")
 
-  val blogForm: Form[MongoPost] = Form {
-    mapping (
-      "id" -> ignored(BSONObjectID.generate :BSONObjectID),
-      "title" -> text,
-      "postType" -> number,
-      "dateCreated" -> date("yyyyMMddHHmmss"),
-      "author" ->text,
-      "content" -> text,
-      "extraData" -> text,
-      "isDraft" -> boolean,
-      "userId" -> optional(number)
-    )(MongoPost.apply)(MongoPost.unapply _)
-  }
 
   def mongoGet = Action.async {
     val postList = posts.genericQueryBuilder.cursor[MongoPost].collect[List]()
@@ -84,7 +71,7 @@ object MongoStuff extends Controller with MongoController with  OptionalAuthElem
   }
 
   def save() = Action.async {
-    val leek = new MongoPost(BSONObjectID.generate,"Leek Post",1,new Date(),"Andrew","Twat Bat", "", false, Some(43))
+    val leek = new MongoPost(BSONObjectID.generate,"Leek Post",1,new Date(),"Andrew","Twat Bat", "", false, None,None)
     val result = PostDAO.insert(leek)
     result.map { res =>
       Ok("Inseted" +res.toString)

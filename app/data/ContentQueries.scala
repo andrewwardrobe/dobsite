@@ -18,4 +18,22 @@ object ContentQueries {
   def byType(typ :Int) = Json.obj(
     "typeId" -> typ
   )
+
+  def dateReverse = Json.obj(
+    "$query" -> Json.obj(),
+    "$orderby" -> Json.obj("dateCreated" -> -1)
+  )
+
+  def dateReverse(dateCreated:Date) = Json.obj(
+    "$query" -> Json.obj("dateCreated" -> dateCreated),
+    "$orderby" -> Json.obj("dateCreated" -> -1)
+  )
+
+  def dateReverse(typeId:Int,dateCreated:Date) = Json.obj(
+    "$query" -> Json.obj("dateCreated" -> dateCreated, "typeId" -> typeId),
+    "$orderby" -> Json.obj("dateCreated" -> -1)
+  )
+
+
+  def all = Json.obj()
 }

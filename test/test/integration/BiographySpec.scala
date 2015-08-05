@@ -8,6 +8,7 @@ import org.scalatestplus.play._
 import play.api.db.DB
 import play.api.test.Helpers._
 import play.api.test._
+import reactivemongo.bson.BSONObjectID
 import test.helpers.{UserAccountHelper, ContentHelper}
 import test.{TestGlobal, TestConfig}
 import test.integration.pages.{SignInPage, SignUpPage, BiographyPage}
@@ -30,11 +31,12 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   lazy val signIn = new SignInPage(port)
   lazy val biographyPage = new BiographyPage(port)
   import biographyPage._
+
   def extraSetup = {
     database.withSession { implicit session =>
       ContentHelper.createBiography("MC Donalds","Sample Bio 1","assets/images/crew/donalds_bw.jpg",None)
       val post = ContentHelper.createBiography("MC Leek","Sample Bio 2","assests/images/crew/donalds_bw.jpg",None)
-      bio = post.id
+      bio = post._id.stringify
     }
   }
   def setup() = {

@@ -1,7 +1,7 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
-import models.{ContentTypeMap, ContentPost}
+import models.{MongoPost, ContentTypeMap}
 import models.UserRole.TrustedContributor
 import org.scalatest.{Matchers, BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play.{FirefoxFactory, OneBrowserPerSuite, OneServerPerSuite, PlaySpec}
@@ -30,7 +30,7 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     }
   }
 
-  var insertedPost: ContentPost = null
+  var insertedPost: MongoPost = null
   lazy val postPage = new PostPage(port)
 
 
@@ -56,7 +56,7 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     "Display a post" in {
        go to post(insertedPost.id)
        title mustBe insertedPost.title
-       articleText mustBe insertedPost.getContent()
+       articleText mustBe insertedPost.getCleanContent
        author mustBe insertedPost.author
     }
 

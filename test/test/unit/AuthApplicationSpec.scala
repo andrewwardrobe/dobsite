@@ -28,7 +28,7 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
 
   object config extends StandardAuthConfig
 
-  implicit val postFormat = Json.format[ContentPost]
+  import models.JsonFormats._
 
   var user: UserAccount = _
   var userProfile :Profile = _

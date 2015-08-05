@@ -13,12 +13,12 @@
           <div id="posts" class="centered">
 
           @for(post <- posts) {
-              <div class="dob-post row" id="itemId@post.id"><a id="itemLink${post.id}" href="@routes.Application.post(post.id).url">
+              <div class="dob-post row" id="itemId@post._id.stringify"><a id="itemLink@{post._id.stringify}" href="@routes.Application.post(post._id.stringify).url">
                   <h2 class="dob-post-title">@post.title</h2></a>
-                  <hidden value="@post.postType" id="typId@post.id"></hidden>
+                  <hidden value="@post.postType" id="typId@post._id.stringify"></hidden>
                   <div>Posted On: @post.dateCreated by <div id="author@post._id.stringify" style="display : inline">@post.author</div></div>
                   <div id="content">
-                  @Html(post.getContent())
+                  @Html(post.getCleanContent)
                   </div>
               </div>
           }

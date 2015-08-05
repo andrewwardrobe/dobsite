@@ -2,7 +2,7 @@ package test.unit
 
 import com.daoostinboyeez.git.GitRepo
 import data.{Content}
-import models.{ ContentPost}
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.Logger
 
@@ -12,21 +12,21 @@ import test.helpers.{UserAccountHelper, ContentHelper}
 import play.api.db.DB
 import scala.slick.jdbc.JdbcBackend._
 import test._
-class DatabaseSpec extends PlaySpec with OneServerPerSuite{
+class DatabaseSpec extends PlaySpec with OneServerPerSuite with ScalaFutures{
 
+  import models.JsonFormats._
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
-  def database = Database.forDataSource(DB.getDataSource())
 
   "Database" must {
 
 
     "Be able to insert and retrieve posts items" in {
-      database.withSession { implicit session =>
+
         GitRepo.refresh
         val newsItem = ContentHelper.createPost("DOB Test News Post", "MC Donalds", "News Content for db spec", 1, None)
-        val result = Content.get
+        val result = Content.get.futureValue
         result.head mustEqual newsItem
-      }
+
     }
     //Todo rewrite this for mongo
     /*

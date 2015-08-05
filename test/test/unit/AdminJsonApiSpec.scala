@@ -4,6 +4,7 @@ import com.daoostinboyeez.git.GitRepo
 import controllers.StandardAuthConfig
 import data.{Content, UserAccounts, UserProfiles}
 import org.scalatest.BeforeAndAfter
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB
 import play.api.libs.json.Json
@@ -18,7 +19,7 @@ import scala.slick.jdbc.JdbcBackend._
 /**
  * Created by andrew on 14/09/14.
  */
-class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
+class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures {
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   object config extends StandardAuthConfig
   def database = Database.forDataSource(DB.getDataSource())
@@ -42,7 +43,7 @@ class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAft
       val result = route(FakeRequest(POST, controllers.routes.AdminJsonApi.insertDiscographies().url,FakeHeaders(),Json.parse(json)).withLoggedIn(config)("Administrator")).get
       status(result) mustBe OK
       database.withSession { implicit session =>
-        Content.get.length must equal(1)
+        Content.count(Json.obj( )) must equal(1)
       }
     }
 
@@ -59,7 +60,7 @@ class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAft
       val result = route(FakeRequest(POST, controllers.routes.AdminJsonApi.insertDiscographies().url,FakeHeaders(),Json.parse(json)).withLoggedIn(config)("Administrator")).get
       status(result) mustBe OK
       database.withSession { implicit session =>
-        Content.get.length must equal(1)
+        Content.count() must equal(1)
       }
     }
 

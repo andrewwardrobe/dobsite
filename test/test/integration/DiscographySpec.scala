@@ -11,8 +11,9 @@ import test.helpers.ContentHelper
 import test.{TestGlobal, TestConfig}
 import test.integration.pages.DiscographyPage
 
+import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend.Database
-
+import models.JsonFormats._
 
 class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
 
@@ -20,7 +21,7 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
   def database = Database.forDataSource(DB.getDataSource())
   val discography = new DiscographyPage(port)
 
-  var bio : ContentPost = null
+  var bio : MongoPost = null
   before{
     dataSetup
   }
@@ -62,8 +63,6 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
   }
 
   def dataSetup() = {
-    database.withSession { implicit session =>
-
       val content =
         """
           |<ol>
@@ -73,14 +72,11 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
           |</ol>
         """.stripMargin
       bio = ContentHelper.createDiscographyItem("Mit Da Queen Mutter",content,"assets/images/mdqm.jpg","Album",None)
-
-    }
   }
 
   def dataTearDown() = {
-    database.withSession { implicit session =>
-      Content.delete(bio.id)
-    }
+      import scala.concurrent.duration.DurationInt
+      Await.result(Content.delete(bio._id.stringify), 10 seconds)
   }
 
  }

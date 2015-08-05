@@ -19,12 +19,14 @@ object Content extends DAOBase[MongoPost]("posts"){
   def create(post : MongoPost, repo :GitRepo) = {
     insert(post).map { res =>
       repo.newFile(post._id.stringify, post.content, ContentMeta.makeCommitMsg("Created", post))
+      post
     }
   }
 
   def save(post: MongoPost, repo: GitRepo) = {
     update(post._id.stringify,post).map { res =>
       repo.updateFile(post._id.stringify, post.content, ContentMeta.makeCommitMsg("Updated", post))
+      post
     }
   }
 }

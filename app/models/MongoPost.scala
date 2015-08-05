@@ -5,6 +5,8 @@ import java.util.Date
 import com.daoostinboyeez.git.GitRepo
 import org.eclipse.jgit.errors.RevisionSyntaxException
 import reactivemongo.bson.BSONObjectID
+import org.jsoup._
+import org.jsoup.safety.Whitelist
 
 /**
  *
@@ -36,12 +38,12 @@ case class MongoPost(_id: BSONObjectID, title:String, postType: Int, dateCreated
     json
   }
 
-  def cleanUp = {
+  def getCleanContent = {
     //Todo Jsoup cleaning
-    lkl;
+    content
   }
 
-
+  def id = _id.stringify
 
 }
 

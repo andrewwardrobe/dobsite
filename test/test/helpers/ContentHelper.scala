@@ -4,101 +4,87 @@ import java.text.SimpleDateFormat
 import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.GitRepo
-import data.{Tags, Content}
-import models.{ContentMeta, ContentTag, ContentTypeMap, ContentPost}
+import data.{Content}
+import models.{MongoPost, ContentTypeMap}
 import play.api.Logger
 import play.api.Play.current
 import play.api.db.DB
+import reactivemongo.bson.BSONObjectID
 
 
-
+import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend._
+import scala.concurrent.duration.DurationInt
 /**
  * Created by andrew on 14/02/15.
  */
 object ContentHelper {
+  import models.JsonFormats._
+
   val repo = GitRepo.apply()
   def database = Database.forDataSource(DB.getDataSource())
 
 
   def getPost(id:String) = {
-    database.withSession{ implicit sess :Session =>
-      val rawPost = Content.getById(id)
-      rawPost
-    }
+    Await.result(Content.getById(id),10 seconds)
   }
 
-  def createPost(title:String, author:String, content :String, typ: Int,userId:Option[Int]) :ContentPost = {
+  def createPost(title:String, author:String, content :String, typ: Int,userId:Option[BSONObjectID]) :MongoPost = {
     createPost(title, author, content, typ, "",userId)
   }
 
-  def createPostWithTags(title:String, content :String, typ: Int,tags :String,userId:Option[Int]) :ContentPost = {
+  def createPostWithTags(title:String, content :String, typ: Int,tags :String,userId:Option[BSONObjectID]) :MongoPost = {
 
-    database.withSession {  implicit sess :Session  =>
+      //Todo fix this
       val post = createPost(title, "PostHelper", content, typ, "",userId)//Need to actually make the tags
-      tags.split(",").foreach{ s =>
-        val tag = Tags.create(s.trim)
-        Tags.link(post.id, tag.id)
-      }
-      post
-    }
+    post
 
   }
 
 
-  def createPost(title:String, author:String, content :String, typ: Int, extraData :String,userId:Option[Int]):ContentPost = {
+  def createPost(title:String, author:String, content :String, typ: Int, extraData :String,userId:Option[BSONObjectID]):MongoPost = {
     createPost(title, author, content, typ, extraData, new Date(),userId)
   }
 
-  def createPost(title:String, author:String, content :String, typ: Int, extraData :String, date: Date,userId:Option[Int]):ContentPost = {
-    val post = new ContentPost(UUID.randomUUID().toString(), title, typ, date, author, content, extraData, false, userId)
-    database.withSession { implicit s :Session =>
-      Content.save(post, repo, userId)
-    }
+  def createPost(title:String, author:String, content :String, typ: Int, extraData :String, date: Date,userId:Option[BSONObjectID],tags : Option[Seq[String]] = None):MongoPost = {
+    val post = new MongoPost(BSONObjectID.generate, title, typ, date, author, content, extraData, false, userId, None)
+    Await.result(Content.create(post, repo), 10 seconds)
   }
 
-  def createPost(title:String, author:String, content :String, typ: Int, extraData :String, date: String,userId:Option[Int]):ContentPost = {
+  def createPost(title:String, author:String, content :String, typ: Int, extraData :String, date: String,userId:Option[BSONObjectID]):MongoPost = {
     val df = new SimpleDateFormat("yyyyMMddHHmmss")
     createPost(title, author, content, typ, "", df.parse(date),userId)
   }
 
-  def createBiography(name:String, text :String, thumb :String,userId:Option[Int]) = {
-    val post = new ContentPost(UUID.randomUUID().toString(), name, ContentTypeMap("Biography"), new Date(), "", text, s"thumb=$thumb", false, userId)
-    database.withSession { implicit s: Session =>
-      Content.save(post, repo, userId)
-    }
+  def createBiography(name:String, text :String, thumb :String,userId:Option[BSONObjectID]) = {
+    val post = new MongoPost(BSONObjectID.generate, name, ContentTypeMap("Biography"), new Date(), "", text, s"thumb=$thumb", false, userId, None)
+    Await.result(Content.create(post, repo), 10 seconds)
   }
 
-  def createDiscographyItem(name:String, text :String, thumb :String, albumType :String,userId:Option[Int]) = {
-    val post = new ContentPost(UUID.randomUUID().toString(), name, ContentTypeMap("Discography"), new Date(), "", text, s"thumb=$thumb\ndiscType=$albumType", false, userId)
-    database.withSession { implicit s: Session =>
-      Content.save(post, repo, userId)
-    }
+  def createDiscographyItem(name:String, text :String, thumb :String, albumType :String,userId:Option[BSONObjectID]) = {
+    val post = new MongoPost(BSONObjectID.generate, name, ContentTypeMap("Discography"), new Date(), "", text, s"thumb=$thumb\ndiscType=$albumType", false, userId,None)
+    Await.result(Content.create(post, repo), 10 seconds)
   }
 
   def clearAll = {
-    database.withSession { implicit s :Session =>
-      Content.clearAll
-    }
+    Await.result(Content.deleteAll,10 seconds)
   }
 
-  def createDraft(title:String, author:String, content :String, typ: Int,userId:Option[Int]) :ContentPost = {
+  def createDraft(title:String, author:String, content :String, typ: Int,userId:Option[BSONObjectID]) :MongoPost = {
     createDraft(title, author, content, typ, "",userId)
   }
 
 
-  def createDraft(title:String, author:String, content :String, typ: Int, extraData :String,userId:Option[Int]):ContentPost = {
+  def createDraft(title:String, author:String, content :String, typ: Int, extraData :String,userId:Option[BSONObjectID]):MongoPost = {
     createDraft(title, author, content, typ, extraData, new Date(),userId)
   }
 
-  def createDraft(title:String, author:String, content :String, typ: Int, extraData :String, date: Date,userId:Option[Int]):ContentPost = {
-    val post = new ContentPost(UUID.randomUUID().toString(), title, typ, date, author, content, extraData, true, userId)
-    database.withSession { implicit s :Session =>
-      Content.save(post, repo, userId)
-    }
+  def createDraft(title:String, author:String, content :String, typ: Int, extraData :String, date: Date,userId:Option[BSONObjectID]):MongoPost = {
+    val post = new MongoPost(BSONObjectID.generate, title, typ, date, author, content, extraData, true, userId,None)
+    Await.result(Content.create(post, repo),10 seconds)
   }
 
-  def createDraft(title:String, author:String, content :String, typ: Int, extraData :String, date: String,userId:Option[Int]):ContentPost = {
+  def createDraft(title:String, author:String, content :String, typ: Int, extraData :String, date: String,userId:Option[BSONObjectID]):MongoPost = {
     val df = new SimpleDateFormat("yyyyMMddHHmmss")
     createDraft(title, author, content, typ, extraData, df.parse(date),userId)
   }
