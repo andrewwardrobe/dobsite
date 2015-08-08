@@ -36,7 +36,11 @@ object ContentHelper {
   def createPostWithTags(title:String, content :String, typ: Int,tags :String,userId:Option[BSONObjectID]) :MongoPost = {
 
       //Todo fix this
-      val post = createPost(title, "PostHelper", content, typ, "",userId)//Need to actually make the tags
+      val tagList = tags match {
+        case "" => None
+        case _ => Some(tags.split(",").toList)
+      }
+      val post = createPost(title, "PostHelper", content, typ, "",new Date,userId,tagList)//Need to actually make the tags
     post
 
   }
@@ -47,7 +51,7 @@ object ContentHelper {
   }
 
   def createPost(title:String, author:String, content :String, typ: Int, extraData :String, date: Date,userId:Option[BSONObjectID],tags : Option[Seq[String]] = None):MongoPost = {
-    val post = new MongoPost(BSONObjectID.generate, title, typ, date, author, content, extraData, false, userId, None)
+    val post = new MongoPost(BSONObjectID.generate, title, typ, date, author, content, extraData, false, userId, tags)
     Await.result(Content.create(post, repo), 10 seconds)
   }
 

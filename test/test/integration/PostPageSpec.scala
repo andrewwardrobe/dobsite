@@ -1,6 +1,7 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
+import com.github.simplyscala.{MongodProps, MongoEmbedDatabase}
 import models.{MongoPost, ContentTypeMap}
 import models.UserRole.TrustedContributor
 import org.scalatest.{Matchers, BeforeAndAfter, BeforeAndAfterAll}
@@ -17,7 +18,7 @@ import scala.slick.jdbc.JdbcBackend._
 /**
  * Created by andrew on 01/03/15.
  */
-class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll {
+class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with MongoEmbedDatabase {
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
@@ -38,20 +39,27 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
 
   var setupDone: Boolean = false
 
+  var props : MongodProps = _
   def setup() = {
-  if(!setupDone) {
+    if (!setupDone) {
       repo.refresh
 
-      insertedPost= extraSetup
+      insertedPost = extraSetup
       setupDone = true
     }
-    UserAccountHelper.createUser("andrew","pa$$word","TrustedContributor")
+    UserAccountHelper.createUser("andrew", "pa$$word", "TrustedContributor")
+
   }
 
   before{
+    props = mongoStart()
     setup()
+
   }
 
+  after{
+   mongoStop(props)
+  }
   "Post" must {
     "Display a post" in {
        go to post(insertedPost.id)

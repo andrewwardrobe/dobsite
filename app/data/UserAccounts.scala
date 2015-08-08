@@ -11,6 +11,7 @@ import scala.concurrent.{Future, Await}
 import scala.slick.jdbc.JdbcBackend._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import scala.concurrent.duration.DurationInt
+import scala.util.Success
 
 /**
  * Created by andrew on 14/05/15.
@@ -35,7 +36,7 @@ object UserAccounts extends DAOBase[UserAccount]("users") {
         accounts.find(acc => BCrypt.checkpw(password,acc.password))
 
       case false =>
-        val result = findByEmail(email)
+        val result = findByName(email)
         val accounts = Await.result(result,10 seconds)
         accounts.find(acc => BCrypt.checkpw(password,acc.password))
     }
@@ -49,11 +50,16 @@ object UserAccounts extends DAOBase[UserAccount]("users") {
 
   def create(user: UserAccount) = {
     val encPass = BCrypt.hashpw(user.password, BCrypt.gensalt())
-    val count = collection.count()
-    count.onSuccess {
-      case cnt => cnt match {
-        case 0 => insert(user.copy(password = encPass, role = "Administrator"))
-        case _ => insert(user.copy(password = encPass))
+    collection.count().andThen{ cnt =>
+      cnt match {
+        case Success(0) => {
+          insert(user.copy(password = encPass, role = "Administrator")).map { res =>
+            user
+          }
+        }
+        case Success(_) => insert(user.copy(password = encPass)).map { res =>
+          user
+        }
       }
     }
   }

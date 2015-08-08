@@ -23,6 +23,7 @@ import play.api.db.slick.DBAction
 
 import play.api.db.slick._
 import play.api.db.slick.Config.driver.simple._
+import reactivemongo.bson.BSONObjectID
 import scala.concurrent.Future
 import scala.slick.jdbc.JdbcBackend._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -62,7 +63,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     val maybeUser  =  loggedIn
     val typ = ContentTypeMap.get(contentType)
     UserProfiles.getByUserId(maybeUser._id).map { profiles =>
-      Ok(views.html.editor("",models.Forms.blogForm,"-1",typ,Some(maybeUser),profiles.headOption))
+      Ok(views.html.editor("",models.Forms.blogForm,BSONObjectID.generate.stringify,typ,Some(maybeUser),profiles.headOption,true))
     }
 
   }
@@ -70,14 +71,14 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   def blogInput = AsyncStack(AuthorityKey -> Contributor){  implicit request =>
     val maybeUser = loggedIn
     UserProfiles.getByUserId(maybeUser._id).map { profiles =>
-      Ok(views.html.editor("",models.Forms.blogForm,"-1",1,Some(maybeUser),profiles.headOption))
+      Ok(views.html.editor("",models.Forms.blogForm,BSONObjectID.generate.stringify,1,Some(maybeUser),profiles.headOption,true))
     }
   }
 
   def blogUpdate(id: String) = AsyncStack(AuthorityKey -> Contributor) {  implicit request =>
     val maybeUser = loggedIn
     UserProfiles.getByUserId(maybeUser._id).map { profiles =>
-      Ok(views.html.editor("",models.Forms.blogForm,"-1",1,Some(maybeUser),profiles.headOption))
+      Ok(views.html.editor("",models.Forms.blogForm,BSONObjectID.generate.stringify,1,Some(maybeUser),profiles.headOption,false))
     }
   }
 

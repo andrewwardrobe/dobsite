@@ -29,7 +29,7 @@ import scala.concurrent.Future
 
 class DAOBase[T](val collectionName : String) {
 
-  protected lazy val collection = ReactiveMongoPlugin.db.collection[JSONCollection](collectionName)
+  protected def collection = ReactiveMongoPlugin.db.collection[JSONCollection](collectionName)
 
   def get(implicit format: OFormat[T]) = {
     find(Json.obj())

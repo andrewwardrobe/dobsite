@@ -129,7 +129,7 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
     userId = $("#userId").val()
     json = {
       data: {
-        "id": id,
+        "_id": id,
         "dateCreated": dateStr,
         "title": title,
         "content": content,
@@ -161,7 +161,7 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
       $("#editAlertDraft").show()
     else
      $("#editAlertLive").show()
-    this.getRevisions(data.id)
+    this.getRevisions(data._id)
 
   saveFailedHandler:(err) ->
     d = $ '<div>'
@@ -176,8 +176,10 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
 
   save: () ->
     postData = this.getContentData()
+    console.log postData._id
     data = postData.data
-    if data.id == undefined || data.id == "-1" || data.id == -1
+    newPost = $("#newPost").val()
+    if newPost == "true"
       result = Q.when jsRoutes.controllers.Authorised.submitPost().ajax postData
       result.then this.saveSucessfulHandler , this.saveFailedHandler
     else

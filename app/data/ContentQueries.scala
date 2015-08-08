@@ -11,12 +11,12 @@ import play.api.libs.json.Json
  */
 object ContentQueries {
   def liveContentByAuthorBeforeDate(author:String, typ : Int, date :Date) = Json.obj(
-    "typeId" -> typ,
+    "postType" -> typ,
     "author" -> author,
     "dateCreated" -> Json.obj("$lt" -> Json.obj("$date" -> date))
   )
   def byType(typ :Int) = Json.obj(
-    "typeId" -> typ
+    "postType" -> typ
   )
 
   def dateReverse = Json.obj(

@@ -25,4 +25,8 @@ object TestConfig {
     )
 
   }
+
+  def withEmbbededMongo = {
+    Map("mongodb.uri" -> "mongodb://localhost:12345")
+  }
 }

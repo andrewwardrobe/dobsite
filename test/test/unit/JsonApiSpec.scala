@@ -12,6 +12,8 @@ import test.{TestGlobal, TestConfig}
 /**
  * Created by andrew on 14/09/14.
  */
+
+//Todo embbeded mongo
 class JsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter{
 
 

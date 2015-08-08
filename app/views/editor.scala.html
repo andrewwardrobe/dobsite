@@ -1,12 +1,5 @@
-@(message: String, form: Form[MongoPost], postId: String, postType:Int = -1,user:Option[UserAccount],profile: Option[Profile])(implicit session : Session)
+@(message: String, form: Form[MongoPost], postId: String, postType:Int = -1,user:Option[UserAccount],profile: Option[Profile], newPost : Boolean)
 
-
-@username = {
-    @session.get("username") match {
-        case Some(username) => {@username}
-        case None => {no-one}
-    }
-}
 @content = {
 
 
@@ -26,6 +19,7 @@
         </div>
         @helper.form(action = routes.Authorised.submitPost, 'id -> "blogForm" ){
         <input type="hidden" name="postId" id="postId" value="@postId" />
+        <input type="hidden" name="newPost" id="newPost" value="@newPost" />
         <!-- Start Toolbar
           -->
         <div style="position:absolute">
