@@ -1,9 +1,11 @@
 package models
 
-import play.api.data.Form
+import play.api.data.{FormError, Form}
 import play.api.data.Forms._
+import play.api.data.format.Formatter
 import reactivemongo.bson.BSONObjectID
-
+import play.api.data.format.Formats._
+import play.modules.reactivemongo.json.BSONFormats._
 import scala.util.{Failure, Success}
 
 
@@ -12,7 +14,10 @@ import scala.util.{Failure, Success}
  * Created by andrew on 02/08/15.
  *
  */
+
+
 object Forms {
+
 
   def bsonMapper(id:String) = {
     val bson = BSONObjectID.parse(id)
@@ -35,7 +40,7 @@ object Forms {
 
   val blogForm: Form[MongoPost] = Form {
     mapping (
-      "id" -> ignored(BSONObjectID.generate :BSONObjectID),
+      "id" -> text.transform[BSONObjectID]({ s => bsonMapper(s)},{b => b.stringify}),
       "title" -> text,
       "postType" -> number,
       "dateCreated" -> date("yyyyMMddHHmmss"),

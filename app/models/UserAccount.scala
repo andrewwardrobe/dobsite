@@ -35,5 +35,6 @@ case class UserAccount(_id: BSONObjectID, email: String, password: String, name:
     }
   }
 
+  def id =  _id.stringify
 }
 

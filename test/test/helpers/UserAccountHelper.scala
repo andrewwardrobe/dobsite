@@ -48,7 +48,7 @@ object UserAccountHelper {
   }
 
   def createProfile(userId:BSONObjectID, about:String,avatar:String) = {
-    val profile = new Profile(userId,BSONObjectID.generate,about,avatar,None)
+    val profile = new Profile(BSONObjectID.generate,userId,about,avatar,None)
     Await.result(UserProfiles.insert(profile),10 seconds)
     profile
   }

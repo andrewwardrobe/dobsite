@@ -80,11 +80,15 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
     $("#rightSideNavBar").prepend listElem
 
   loadContentPost:(id,revisionId) ->
-    if id != -1 && id != "-1"
+    newPost = $("#newPost").val()
+    if newPost != "true"
+      console.log "id  #{id}"
       result = Q.when jsRoutes.controllers.JsonApi.getPostRevisionById(id,revisionId).ajax({})
       result.then (data) ->
+        console.log "loading... "
+        console.log "data = #{JSON.stringify data} "
         $("#editor").html data.content
-        $("#postId").val data.id
+        #$("#postId").val data._id.stringify
         $("#postTitle").text data.title
         $("#author").val data.author
         dt = data.dateCreated
@@ -113,6 +117,8 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
           $(blk).on 'click', (event) ->
             event.stopPropagation()
           hljs.highlightBlock blk
+      ,(err) ->
+        console.log err
     else
       $("#editAlertNew").show()
 
@@ -157,6 +163,7 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
     $("*[id*='editAlert']").hide()
     $("#draft").val data.isDraft
     $("#userId").val data.userId
+    $("#newPost").val "false"
     if data.isDraft != false
       $("#editAlertDraft").show()
     else

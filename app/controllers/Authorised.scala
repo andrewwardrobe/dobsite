@@ -1,5 +1,6 @@
 package controllers
 
+import java.text.SimpleDateFormat
 import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.{GitRepo}
@@ -15,14 +16,14 @@ import org.openqa.jetty.http.SecurityConstraint.Nobody
 import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.libs.json.Json
+import play.api.libs.json.{JsError, JsSuccess, JsObject, Json}
 import play.api.libs.json.Json._
-import play.api.mvc.Controller
+import play.api.mvc.{AnyContentAsFormUrlEncoded, AnyContentAsJson, Controller}
 import play.api.db.DB
 import play.api.db.slick.DBAction
 
-import play.api.db.slick._
-import play.api.db.slick.Config.driver.simple._
+
+import play.mvc.BodyParser.FormUrlEncoded
 import reactivemongo.bson.BSONObjectID
 import scala.concurrent.Future
 import scala.slick.jdbc.JdbcBackend._
@@ -62,8 +63,10 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   def newContent(contentType:String) = AsyncStack(AuthorityKey -> Contributor){  implicit request =>
     val maybeUser  =  loggedIn
     val typ = ContentTypeMap.get(contentType)
+    val postId = BSONObjectID.generate.stringify
+    Logger.info("Noew Content "+postId)
     UserProfiles.getByUserId(maybeUser._id).map { profiles =>
-      Ok(views.html.editor("",models.Forms.blogForm,BSONObjectID.generate.stringify,typ,Some(maybeUser),profiles.headOption,true))
+      Ok(views.html.editor("",models.Forms.blogForm,postId,typ,Some(maybeUser),profiles.headOption,true))
     }
 
   }
@@ -78,44 +81,64 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   def blogUpdate(id: String) = AsyncStack(AuthorityKey -> Contributor) {  implicit request =>
     val maybeUser = loggedIn
     UserProfiles.getByUserId(maybeUser._id).map { profiles =>
-      Ok(views.html.editor("",models.Forms.blogForm,BSONObjectID.generate.stringify,1,Some(maybeUser),profiles.headOption,false))
+      Ok(views.html.editor("",models.Forms.blogForm,id,1,Some(maybeUser),profiles.headOption,false))
     }
   }
 
 
   def submitPost = AsyncStack(AuthorityKey -> Contributor) { implicit request =>
     val user = loggedIn
-    models.Forms.blogForm.bindFromRequest() match {
-      case s: Form[MongoPost] => {
-        val item = s.get
-        if(user.userRole.hasPermission(ContentTypeMap(item.postType))) {
-          val postTags : Option[Seq[String]] = request.body.asFormUrlEncoded match {
-            case None => { None }
-            case Some(formData) => {
-              formData.get("tags") match {
-                case Some(tagData) => {
-                  Some(tagData.toList)
-                }
-                case _ => {None}
-              }
+
+    request.body match {
+      case form: AnyContentAsFormUrlEncoded =>
+        request.body.asFormUrlEncoded.map({ data =>
+          val userId = if (data("userId")(0) == "")
+            None
+          else
+            Some(BSONObjectID(data("userId")(0)))
+
+          val tags = if (data("tags")(0) == "")
+            None
+          else
+            Some(data("tags")(0).split(",").toList)
+
+          val postType = data("postType")(0).toInt
+          val df = new SimpleDateFormat("yyyyMMddHHmmss")
+          val date = df.parse(data("dateCreated")(0))
+          val post = new MongoPost(BSONObjectID(data("_id")(0)), data("title")(0), postType, date, data("author")(0), data("content")(0),
+            data("extraData")(0), data("isDraft")(0).toBoolean, userId, tags)
+          if (user.userRole.hasPermission(ContentTypeMap(post.postType))) {
+            Content.create(post, repo).map { res =>
+              Ok(toJson(post))
             }
-            case _ => None
-          }
 
-//          val newItem = Content.save(item,repo,Some(user._id),tags) change this back later
-          Content.create(item.copy(tags = postTags),repo).map { res =>
-            Ok(toJson(item))
+          } else {
+            Future {
+              Unauthorized("You don't have the right privileges for " + ContentTypeMap(post.postType))
+            }
           }
+        }).getOrElse(Future {
+          BadRequest("Invalid Post Data")
+        })
 
-        }else
-          Future {
-            Unauthorized("You don't have the right privileges for "+ContentTypeMap(item.postType))
+      case json: AnyContentAsJson =>
+
+        request.body.asJson.map({js => fromJson[MongoPost](js) match {
+          case JsSuccess(post, _) => {
+            if (user.userRole.hasPermission(ContentTypeMap(post.postType))) {
+              Content.create(post, repo).map { res =>
+                Ok(toJson(post))
+              }
+
+            } else {
+              Future { Unauthorized("You don't have the right privileges for " + ContentTypeMap(post.postType)) }
+            }
           }
-      }
-      case _ => { Future {
-        BadRequest("Invalid Post Data")
-        }
-      }
+          case JsError(err) => Future { BadRequest("Error")}
+          }
+        }).getOrElse(Future {
+          BadRequest
+        })
     }
   }
 
@@ -139,55 +162,93 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
 
     //Todo Do jsoup white listing on the content and title before saving
     val user = loggedIn
-    models.Forms.blogForm.bindFromRequest() match {
-      case s: Form[MongoPost] => {
-        val item = s.get
-        if (user.userRole.hasPermission(ContentTypeMap(item.postType))) {
-          val postTags: Option[Seq[String]] = request.body.asFormUrlEncoded match {
-            case None => {
-              None
+    request.body match {
+      case form: AnyContentAsFormUrlEncoded =>
+        request.body.asFormUrlEncoded.map({ data =>
+          val userId = if (data("userId")(0) == "")
+            None
+          else
+            Some(BSONObjectID(data("userId")(0)))
+
+          val tags = if (data("tags")(0) == "")
+            None
+          else
+            Some(data("tags")(0).split(",").toList)
+
+          val postType = data("postType")(0).toInt
+          val df = new SimpleDateFormat("yyyyMMddHHmmss")
+          val date = df.parse(data("dateCreated")(0))
+          val post = new MongoPost(BSONObjectID(data("_id")(0)), data("title")(0), postType, date, data("author")(0), data("content")(0),
+            data("extraData")(0), data("isDraft")(0).toBoolean, userId, tags)
+          if (user.userRole.hasPermission(ContentTypeMap(post.postType))) {
+            Content.save(post, repo).map { res =>
+              Ok(toJson(post))
             }
-            case Some(formData) => {
-              formData.get("tags") match {
-                case Some(tagData) => {
-                  Some(tagData.toList)
-                }
-                case _ => {
-                  None
-                }
+
+          } else {
+            Future {
+              Unauthorized("You don't have the right privileges for " + ContentTypeMap(post.postType))
+            }
+          }
+        }).getOrElse(Future {
+          BadRequest("Invalid Post Data")
+        })
+
+      case json: AnyContentAsJson =>
+        request.body.asJson.map(js => fromJson[MongoPost](js) match {
+          case JsSuccess(post, _) => {
+            if (user.userRole.hasPermission(ContentTypeMap(post.postType))) {
+              Content.save(post, repo).map { res =>
+                Ok(toJson(post))
+              }
+
+            } else {
+              Future {
+                Unauthorized("You don't have the right privileges for " + ContentTypeMap(post.postType))
               }
             }
-            case _ => None
           }
-
-         Content.save(item.copy(tags = postTags),repo).map { res =>
-            Ok(toJson(item))
+          case JsError(err) => Future {
+            BadRequest("Error")
           }
-
-
-        } else
-          Future{
-            Unauthorized("You don't have the right privileges for " + ContentTypeMap(item.postType))
-          }
-      }
-      case _ => {
-        Future{
-          BadRequest("Invalid Post Data")
-        }
-      }
+        }).getOrElse(Future {
+          BadRequest
+        })
     }
-
   }
 
 
-  def updateProfile = StackAction(AuthorityKey -> NormalUser) { implicit request =>
-    val profile = profileForm.bindFromRequest().get
+  def updateProfile = AsyncStack(AuthorityKey -> NormalUser) { implicit request =>
     val user = loggedIn
-    if (profile.userId == user._id) {
-          UserProfiles.update(profile._id.stringify,profile)
-          Ok("")
-    } else
-      Forbidden("You do not have permission to perform this request")
+    def doUpdate(profile:Profile) = {
+      if (profile.userId.stringify == user._id.stringify) {
+        UserProfiles.update(profile._id.stringify, profile).map{res =>
+             Ok("")
+          }
+        }
+       else
+        Future{
+          Forbidden("You do not have permission to perform this request")
+        }
+    }
+    request.body match {
+      case form: AnyContentAsFormUrlEncoded =>
+        val profile = profileForm.bindFromRequest().get
+        doUpdate(profile)
+      case json: JsObject =>
+        request.body.asJson.map(js => fromJson[Profile](js) match {
+          case JsSuccess(profile,_) => doUpdate(profile)
+        }).getOrElse(Future{
+          BadRequest
+        })
+      case json: AnyContentAsJson =>
+        request.body.asJson.map(js => fromJson[Profile](js) match {
+          case JsSuccess(profile,_) => doUpdate(profile)
+          case JsError(err) => Future { BadRequest("Error") }
+        }).getOrElse(Future{
+          BadRequest
+        })
+    }
   }
 
 

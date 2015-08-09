@@ -25,8 +25,8 @@ class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite with ScalaFu
     "Be able to create an account" in {
 
         UserAccountHelper.createUser("test", "test@test.com", "pa$$word", "NormalUser")
-        val res = UserAccounts.findByEmail("test@test.com").futureValue
-        res must not be empty
+        val res = UserAccounts.findByEmail("test@test.com")
+        res.futureValue must not be empty
 
     }
   }

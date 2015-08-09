@@ -181,15 +181,18 @@ define ['common', 'helpers/date'], (common) -> {
     doTextAndImage : (bio, target) ->
         bsRow2 = $("<div>")
         bsRow2.attr 'class','col-sm-5'
-        $(target).append bsRow2
-        extraData = $.parseJSON(bio.extraData)
         imageDiv = $("<div>")
-        image = $("<img>")
-        image.attr 'src', extraData.thumb
-        image.attr 'class','bioThumb pull-left'
-        image.attr 'id', 'bioImage' + bio.id
+        $(target).append bsRow2
+        if bio.extraData != ""
+            console.log "Extra Data = |#{bio.extraData}|"
+            extraData = $.parseJSON(bio.extraData)
+            image = $("<img>")
+            image.attr 'src', extraData.thumb
+            image.attr 'class','bioThumb pull-left'
+            image.attr 'id', 'bioImage' + bio.id
+            imageDiv.append image
+
         imageDiv.attr 'id', 'bioImageDiv' + bio.id
-        imageDiv.append image
         textDiv = $("<div>")
         textDiv.attr 'id', 'bioDiv' + bio.id
         textDiv.attr 'class', 'col-xs-12 col-sm-12 bioDiv'
@@ -214,9 +217,11 @@ define ['common', 'helpers/date'], (common) -> {
         bioExtra = $("<input>")
         bioExtra.attr 'id', 'bioExtra' + bio.id
         bioExtra.attr 'type', 'hidden'
-        bioExtra.attr 'value', this.extraDataJs2KeyVal bio.extraData
+        console.log "Extra Data #{bio.extraData}"
+        if bio.extraData != ""
+            bioExtra.attr 'value', this.extraDataJs2KeyVal bio.extraData
         textDiv.append bioExtra
-        d = new Date(bio.dateCreated);
+        d = new Date(bio.dateCreated)
         dateCreated.attr 'value', d.yyyymmdd()
         textDiv.append dateCreated
         author = $("<input>")

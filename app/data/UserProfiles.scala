@@ -27,7 +27,14 @@ object UserProfiles extends DAOBase[Profile]("profiles"){
         case Some(profile) => {
           val aliasList = profile.aliases.getOrElse(Nil) ++: List(alias)
           val updated = profile.copy(aliases = Some(aliasList))
-          update(profile._id.stringify,updated)
+          update(profile._id.stringify,updated).map{ res =>
+            res.ok match {
+              case true =>
+                updated
+              case false => null
+            }
+          }
+
         }
       }
     }
@@ -47,4 +54,6 @@ object UserProfiles extends DAOBase[Profile]("profiles"){
       users.head.aliases.getOrElse(Vector())
     }
   }
+
+
 }

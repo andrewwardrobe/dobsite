@@ -18,7 +18,7 @@ define ['common', 'q','jquery.mCustomScrollbar.concat.min'], (common, Q) -> {
   attachPostsToDiv:(target,data)->
     $.each data, (idx, val) ->
       div = $("<div>")
-      lnk = $("<a>").attr {href:"/post/"+val.id }
+      lnk = $("<a>").attr {href:"/post/"+val._id.stringify }
       lnk.text val.title
       div.append lnk
       $(target).append div

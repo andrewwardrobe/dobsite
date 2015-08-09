@@ -2,9 +2,10 @@ require ['common'], (common) ->
     require ['editor','jquery'], (editor,$) ->
         editor.setupEditor()
         editor.setupEditorBox()
-        postId = $("#postId").attr 'value'
+        postId = $("#postId").val()
+        console.log postId
         editor.loadContentPost postId, "HEAD"
-        editor.loadTags postId
+        #editor.loadTags postId
         editor.getRevisions postId
 
         editor.applyToolbarHandlers()

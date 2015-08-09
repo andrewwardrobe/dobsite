@@ -3,6 +3,7 @@ package data
 import com.daoostinboyeez.git.GitRepo
 import com.daoostinboyeez.site.exceptions.{PostUpdateException, PostInsertException}
 import models.{ContentMeta, MongoPost}
+import play.api.Logger
 import play.api.libs.json.Json
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
@@ -13,12 +14,17 @@ object Content extends DAOBase[MongoPost]("posts"){
 
   import models.JsonFormats._
   def findByType(typeId: Int) = {
-    find(Json.obj("typeId" -> typeId ))
+    find(Json.obj("postType" -> typeId ))
   }
 
   //Todo write this
   def create(post : MongoPost, repo :GitRepo) = {
-    insert(post.copy(extraData = post.extraDataToJson)).map { res =>
+    Logger.info("create" +post.id)
+    val ed = post.extraData match {
+      case "" => ""
+      case _ => post.extraDataToJson
+    }
+    insert(post.copy(extraData = ed)).map { res =>
       res.ok match {
         case true =>
           repo.newFile(post._id.stringify, post.content, ContentMeta.makeCommitMsg("Created", post))
@@ -31,7 +37,11 @@ object Content extends DAOBase[MongoPost]("posts"){
   }
 
   def save(post: MongoPost, repo: GitRepo) = {
-    update(post._id.stringify,post.copy(extraData = post.extraDataToJson)).map { res =>
+    val ed = post.extraData match {
+      case "" => ""
+      case _ => post.extraDataToJson
+    }
+    update(post._id.stringify,post.copy(extraData = ed)).map { res =>
       res.ok match {
         case true =>
           repo.updateFile (post._id.stringify, post.content, ContentMeta.makeCommitMsg ("Updated", post) )

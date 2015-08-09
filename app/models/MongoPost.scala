@@ -20,7 +20,10 @@ case class MongoPost(_id: BSONObjectID, title:String, postType: Int, dateCreated
     //Todo populate this from json commit message or store
     //the json in the git files
     val revContent = repo.getFile(_id.stringify,revision)
-    this.copy(content = revContent)
+    revContent match {
+      case "" => this
+      case _ => this.copy(content = revContent)
+    }
   }
 
   def extraDataToJson  = {

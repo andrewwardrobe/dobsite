@@ -50,7 +50,7 @@ class DAOBase[T](val collectionName : String) {
   }
 
   def find(query :JsObject,  max :Int)(implicit format: OFormat[T]) = {
-    val documents = collection.find(query).options(QueryOpts().batchSize(max))
+    val documents = collection.find(query)
     try {
       val cursor = documents.cursor[T]
       cursor.collect[Vector]()

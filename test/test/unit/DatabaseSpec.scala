@@ -24,7 +24,7 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite with ScalaFutures{
 
         GitRepo.refresh
         val newsItem = ContentHelper.createPost("DOB Test News Post", "MC Donalds", "News Content for db spec", 1, None)
-        val result = Content.get.futureValue
+        val result = Content.getById(newsItem.id).futureValue
         result.head mustEqual newsItem
 
     }

@@ -7,11 +7,13 @@ import controllers.StandardAuthConfig
 import data.{UserProfiles, Content, UserAccounts}
 import models._
 import org.scalatest.BeforeAndAfter
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.libs.json.Json
 import play.api.test.{FakeRequest, FakeApplication, FakeHeaders}
 import play.api.test.Helpers._
 import play.api.db.DB
+import reactivemongo.bson.BSONObjectID
 import test.helpers.UserAccountHelper
 import test.{TestGlobal, TestConfig}
 import scala.slick.jdbc.JdbcBackend._
@@ -20,7 +22,7 @@ import jp.t2v.lab.play2.auth.test.Helpers._
 /**
  * Created by andrew on 14/09/14.
  */
-class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter{
+class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures{
   import models.JsonFormats._
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
@@ -38,28 +40,29 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
 
     "Allow Contributors to create news posts" in {
 
-      val json = Json.parse( """{"id":"f26c0ddc-214e-4d3a-a8c8-0deec3045e75","title":"title","postType":1,"dateCreated":"20120412140513","author":"Andrew","content":"12345678","extraData":"{ \"thumb\":\"assets/leek.jpg\"}","isDraft":false}""")
+      val post = new MongoPost(BSONObjectID.generate,"title",1,new Date,"Andrew","Content","",false,None,None)
+      val json = Json.toJson(post)
       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitPost().url,FakeHeaders(),json).withLoggedIn(config)("Contributor")).get
       status(result) mustBe OK
     }
 
     "Not Allow normal users to create news posts" in {
-
-      val json = Json.parse( """{"id":"f26c0ddc-214e-4d3a-a8c8-0deec3045e75","title":"title","postType":1,"dateCreated":"20120412140513","author":"Andrew","content":"12345678","extraData":"{ \"thumb\":\"assets/leek.jpg\"}","isDraft":false}""")
+      val post = new MongoPost(BSONObjectID.generate,"title",1,new Date,"Andrew","Content","",false,None,None)
+      val json = Json.toJson(post)
       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitPost().url,FakeHeaders(),json).withLoggedIn(config)("NormalUser")).get
       status(result) mustBe FORBIDDEN
     }
 
     "Not Allow contributors to create biography posts" in {
-
-      val json = Json.parse( """{"id":"f26c0ddc-214e-4d3a-a8c8-0deec3045e75","title":"title","postType":4,"dateCreated":"20120412140513","author":"Andrew","content":"12345678","extraData":"{ \"thumb\":\"assets/leek.jpg\"}","isDraft":false}""")
+      val post = new MongoPost(BSONObjectID.generate,"title",ContentTypeMap("Biography"),new Date,"Andrew","Content","",false,None,None)
+      val json = Json.toJson(post)
       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitPost().url,FakeHeaders(),json).withLoggedIn(config)("Contributor")).get
       status(result) mustBe UNAUTHORIZED
     }
 
     "Allow TrustedContributors to create biography posts" in {
-
-      val json = Json.parse( """{"id":"f26c0ddc-214e-4d3a-a8c8-0deec3045e75","title":"title","postType":4,"dateCreated":"20120412140513","author":"Andrew","content":"12345hhgjhg678","extraData":"{ \"thumb\":\"assets/leek.jpg\"}","isDraft":false}""")
+      val post = new MongoPost(BSONObjectID.generate,"title",ContentTypeMap("Biography"),new Date,"Andrew","Content","",false,None,None)
+      val json = Json.toJson(post)
       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitPost().url,FakeHeaders(),json).withLoggedIn(config)("TrustedContributor")).get
       status(result) mustBe OK
     }
@@ -68,10 +71,8 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
       val updateProfile = userProfile.copy(about = "New user info")
       val result = route(FakeRequest(POST, controllers.routes.Authorised.updateProfile.url,FakeHeaders(),Json.toJson(updateProfile)).withLoggedIn(config)("TrustedContributor")).get
       status(result) mustBe OK
-      database.withSession { implicit session =>
-        val retrievedProfile = UserProfiles.getById(updateProfile._id.toString())
-        retrievedProfile mustEqual updateProfile
-      }
+      val retrievedProfile = UserProfiles.getById(updateProfile.id).futureValue
+      retrievedProfile.head mustEqual updateProfile
     }
 
     "Prevent Users from updating others profiles" in {

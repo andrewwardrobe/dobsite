@@ -25,6 +25,7 @@ import scala.concurrent.duration.DurationInt
 
 class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures  {
 
+  import scala.concurrent.duration.DurationInt
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
   def database = Database.forDataSource(DB.getDataSource())
   
@@ -45,9 +46,10 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
 
     "Be able an assign an alias to a user" in {
       val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
-      database.withSession { implicit session =>
-        UserProfiles.addAlias(user, "Leek")
-        UserProfiles.getAliasesAsString(user).futureValue.head mustEqual "Leek"
+      val inserted = UserProfiles.addAlias(user, "Leek")
+      whenReady(inserted) { result =>
+        val futureProfile = UserProfiles.getByUserId(user._id).futureValue
+        futureProfile.head.aliases.getOrElse(List("Failed")) must contain("Leek")
       }
     }
 
@@ -71,9 +73,8 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
   }
 
   after {
-    database.withSession { implicit session =>
+      UserAccounts.deleteAll
       UserProfiles.deleteAll
-    }
   }
 
 

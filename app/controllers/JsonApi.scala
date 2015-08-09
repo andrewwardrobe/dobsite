@@ -45,9 +45,10 @@ object JsonApi extends Controller {
     }
   }
   def getPostById(id: String) = Action.async { implicit response =>
-    val regex = """"^[0-9a-fA-F]{24}$".r""".r
+    val regex = "^[0-9a-fA-F]{24}$".r
      id match {
       case regex() => {
+        Logger.info("Post ID")
         Content.getById(id).map { posts =>
           posts.headOption match {
             case Some(post) => Ok(toJson(posts))
@@ -56,6 +57,7 @@ object JsonApi extends Controller {
         }
       }
       case _ => {
+        Logger.info("Title")
         val title = id.replace("_"," ")
         Content.find(Json.obj("title" -> title )).map { posts =>
           posts.headOption match {
@@ -85,6 +87,7 @@ object JsonApi extends Controller {
     Content.getById(id).map { posts =>
       posts.headOption match {
         case Some(post) => Ok(toJson(post.revision(revId,repo)))
+        case None => BadRequest("Not Found")
       }
     }
   }

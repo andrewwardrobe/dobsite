@@ -24,13 +24,15 @@ object ContentQueries {
     "$orderby" -> Json.obj("dateCreated" -> -1)
   )
 
-  def dateReverse(dateCreated:Date) = Json.obj(
-    "$query" -> Json.obj("dateCreated" -> dateCreated),
+  def dateReverse(date:Date) = Json.obj(
+    "$query" -> Json.obj( "dateCreated" -> Json.obj("$lte" -> Json.obj("$date" -> date))),
     "$orderby" -> Json.obj("dateCreated" -> -1)
   )
 
-  def dateReverse(typeId:Int,dateCreated:Date) = Json.obj(
-    "$query" -> Json.obj("dateCreated" -> dateCreated, "typeId" -> typeId),
+  def dateReverse(typeId:Int,date:Date) = Json.obj(
+    "$query" -> Json.obj(
+      "dateCreated" -> Json.obj("$lt" -> Json.obj("$date" -> date)),
+      "postType" -> typeId),
     "$orderby" -> Json.obj("dateCreated" -> -1)
   )
 

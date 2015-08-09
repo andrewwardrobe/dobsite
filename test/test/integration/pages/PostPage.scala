@@ -32,7 +32,7 @@ class PostPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest.s
 
   def tagList = {
     val tags: ListBuffer[String] = new ListBuffer[String]()
-    cssSelector("a[id*='tag']").findAllElements.toList.foreach { elem =>
+    cssSelector("a[id*='tag_']").findAllElements.toList.foreach { elem =>
       tags += elem.text
     }
     tags.toList

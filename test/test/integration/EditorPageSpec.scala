@@ -162,7 +162,7 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
     }
 
-    "Be able to save tags" in {
+    "Be able to save tags" in { //Seems to be broken here
       val postPage = new PostPage(port)
       go to post(post3.id)
       addTags("Leek,Sheek")
