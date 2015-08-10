@@ -1,6 +1,7 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
+import data.{UserAccounts, UserProfiles, Content}
 import models._
 import org.scalatest._
 import org.scalatestplus.play._
@@ -11,6 +12,7 @@ import test.helpers.UserAccountHelper
 import test.integration.pages.{EditorPage, MenuBar, SignInPage}
 import test.{TestConfig, TestGlobal}
 
+import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend.Database
 
 
@@ -26,12 +28,20 @@ class MenuSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
 
 
   before{
-
+    import scala.concurrent.duration.DurationInt
+    Await.ready(Content.deleteAll,10 seconds)
+    Await.ready(UserProfiles.deleteAll,10 seconds)
+    Await.ready(UserAccounts.deleteAll,10 seconds)
+    setup
   }
 
 
   after {
-
+    signInPage.signout
+    import scala.concurrent.duration.DurationInt
+    Await.ready(Content.deleteAll,10 seconds)
+    Await.ready(UserProfiles.deleteAll,10 seconds)
+    Await.ready(UserAccounts.deleteAll,10 seconds)
   }
 
 
@@ -39,14 +49,12 @@ class MenuSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
     import signInPage._
     import menuBar._
     "Provide a list of  thes types of content editible by the user" in {
-      setup
       signin("TrustedContributor","TrustedContributor")
       eventually{editLinks must not be empty}
 
     }
 
     "Provide Links to The type of content editible by the user" in {
-      setup
       signin("Administrator","Administrator")
 
       clickEditLink("Biography")

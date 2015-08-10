@@ -1,6 +1,7 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
+import data.{UserAccounts, UserProfiles, Content}
 import models.MongoPost
 
 import models.UserRole.TrustedContributor
@@ -15,6 +16,7 @@ import test._
 import test.helpers.{UserAccountHelper, ContentHelper}
 import test.integration.pages._
 
+import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend._
 
 /**
@@ -47,17 +49,35 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
   import editorPage._
 
+
+
+
+  override def afterAll()  {
+    import scala.concurrent.duration.DurationInt
+    Await.ready(Content.deleteAll,10 seconds)
+    Await.ready(UserProfiles.deleteAll,10 seconds)
+    Await.ready(UserAccounts.deleteAll,10 seconds)
+    signIn.signout
+  }
+
   var setupDone: Boolean = false
-
+  val signIn = new SignInPage(port)
   def setup() = {
+    setupDone match {
 
-    val signIn = new SignInPage(port)
-    if(!setupDone) {
-      repo.refresh
-      UserAccountHelper.createUserWithAlias("TrustedContributor", "TrustedContributor", "TrustedContributor","TrustedContributor", "Da Oostin Boyeez")
-      signIn.signin("TrustedContributor", "TrustedContributor")
-      extraSetup
-      setupDone = true
+      case false =>
+        repo.refresh
+        UserAccountHelper.createUserWithAlias("TrustedContributor", "TrustedContributor", "TrustedContributor", "TrustedContributor", "Da Oostin Boyeez")
+        signIn.signin("TrustedContributor", "TrustedContributor")
+        extraSetup
+        post1 = ContentHelper.createPost("DOB Test News Post", "MC Donalds", "ah ah blah", 1, None)
+        post2 = ContentHelper.createPost("2nd Post", "MC Donalds", "Jimbo jimbp", 1, None)
+        post3 = ContentHelper.createPost("3rd Post", "MC Donalds", "Dis is Da Oostin Boyeez Leek", 1, None)
+        post4 = ContentHelper.createDraft("4th Post", "MC Donalds", "Jambo jimbo Leek", 1, None)
+        repo.updateFile(post1.id, "Here is some data I just changed")
+        setupDone = true
+      case true =>
+
     }
 
   }
@@ -65,6 +85,7 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   before{
     setup()
   }
+
 
   "Editor" must {
    "Display the editor with some initial text" in {
@@ -207,8 +228,12 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     }
 
 
+
   }
 
+  after{
+
+  }
 
   def addContent(content: String) = editorPage.addContent(content)
 }

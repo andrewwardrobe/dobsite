@@ -90,10 +90,10 @@ define ['common', 'helpers/date'], (common) -> {
 
     doEditMode : (bio) ->
         self = this
-        bioText = $("#bioText" + bio.id)
-        nameDiv = $("#bioName" + bio.id)
-        imageDiv = $("#bioImageDiv" + bio.id)
-        textDiv = $("#bioDiv" + bio.id)
+        bioText = $("#bioText" + bio._id.$oid)
+        nameDiv = $("#bioName" + bio._id.$oid)
+        imageDiv = $("#bioImageDiv" + bio._id.$oid)
+        textDiv = $("#bioDiv" + bio._id.$oid)
         bioText.attr 'contenteditable','false'
         nameDiv.attr 'contenteditable','false'
         imageDiv.attr 'contenteditable','false'
@@ -105,42 +105,42 @@ define ['common', 'helpers/date'], (common) -> {
         btnsDiv.attr 'class', 'pull-right'
         saveBtn = $("<a>")
         saveBtn.html '<span class="fa fa-save"></span>'
-        saveBtn.attr 'id', 'bioSave' + bio.id
+        saveBtn.attr 'id', 'bioSave' + bio._id.$oid
         saveBtn.attr 'href', '#'
         saveBtn.attr 'class', 'expander'
         editBtn = $("<a>")
         editBtn.html '<span class="fa fa-pencil"></span>'
-        editBtn.attr 'id', 'bioEdit' + bio.id
+        editBtn.attr 'id', 'bioEdit' + bio._id.$oid
         editBtn.attr 'href', '#'
         editBtn.attr 'class', 'editBtnOff'
         saveSuccess = $("<a>")
-        saveSuccess.attr 'id', 'bioSuccess' + bio.id
+        saveSuccess.attr 'id', 'bioSuccess' + bio._id.$oid
         saveSuccess.attr 'href', '#'
         saveSuccess.attr 'class', 'btnSuccessful'
         saveSuccess.html '<span class="fa fa-check-circle"></span>'
         saveSuccess.hide()
         saveFailure = $("<a>")
-        saveFailure.attr 'id', 'bioFailure' + bio.id
+        saveFailure.attr 'id', 'bioFailure' + bio._id.$oid
         saveFailure.attr 'href', '#'
         saveFailure.attr 'class', 'btnFailure'
         saveFailure.html '<span class="fa fa-times-circle"></span>'
         saveFailure.hide()
         editBtn.on "click", () ->
-            self.editModeOn bio.id
+            self.editModeOn bio._id.$oid
         saveBtn.on "click", (event) ->
-            extraData = $("#bioExtra" +bio.id).val()
+            extraData = $("#bioExtra" +bio._id.$oid).val()
             id = event.target.parentElement.id.replace "bioSave" , ""
-            dte = $("#bioDate" +bio.id).val()
-            title = $("#bioName" +bio.id).text()
-            textId = "#bioText" + bio.id
+            dte = $("#bioDate" +bio._id.$oid).val()
+            title = $("#bioName" +bio._id.$oid).text()
+            textId = "#bioText" + bio._id.$oid
             content = $(textId).html()
-            userId =  $("#bioUser" +bio.id).text()
-            $("#bioSuccess"+bio.id).hide()
-            $("#bioFailure"+bio.id).hide()
+            userId =  $("#bioUser" +bio._id.$oid).text()
+            $("#bioSuccess"+bio._id.$oid).hide()
+            $("#bioFailure"+bio._id.$oid).hide()
             console.log event.target.id
             json = {
                 data:
-                    "id":bio.id,
+                    "_id":bio._id.$oid,
                     "dateCreated":dte,
                     "title":title,
                     "content":content
@@ -152,11 +152,11 @@ define ['common', 'helpers/date'], (common) -> {
                     "tags":"",
                     "userId":userId
                 success: (data) ->
-                    $("#bioSuccess"+bio.id).show()
-                    $("#bioSave"+bio.id).hide()
+                    $("#bioSuccess"+bio._id.$oid).show()
+                    $("#bioSave"+bio._id.$oid).hide()
                     console.log("Success")
                 error: (data) ->
-                    $("#bioFailure"+bio.id).show()
+                    $("#bioFailure"+bio._id.$oid).show()
                     console.log("Error")
             }
             jsRoutes.controllers.Authorised.submitBlogUpdate().ajax(json);
@@ -166,10 +166,10 @@ define ['common', 'helpers/date'], (common) -> {
         btnsDiv.append saveSuccess
         btnsDiv.append saveFailure
         nameDiv.append btnsDiv
-        $("#bioSave"+bio.id).hide()
+        $("#bioSave"+bio._id.$oid).hide()
         textDiv.on "keyup", ->
-            $("#bioSave"+bio.id).show()
-            $("#bioSuccess"+bio.id).hide()
+            $("#bioSave"+bio._id.$oid).show()
+            $("#bioSuccess"+bio._id.$oid).hide()
 
     extraDataJs2KeyVal : (js) ->
         data = $.parseJSON(js)
@@ -189,33 +189,33 @@ define ['common', 'helpers/date'], (common) -> {
             image = $("<img>")
             image.attr 'src', extraData.thumb
             image.attr 'class','bioThumb pull-left'
-            image.attr 'id', 'bioImage' + bio.id
+            image.attr 'id', 'bioImage' + bio._id.$oid
             imageDiv.append image
 
-        imageDiv.attr 'id', 'bioImageDiv' + bio.id
+        imageDiv.attr 'id', 'bioImageDiv' + bio._id.$oid
         textDiv = $("<div>")
-        textDiv.attr 'id', 'bioDiv' + bio.id
+        textDiv.attr 'id', 'bioDiv' + bio._id.$oid
         textDiv.attr 'class', 'col-xs-12 col-sm-12 bioDiv'
         textDiv.append imageDiv
         nameDiv = $("<div>")
         nameDiv.text bio.title
-        nameDiv.attr 'id','bioName' + bio.id
+        nameDiv.attr 'id','bioName' + bio._id.$oid
         bioText = $("<div>")
         bioText.attr 'class','bioText'
-        bioText.attr 'id','bioText' + bio.id
+        bioText.attr 'id','bioText' + bio._id.$oid
         bioText.attr 'contenteditable','false'
         bioText.html bio.content
         textDiv.append nameDiv
         #Some hidden stuff
         dateCreated = $("<input>")
-        dateCreated.attr 'id', 'bioDate' + bio.id
+        dateCreated.attr 'id', 'bioDate' + bio._id.$oid
         dateCreated.attr 'type', 'hidden'
         bioUser =  $("<input>")
-        bioUser.attr 'id', 'bioUser' + bio.id
+        bioUser.attr 'id', 'bioUser' + bio._id.$oid
         bioUser.attr 'type', 'hidden'
         bioUser.val bio.userId
         bioExtra = $("<input>")
-        bioExtra.attr 'id', 'bioExtra' + bio.id
+        bioExtra.attr 'id', 'bioExtra' + bio._id.$oid
         bioExtra.attr 'type', 'hidden'
         console.log "Extra Data #{bio.extraData}"
         if bio.extraData != ""
@@ -225,7 +225,7 @@ define ['common', 'helpers/date'], (common) -> {
         dateCreated.attr 'value', d.yyyymmdd()
         textDiv.append dateCreated
         author = $("<input>")
-        author.attr 'id', 'bioAuthor' + bio.id
+        author.attr 'id', 'bioAuthor' + bio._id.$oid
         author.attr 'type', 'hidden'
         author.attr 'value', bio.author
         textDiv.append author
@@ -237,15 +237,15 @@ define ['common', 'helpers/date'], (common) -> {
 
     doExpander : (bio) ->
         self = this
-        textDiv = $("#bioDiv" + bio.id)
+        textDiv = $("#bioDiv" + bio._id.$oid)
         rightDiv = $("<div>")
         rightDiv.attr 'align','right'
         expander = $("<a>")
         expander.attr 'href','#'
-        expander.attr 'id', 'expander' + bio.id
+        expander.attr 'id', 'expander' + bio._id.$oid
         expander.html '<span class="fa fa-chevron-circle-down"></span>'
         expander.on 'click', () ->
-            self.expandDiv bio.id
+            self.expandDiv bio._id.$oid
         expander.attr 'class','expander'
         rightDiv.append expander
         textDiv.append rightDiv
