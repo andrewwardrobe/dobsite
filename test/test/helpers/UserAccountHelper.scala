@@ -31,20 +31,28 @@ object UserAccountHelper {
       user
   }
 
-  def createUserAndProfile(userId: String, password: String, role: String) = {
+  def createUserAndProfile(userId: String, password: String, role: String, about : String) = {
     val user = new UserAccount(BSONObjectID.generate, s"$userId@daoostinboyeez.com", password, userId, role)
     Await.result(UserAccounts.create(user),10 seconds)
-    val profile = new Profile(BSONObjectID.generate, user._id,"Some Test about","assets/images/crew/donalds_bw.jpg",None)
+    val profile = new Profile(BSONObjectID.generate, user._id,about,"assets/images/crew/donalds_bw.jpg",None)
     Await.result(UserProfiles.insert(profile),10 seconds)
     user
   }
 
-  def createUserWithAlias(userId: String, email :String, password: String, role: String,alias: String ) = {
+  def createUserAndProfile(userId: String, password: String, role: String) : UserAccount = {
+    createUserAndProfile(userId, password, role, "Some Test About")
+  }
+
+  def createUserWithAlias(userId: String, email :String, password: String, role: String, alias: String, about :String) = {
     val user = new UserAccount(BSONObjectID.generate, s"$userId@daoostinboyeez.com", password, userId, role)
     Await.result(UserAccounts.create(user),10 seconds)
-    val profile = new Profile(BSONObjectID.generate, user._id,"Some Test about","assets/images/crew/donalds_bw.jpg",Some(List(alias)))
+    val profile = new Profile(BSONObjectID.generate, user._id,about,"assets/images/crew/donalds_bw.jpg",Some(List(alias)))
     Await.result(UserProfiles.insert(profile),10 seconds)
     user
+  }
+
+  def createUserWithAlias(userId: String, email :String, password: String, role: String,alias: String ) : UserAccount = {
+    createUserWithAlias(userId, email , password, role, alias, "Some Test About")
   }
 
   def createProfile(userId:BSONObjectID, about:String,avatar:String) = {

@@ -12,6 +12,7 @@ import test.helpers.{ContentHelper, UserAccountHelper}
 import test.integration.pages.{ProfilePage, BiographyPage, SignInPage}
 import test.{TestConfig, TestGlobal}
 
+import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend.Database
 
 
@@ -33,8 +34,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
   def setup() = {
     UserAccountHelper.createUser("Administrator","Administrator","Administrator")
     UserAccountHelper.createUser("Contributor","Contributor","Contributor")
-    trust = UserAccountHelper.createUserWithAlias("TrustedContributor", "TrustedContributor@dob.com", "TrustedContributor", "TrustedContributor", "Da Oostin Boyeez")
-    UserAccountHelper.createProfile(trust._id,"this user is a fine member of da oostin boyeez","assets/images/crew/donalds_bw.jpg")
+    trust = UserAccountHelper.createUserWithAlias("TrustedContributor", "TrustedContributor@dob.com", "TrustedContributor", "TrustedContributor", "Da Oostin Boyeez","this user is a fine member of da oostin boyeez")
     UserAccountHelper.createUser("NormalUser","NormalUser","NormalUser")
 
   }
@@ -162,16 +162,14 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
   def dataSetup() = {
 
-    database.withSession { implicit session =>
 
-    }
   }
 
   def dataTearDown() = {
-    database.withSession { implicit session =>
+    import scala.concurrent.duration.DurationInt
+    Await.ready(Content.deleteAll,10 seconds)
+    Await.ready(UserProfiles.deleteAll,10 seconds)
+    Await.ready(UserAccounts.deleteAll,10 seconds)
 
-      UserProfiles.deleteAll
-      UserAccounts.deleteAll
-    }
   }
 }
