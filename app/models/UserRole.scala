@@ -72,6 +72,8 @@ object UserRole {
   def roleHasAuthority(role: UserRole, authority: UserRole) = {
     role.hasAuthority(authority.name)
   }
+
+  def apply(role:String) = valueOf(role)
 }
 
 class UserRoleMapping(val key: String = "") extends Mapping[UserRole]{
@@ -100,4 +102,6 @@ class UserRoleMapping(val key: String = "") extends Mapping[UserRole]{
     }
 
   }
+
+
 }

@@ -6,6 +6,7 @@ import java.util.Date
 import com.daoostinboyeez.git.GitRepo
 import data.{ContentQueries, Content}
 import models.{ContentTypeMap}
+import org.hamcrest.core.AnyOf
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
@@ -82,8 +83,8 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
         ContentHelper.createPost("Post 21","MC Donalds","wet rwe1",1,"",None)
         ContentHelper.createPost("Post 42423","MC Donalds","23 rew2",1,"",None)
         ContentHelper.createPost("Post 342","MC Donalds","43 ewr3",1,"",None)
-        val target = ContentHelper.createPost("Post 432","MC Donalds","432 4",2,"",None)
-        ContentHelper.createPost("Post 65","MC Donalds","wrw rwewe",1,"",None)
+        ContentHelper.createPost("Post 432","MC Donalds","432 4",2,"",None)
+        val target = ContentHelper.createPost("Post 65","MC Donalds","wrw rwewe",1,"",None)
         ContentHelper.createPost("Post 6ewq5","MC Donalds","Postewqeqwfsd 5",1,"","20170803154423",None)
         ContentHelper.createPost("Postdsf 6ewq5","MC Donalds","fdsfsdfds 5",2,"","20170803154423",None)
         val df = new SimpleDateFormat("yyyyMMddHHmmss")
@@ -104,9 +105,9 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
         ContentHelper.createPost("Post 218","MC Donalds","Jimbo Jambo 4",1,"",None)
         ContentHelper.createPost("Post 219","MC Donalds","Jimbo Jambo 5",2,"",None)
 
-        val posts = Content.find(ContentQueries.dateReverse,5).futureValue
+        val posts = Content.find(ContentQueries.dateReverse,3).futureValue
 
-        posts must have length(5) //Idont think this works properly
+        posts must have length(3)
 
     }
 
@@ -133,15 +134,15 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
         ContentHelper.createPost("Post 216","MC Donalds","Jimbo Jambo 2",1,"",None)
         ContentHelper.createPost("Post 217","Test Author","Jimbo Jambo 3",1,"",None)
         ContentHelper.createPost("Post 218","MC Donalds","Jimbo Jambo 4",1,"",None)
-        val latest = ContentHelper.createPost("Post 219","MC Donalds","Jimbo Jambo 5",1,"",None)
-        ContentHelper.createPost("Post 220","MC Donalds","Jimbo Jambo 6",1,"","20170803154423",None)
+        ContentHelper.createPost("Post 219","MC Donalds","Jimbo Jambo 5",1,"",None)
+        val latest = ContentHelper.createPost("Post 220","MC Donalds","Jimbo Jambo 6",1,"","20170803154423",None)
 
         val df = new SimpleDateFormat("yyyyMMddHHmmss")
         val targetDate = df.parse("20170802154423")
         val posts = Content.find(ContentQueries.liveContentByAuthorBeforeDate("MC Donalds",1,targetDate),3).futureValue
 
         posts must have length(3)
-        posts.head.dateCreated mustEqual latest.dateCreated
+        posts must not contain latest
       }
     }
 
@@ -164,7 +165,7 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
         ContentHelper.createPost("Post 2166", "MC Donalds", "Leeek 2", 1, "",None)
         ContentHelper.createPost("Post 2133", "MC Donalds", "Leeek 3", 1, "",None)
 
-        val posts = Content.find(ContentQueries.dateReverse(new Date),10).futureValue
+        val posts = Content.find(ContentQueries.dateReverseWithDrafts(new Date),10).futureValue
         posts must contain (draft)
 
       }

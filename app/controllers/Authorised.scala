@@ -150,13 +150,25 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   def addAlias(alias: String) = AsyncStack(AuthorityKey -> Contributor) { implicit request =>
     val user = loggedIn
       try {
-        UserProfiles.addAlias(user, alias).map { result =>
-          Ok(alias)
+        UserProfiles.getByUserId(user._id).flatMap{ profile =>
+          val aliasLimit = user.userRole.aliasLimit
+          val aliasCount = profile.head.aliases.getOrElse(Nil).length
+          aliasCount match {
+            case x if x < aliasLimit =>
+              UserProfiles.addAlias(profile.head, alias).map { result =>
+                result.ok match {
+                  case true => Ok(alias)
+                  case false => BadRequest("Could not  add Alias")
+                }
+              }
+            case _ => Future { BadRequest("Alias Limit Reached") }
+          }
         }
       } catch {
         case ex: AliasLimitReachedException => Future.successful(BadRequest("Alias Limit Reached"))
       }
   }
+
   //TODO: Reactor this to use the save from content
   def submitBlogUpdate = AsyncStack(AuthorityKey -> Contributor) { implicit request =>
 

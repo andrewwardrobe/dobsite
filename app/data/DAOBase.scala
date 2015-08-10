@@ -31,8 +31,24 @@ class DAOBase[T](val collectionName : String) {
 
   protected def collection = ReactiveMongoPlugin.db.collection[JSONCollection](collectionName)
 
+
+
   def get(implicit format: OFormat[T]) = {
     find(Json.obj())
+  }
+
+  def find(query :BSONDocument) (implicit format: OFormat[T]) = {
+    val documents = collection.find(query)
+    val items = try {
+      val cursor = documents.cursor[T]
+      cursor.collect[Vector]()
+    }catch{
+      case ex : NoSuchElementException =>
+        Future {
+          Vector()
+        }
+    }
+    items
   }
 
   def find(query :JsObject)(implicit format: OFormat[T]) = {
@@ -53,7 +69,7 @@ class DAOBase[T](val collectionName : String) {
     val documents = collection.find(query)
     try {
       val cursor = documents.cursor[T]
-      cursor.collect[Vector]()
+      cursor.collect[Vector](max)
     }catch{
       case ex : NoSuchElementException =>
         Future {

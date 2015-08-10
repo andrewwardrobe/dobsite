@@ -1,9 +1,14 @@
 package data
 
-import models.{UserAccount, Profile}
+import com.daoostinboyeez.site.exceptions.AliasLimitReachedException
+import models.{UserRole, UserAccount, Profile}
+import play.api.Logger
 import play.api.libs.json.Json
 import reactivemongo.bson.BSONObjectID
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+
+import scala.concurrent.Future
+
 /**
  *
  * Created by andrew on 01/08/15.
@@ -21,22 +26,20 @@ object UserProfiles extends DAOBase[Profile]("profiles"){
     find(query)
   }
 
-  def addAlias(user: UserAccount,alias :String) = {
-    getByUserId(user._id).map{ users =>
-      users.headOption match {
-        case Some(profile) => {
-          val aliasList = profile.aliases.getOrElse(Nil) ++: List(alias)
-          val updated = profile.copy(aliases = Some(aliasList))
-          update(profile._id.stringify,updated).map{ res =>
-            res.ok match {
-              case true =>
-                updated
-              case false => null
-            }
-          }
+  def addAlias(profile:Profile,alias :String) =  {
+    val aliasList = profile.aliases.getOrElse(Nil) ++: List(alias)
+    val updated = profile.copy(aliases = Some(aliasList))
 
-        }
-      }
+    update(profile._id.stringify,updated)
+  }
+
+  def addAlias(user:UserAccount,alias :String) =  {
+    getByUserId(user._id).map { profiles =>
+      val profile = profiles.head
+      val aliasList = profile.aliases.getOrElse(Nil) ++: List(alias)
+      val updated = profile.copy(aliases = Some(aliasList))
+
+      update(profile._id.stringify, updated)
     }
   }
 

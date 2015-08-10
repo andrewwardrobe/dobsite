@@ -13,7 +13,8 @@ import play.api.test.{FakeApplication, FakeHeaders, FakeRequest}
 import test.helpers.UserAccountHelper
 import test.{TestGlobal, TestConfig}
 import jp.t2v.lab.play2.auth.test.Helpers._
-
+import scala.concurrent.duration.DurationInt
+import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend._
 
 /**
@@ -42,9 +43,9 @@ class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAft
         """.stripMargin
       val result = route(FakeRequest(POST, controllers.routes.AdminJsonApi.insertDiscographies().url,FakeHeaders(),Json.parse(json)).withLoggedIn(config)("Administrator")).get
       status(result) mustBe OK
-      database.withSession { implicit session =>
-        Content.count(Json.obj( )) must equal(1)
-      }
+
+      Content.count(Json.obj( )).futureValue must equal(1)
+
     }
 
     "load biography data from json" in {
@@ -59,13 +60,14 @@ class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAft
         """.stripMargin
       val result = route(FakeRequest(POST, controllers.routes.AdminJsonApi.insertDiscographies().url,FakeHeaders(),Json.parse(json)).withLoggedIn(config)("Administrator")).get
       status(result) mustBe OK
-      database.withSession { implicit session =>
-        Content.count() must equal(1)
-      }
+      Content.count().futureValue must equal(1)
     }
 
   }
   before{
+    Await.ready(Content.deleteAll,10 seconds)
+    Await.ready(UserProfiles.deleteAll,10 seconds)
+    Await.ready(UserAccounts.deleteAll,10 seconds)
     val repo = GitRepo.apply()
     repo.refresh
     UserAccountHelper.createUser("Administrator","Administrator","Administrator")
@@ -73,11 +75,8 @@ class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAft
   }
 
   after{
-    database.withSession { implicit session =>
-      Content.deleteAll
-      UserProfiles.deleteAll
-      UserAccounts.deleteAll
-
-    }
+    Await.ready(Content.deleteAll,10 seconds)
+    Await.ready(UserProfiles.deleteAll,10 seconds)
+    Await.ready(UserAccounts.deleteAll,10 seconds)
   }
 }

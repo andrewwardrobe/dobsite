@@ -2,7 +2,7 @@ package test.unit
 
 import com.daoostinboyeez.git.GitRepo
 import controllers.StandardAuthConfig
-import data.{UserProfiles, UserAccounts}
+import data.{Content, UserProfiles, UserAccounts}
 import jp.t2v.lab.play2.auth.test.Helpers._
 import models.{MongoPost}
 import org.scalatest.BeforeAndAfter
@@ -13,7 +13,9 @@ import play.api.test.Helpers._
 import play.api.test.{FakeApplication, FakeHeaders, FakeRequest}
 import test.helpers.UserAccountHelper
 import test.{TestConfig, TestGlobal}
+import scala.concurrent.duration.DurationInt
 
+import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend._
 
 /**
@@ -51,9 +53,9 @@ class AdminControllerSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
   }
 
   after{
-    database.withSession { implicit session =>
-      UserProfiles.deleteAll
-      UserAccounts.deleteAll
-    }
+    import scala.concurrent.duration.DurationInt
+    Await.ready(Content.deleteAll,10 seconds)
+    Await.ready(UserProfiles.deleteAll,10 seconds)
+    Await.ready(UserAccounts.deleteAll,10 seconds)
   }
 }

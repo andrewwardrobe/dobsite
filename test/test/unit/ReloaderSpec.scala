@@ -9,8 +9,9 @@ import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
 import test.helpers.ContentHelper
-import data.{ContentReloader, Content}
+import data.{UserAccounts, UserProfiles, ContentReloader, Content}
 
+import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend._
 
 /**
@@ -32,11 +33,12 @@ class ReloaderSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter w
     }
 
     before {
-
+      import scala.concurrent.duration.DurationInt
         repo.refresh
         ContentHelper.createPost("Post 1", "MC Donalds", "Some Example Content", 1, "", None)
         ContentHelper.createPost("Post 2", "MC Donalds", "Some Example Content", 1, "", None)
-        Content.deleteAll
+      Await.ready(Content.deleteAll,10 seconds)
+
 
     }
   }
