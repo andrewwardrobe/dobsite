@@ -1,7 +1,7 @@
 package test.unit
 
 import controllers.routes
-import models.{MongoPost, ContentTypeMap}
+import models.{Post, ContentTypeMap}
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.test.{FakeApplication, FakeRequest}
@@ -19,7 +19,7 @@ class JsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter{
 
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-  var post: MongoPost = _
+  var post: Post = _
 
    before {
     post = ContentHelper.createPost("Leek","andrew","jimmy",ContentTypeMap.get("Blog"),None)

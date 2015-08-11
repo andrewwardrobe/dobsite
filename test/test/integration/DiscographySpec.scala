@@ -21,7 +21,7 @@ class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
   def database = Database.forDataSource(DB.getDataSource())
   val discography = new DiscographyPage(port)
 
-  var bio : MongoPost = null
+  var bio : Post = null
   before{
     dataSetup
   }

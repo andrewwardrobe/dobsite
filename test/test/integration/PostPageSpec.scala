@@ -2,7 +2,7 @@ package test.integration
 
 import com.daoostinboyeez.git.GitRepo
 import com.github.simplyscala.{MongodProps, MongoEmbedDatabase}
-import models.{MongoPost, ContentTypeMap}
+import models.{Post, ContentTypeMap}
 import models.UserRole.TrustedContributor
 import org.scalatest.{Matchers, BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play.{FirefoxFactory, OneBrowserPerSuite, OneServerPerSuite, PlaySpec}
@@ -31,7 +31,7 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
     }
   }
 
-  var insertedPost: MongoPost = null
+  var insertedPost: Post = null
   lazy val postPage = new PostPage(port)
 
 

@@ -30,8 +30,8 @@ object ContentMeta {
     val meta = getMeta(commit)
     if(meta!=null && meta!="") {
       val json = Json.parse(meta)
-      val post = Json.fromJson[MongoPost](json) match {
-        case p: JsSuccess[MongoPost] => {
+      val post = Json.fromJson[Post](json) match {
+        case p: JsSuccess[Post] => {
           p.get
         }
         case err: JsError => {
@@ -44,7 +44,7 @@ object ContentMeta {
       null
   }
 
-  def makeCommitMsg(commitMsg: String, post: MongoPost) = {
+  def makeCommitMsg(commitMsg: String, post: Post) = {
     val str = new StringBuilder
     str.append(commitMsg)
     str.append("\n\n")
@@ -52,7 +52,7 @@ object ContentMeta {
     str.toString()
   }
 
-  def toMeta(post: MongoPost) = {
+  def toMeta(post: Post) = {
     val metaStr = new StringBuilder()
     metaStr.append("++++META++++")
     metaStr.append("\n")
@@ -62,6 +62,6 @@ object ContentMeta {
     metaStr.toString()
   }
 
-  def fromPost(post: MongoPost) = new ContentMeta("","",toMeta(post))
+  def fromPost(post: Post) = new ContentMeta("","",toMeta(post))
 
 }

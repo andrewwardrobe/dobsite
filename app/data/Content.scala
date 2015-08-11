@@ -2,7 +2,7 @@ package data
 
 import com.daoostinboyeez.git.GitRepo
 import com.daoostinboyeez.site.exceptions.{PostUpdateException, PostInsertException}
-import models.{ContentMeta, MongoPost}
+import models.{ContentMeta, Post}
 import play.api.Logger
 import play.api.libs.json.Json
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -10,7 +10,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 /**
  * Created by andrew on 14/05/15.
  */
-object Content extends DAOBase[MongoPost]("posts"){
+object Content extends DAOBase[Post]("posts"){
 
   import models.JsonFormats._
   def findByType(typeId: Int) = {
@@ -18,7 +18,7 @@ object Content extends DAOBase[MongoPost]("posts"){
   }
 
 
-  def create(post : MongoPost, repo :GitRepo) = {
+  def create(post : Post, repo :GitRepo) = {
     Logger.info("create" +post.id)
     val ed = post.extraData match {
       case "" => ""
@@ -36,7 +36,7 @@ object Content extends DAOBase[MongoPost]("posts"){
     }
   }
 
-  def save(post: MongoPost, repo: GitRepo) = {
+  def save(post: Post, repo: GitRepo) = {
     val ed = post.extraData match {
       case "" => ""
       case _ => post.extraDataToJson

@@ -4,7 +4,7 @@ import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.GitRepo
 import com.daoostinboyeez.site.exceptions.InvalidMetaJsonException
-import models.{MongoPost, ContentMeta}
+import models.{Post, ContentMeta}
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.libs.json.Json
@@ -46,7 +46,7 @@ class ContentMetaSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
 
 
     "Be able to serialize json string into a post" in  {
-      val post = new MongoPost(BSONObjectID.generate, "title", 2, new Date(), "Andrew", "12345678", """{ "thumb":"assets/leek.jpg"}""",false, None,None)
+      val post = new Post(BSONObjectID.generate, "title", 2, new Date(), "Andrew", "12345678", """{ "thumb":"assets/leek.jpg"}""",false, None,None)
 
       val metaString = ContentMeta.toMeta(post)
       val createdPost = ContentMeta.toPost(metaString)
@@ -70,7 +70,7 @@ class ContentMetaSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
   }
 
   "Be able to make a commit message with meta data" in {
-    val post = new MongoPost(BSONObjectID.generate, "title", 2, new Date(), "Andrew", "12345678", """{ "thumb":"assets/leek.jpg"}""",false, None,None)
+    val post = new Post(BSONObjectID.generate, "title", 2, new Date(), "Andrew", "12345678", """{ "thumb":"assets/leek.jpg"}""",false, None,None)
     val commitMsg = "My Commit Msg"
     val expected = commitMsg + "\n\n" + ContentMeta.toMeta(post)
 

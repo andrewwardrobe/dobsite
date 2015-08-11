@@ -1,6 +1,6 @@
 package data
 
-import models.MongoPost
+import models.Post
 import play.api.Play.current
 import java.util.{NoSuchElementException, Date}
 
@@ -23,7 +23,7 @@ import scala.concurrent.Future
 
 
 
-object PostDAO extends DAOBase[MongoPost]("posts"){
+object PostDAO extends DAOBase[Post]("posts"){
 
   import models.JsonFormats._
   def get(title: String) = {

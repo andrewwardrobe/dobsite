@@ -37,7 +37,7 @@ object Forms {
   }
 
 
-  val blogForm: Form[MongoPost] = Form {
+  val blogForm: Form[Post] = Form {
     mapping (
       "id" -> text.transform[BSONObjectID]({ s => bsonMapper(s)},{b => b.stringify}),
       "title" -> text,
@@ -49,6 +49,6 @@ object Forms {
       "isDraft" -> boolean,
       "userId" -> optional(text.transform[BSONObjectID]({ s => bsonMapper(s)},{b => b.stringify})),
       "tags" -> optional(seq(text))
-    )(MongoPost.apply)(MongoPost.unapply _)
+    )(Post.apply)(Post.unapply _)
   }
 }

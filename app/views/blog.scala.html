@@ -1,4 +1,4 @@
-@(mode: String, user: Option[UserAccount], posts: Seq[MongoPost])(implicit session: Session)
+@(mode: String, user: Option[UserAccount], posts: Seq[Post])(implicit session: Session)
 @scripts = {
 <script src='@routes.Assets.at("javascripts/require.js").url'
         data-main='@routes.Assets.at("javascripts/news-main.js").url'></script>

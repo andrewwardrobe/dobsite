@@ -18,6 +18,7 @@ import test.helpers.{UserAccountHelper, ContentHelper}
 import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend._
 import scala.concurrent.duration.DurationInt
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite with ScalaFutures with BeforeAndAfter{
 
@@ -30,9 +31,10 @@ class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite with ScalaFu
 
         val user = UserAccountHelper.createUser("test", "test@test.com", "pa$$word", "NormalUser")
         info(user.toString)
-        val res = UserAccounts.findByEmail("test@test.com")
-          res.futureValue must not be empty
+        UserAccounts.findByEmail("test@test.com").map { users =>
+          users must not be empty
         }
+    }
   }
 
 

@@ -17,6 +17,7 @@ import jp.t2v.lab.play2.auth.test.Helpers._
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Created by andrew on 14/09/14.
@@ -45,9 +46,9 @@ class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAft
       val result = route(FakeRequest(POST, controllers.routes.AdminJsonApi.insertDiscographies().url,FakeHeaders(),Json.parse(json)).withLoggedIn(config)("Administrator")).get
       status(result) mustBe OK
       //Wait for the upload to finish
-      result.futureValue
+      result.map { result =>
         Content.count(Json.obj()).futureValue must equal(1)
-
+      }
 
     }
 
@@ -64,8 +65,11 @@ class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAft
       val result = route(FakeRequest(POST, controllers.routes.AdminJsonApi.insertDiscographies().url,FakeHeaders(),Json.parse(json)).withLoggedIn(config)("Administrator")).get
       status(result) mustBe OK
       //Wait for the upload to finish
-      info(result.futureValue.toString())
-      Content.count(Json.obj()).futureValue must equal(1)
+
+      result.map { result =>
+        Content.count(Json.obj()).futureValue must equal(1)
+      }
+
 
     }
 

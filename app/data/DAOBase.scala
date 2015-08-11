@@ -1,7 +1,7 @@
 package data
 
 import data.UserAccounts._
-import models.{UserAccount, MongoPost}
+import models.{UserAccount, Post}
 import org.mindrot.jbcrypt.BCrypt
 import play.api.Play.current
 import java.util.{NoSuchElementException, Date}

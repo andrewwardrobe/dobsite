@@ -4,7 +4,7 @@ import com.daoostinboyeez.git.GitRepo
 import controllers.StandardAuthConfig
 import data.{Content, UserProfiles, UserAccounts}
 import jp.t2v.lab.play2.auth.test.Helpers._
-import models.{MongoPost}
+import models.{Post}
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB

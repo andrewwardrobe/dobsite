@@ -10,7 +10,7 @@ import play.api.libs.json.Json
 object JsonFormats {
   import play.modules.reactivemongo.json.ImplicitBSONHandlers
   import play.modules.reactivemongo.json.BSONFormats._
-  implicit val postFormat = Json.format[MongoPost]
+  implicit val postFormat = Json.format[Post]
   implicit val discFormat = Json.format[Discography]
   implicit val bioFormat = Json.format[Biography]
   implicit val userFormat = Json.format[UserAccount]

@@ -17,7 +17,7 @@ import scala.collection.mutable.ListBuffer
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import jp.t2v.lab.play2.auth.OptionalAuthElement
-import models.{ MongoPost}
+import models.{ Post}
 import play.api.libs.json.{JsValue, JsArray, JsObject, Json}
 import play.api.mvc.{Action, Controller}
 import play.api.libs.json.Json._
@@ -32,13 +32,13 @@ object MongoStuff extends Controller with MongoController with  OptionalAuthElem
   implicit val timeout = 10.seconds
 
   import play.modules.reactivemongo.json.BSONFormats._
-  implicit val postFormat = Json.format[MongoPost]
+  implicit val postFormat = Json.format[Post]
 
   def posts : JSONCollection = db.collection[JSONCollection]("posts")
 
 
   def mongoGet = Action.async {
-    val postList = posts.genericQueryBuilder.cursor[MongoPost].collect[List]()
+    val postList = posts.genericQueryBuilder.cursor[Post].collect[List]()
     postList.map { pstList =>
       Ok(toJson(pstList))
     }.recover{
@@ -71,7 +71,7 @@ object MongoStuff extends Controller with MongoController with  OptionalAuthElem
   }
 
   def save() = Action.async {
-    val leek = new MongoPost(BSONObjectID.generate,"Leek Post",1,new Date(),"Andrew","Twat Bat", "", false, None,None)
+    val leek = new Post(BSONObjectID.generate,"Leek Post",1,new Date(),"Andrew","Twat Bat", "", false, None,None)
     val result = PostDAO.insert(leek)
     result.map { res =>
       Ok("Inseted" +res.toString)

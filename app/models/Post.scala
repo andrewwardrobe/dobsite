@@ -13,7 +13,7 @@ import org.jsoup.safety.Whitelist
  * Created by andrew on 29/07/15.
  *
  */
-case class MongoPost(_id: BSONObjectID, title:String, postType: Int, dateCreated :Date,author:String,
+case class Post(_id: BSONObjectID, title:String, postType: Int, dateCreated :Date,author:String,
                      content: String, extraData: String, isDraft: Boolean, userId:Option[BSONObjectID], tags: Option[Seq[String]]){
 
   def revision(revision :String, repo : GitRepo) ={
