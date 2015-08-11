@@ -215,6 +215,7 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       }
     }
 
+    "Clean up user inputted html" in pending
 
     "Tidy this up" in pending
   }

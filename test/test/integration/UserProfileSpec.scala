@@ -123,8 +123,8 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
     }
 
-//Todo: make these work
-/*
+
+
     "Display a list of links to the users posts" in {
       ContentHelper.createPost("Test Post 1","MC Donalds","Sample Post Content 1",1,Some(trust._id) )
       ContentHelper.createPost("Test Post 2","MC Donalds","Sample Post Content 2",1,Some(trust._id) )
@@ -157,7 +157,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       draftLinks must not be empty
       database.withSession{implicit session => Content.deleteAll}
     }
-*/
+
   }
 
   def dataSetup() = {
