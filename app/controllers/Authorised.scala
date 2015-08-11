@@ -20,13 +20,12 @@ import play.api.libs.json.{JsError, JsSuccess, JsObject, Json}
 import play.api.libs.json.Json._
 import play.api.mvc.{AnyContentAsFormUrlEncoded, AnyContentAsJson, Controller}
 import play.api.db.DB
-import play.api.db.slick.DBAction
 
 
 import play.mvc.BodyParser.FormUrlEncoded
 import reactivemongo.bson.BSONObjectID
 import scala.concurrent.Future
-import scala.slick.jdbc.JdbcBackend._
+
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
 

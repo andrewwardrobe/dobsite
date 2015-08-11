@@ -6,13 +6,13 @@ import com.daoostinboyeez.git.GitRepo
 import models.{ContentTypeMap}
 import org.scalatest.BeforeAndAfter
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
-import play.api.db.DB
+
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
 import test.helpers.ContentHelper
 
-import scala.slick.jdbc.JdbcBackend._
+
 
 class ContentTypeMapSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 

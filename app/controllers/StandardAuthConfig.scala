@@ -4,8 +4,7 @@ import _root_.data.Users
 import jp.t2v.lab.play2.auth.AuthConfig
 import models.UserRole._
 import models.{UserRole, UserAccount}
-import play.api.db.DB
-import play.api.db.slick.DBAction
+
 
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -16,7 +15,7 @@ import play.api._
 import play.api.mvc.Results._
 import play.api.Play.current
 
-import scala.slick.jdbc.JdbcBackend._
+
 
 
 /**
@@ -28,7 +27,7 @@ trait StandardAuthConfig extends AuthConfig {
   type User = UserAccount
   type Authority = UserRole
   val sessionTimeoutInSeconds: Int = 3600
-  def database = Database.forDataSource(DB.getDataSource())
+
 
   val idTag: ClassTag[Id] = classTag[Id]
 

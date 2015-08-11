@@ -10,8 +10,8 @@ import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import reactivemongo.bson.BSONObjectID
 import test.helpers.{UserAccountHelper, ContentHelper}
-import play.api.db.DB
-import scala.slick.jdbc.JdbcBackend._
+
+
 import test._
 class DatabaseSpec extends PlaySpec with OneServerPerSuite with ScalaFutures{
 

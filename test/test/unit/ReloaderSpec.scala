@@ -4,7 +4,7 @@ import com.daoostinboyeez.git.GitRepo
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
-import play.api.db.DB
+
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
@@ -12,7 +12,7 @@ import test.helpers.ContentHelper
 import data.{Users, Profiles, ContentReloader, Content}
 
 import scala.concurrent.Await
-import scala.slick.jdbc.JdbcBackend._
+
 
 /**
  * Created by andrew on 21/02/15.

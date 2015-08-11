@@ -30,8 +30,6 @@ copy_node_modules := {
 }
 
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play-slick" % "0.8.0",
-  "io.strongtyped"			%% 	"active-slick"	% "0.2.2",
   "org.webjars" %% "webjars-play" % "2.3.0-3",
   "org.webjars" % "bootstrap" % "3.1.1-2",
   "org.webjars" % "q" % "1.1.2",

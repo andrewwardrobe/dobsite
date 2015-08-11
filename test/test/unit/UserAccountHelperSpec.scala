@@ -7,7 +7,7 @@ import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
 
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
-import play.api.db.DB
+
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import play.modules.reactivemongo.ReactiveMongoPlugin
@@ -16,14 +16,14 @@ import test._
 import test.helpers.{UserAccountHelper, ContentHelper}
 
 import scala.concurrent.Await
-import scala.slick.jdbc.JdbcBackend._
+
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite with ScalaFutures with BeforeAndAfter{
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo,withGlobal = Some(EmbedMongoGlobal))
-  def database = Database.forDataSource(DB.getDataSource())
+
 
 
   "UserAccountHelper" must {

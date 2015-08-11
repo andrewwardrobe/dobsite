@@ -13,7 +13,6 @@ import reactivemongo.bson.BSONObjectID
 
 
 import scala.concurrent.Await
-import scala.slick.jdbc.JdbcBackend._
 import scala.concurrent.duration.DurationInt
 /**
  * Created by andrew on 14/02/15.
@@ -22,8 +21,6 @@ object ContentHelper {
   import models.JsonFormats._
 
   val repo = GitRepo.apply()
-  def database = Database.forDataSource(DB.getDataSource())
-
 
   def getPost(id:String) = {
     Await.result(Content.findById(id),10 seconds)

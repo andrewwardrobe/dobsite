@@ -6,7 +6,7 @@ import data.{Content, Users, Profiles}
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
-import play.api.db.DB
+
 import play.api.libs.json.Json
 import play.api.test.Helpers._
 import play.api.test.{FakeApplication, FakeHeaders, FakeRequest}
@@ -16,7 +16,7 @@ import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
 import jp.t2v.lab.play2.auth.test.Helpers._
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.Await
-import scala.slick.jdbc.JdbcBackend._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -25,7 +25,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures {
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
   object config extends StandardAuthConfig
-  def database = Database.forDataSource(DB.getDataSource())
 
   "Authorises Json API" should {
 

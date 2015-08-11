@@ -6,7 +6,7 @@ import play.api.Logger
 import play.api.db.DB
 import play.api.Play.current
 
-import scala.slick.jdbc.JdbcBackend._
+
 
 /**
  * Created by andrew on 19/06/15.

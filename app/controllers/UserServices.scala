@@ -13,10 +13,10 @@ import play.api.data.Forms._
 import reactivemongo.bson.BSONObjectID
 
 import scala.concurrent.{Await, Future}
-import play.api.db.DB
-import play.api.db.slick.DBAction
 
-import scala.slick.jdbc.JdbcBackend._
+
+
+
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import scala.concurrent.duration.DurationInt
 
@@ -47,7 +47,7 @@ object UserServices extends Controller with LoginLogout with OptionalAuthElement
     Ok(views.html.signup(signUpForm,maybeUser))
   }
 
-  def register = DBAction{ implicit request =>
+  def register = StackAction{ implicit request =>
     val newAccount = signUpForm.bindFromRequest().get
     //validate the user account
     import newAccount._

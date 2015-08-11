@@ -16,14 +16,14 @@ import test.{EmbedMongoGlobal, TestConfig, TestGlobal}
 import scala.concurrent.duration.DurationInt
 
 import scala.concurrent.Await
-import scala.slick.jdbc.JdbcBackend._
+
 
 /**
  * Created by andrew on 14/09/14.
  */
 class AdminControllerSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-  def database = Database.forDataSource(DB.getDataSource())
+
 
   object config extends StandardAuthConfig
 

@@ -8,7 +8,7 @@ import reactivemongo.bson.BSONDocument
 import reactivemongo.core.commands.Count
 
 import scala.concurrent.{Future, Await}
-import scala.slick.jdbc.JdbcBackend._
+
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import scala.concurrent.duration.DurationInt
 import scala.util.Success

@@ -6,29 +6,28 @@ import models.{Post, ContentTypeMap}
 import models.UserRole.TrustedContributor
 import org.scalatest.{Matchers, BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play.{FirefoxFactory, OneBrowserPerSuite, OneServerPerSuite, PlaySpec}
-import play.api.db.DB
+
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
 import test.helpers.{ContentHelper, UserAccountHelper}
 import test.integration.pages.PostPage
 
-import scala.slick.jdbc.JdbcBackend._
 
 /**
  * Created by andrew on 01/03/15.
  */
 class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with MongoEmbedDatabase {
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-  def database = Database.forDataSource(DB.getDataSource())
+
 
 
 
   lazy val repo = GitRepo.apply()
   def extraSetup = {
-    database.withSession { implicit session =>
+
       ContentHelper.createPost("Da Oostin Boyeez","MC Donalds","Hello",1,None)
-    }
+
   }
 
   var insertedPost: Post = null

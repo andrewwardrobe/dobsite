@@ -17,14 +17,14 @@ import test.helpers.{UserAccountHelper, ContentHelper}
 import test.integration.pages._
 
 import scala.concurrent.Await
-import scala.slick.jdbc.JdbcBackend._
+
 
 /**
  * Created by andrew on 01/03/15.
  */
 class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-  def database = Database.forDataSource(DB.getDataSource())
+
 
   lazy val repo = GitRepo.apply()
   var post1: Post = null
@@ -33,14 +33,11 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   var post4: Post  = null
 
   def extraSetup = {
-    database.withSession { implicit session =>
-
       post1 = ContentHelper.createPost("DOB Test News Post","MC Donalds","ah ah blah",1,None)
       post2 =  ContentHelper.createPost("2nd Post","MC Donalds","Jimbo jimbp",1,None)
       post3 = ContentHelper.createPost("3rd Post","MC Donalds","Dis is Da Oostin Boyeez Leek",1,None)
       post4 = ContentHelper.createDraft("4th Post","MC Donalds","Jambo jimbo Leek",1,None)
       repo.updateFile(post1.id, "Here is some data I just changed")
-    }
   }
 
   val editorPage = new EditorPage(port)

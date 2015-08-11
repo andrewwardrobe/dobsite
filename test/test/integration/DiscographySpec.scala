@@ -12,13 +12,11 @@ import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
 import test.integration.pages.DiscographyPage
 
 import scala.concurrent.Await
-import scala.slick.jdbc.JdbcBackend.Database
 import models.JsonFormats._
 
 class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo  ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-  def database = Database.forDataSource(DB.getDataSource())
   val discography = new DiscographyPage(port)
 
   var bio : Post = null

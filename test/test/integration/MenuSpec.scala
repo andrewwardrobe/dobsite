@@ -15,13 +15,12 @@ import test.integration.pages.{EditorPage, MenuBar, SignInPage}
 import test.{EmbedMongoGlobal, TestConfig, TestGlobal}
 
 import scala.concurrent.Await
-import scala.slick.jdbc.JdbcBackend.Database
+
 
 
 class MenuSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  with ScalaFutures with MongoEmbedDatabase  {
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo  ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-  def database = Database.forDataSource(DB.getDataSource())
 
   val signInPage = new SignInPage(port)
   val menuBar = new MenuBar(port)

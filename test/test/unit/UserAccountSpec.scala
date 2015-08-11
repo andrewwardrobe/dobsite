@@ -20,22 +20,21 @@ import test._
 import test.helpers.UserAccountHelper
 
 import scala.concurrent.Await
-import scala.slick.jdbc.JdbcBackend._
 import scala.concurrent.duration.DurationInt
 
 class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures  {
 
   import scala.concurrent.duration.DurationInt
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-  def database = Database.forDataSource(DB.getDataSource())
+
   
   "User Account" must {
 
       "Have associated user profiles" in {
         val user = UserAccountHelper.createUserAndProfile("TestUser","TestUser","TrustedContributor")
-        database.withSession { implicit session =>
-          Profiles.findByUserId(user._id) must not be None
-        }
+
+        Profiles.findByUserId(user._id) must not be None
+
       }
       "Allow for user aliases" in {
         val user = UserAccountHelper.createUserWithAlias("Andrew","Andrew","pa$$word","Contributor","Gaz Three")
@@ -56,19 +55,19 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
     "Prevent reuse of alias'" in {
       UserAccountHelper.createUserWithAlias("Andrew", "Andrew", "pa$$word", "Contributor", "Leek")
       val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
-      database.withSession { implicit session =>
-        Profiles.addAlias(user, "Leek")
-        Profiles.getAliasesAsString(user).futureValue must not contain "Leek"
-      }
+
+      Profiles.addAlias(user, "Leek")
+      Profiles.getAliasesAsString(user).futureValue must not contain "Leek"
+
     }
 
     "Prevent use of someone else's username as an alias" in {
       UserAccountHelper.createUserWithAlias("Andrew", "Andrew", "pa$$word", "Contributor", "Leek")
       val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
-      database.withSession { implicit session =>
-        Profiles.addAlias(user, "Andrew")
-        Profiles.getAliasesAsString(user).futureValue must not contain "Andrew"
-      }
+
+      Profiles.addAlias(user, "Andrew")
+      Profiles.getAliasesAsString(user).futureValue must not contain "Andrew"
+
     }
   }
 

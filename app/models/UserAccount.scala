@@ -4,7 +4,7 @@ import org.mindrot.jbcrypt.BCrypt
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.validation._
-import play.api.db.slick._
+
 
 import play.api.Play.current
 import play.api.libs.json.{Json, JsValue}

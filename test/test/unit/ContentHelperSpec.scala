@@ -13,14 +13,12 @@ import play.api.test.Helpers._
 import test._
 import test.helpers.ContentHelper
 
-import scala.slick.jdbc.JdbcBackend._
 
 class ContentHelperSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures{
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo , withGlobal = Some(EmbedMongoGlobal))
 
 
-  def database = Database.forDataSource(DB.getDataSource())
   "Content Helper" must {
 
 

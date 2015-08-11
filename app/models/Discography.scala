@@ -7,8 +7,7 @@ import org.jsoup.safety.Whitelist
 import play.api.{Play, Logger}
 import play.api.data.Form
 import play.api.data.Forms._
-import play.api.db.slick._
-import play.api.db.slick.Config.driver.simple._
+
 import play.api.libs.json.{JsString, Json, JsValue, JsObject, JsNumber}
 
 import scala.collection.mutable.ListBuffer

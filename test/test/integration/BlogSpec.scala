@@ -11,15 +11,13 @@ import test.integration.pages.BlogPage
 import test.{EmbedMongoGlobal, TestConfig, TestGlobal}
 
 
-import scala.slick.jdbc.JdbcBackend._
-
 /**
  * Created by andrew on 11/10/14.
  */
 class BlogSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-  def database = Database.forDataSource(DB.getDataSource())
+
 
   var setupDone = false
 
@@ -81,14 +79,14 @@ class BlogSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
   }
 
   def dataSetup = {
-    database.withSession { implicit session =>
+
       val newsItem = ContentHelper.createPost("DOB Test News Post","MC Donalds","Some Example content blah blah blah 1234567",ContentTypeMap.get("Blog"),None)
       ContentHelper.createPost("DOB Test News Post", "MC Donalds", "Some Example content blah blah blah 1234567", ContentTypeMap.get("Blog"), None)
       ContentHelper.createPost("DOB Test News Post", "MC Donalds", "Some Example content blah blah blah 1234567", ContentTypeMap.get("Blog"), None)
       ContentHelper.createPost("DOB Test News Post", "Pat Shleet", "Some Example content blah blah blah 1234567", ContentTypeMap.get("Blog"), None)
       ContentHelper.createPost("DOB Test News Post", "MC Donalds", "Some Example content blah blah blah 1234567", ContentTypeMap.get("Blog"), None)
       val nonNewsItem =  ContentHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music",ContentTypeMap.get("Music"),None)
-    }
+
   }
 
   def dataTearDown = {}

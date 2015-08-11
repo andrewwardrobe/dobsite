@@ -7,7 +7,6 @@ import controllers.JsonApi._
 import jp.t2v.lab.play2.auth.AuthElement
 import models.{UserAccount}
 import models.UserRole.Administrator
-import play.api.db.slick.DBAction
 import play.api.libs.json.Json._
 import play.api.mvc.Controller
 

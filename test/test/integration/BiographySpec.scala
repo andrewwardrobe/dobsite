@@ -13,7 +13,7 @@ import test.helpers.{UserAccountHelper, ContentHelper}
 import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
 import test.integration.pages.{SignInPage, SignUpPage, BiographyPage}
 
-import scala.slick.jdbc.JdbcBackend.Database
+
 
 
 
@@ -21,7 +21,7 @@ import scala.slick.jdbc.JdbcBackend.Database
 class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-  def database = Database.forDataSource(DB.getDataSource())
+
 
   lazy val repo = GitRepo.apply()
 
@@ -33,11 +33,9 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
   import biographyPage._
 
   def extraSetup = {
-    database.withSession { implicit session =>
       ContentHelper.createBiography("MC Donalds","Sample Bio 1","assets/images/crew/donalds_bw.jpg",None)
       val post = ContentHelper.createBiography("MC Leek","Sample Bio 2","assests/images/crew/donalds_bw.jpg",None)
       bio = post._id.stringify
-    }
   }
   def setup() = {
     //val signUp = new SignUpPage(port)
@@ -146,14 +144,8 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
 
   def dataSetup() = {
 
-    database.withSession { implicit session =>
-
-    }
   }
 
   def dataTearDown() = {
-    database.withSession { implicit session =>
-
-    }
   }
 }

@@ -17,7 +17,7 @@ import reactivemongo.bson.BSONObjectID
 import test.helpers.{ContentHelper, UserAccountHelper}
 import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
 import scala.concurrent.Await
-import scala.slick.jdbc.JdbcBackend._
+
 import jp.t2v.lab.play2.auth.test.Helpers._
 
 /**
@@ -26,7 +26,7 @@ import jp.t2v.lab.play2.auth.test.Helpers._
 class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures{
   import models.JsonFormats._
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-  def database = Database.forDataSource(DB.getDataSource())
+
 
 
   object config extends StandardAuthConfig

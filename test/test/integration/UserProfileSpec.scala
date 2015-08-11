@@ -5,7 +5,7 @@ import data.{Profiles, Content, Users}
 import models.{UserRole, UserAccount}
 import org.scalatest._
 import org.scalatestplus.play._
-import play.api.db.DB
+
 import play.api.test.Helpers._
 import play.api.test._
 import test.helpers.{ContentHelper, UserAccountHelper}
@@ -13,13 +13,13 @@ import test.integration.pages.{ProfilePage, BiographyPage, SignInPage}
 import test.{EmbedMongoGlobal, TestConfig, TestGlobal}
 
 import scala.concurrent.Await
-import scala.slick.jdbc.JdbcBackend.Database
+
 
 
 class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
 
   implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo  ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-  def database = Database.forDataSource(DB.getDataSource())
+
 
   lazy val repo = GitRepo.apply()
 
@@ -133,7 +133,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       go to profilePage
 
       eventually {postLinks must not be empty}
-      database.withSession{implicit session => Content.deleteAll}
+
     }
 
     "Display a list links of the edit pages of the users posts" in {
@@ -144,7 +144,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       go to profilePage
 
       editLinks must not be empty
-      database.withSession{implicit session => Content.deleteAll}
+
     }
 
     "Display a list links of the edit pages of the users drafts" in {
@@ -155,7 +155,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       go to profilePage
 
       draftLinks must not be empty
-      database.withSession{implicit session => Content.deleteAll}
+
     }
 
   }

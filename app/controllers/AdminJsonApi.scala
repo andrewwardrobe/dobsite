@@ -18,15 +18,8 @@ import play.api.Play.current
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc.Controller
-import play.api.db.DB
-import play.api.db.slick.DBAction
-
-import play.api.db.slick._
-import play.api.db.slick.Config.driver.simple._
 import reactivemongo.bson.BSONObjectID
-import scala.slick.jdbc.JdbcBackend._
 import scala.text
-
 import play.api.libs.json._
 import play.api.libs.json.Json._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext

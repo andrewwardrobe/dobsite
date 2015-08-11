@@ -8,7 +8,7 @@ import play.api.db.DB
 import play.api.Play.current
 import reactivemongo.bson.BSONObjectID
 import scala.concurrent.Await
-import scala.slick.jdbc.JdbcBackend._
+
 import models.JsonFormats._
 /**
  * Created by andrew on 03/04/15.
@@ -16,7 +16,6 @@ import models.JsonFormats._
 object UserAccountHelper {
 
   import scala.concurrent.duration.DurationInt
-  def database = Database.forDataSource(DB.getDataSource())
 
   def createUser(userId: String, email :String, password: String, role: String) = {
       val user = new UserAccount(BSONObjectID.generate, email, password, userId, role)
