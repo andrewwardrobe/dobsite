@@ -165,11 +165,7 @@ object JsonApi extends Controller {
         df.parse(startDate)
       }
     }
-    val query = Json.obj(
-      "typeId" -> typ,
-      "dateCreated" -> Json.obj("$lt" -> Json.obj("$date" -> date))
-    )
-    Content.find(query, Json.obj("dateCreated" -> -1 ), max).map{ posts =>
+    Content.find(ContentQueries.liveContentByTypeLatestFirst(typ,date), max).map{ posts =>
       Ok(toJson(posts))
     }
   }
