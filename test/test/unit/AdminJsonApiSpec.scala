@@ -57,7 +57,8 @@ class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAft
           |{"biographies":[{
           |    "name":"MC Donalds",
           |    "text":"<p>Some example text</p> <p>Some more stuff</p>",
-          |    "thumbnail":"assets/images/crew/donalds_col.jpg"
+          |    "thumbnail":"assets/images/crew/donalds_col.jpg",
+          |    "crew":"Da Oostin Boyeez"
           |  }]
           |}
         """.stripMargin

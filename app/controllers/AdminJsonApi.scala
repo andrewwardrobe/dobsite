@@ -49,7 +49,7 @@ object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig 
 
   def processBiographies(bios: Seq[Biography]) = {
     bios.foreach { bio: Biography =>
-      val extraData = s"thumb=${bio.thumbnail}"
+      val extraData = s"thumb=${bio.thumbnail}\n,crew=${bio.crew}"
       val post = new Post(BSONObjectID.generate, bio.name, ContentTypeMap("Discography"), new Date(), defaultAuthor, bio.text, extraData, false, None, None)
       Content.create(post, GitRepo.apply())
     }
