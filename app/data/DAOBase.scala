@@ -1,6 +1,6 @@
 package data
 
-import data.UserAccounts._
+import data.Users._
 import models.{UserAccount, Post}
 import org.mindrot.jbcrypt.BCrypt
 import play.api.Play.current

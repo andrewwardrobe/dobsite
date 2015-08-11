@@ -2,7 +2,7 @@ package test.integration
 
 import com.daoostinboyeez.git.GitRepo
 import com.github.simplyscala.MongoEmbedDatabase
-import data.{UserAccounts, Profiles, Content}
+import data.{Users, Profiles, Content}
 import models._
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
@@ -33,7 +33,7 @@ class MenuSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
     import scala.concurrent.duration.DurationInt
     Await.ready(Content.deleteAll,10 seconds)
     Await.ready(Profiles.deleteAll,10 seconds)
-    Await.ready(UserAccounts.deleteAll,10 seconds)
+    Await.ready(Users.deleteAll,10 seconds)
     setup
   }
 
@@ -43,7 +43,7 @@ class MenuSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
     import scala.concurrent.duration.DurationInt
     Await.ready(Content.deleteAll,10 seconds)
     Await.ready(Profiles.deleteAll,10 seconds)
-    Await.ready(UserAccounts.deleteAll,10 seconds)
+    Await.ready(Users.deleteAll,10 seconds)
   }
 
 

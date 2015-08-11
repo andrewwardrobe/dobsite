@@ -1,6 +1,6 @@
 package controllers
 
-import _root_.data.UserAccounts
+import _root_.data.Users
 import jp.t2v.lab.play2.auth.AuthConfig
 import models.UserRole._
 import models.{UserRole, UserAccount}
@@ -33,7 +33,7 @@ trait StandardAuthConfig extends AuthConfig {
   val idTag: ClassTag[Id] = classTag[Id]
 
   def resolveUser(id: Id)(implicit ctx: ExecutionContext): Future[Option[User]] = {
-    UserAccounts.findByName(id).map { users =>
+    Users.findByName(id).map { users =>
       users.headOption
     }
   }

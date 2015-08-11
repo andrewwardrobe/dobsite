@@ -2,7 +2,7 @@ package controllers
 
 import com.daoostinboyeez.git.GitRepo
 import controllers.Authorised._
-import data.{ContentReloader, UserAccounts}
+import data.{ContentReloader, Users}
 import jp.t2v.lab.play2.auth.AuthElement
 import models.{UserRole, UserAccount}
 import models.UserRole.{InvalidUser, Administrator}
@@ -36,14 +36,14 @@ object Admin extends Controller with AuthElement with StandardAuthConfig{
 
   def changeRole(name: String,role:String) = AsyncStack(AuthorityKey -> Administrator) {  implicit request =>
 
-    UserAccounts.findByEmail(name).map { users =>
+    Users.findByEmail(name).map { users =>
       users.headOption match {
         case None => BadRequest("Unknown User")
         case Some(user) => {
           UserRole.valueOf(role) match {
             case InvalidUser => BadRequest("Unknown User Role")
             case _ => {
-              UserAccounts.changeRole(user, role)
+              Users.changeRole(user, role)
               Ok("User Role changed")
             }
           }
@@ -53,10 +53,10 @@ object Admin extends Controller with AuthElement with StandardAuthConfig{
   }
 
   def changeEmail(name: String, email:String) = AsyncStack(AuthorityKey -> Administrator) { implicit request =>
-    UserAccounts.findByName(name).map { result =>
+    Users.findByName(name).map { result =>
       result.headOption match {
         case Some(user) => {
-          UserAccounts.newEmail(user, email)
+          Users.newEmail(user, email)
           Ok("Email Updated")
         }
         case None => BadRequest("Account Not Found")
@@ -79,10 +79,10 @@ object Admin extends Controller with AuthElement with StandardAuthConfig{
     if (data.password != data.confirm) {
       Future.successful(BadRequest("Passwords Do Not Match"))
     } else {
-      UserAccounts.findByName(data.userName).map { result =>
+      Users.findByName(data.userName).map { result =>
         result.headOption match {
           case Some(user) => {
-            UserAccounts.newPasswd(user,data.password)
+            Users.newPasswd(user,data.password)
             Ok("Password Updated")
           }
           case None =>

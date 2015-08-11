@@ -1,7 +1,7 @@
 package controllers
 
 import controllers.Application._
-import data.{Profiles, UserAccounts}
+import data.{Profiles, Users}
 import jp.t2v.lab.play2.auth.{OptionalAuthElement, LoginLogout}
 import models.UserRole.InActiveUser
 import models.{Profile, UserProfile, UserRoleMapping, UserAccount}
@@ -30,7 +30,7 @@ object UserServices extends Controller with LoginLogout with OptionalAuthElement
   def loginForm(implicit session: Session) = {
 
       Form {
-        mapping("email" -> text, "password" -> text)(UserAccounts.authenticate)(_.map(u => (u.email, "")))
+        mapping("email" -> text, "password" -> text)(Users.authenticate)(_.map(u => (u.email, "")))
           .verifying("Invalid email or password", result => result.isDefined)
 
     }
@@ -55,7 +55,7 @@ object UserServices extends Controller with LoginLogout with OptionalAuthElement
     import newAccount._
     val incAccount = newAccount.copy(role =  "InActiveUser")
 
-      UserAccounts.create(incAccount)
+      Users.create(incAccount)
       val newProfile = new Profile(BSONObjectID.generate,newAccount._id,"","", None)
       Profiles.insert(newProfile)
       Redirect(routes.UserServices.login)
@@ -85,13 +85,13 @@ def signedout = StackAction { implicit request =>
   }
 
   def checkName(name: String) = Action.async { implicit request =>
-    UserAccounts.getUserNameCount(name).map { count =>
+    Users.getUserNameCount(name).map { count =>
      Ok("" + count)
     }
   }
 
   def checkEmail(email: String) = Action.async{ implicit request =>
-    UserAccounts.getEmailCount(email).map { count =>
+    Users.getEmailCount(email).map { count =>
       Ok(""+count)
     }
 
@@ -103,7 +103,7 @@ def signedout = StackAction { implicit request =>
   val emailIsAvailable: Constraint[String] = Constraint("constraints.accountavailable")({
     email =>
 
-        val count = Await.result(UserAccounts.getEmailCount(email),10 seconds)
+        val count = Await.result(Users.getEmailCount(email),10 seconds)
         val errors = count match {
           case 0 => Nil
           case _ => Seq(ValidationError("Email Address is already in use"))

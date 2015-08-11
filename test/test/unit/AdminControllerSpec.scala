@@ -2,7 +2,7 @@ package test.unit
 
 import com.daoostinboyeez.git.GitRepo
 import controllers.StandardAuthConfig
-import data.{Content, Profiles, UserAccounts}
+import data.{Content, Profiles, Users}
 import jp.t2v.lab.play2.auth.test.Helpers._
 import models.{Post}
 import org.scalatest.BeforeAndAfter
@@ -56,6 +56,6 @@ class AdminControllerSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
     import scala.concurrent.duration.DurationInt
     Await.ready(Content.deleteAll,10 seconds)
     Await.ready(Profiles.deleteAll,10 seconds)
-    Await.ready(UserAccounts.deleteAll,10 seconds)
+    Await.ready(Users.deleteAll,10 seconds)
   }
 }

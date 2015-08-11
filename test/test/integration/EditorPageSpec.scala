@@ -1,7 +1,7 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
-import data.{UserAccounts, Profiles, Content}
+import data.{Users, Profiles, Content}
 import models.Post
 
 import models.UserRole.TrustedContributor
@@ -59,7 +59,7 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
         import scala.concurrent.duration.DurationInt
         Await.ready(Content.deleteAll,10 seconds)
         Await.ready(Profiles.deleteAll,10 seconds)
-        Await.ready(UserAccounts.deleteAll,10 seconds)
+        Await.ready(Users.deleteAll,10 seconds)
         repo.refresh
         UserAccountHelper.createUserWithAlias("TrustedContributor", "TrustedContributor", "TrustedContributor", "TrustedContributor", "Da Oostin Boyeez")
         signIn.signin("TrustedContributor", "TrustedContributor")

@@ -2,7 +2,7 @@ package test.unit
 
 import com.daoostinboyeez.git.GitRepo
 
-import data.{Profiles, Content, UserAccounts}
+import data.{Profiles, Content, Users}
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
 
@@ -31,7 +31,7 @@ class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite with ScalaFu
 
         val user = UserAccountHelper.createUser("test", "test@test.com", "pa$$word", "NormalUser")
         info(user.toString)
-        UserAccounts.findByEmail("test@test.com").map { users =>
+        Users.findByEmail("test@test.com").map { users =>
           users must not be empty
         }
     }

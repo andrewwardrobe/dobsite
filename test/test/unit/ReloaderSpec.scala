@@ -9,7 +9,7 @@ import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
 import test.helpers.ContentHelper
-import data.{UserAccounts, Profiles, ContentReloader, Content}
+import data.{Users, Profiles, ContentReloader, Content}
 
 import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend._

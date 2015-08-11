@@ -1,7 +1,7 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
-import data.{Profiles, Content, UserAccounts}
+import data.{Profiles, Content, Users}
 import models.{UserRole, UserAccount}
 import org.scalatest._
 import org.scalatestplus.play._
@@ -169,7 +169,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
     import scala.concurrent.duration.DurationInt
     Await.ready(Content.deleteAll,10 seconds)
     Await.ready(Profiles.deleteAll,10 seconds)
-    Await.ready(UserAccounts.deleteAll,10 seconds)
+    Await.ready(Users.deleteAll,10 seconds)
 
   }
 }

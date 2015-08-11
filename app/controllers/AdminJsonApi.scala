@@ -7,7 +7,7 @@ import java.util.{Date, UUID}
 
 import com.daoostinboyeez.git.GitRepo
 import controllers.Application._
-import data.{Content, UserAccounts}
+import data.{Content, Users}
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
 import models._
@@ -38,7 +38,7 @@ object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig 
   private val defaultAuthor = Play.application.configuration.getString("content.defaultauthor").getOrElse("Da Oostin Boyeez")
 
   def getUsers(name:String) = AsyncStack(AuthorityKey -> Administrator) { implicit request =>
-    UserAccounts.getUsersLike(name).map { users =>
+    Users.getUsersLike(name).map { users =>
       Ok(toJson(users))
     }
 
@@ -46,7 +46,7 @@ object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig 
 
 
   def getUser(name:String) = AsyncStack(AuthorityKey -> Administrator) { implicit request =>
-    UserAccounts.findByName(name).map { users =>
+    Users.findByName(name).map { users =>
       users.headOption match {
         case Some(user) => Ok(toJson(user))
         case None => NotFound("User Not Found")

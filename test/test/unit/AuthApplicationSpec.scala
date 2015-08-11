@@ -4,7 +4,7 @@ import java.util.{Date, UUID}
 
 import com.daoostinboyeez.git.GitRepo
 import controllers.StandardAuthConfig
-import data.{Profiles, Content, UserAccounts}
+import data.{Profiles, Content, Users}
 import models._
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
@@ -119,7 +119,7 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
     import scala.concurrent.duration.DurationInt
     Await.ready(Content.deleteAll,10 seconds)
     Await.ready(Profiles.deleteAll,10 seconds)
-    Await.ready(UserAccounts.deleteAll,10 seconds)
+    Await.ready(Users.deleteAll,10 seconds)
 
   }
 }

@@ -7,7 +7,7 @@
 
 package test.unit
 
-import data.{Content, Profiles, UserAccounts}
+import data.{Content, Profiles, Users}
 import models.{UserProfile, UserRole}
 import models.UserRole.NormalUser
 import org.scalatest.BeforeAndAfter
@@ -74,7 +74,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
 
   after {
     Await.ready(Profiles.deleteAll,10 seconds)
-    Await.ready(UserAccounts.deleteAll,10 seconds)
+    Await.ready(Users.deleteAll,10 seconds)
   }
 
 

@@ -16,7 +16,7 @@ import scala.util.Success
 /**
  * Created by andrew on 14/05/15.
  */
-object UserAccounts extends DAOBase[UserAccount]("users") {
+object Users extends DAOBase[UserAccount]("users") {
 
   import models.JsonFormats._
 
