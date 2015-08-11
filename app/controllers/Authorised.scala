@@ -48,7 +48,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
 
   def profile = AsyncStack(AuthorityKey -> InActiveUser) { implicit request =>
       val user = loggedIn
-      Profiles.getByUserId(user._id).map { profiles =>
+      Profiles.findByUserId(user._id).map { profiles =>
           Ok(views.html.profile("", user, profiles.headOption))
       }
 
@@ -65,7 +65,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     val typ = ContentTypeMap.get(contentType)
     val postId = BSONObjectID.generate.stringify
     Logger.info("Noew Content "+postId)
-    Profiles.getByUserId(maybeUser._id).map { profiles =>
+    Profiles.findByUserId(maybeUser._id).map { profiles =>
       Ok(views.html.editor("",models.Forms.blogForm,postId,typ,Some(maybeUser),profiles.headOption,true))
     }
 
@@ -73,14 +73,14 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
 
   def blogInput = AsyncStack(AuthorityKey -> Contributor){  implicit request =>
     val maybeUser = loggedIn
-    Profiles.getByUserId(maybeUser._id).map { profiles =>
+    Profiles.findByUserId(maybeUser._id).map { profiles =>
       Ok(views.html.editor("",models.Forms.blogForm,BSONObjectID.generate.stringify,1,Some(maybeUser),profiles.headOption,true))
     }
   }
 
   def blogUpdate(id: String) = AsyncStack(AuthorityKey -> Contributor) {  implicit request =>
     val maybeUser = loggedIn
-    Profiles.getByUserId(maybeUser._id).map { profiles =>
+    Profiles.findByUserId(maybeUser._id).map { profiles =>
       Ok(views.html.editor("",models.Forms.blogForm,id,1,Some(maybeUser),profiles.headOption,false))
     }
   }
@@ -150,7 +150,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   def addAlias(alias: String) = AsyncStack(AuthorityKey -> Contributor) { implicit request =>
     val user = loggedIn
       try {
-        Profiles.getByUserId(user._id).flatMap{ profile =>
+        Profiles.findByUserId(user._id).flatMap{ profile =>
           val aliasLimit = user.userRole.aliasLimit
           val aliasCount = profile.head.aliases.getOrElse(Nil).length
           aliasCount match {

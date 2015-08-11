@@ -17,11 +17,11 @@ import scala.concurrent.Future
 object Profiles extends DAOBase[Profile]("profiles"){
   import models.JsonFormats._
 
-  def getByUserId(id: String) = {
+  def findByUserId(id: String) = {
     find(Json.obj("userId" -> Json.obj("$oid" -> id)))
   }
 
-  def getByUserId(id: BSONObjectID) = {
+  def findByUserId(id: BSONObjectID) = {
     val query = Json.obj("userId" -> Json.obj("$oid" -> id.stringify))
     find(query)
   }
@@ -34,7 +34,7 @@ object Profiles extends DAOBase[Profile]("profiles"){
   }
 
   def addAlias(user:UserAccount,alias :String) =  {
-    getByUserId(user._id).map { profiles =>
+    findByUserId(user._id).map { profiles =>
       val profile = profiles.head
       val aliasList = profile.aliases.getOrElse(Nil) ++: List(alias)
       val updated = profile.copy(aliases = Some(aliasList))
@@ -53,7 +53,7 @@ object Profiles extends DAOBase[Profile]("profiles"){
   }
 
   def getAliasesAsString(user: UserAccount) = {
-    getByUserId(user._id).map{ users =>
+    findByUserId(user._id).map{ users =>
       users.head.aliases.getOrElse(Vector())
     }
   }

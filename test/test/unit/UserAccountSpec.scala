@@ -34,7 +34,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       "Have associated user profiles" in {
         val user = UserAccountHelper.createUserAndProfile("TestUser","TestUser","TrustedContributor")
         database.withSession { implicit session =>
-          Profiles.getByUserId(user._id) must not be None
+          Profiles.findByUserId(user._id) must not be None
         }
       }
       "Allow for user aliases" in {
@@ -48,7 +48,7 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       val user = UserAccountHelper.createUserAndProfile("TestUser", "TestUser", "TrustedContributor")
       val inserted = Profiles.addAlias(user, "Leek")
       whenReady(inserted) { result =>
-        val futureProfile = Profiles.getByUserId(user._id).futureValue
+        val futureProfile = Profiles.findByUserId(user._id).futureValue
         futureProfile.head.aliases.getOrElse(List("Failed")) must contain("Leek")
       }
     }
