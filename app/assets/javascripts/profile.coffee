@@ -138,13 +138,13 @@ define ['common','utilities','q'],(common,utils,Q) ->
                     $.each data, (idx,post) ->
                         postDiv = $("<div>")
                         newLink = $("<a>")
-                        newLink.attr 'id','postLink'+post.id
-                        newLink.attr 'href',post.id
+                        newLink.attr 'id','postLink'+post._id.$oid
+                        newLink.attr 'href',post._id.$oid
                         newLink.text post.title
                         editLink = $("<a>")
                         editLink.text "(edit)"
-                        editLink.attr 'id','editLink'+post.id
-                        editLink.attr 'href',"editor/"+post.id
+                        editLink.attr 'id','editLink'+post._id.$oid
+                        editLink.attr 'href',"editor/"+post._id.$oid
                         postDiv.append newLink
                         postDiv.append " "
                         postDiv.append editLink
@@ -159,8 +159,8 @@ define ['common','utilities','q'],(common,utils,Q) ->
                     $.each data, (idx,post) ->
                         postDiv = $("<div>")
                         newLink = $("<a>")
-                        newLink.attr 'id','draftLink'+post.id
-                        newLink.attr 'href',"editor/"+post.id
+                        newLink.attr 'id','draftLink'+post._id.$oid
+                        newLink.attr 'href',"editor/"+post._id.$oid
                         newLink.text post.title
                         postDiv.append newLink
                         $("#myDrafts").append postDiv
