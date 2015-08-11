@@ -4,7 +4,7 @@ import java.util.{Date, UUID}
 
 import com.daoostinboyeez.git.GitRepo
 import controllers.StandardAuthConfig
-import data.{UserProfiles, Content, UserAccounts}
+import data.{Profiles, Content, UserAccounts}
 import models._
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
@@ -72,7 +72,7 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
       val updateProfile = userProfile.copy(about = "New user info")
       val result = route(FakeRequest(POST, controllers.routes.Authorised.updateProfile.url,FakeHeaders(),Json.toJson(updateProfile)).withLoggedIn(config)("TrustedContributor")).get
       status(result) mustBe OK
-      val retrievedProfile = UserProfiles.getById(updateProfile.id).futureValue
+      val retrievedProfile = Profiles.getById(updateProfile.id).futureValue
       retrievedProfile.head mustEqual updateProfile
     }
 
@@ -95,7 +95,7 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
     "Thorw a meaningful error message when on the alias limit" in {
 
         for (i <- 0 to user.getAliasLimit - 1) {
-          UserProfiles.addAlias(user, s"leek${i}").futureValue
+          Profiles.addAlias(user, s"leek${i}").futureValue
         }
 
         val result = route(FakeRequest(POST, controllers.routes.Authorised.addAlias("Error One").url, FakeHeaders(), "").withLoggedIn(config)("TrustedContributor")).get
@@ -118,7 +118,7 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
   after{
     import scala.concurrent.duration.DurationInt
     Await.ready(Content.deleteAll,10 seconds)
-    Await.ready(UserProfiles.deleteAll,10 seconds)
+    Await.ready(Profiles.deleteAll,10 seconds)
     Await.ready(UserAccounts.deleteAll,10 seconds)
 
   }

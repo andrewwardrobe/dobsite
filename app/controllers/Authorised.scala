@@ -48,7 +48,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
 
   def profile = AsyncStack(AuthorityKey -> InActiveUser) { implicit request =>
       val user = loggedIn
-      UserProfiles.getByUserId(user._id).map { profiles =>
+      Profiles.getByUserId(user._id).map { profiles =>
           Ok(views.html.profile("", user, profiles.headOption))
       }
 
@@ -65,7 +65,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     val typ = ContentTypeMap.get(contentType)
     val postId = BSONObjectID.generate.stringify
     Logger.info("Noew Content "+postId)
-    UserProfiles.getByUserId(maybeUser._id).map { profiles =>
+    Profiles.getByUserId(maybeUser._id).map { profiles =>
       Ok(views.html.editor("",models.Forms.blogForm,postId,typ,Some(maybeUser),profiles.headOption,true))
     }
 
@@ -73,14 +73,14 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
 
   def blogInput = AsyncStack(AuthorityKey -> Contributor){  implicit request =>
     val maybeUser = loggedIn
-    UserProfiles.getByUserId(maybeUser._id).map { profiles =>
+    Profiles.getByUserId(maybeUser._id).map { profiles =>
       Ok(views.html.editor("",models.Forms.blogForm,BSONObjectID.generate.stringify,1,Some(maybeUser),profiles.headOption,true))
     }
   }
 
   def blogUpdate(id: String) = AsyncStack(AuthorityKey -> Contributor) {  implicit request =>
     val maybeUser = loggedIn
-    UserProfiles.getByUserId(maybeUser._id).map { profiles =>
+    Profiles.getByUserId(maybeUser._id).map { profiles =>
       Ok(views.html.editor("",models.Forms.blogForm,id,1,Some(maybeUser),profiles.headOption,false))
     }
   }
@@ -150,12 +150,12 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   def addAlias(alias: String) = AsyncStack(AuthorityKey -> Contributor) { implicit request =>
     val user = loggedIn
       try {
-        UserProfiles.getByUserId(user._id).flatMap{ profile =>
+        Profiles.getByUserId(user._id).flatMap{ profile =>
           val aliasLimit = user.userRole.aliasLimit
           val aliasCount = profile.head.aliases.getOrElse(Nil).length
           aliasCount match {
             case x if x < aliasLimit =>
-              UserProfiles.addAlias(profile.head, alias).map { result =>
+              Profiles.addAlias(profile.head, alias).map { result =>
                 result.ok match {
                   case true => Ok(alias)
                   case false => BadRequest("Could not  add Alias")
@@ -234,7 +234,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     val user = loggedIn
     def doUpdate(profile:Profile) = {
       if (profile.userId.stringify == user._id.stringify) {
-        UserProfiles.update(profile._id.stringify, profile).map{res =>
+        Profiles.update(profile._id.stringify, profile).map{res =>
              Ok("")
           }
         }

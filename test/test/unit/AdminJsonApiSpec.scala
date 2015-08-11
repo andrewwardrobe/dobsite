@@ -2,7 +2,7 @@ package test.unit
 
 import com.daoostinboyeez.git.GitRepo
 import controllers.StandardAuthConfig
-import data.{Content, UserAccounts, UserProfiles}
+import data.{Content, UserAccounts, Profiles}
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
@@ -76,7 +76,7 @@ class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAft
   }
   before{
     Await.ready(Content.deleteAll,10 seconds)
-    Await.ready(UserProfiles.deleteAll,10 seconds)
+    Await.ready(Profiles.deleteAll,10 seconds)
     Await.ready(UserAccounts.deleteAll,10 seconds)
     val repo = GitRepo.apply()
     repo.refresh
@@ -86,7 +86,7 @@ class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAft
 
   after{
     Await.ready(Content.deleteAll,10 seconds)
-    Await.ready(UserProfiles.deleteAll,10 seconds)
+    Await.ready(Profiles.deleteAll,10 seconds)
     Await.ready(UserAccounts.deleteAll,10 seconds)
   }
 }

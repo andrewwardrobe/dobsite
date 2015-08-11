@@ -1,7 +1,7 @@
 package test.unit
 
 import com.daoostinboyeez.git.GitRepo
-import data.{UserProfiles, Content}
+import data.{Profiles, Content}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.Logger
@@ -33,7 +33,7 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite with ScalaFutures{
 
     "Be able to save and retrieve user profile" in {
         val profile = UserAccountHelper.createProfile(BSONObjectID.generate,"some text","assests/images/crew/donalds_bw.jpg")
-        val retrievedProfile  = UserProfiles.getById(profile.id)
+        val retrievedProfile  = Profiles.getById(profile.id)
         retrievedProfile.futureValue must contain (profile)
     }
 

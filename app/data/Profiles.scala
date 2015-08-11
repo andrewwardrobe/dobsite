@@ -14,7 +14,7 @@ import scala.concurrent.Future
  * Created by andrew on 01/08/15.
  *
  */
-object UserProfiles extends DAOBase[Profile]("profiles"){
+object Profiles extends DAOBase[Profile]("profiles"){
   import models.JsonFormats._
 
   def getByUserId(id: String) = {

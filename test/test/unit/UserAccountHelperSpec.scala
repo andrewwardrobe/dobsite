@@ -2,7 +2,7 @@ package test.unit
 
 import com.daoostinboyeez.git.GitRepo
 
-import data.{UserProfiles, Content, UserAccounts}
+import data.{Profiles, Content, UserAccounts}
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
 

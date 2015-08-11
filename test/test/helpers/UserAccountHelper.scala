@@ -2,7 +2,7 @@ package test.helpers
 
 import java.util.UUID
 
-import data.{UserProfiles, UserAccounts}
+import data.{Profiles, UserAccounts}
 import models._
 import play.api.db.DB
 import play.api.Play.current
@@ -35,7 +35,7 @@ object UserAccountHelper {
     val user = new UserAccount(BSONObjectID.generate, s"$userId@daoostinboyeez.com", password, userId, role)
     Await.result(UserAccounts.create(user),10 seconds)
     val profile = new Profile(BSONObjectID.generate, user._id,about,"assets/images/crew/donalds_bw.jpg",None)
-    Await.result(UserProfiles.insert(profile),10 seconds)
+    Await.result(Profiles.insert(profile),10 seconds)
     user
   }
 
@@ -47,7 +47,7 @@ object UserAccountHelper {
     val user = new UserAccount(BSONObjectID.generate, s"$userId@daoostinboyeez.com", password, userId, role)
     Await.result(UserAccounts.create(user),10 seconds)
     val profile = new Profile(BSONObjectID.generate, user._id,about,"assets/images/crew/donalds_bw.jpg",Some(List(alias)))
-    Await.result(UserProfiles.insert(profile),10 seconds)
+    Await.result(Profiles.insert(profile),10 seconds)
     user
   }
 
@@ -57,7 +57,7 @@ object UserAccountHelper {
 
   def createProfile(userId:BSONObjectID, about:String,avatar:String) = {
     val profile = new Profile(BSONObjectID.generate,userId,about,avatar,None)
-    Await.result(UserProfiles.insert(profile),10 seconds)
+    Await.result(Profiles.insert(profile),10 seconds)
     profile
   }
 }

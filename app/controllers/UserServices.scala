@@ -1,7 +1,7 @@
 package controllers
 
 import controllers.Application._
-import data.{UserProfiles, UserAccounts}
+import data.{Profiles, UserAccounts}
 import jp.t2v.lab.play2.auth.{OptionalAuthElement, LoginLogout}
 import models.UserRole.InActiveUser
 import models.{Profile, UserProfile, UserRoleMapping, UserAccount}
@@ -57,7 +57,7 @@ object UserServices extends Controller with LoginLogout with OptionalAuthElement
 
       UserAccounts.create(incAccount)
       val newProfile = new Profile(BSONObjectID.generate,newAccount._id,"","", None)
-      UserProfiles.insert(newProfile)
+      Profiles.insert(newProfile)
       Redirect(routes.UserServices.login)
   }
 
@@ -120,7 +120,7 @@ def signedout = StackAction { implicit request =>
   val userNameIsAvailable: Constraint[String] = Constraint("constraints.nameavailable")({
     name =>
 
-        val available = Await.result(UserProfiles.aliasAvailable(name), 10 seconds)
+        val available = Await.result(Profiles.aliasAvailable(name), 10 seconds)
       val errors = if (available) {
           Nil
         } else {

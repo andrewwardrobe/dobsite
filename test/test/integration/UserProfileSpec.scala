@@ -1,7 +1,7 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
-import data.{UserProfiles, Content, UserAccounts}
+import data.{Profiles, Content, UserAccounts}
 import models.{UserRole, UserAccount}
 import org.scalatest._
 import org.scalatestplus.play._
@@ -168,7 +168,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
   def dataTearDown() = {
     import scala.concurrent.duration.DurationInt
     Await.ready(Content.deleteAll,10 seconds)
-    Await.ready(UserProfiles.deleteAll,10 seconds)
+    Await.ready(Profiles.deleteAll,10 seconds)
     Await.ready(UserAccounts.deleteAll,10 seconds)
 
   }
