@@ -180,7 +180,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
     if (user.userRole == Administrator)
       Future(true)
     else {
-      Content.getById(post.id).map { posts =>
+      Content.findById(post.id).map { posts =>
         posts.headOption match {
           case None => post.userId match {
             case None => user.userRole.hasPermission (ContentTypeMap (post.postType) )

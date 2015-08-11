@@ -49,7 +49,7 @@ object JsonApi extends Controller {
      id match {
       case regex() => {
         Logger.info("Post ID")
-        Content.getById(id).map { posts =>
+        Content.findById(id).map { posts =>
           posts.headOption match {
             case Some(post) => Ok(toJson(posts))
             case None => BadRequest("Not Found")
@@ -72,7 +72,7 @@ object JsonApi extends Controller {
 
   //Todo delete this function
   def getContentTags(id:String) = Action.async { implicit response =>
-    Content.getById(id).map { posts =>
+    Content.findById(id).map { posts =>
       posts.headOption match {
         case Some(post) => post.tags match {
           case Some(tags) => Ok(toJson(tags))
@@ -84,7 +84,7 @@ object JsonApi extends Controller {
   }
 
   def getPostRevisionById(id: String, revId : String) = Action.async { implicit response =>
-    Content.getById(id).map { posts =>
+    Content.findById(id).map { posts =>
       posts.headOption match {
         case Some(post) => Ok(toJson(post.revision(revId,repo)))
         case None => BadRequest("Not Found")

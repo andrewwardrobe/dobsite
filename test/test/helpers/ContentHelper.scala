@@ -26,7 +26,7 @@ object ContentHelper {
 
 
   def getPost(id:String) = {
-    Await.result(Content.getById(id),10 seconds)
+    Await.result(Content.findById(id),10 seconds)
   }
 
   def createPost(title:String, author:String, content :String, typ: Int,userId:Option[BSONObjectID]) :Post = {

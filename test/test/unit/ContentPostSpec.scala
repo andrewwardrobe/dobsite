@@ -32,7 +32,7 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
     "Be able to insert and retrieve posts items" in {
         val newsItem = ContentHelper.createPost("DOB Test News Post","MC Donalds","News Content for db spec",1,None)
         val nonNewsItem =  ContentHelper.createPost( "DOB Test Music Post","MC Donalds","Some cool DoB Music for dbspec",2,None)
-        val result = Content.getById(newsItem.id).futureValue
+        val result = Content.findById(newsItem.id).futureValue
         result.head mustEqual newsItem
     }
 

@@ -130,7 +130,7 @@ class DAOBase[T](val collectionName : String) {
     }
   }
 
-  def getById(id: String)(implicit format: OFormat[T]) ={ //Also handle invalid ads
+  def findById(id: String)(implicit format: OFormat[T]) ={ //Also handle invalid ads
   val documents = collection.find(Json.obj("_id" -> Json.obj("$oid" -> id)))
     val items = try {
       val cursor = documents.cursor[T]

@@ -90,7 +90,7 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
       val updateProfile = userProfile.copy(about = "New user info")
       val result = route(FakeRequest(POST, controllers.routes.Authorised.updateProfile.url,FakeHeaders(),Json.toJson(updateProfile)).withLoggedIn(config)("TrustedContributor")).get
       status(result) mustBe OK
-      val retrievedProfile = Profiles.getById(updateProfile.id).futureValue
+      val retrievedProfile = Profiles.findById(updateProfile.id).futureValue
       retrievedProfile.head mustEqual updateProfile
     }
 

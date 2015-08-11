@@ -25,7 +25,7 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite with ScalaFutures{
 
         GitRepo.refresh
         val newsItem = ContentHelper.createPost("DOB Test News Post", "MC Donalds", "News Content for db spec", 1, None)
-        val result = Content.getById(newsItem.id).futureValue
+        val result = Content.findById(newsItem.id).futureValue
         result.head mustEqual newsItem
 
     }
@@ -33,7 +33,7 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite with ScalaFutures{
 
     "Be able to save and retrieve user profile" in {
         val profile = UserAccountHelper.createProfile(BSONObjectID.generate,"some text","assests/images/crew/donalds_bw.jpg")
-        val retrievedProfile  = Profiles.getById(profile.id)
+        val retrievedProfile  = Profiles.findById(profile.id)
         retrievedProfile.futureValue must contain (profile)
     }
 

@@ -51,7 +51,7 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
 
   def post(id :String) =  AsyncStack{ implicit request =>
     val maybeUser: Option[User] = loggedIn
-    Content.getById(id).map { posts =>
+    Content.findById(id).map { posts =>
       posts.headOption match {
         case Some(post) =>{
           val extraData = Try(Json.parse(post.extraData).as[Map[String,String]]).getOrElse(Map())
