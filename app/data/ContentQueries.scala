@@ -19,6 +19,38 @@ object ContentQueries {
     "dateCreated" -> Json.obj("$lt" ->  date)
   )
 
+  def liveContentByAuthorLatestFirst(author:String) = Json.obj(
+    "$query" ->Json.obj(
+      "author" -> author,
+      "isDraft" -> false
+    ),
+    "$orderby" -> Json.obj("dateCreated" -> -1)
+  )
+
+  def liveContentByAuthorBeforeDateLatestFirst(author:String, typ : Int, date :Date) = Json.obj(
+    "$query" ->Json.obj(
+      "postType" -> typ,
+      "author" -> author,
+      "isDraft" -> false,
+      "dateCreated" -> Json.obj("$lt" ->  date)
+    ),"$orderby" -> Json.obj("dateCreated" -> -1)
+  )
+
+  def liveContentByUserLatestFirst(user:String) = Json.obj(
+    "$query" ->Json.obj(
+      "userId" -> Json.obj("$oid" -> user),
+      "isDraft" -> false
+    ),"$orderby" -> Json.obj("dateCreated" -> -1)
+  )
+
+  def draftContentByUserLatestFirst(user:String) = Json.obj(
+    "$query" ->Json.obj(
+      "userId" -> Json.obj("$oid" -> user),
+      "isDraft" -> true
+    ),"$orderby" -> Json.obj("dateCreated" -> -1)
+  )
+
+
   def byType(typ :Int) = Json.obj(
     "postType" -> typ
   )

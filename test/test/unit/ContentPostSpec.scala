@@ -175,20 +175,17 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
         val post = ContentHelper.createPostWithTags("Post with tags","Some Content",ContentTypeMap("Blog"),"Leek,Freek,Gimp",None)
         post.tags.get must contain allOf ("Leek","Gimp","Freek")
     }
-//Todo: Sort this out
-    /*
+
     "Be able to retrieve posts by user" in {
-      database.withSession { implicit session =>
+
         val user = UserAccountHelper.createUserAndProfile("TestUser","TestUser","TrustedContributor")
         val authorPost = ContentHelper.createPost("Test Post Leeeek","MC Donalds","Twatous Leek us",1,"",Some(user._id))
         val draftPost = ContentHelper.createDraft("Draftus Post Leeeek","MC Donalds","Twatous Leek us",1,"",Some(user._id))
         val nonAuthorPost = ContentHelper.createPost("Test Post Leeeek 2","MC Donalds","Twatous Leek us",1,"",None)
 
-        val posts = Content.getLiveContentByUserLatestFirst(user._id)
+        val posts = Content.find(ContentQueries.liveContentByUserLatestFirst(user.id)).futureValue
         posts must (contain (authorPost) and contain noneOf(nonAuthorPost,draftPost))
 
-
-      }
     }
 
     "Be able to retrieve posts by author" in {
@@ -197,7 +194,7 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
         val authorPost = ContentHelper.createPost("Test Post Leeeek","MC Donalds","Twatous Leek us",1,"",Some(user._id))
         val nonAuthorPost = ContentHelper.createPost("Test Post Leeeek","Gary The Baldy","Twatous Leek us",1,"",Some(user._id))
         val authorDraft = ContentHelper.createDraft("Test Post Leeeek","MC Donalds","Twatous Leek us",1,"",Some(user._id))
-        val posts = Content.getLiveContentByAuthorLatestFirst("MC Donalds")
+        val posts = Content.find(ContentQueries.liveContentByAuthorLatestFirst("MC Donalds")).futureValue
         posts must (contain (authorPost) and contain noneOf(nonAuthorPost,authorDraft))
 
 
@@ -211,12 +208,13 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
         val draftPost = ContentHelper.createDraft("Draftus Post Leeeek","MC Donalds","Twatous Leek us",1,"",Some(user._id))
         val nonAuthorPost = ContentHelper.createPost("Test Post Leeeek 2","MC Donalds","Twatous Leek us",1,"",None)
 
-        val posts = Content.getDraftContentByUserLatestFirst(user._id)
+        val posts = Content.find(ContentQueries.draftContentByUserLatestFirst(user.id)).futureValue
+
         posts must (contain (draftPost) and contain noneOf(authorPost,nonAuthorPost))
 
       }
     }
-  */
+
 
     "Tidy this up" in pending
   }

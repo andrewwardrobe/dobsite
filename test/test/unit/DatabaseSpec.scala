@@ -29,7 +29,7 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite with ScalaFutures{
         result.head mustEqual newsItem
 
     }
-    //Todo rewrite this for mongo
+
 
     "Be able to save and retrieve user profile" in {
         val profile = UserAccountHelper.createProfile(BSONObjectID.generate,"some text","assests/images/crew/donalds_bw.jpg")
