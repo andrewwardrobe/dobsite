@@ -27,7 +27,7 @@ object UserServices extends Controller with LoginLogout with OptionalAuthElement
 
   import models.JsonFormats._
 
-  def loginForm(implicit session: Session) = {
+  def loginForm = {
 
       Form {
         mapping("email" -> text, "password" -> text)(Users.authenticate)(_.map(u => (u.email, "")))
@@ -39,9 +39,7 @@ object UserServices extends Controller with LoginLogout with OptionalAuthElement
 
   def login() = StackAction{  implicit request =>
     val maybeUser: Option[User] = loggedIn
-    database.withSession { implicit session =>
       Ok(views.html.login(loginForm,maybeUser))
-    }
   }
 
   def signup = StackAction{ implicit request =>
@@ -73,15 +71,13 @@ def signedout = StackAction { implicit request =>
   }
 
   def authenticate = Action.async{ implicit request =>
-    database.withSession { implicit session =>
-      val submission = loginForm.bindFromRequest()
-      submission.fold(
-        formWithErrors => Future.successful(BadRequest(views.html.login(formWithErrors,None))),
-        user => {
-          gotoLoginSucceeded(user.get.name)
-        }
-      )
-    }
+    val submission = loginForm.bindFromRequest()
+    submission.fold(
+      formWithErrors => Future.successful(BadRequest(views.html.login(formWithErrors,None))),
+      user => {
+        gotoLoginSucceeded(user.get.name)
+      }
+    )
   }
 
   def checkName(name: String) = Action.async { implicit request =>

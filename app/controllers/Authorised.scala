@@ -106,15 +106,17 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
           val df = new SimpleDateFormat("yyyyMMddHHmmss")
           val date = df.parse(data("dateCreated")(0))
           val post = new Post(BSONObjectID(data("_id")(0)), data("title")(0), postType, date, data("author")(0), data("content")(0),
-            data("extraData")(0), data("isDraft")(0).toBoolean, userId, tags)
-          if (user.userRole.hasPermission(ContentTypeMap(post.postType))) {
-            Content.create(post, repo).map { res =>
-              Ok(toJson(post))
-            }
-
-          } else {
-            Future {
-              Unauthorized("You don't have the right privileges for " + ContentTypeMap(post.postType))
+          data("extraData")(0), data("isDraft")(0).toBoolean, userId, tags)
+          canEditPost(user,post).flatMap { perm =>
+            perm match {
+              case true =>
+                Content.create(post, repo).map { res =>
+                  Ok(toJson(post))
+                }
+              case _ =>
+                Future {
+                  Unauthorized("You don't have the right privileges for " + ContentTypeMap(post.postType))
+                }
             }
           }
         }).getOrElse(Future {
@@ -125,13 +127,17 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
 
         request.body.asJson.map({js => fromJson[Post](js) match {
           case JsSuccess(post, _) => {
-            if (user.userRole.hasPermission(ContentTypeMap(post.postType))) {
-              Content.create(post, repo).map { res =>
-                Ok(toJson(post))
+            canEditPost(user,post).flatMap { perm =>
+              perm match {
+                case true =>
+                  Content.create(post, repo).map { res =>
+                    Ok(toJson(post))
+                  }
+                case _ =>
+                  Future {
+                    Unauthorized("You don't have the right privileges for " + ContentTypeMap(post.postType))
+                  }
               }
-
-            } else {
-              Future { Unauthorized("You don't have the right privileges for " + ContentTypeMap(post.postType)) }
             }
           }
           case JsError(err) => Future { BadRequest("Error")}
@@ -169,6 +175,25 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
       }
   }
 
+  def canEditPost(user: User, post: Post) = {
+
+    if (user.userRole == Administrator)
+      Future(true)
+    else {
+      Content.getById(post.id).map { posts =>
+        posts.headOption match {
+          case None => post.userId match {
+            case None => user.userRole.hasPermission (ContentTypeMap (post.postType) )
+            case Some (id) => user._id == id && user.userRole.hasPermission (ContentTypeMap (post.postType) )
+          }
+          case Some(savedPost) => savedPost.userId match {
+            case None => user.userRole.hasPermission (ContentTypeMap (post.postType) )
+            case Some (id) => user._id == id && user.userRole.hasPermission (ContentTypeMap (post.postType) )
+          }
+        }
+      }
+    }
+  }
 
   def submitBlogUpdate = AsyncStack(AuthorityKey -> Contributor) { implicit request =>
 
@@ -192,14 +217,16 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
           val date = df.parse(data("dateCreated")(0))
           val post = new Post(BSONObjectID(data("_id")(0)), data("title")(0), postType, date, data("author")(0), data("content")(0),
             data("extraData")(0), data("isDraft")(0).toBoolean, userId, tags)
-          if (user.userRole.hasPermission(ContentTypeMap(post.postType))) {
-            Content.save(post, repo).map { res =>
-              Ok(toJson(post))
-            }
-
-          } else {
-            Future {
-              Unauthorized("You don't have the right privileges for " + ContentTypeMap(post.postType))
+          canEditPost(user,post).flatMap { perm =>
+            perm match {
+              case true =>
+                Content.save(post, repo).map { res =>
+                  Ok(toJson(post))
+                }
+              case _ =>
+                Future {
+                  Unauthorized("You don't have the right privileges for " + ContentTypeMap(post.postType))
+                }
             }
           }
         }).getOrElse(Future {
@@ -209,14 +236,16 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
       case json: AnyContentAsJson =>
         request.body.asJson.map(js => fromJson[Post](js) match {
           case JsSuccess(post, _) => {
-            if (user.userRole.hasPermission(ContentTypeMap(post.postType))) {
-              Content.save(post, repo).map { res =>
-                Ok(toJson(post))
-              }
-
-            } else {
-              Future {
-                Unauthorized("You don't have the right privileges for " + ContentTypeMap(post.postType))
+            canEditPost(user,post).flatMap { perm =>
+              perm match {
+                case true =>
+                  Content.save(post, repo).map { res =>
+                    Ok(toJson(post))
+                  }
+                case _ =>
+                  Future {
+                    Unauthorized("You don't have the right privileges for " + ContentTypeMap(post.postType))
+                  }
               }
             }
           }

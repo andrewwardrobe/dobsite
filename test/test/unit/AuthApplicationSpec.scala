@@ -14,7 +14,7 @@ import play.api.test.{FakeRequest, FakeApplication, FakeHeaders}
 import play.api.test.Helpers._
 import play.api.db.DB
 import reactivemongo.bson.BSONObjectID
-import test.helpers.UserAccountHelper
+import test.helpers.{ContentHelper, UserAccountHelper}
 import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
 import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend._
@@ -61,8 +61,26 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
       status(result) mustBe UNAUTHORIZED
     }
 
+    "Prevent users editing the post of others" in {
+      val origPost = ContentHelper.createPost("Dob Post","Andrew","Some test shit",ContentTypeMap("Blog"),Some(contrib._id))
+      val updatedPost = origPost.copy( content = "Some New Content" ,  userId = Some(user._id))
+      val json = Json.toJson(updatedPost)
+      val result = route(FakeRequest(PUT, controllers.routes.Authorised.submitBlogUpdate().url,FakeHeaders(),json).withLoggedIn(config)("TrustedContributor")).get
+
+      status(result) mustBe UNAUTHORIZED
+    }
+
+    "Allow admins edit the post of others" in {
+      val origPost = ContentHelper.createPost("Dob Post","Andrew","Some test shit",ContentTypeMap("Blog"),Some(contrib._id))
+      val updatedPost = origPost.copy( content = "Some New Content" )
+      val json = Json.toJson(updatedPost)
+      val result = route(FakeRequest(PUT, controllers.routes.Authorised.submitBlogUpdate().url,FakeHeaders(),json).withLoggedIn(config)("Administrator")).get
+
+      status(result) mustBe OK
+    }
+
     "Allow TrustedContributors to create biography posts" in {
-      val post = new Post(BSONObjectID.generate,"title",ContentTypeMap("Biography"),new Date,"Andrew","Content","",false,None,None)
+      val post = new Post(BSONObjectID.generate,"title",ContentTypeMap("Biography"),new Date,"Andrew","Content","",false,Some(user._id),None)
       val json = Json.toJson(post)
       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitPost().url,FakeHeaders(),json).withLoggedIn(config)("TrustedContributor")).get
       status(result) mustBe OK
@@ -104,14 +122,20 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
 
     }
   }
+
+  var contrib : UserAccount = null
+  var admin : UserAccount = null
+  var normal : UserAccount = null
+
+
   before{
     val repo = GitRepo.apply()
     repo.refresh
-    UserAccountHelper.createUser("Administrator","Administrator","Administrator")
-    UserAccountHelper.createUser("Contributor","Contributor","Contributor")
+    admin = UserAccountHelper.createUser("Administrator","Administrator","Administrator")
+    contrib = UserAccountHelper.createUser("Contributor","Contributor","Contributor")
     user = UserAccountHelper.createUser("TrustedContributor","TrustedContributor","TrustedContributor")
     userProfile = UserAccountHelper.createProfile(user._id,"A fine oostin boyee","assets/images/leek.png")
-    UserAccountHelper.createUser("NormalUser","NormalUser","NormalUser")
+    normal = UserAccountHelper.createUser("NormalUser","NormalUser","NormalUser")
 
   }
 
