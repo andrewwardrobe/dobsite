@@ -92,7 +92,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
       case form: AnyContentAsFormUrlEncoded =>
         request.body.asFormUrlEncoded.map({ data =>
           val userId = if (data("userId")(0) == "")
-            None
+            Some(user._id)
           else
             Some(BSONObjectID(data("userId")(0)))
 
