@@ -21,6 +21,7 @@ class UserServiceSpec extends PlaySpec with OneServerPerSuite{
     }
 
 
+    "Allow space in user name" in fail("Implement this")
     def setup = {
 
     }
