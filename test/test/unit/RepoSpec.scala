@@ -12,7 +12,7 @@ import test._
  */
 class RepoSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo , withGlobal = Some(TestGlobal))
   lazy val repo = GitRepo.apply()
 
   "Content Repository" must {

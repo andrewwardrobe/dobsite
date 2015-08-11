@@ -23,7 +23,7 @@ import scala.slick.jdbc.JdbcBackend._
  * Created by andrew on 01/03/15.
  */
 class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
   lazy val repo = GitRepo.apply()
@@ -50,22 +50,16 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
   import editorPage._
 
 
-
-
-  override def afterAll()  {
-    import scala.concurrent.duration.DurationInt
-    Await.ready(Content.deleteAll,10 seconds)
-    Await.ready(UserProfiles.deleteAll,10 seconds)
-    Await.ready(UserAccounts.deleteAll,10 seconds)
-    signIn.signout
-  }
-
   var setupDone: Boolean = false
   val signIn = new SignInPage(port)
   def setup() = {
     setupDone match {
 
       case false =>
+        import scala.concurrent.duration.DurationInt
+        Await.ready(Content.deleteAll,10 seconds)
+        Await.ready(UserProfiles.deleteAll,10 seconds)
+        Await.ready(UserAccounts.deleteAll,10 seconds)
         repo.refresh
         UserAccountHelper.createUserWithAlias("TrustedContributor", "TrustedContributor", "TrustedContributor", "TrustedContributor", "Da Oostin Boyeez")
         signIn.signin("TrustedContributor", "TrustedContributor")

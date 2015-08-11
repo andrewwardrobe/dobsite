@@ -2,6 +2,8 @@ package test
 
 import java.io.File
 
+import scala.util.Random
+
 /**
  * Created by andrew on 15/02/15.
  */
@@ -27,6 +29,14 @@ object TestConfig {
   }
 
   def withEmbbededMongo = {
-    Map("mongodb.uri" -> "mongodb://localhost:12345")
+    val random = new Random()
+    val portnum = 28000 + random.nextInt(500) //Really simple port randomisation
+
+
+    val embedPort = portnum
+    Map(
+      "mongoembed.port" -> s"${embedPort}",
+      "mongodb.uri" -> s"mongodb://localhost:${embedPort}/test${embedPort}"
+    )
   }
 }

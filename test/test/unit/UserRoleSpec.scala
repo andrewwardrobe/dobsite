@@ -14,7 +14,7 @@ import test._
  */
 class UserRoleSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
 
   
   "User Role" must {

@@ -1,6 +1,7 @@
 package test.unit
 
 import com.daoostinboyeez.git.GitRepo
+
 import data.{UserProfiles, Content, UserAccounts}
 import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
@@ -9,6 +10,8 @@ import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
+import play.modules.reactivemongo.ReactiveMongoPlugin
+import play.modules.reactivemongo.ReactiveMongoHelper
 import test._
 import test.helpers.{UserAccountHelper, ContentHelper}
 
@@ -18,7 +21,7 @@ import scala.concurrent.duration.DurationInt
 
 class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite with ScalaFutures with BeforeAndAfter{
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo,withGlobal = Some(EmbedMongoGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
 
@@ -27,15 +30,20 @@ class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite with ScalaFu
 
         UserAccountHelper.createUser("test", "test@test.com", "pa$$word", "NormalUser")
         val res = UserAccounts.findByEmail("test@test.com")
-        res.futureValue must not be empty
+          res.futureValue must not be empty
+        }
+  }
 
-    }
+
+  before {
+    //import scala.concurrent.duration.DurationInt
+    //Await.ready(Content.deleteAll,10 seconds)
+    //Await.ready(UserProfiles.deleteAll,10 seconds)
+    //Await.ready(UserAccounts.deleteAll,10 seconds)
   }
 
   after {
-    import scala.concurrent.duration.DurationInt
-    Await.ready(Content.deleteAll,10 seconds)
-    Await.ready(UserProfiles.deleteAll,10 seconds)
-    Await.ready(UserAccounts.deleteAll,10 seconds)
+
+
   }
 }

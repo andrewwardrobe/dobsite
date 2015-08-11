@@ -19,7 +19,7 @@ import scala.slick.jdbc.JdbcBackend._
  * Created by andrew on 01/03/15.
  */
 class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with MongoEmbedDatabase {
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
 
@@ -39,26 +39,28 @@ class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
 
   var setupDone: Boolean = false
 
-  var props : MongodProps = _
+  var props : MongodProps = null
+
   def setup() = {
     if (!setupDone) {
       repo.refresh
 
       insertedPost = extraSetup
       setupDone = true
+      UserAccountHelper.createUser("andrew", "pa$$word", "TrustedContributor")
     }
-    UserAccountHelper.createUser("andrew", "pa$$word", "TrustedContributor")
+
 
   }
 
   before{
-    props = mongoStart()
+
     setup()
 
   }
 
   after{
-   mongoStop(props)
+
   }
   "Post" must {
     "Display a post" in {

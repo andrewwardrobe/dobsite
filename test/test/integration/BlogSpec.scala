@@ -8,7 +8,7 @@ import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test.helpers.ContentHelper
 import test.integration.pages.BlogPage
-import test.{TestConfig, TestGlobal}
+import test.{EmbedMongoGlobal, TestConfig, TestGlobal}
 
 
 import scala.slick.jdbc.JdbcBackend._
@@ -18,7 +18,7 @@ import scala.slick.jdbc.JdbcBackend._
  */
 class BlogSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
   var setupDone = false

@@ -15,7 +15,7 @@ import test._
 class DatabaseSpec extends PlaySpec with OneServerPerSuite with ScalaFutures{
 
   import models.JsonFormats._
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
 
   "Database" must {
 

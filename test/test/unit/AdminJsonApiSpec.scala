@@ -11,7 +11,7 @@ import play.api.libs.json.Json
 import play.api.test.Helpers._
 import play.api.test.{FakeApplication, FakeHeaders, FakeRequest}
 import test.helpers.UserAccountHelper
-import test.{TestGlobal, TestConfig}
+import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
 import jp.t2v.lab.play2.auth.test.Helpers._
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.Await
@@ -21,7 +21,7 @@ import scala.slick.jdbc.JdbcBackend._
  * Created by andrew on 14/09/14.
  */
 class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures {
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
   object config extends StandardAuthConfig
   def database = Database.forDataSource(DB.getDataSource())
 

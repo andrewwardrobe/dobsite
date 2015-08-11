@@ -19,7 +19,7 @@ import scala.slick.jdbc.JdbcBackend._
  */
 class ReloaderSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
   lazy val repo = GitRepo.apply()
 
   "Reloader" must {

@@ -21,7 +21,7 @@ import scala.slick.jdbc.JdbcBackend._
 class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures{
 
   import models.JsonFormats._
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
 
 
   def database = Database.forDataSource(DB.getDataSource())

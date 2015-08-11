@@ -6,13 +6,15 @@ package test
 
 import java.io.File
 
+import com.github.simplyscala.{MongoEmbedDatabase, MongodProps}
 import play.api.Play.current
 import play.api._
 
-object TestGlobal extends GlobalSettings {
+object TestGlobal extends GlobalSettings{
+
 
   override def onStart(app: Application) {
-    //Logger.info("Test Application Started")
+
   }
 
   override def onStop(app: Application) {
@@ -21,6 +23,7 @@ object TestGlobal extends GlobalSettings {
     //Logger.info("Deleting file "+file.getAbsolutePath());
     file.delete()
     //Logger.info("Application stopped")
+
   }
 
 

@@ -1,24 +1,26 @@
 package test.integration
 
 import com.daoostinboyeez.git.GitRepo
+import com.github.simplyscala.MongoEmbedDatabase
 import data.{UserAccounts, UserProfiles, Content}
 import models._
 import org.scalatest._
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play._
 import play.api.db.DB
 import play.api.test.Helpers._
 import play.api.test._
 import test.helpers.UserAccountHelper
 import test.integration.pages.{EditorPage, MenuBar, SignInPage}
-import test.{TestConfig, TestGlobal}
+import test.{EmbedMongoGlobal, TestConfig, TestGlobal}
 
 import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend.Database
 
 
-class MenuSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
+class MenuSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  with ScalaFutures with MongoEmbedDatabase  {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo  ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
   val signInPage = new SignInPage(port)
@@ -72,10 +74,10 @@ class MenuSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
   def setup = {
     val repo = GitRepo.apply()
     repo.refresh
-    UserAccountHelper.createUser("Administrator","Administrator","Administrator")
-    UserAccountHelper.createUser("Contributor","Contributor","Contributor")
-    UserAccountHelper.createUser("TrustedContributor","TrustedContributor","TrustedContributor")
-    UserAccountHelper.createUser("NormalUser","NormalUser","NormalUser")
+    UserAccountHelper.createUserAndProfile("Administrator","Administrator","Administrator")
+    UserAccountHelper.createUserAndProfile("Contributor","Contributor","Contributor")
+    UserAccountHelper.createUserAndProfile("TrustedContributor","TrustedContributor","TrustedContributor")
+    UserAccountHelper.createUserAndProfile("NormalUser","NormalUser","NormalUser")
 
   }
 

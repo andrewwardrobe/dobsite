@@ -10,7 +10,7 @@ import play.api.test.Helpers._
 import play.api.test._
 import test.helpers.{ContentHelper, UserAccountHelper}
 import test.integration.pages.{ProfilePage, BiographyPage, SignInPage}
-import test.{TestConfig, TestGlobal}
+import test.{EmbedMongoGlobal, TestConfig, TestGlobal}
 
 import scala.concurrent.Await
 import scala.slick.jdbc.JdbcBackend.Database
@@ -18,7 +18,7 @@ import scala.slick.jdbc.JdbcBackend.Database
 
 class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo  ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
   lazy val repo = GitRepo.apply()

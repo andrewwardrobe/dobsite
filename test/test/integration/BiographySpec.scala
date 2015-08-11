@@ -10,7 +10,7 @@ import play.api.test.Helpers._
 import play.api.test._
 import reactivemongo.bson.BSONObjectID
 import test.helpers.{UserAccountHelper, ContentHelper}
-import test.{TestGlobal, TestConfig}
+import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
 import test.integration.pages.{SignInPage, SignUpPage, BiographyPage}
 
 import scala.slick.jdbc.JdbcBackend.Database
@@ -20,7 +20,7 @@ import scala.slick.jdbc.JdbcBackend.Database
 
 class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
   lazy val repo = GitRepo.apply()

@@ -12,7 +12,7 @@ import play.api.libs.json.Json
 import play.api.test.Helpers._
 import play.api.test.{FakeApplication, FakeHeaders, FakeRequest}
 import test.helpers.UserAccountHelper
-import test.{TestConfig, TestGlobal}
+import test.{EmbedMongoGlobal, TestConfig, TestGlobal}
 import scala.concurrent.duration.DurationInt
 
 import scala.concurrent.Await
@@ -22,7 +22,7 @@ import scala.slick.jdbc.JdbcBackend._
  * Created by andrew on 14/09/14.
  */
 class AdminControllerSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
   def database = Database.forDataSource(DB.getDataSource())
 
   object config extends StandardAuthConfig

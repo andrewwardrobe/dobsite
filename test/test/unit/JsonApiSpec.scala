@@ -7,7 +7,7 @@ import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.test.{FakeApplication, FakeRequest}
 import play.api.test.Helpers._
 import test.helpers.{UserAccountHelper, ContentHelper}
-import test.{TestGlobal, TestConfig}
+import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
 
 /**
  * Created by andrew on 14/09/14.
@@ -18,7 +18,7 @@ class JsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter{
 
 
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo, withGlobal = Some(TestGlobal))
+  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
   var post: MongoPost = _
 
    before {
