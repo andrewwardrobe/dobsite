@@ -6,7 +6,179 @@
       "Misuse May Result In Sudden Death"],
     "discType":"album",
     "artwork":"assets/images/mdqm.jpg"
+  },{
+    "title":"There Is Only One Thing I Hate More The Creamed Corn",
+    "tracks":["Good Shitizen","Prefur Blue",
+      "There Only One Thing I hate more than creamed corn",
+      "Pick Up Da Table","Put It Away",
+      "Put The Seat Down After You"],
+    "discType":"album",
+    "artwork":"assets/images/corn.jpg"
+  },{
+    "title":"Mit Hans Und Jorg",
+    "tracks":["N.T.I.G","U-PVC Boxerz","E=MC<sup>2</sup>","Princess Di 4 Life",
+      "Mit Jesus","What the Fucks is a German?","Grab Them While Ther'ye Hot",
+      "A Half Cut Above The Rest"],
+    "discType":"album",
+    "artwork":"assets/images/mhuj.jpg"
+  },{
+    "title":"oUCH mY sTrapp?",
+    "tracks":["oUCH mY sTRAPP?","Oww Miene Belt (Wellsy Re-mix)","Song A","Michael Barryless"],
+    "discType":"album",
+    "artwork":"assets/"
+  },{
+    "title":"Wo Ist",
+    "tracks":["Leeek","Grab Them While Ther'ye Hot","oUCH mY sTRAPP?","A Half Cut Above The Rest","U-PVC Boxerz","Good Shitizen","NTIG","Christmas Part Specieal","Oww Miene Belt (Wellsy Re-mix)","Prefur Blue","Pick Up Da Table"],
+    "discType":"album",
+    "artwork":"assets/images/woist.jpg"
+  },{
+    "title":"Wo Ist (Limited Edition)",
+    "tracks":["Leeek","Grab Them WhileTher'ye Hot","oUCH mY sTRAPP?","A Half Cut Above The Rest","U-PVC Boxerz","Good Shitizen","NTIG",
+      "Christmas Part Specieal","Oww Miene Belt (Wellsy Re-mix)","Emmerdale","Prefur Blue","Pick Up Da Table","oUCH mY sTRAPP_ (Studio Edition)",
+      "Song A","Interview Mit Da Boyeez","Da Oostin Boyeez Leek","Emmerdale (Mango Crew RMX)","NTIG (Mango Crew RMX)","oUCH mY sTRAPP? (Gaz Three RMX)",
+      "Hello (feat Lionel Richie)"],
+    "discType":"album",
+    "artwork":"assets/images/woistle.gif"
+  },{
+    "title":"Is Yer Looking At Me Milk Moosetasche",
+    "tracks":["Fuckwitz","Emmerdale","Help Spasticz","Christmas Part Specieal","Jew-Bellie","Milk Moosetasche","Toking Grannies"],
+    "discType":"album",
+    "artwork":"assets/images/mm.jpg"
+  },{
+    "title":"We Are Not Animals",
+    "tracks":["Payment In Advance","This All Seems Like Voodoo Magic (To Me Like)","Bakewell Slut","Nee Botha","Oostin Aid (Richie Sez it's Harvest Time)",
+      "Calm Down Dear","Best After","My Product Will Contain Nuts","Hawkin and The Daleks","Because Pandas are Dyning","Quinny Part 2","It Went Wrong",
+      "Marcatore Per Lavagine Blanche","Trout Patse","Your Dog's a Wanker","A Brief history of Time and Space"],
+    "discType":"album",
+    "artwork":"assets/images/weare.jpg"
+  },{
+    "title":"Back in The Shack",
+    "tracks":["24 Stunden Deororant","Folks","Replacement Hip Hop","Misuse May Result In Sudden Death","Good Shitizen",
+      "There Only One Thing I Hate More Than Creamed Corn","Put The Seat Down After You","N.T.I.G","E=MC<sup>2</sup>","Mit Jesus",
+      "A Half Cut Above The Rest","oUCH mY sTRAPP?","Fuckwitz","Help Spasticz","Jew-Bellie",
+      "Toking Grannies","Best After","Your Dog's a Wanker","Because Pandas are Dying"],
+    "discType":"album",
+    "artwork":"assets/images/shack.png"
+  },{
+    "title":"Singles Collection",
+    "tracks":["Tribal Oostin","A Trip into the mind","Chasing The Train","Da Oostin Streets","Arressted","Da Oostin Ballroom",
+      "I Watched What You Did Last Winter", "You Stole My Trousers","Our New Song", "its Nice","Oostin Tribes 2"],
+    "discType":"album",
+    "artwork":"assets/images/singles.png"
+  },{
+    "title":"24 Stunden Deoderant",
+    "tracks":["24 Stunden Deororant","KY Jam (Gaz Three RMX)"],
+    "discType":"single",
+    "artwork":"assets/images/24sd.png"
+  },{
+    "title":"Folks",
+    "tracks":["Folks","Folks (Instrumental)"],
+    "discType":"single",
+    "artwork":"assets/images/folks.png"
+  },{
+    "title":"Replacement Hip Hop",
+    "tracks":["Replacement Hip Hop","Die Urpeff Lads Diss Track"],
+    "discType":"single",
+    "artwork":"assets/images/rhh.png"
+  },{
+    "title":"Misuse May Result in Sudden Death",
+    "tracks":["Misuse May Result In Sudden Death","Misuse May Result In Sudden Death (Chesta Ladz Remix)"],
+    "discType":"single",
+    "artwork":"assets/images/misuse.png"
+  },{
+    "title":"Good Shitizen",
+    "tracks":["Good Shitizen","Pissing in the Window"],
+    "discType":"single",
+    "artwork":"assets/images/goodshitizen.png"
+  },{
+    "title":"There's Only One Thing I Hate More The Creamed Corn",
+    "tracks":["There Only One Thing I Hate More Than Creamed Corn","DOB 4 Life"],
+    "discType":"single",
+    "artwork":"assets/images/corn.png"
+  },{
+    "title":"Put The Seat Down After You",
+    "tracks":["Put The Seat Down After You","Wipe up the Floor"],
+    "discType":"single",
+    "artwork":"assets/images/seat.png"
+  },{
+    "title":"N.T.I.G",
+    "tracks":["N.T.I.G","N.T.I.G (Jon Kevson Remix)"],
+    "discType":"single",
+    "artwork":"assets/images/ntig.png"
+  },{
+    "title":"E=MC<sup>2</sup>",
+    "tracks":["E=MC<sup>2</sup>","E=MC<sup>3</sup>"],
+    "discType":"single",
+    "artwork":"assets/images/e=mc2.png"
+  },{
+    "title":"Mit Jesus",
+    "tracks":["Mit Jesus","Mit Satan"],
+    "discType":"single",
+    "artwork":"assets/images/mitjesus.png"
+  },{
+    "title":"A Half Cut Above the Rest",
+    "tracks":["A Half Cut Above The Rest","Bush Babies"],
+    "discType":"single",
+    "artwork":"assets/images/half.png"
+  },{
+    "title":"oUCH mY sTRAPP?",
+    "tracks":["oUCH mY sTRAPP?","Cup of Tea"],
+    "discType":"single",
+    "artwork":"assets/images/ouch.png"
+  },{
+    "title":"Fuckwits",
+    "tracks":["Fuckwitz","Chown Time"],
+    "discType":"single",
+    "artwork":"assets/images/fuckwits.png"
+  },{
+    "title":"Help Spastics",
+    "tracks":["Help Spasticz","Help Spasticz (Mango Crew Dubstep Remix)"],
+    "discType":"single",
+    "artwork":"assets/images/spaz.png"
+  },{
+    "title":"JewBellie",
+    "tracks":["Jew-Bellie","What Jew Lopking At"],
+    "discType":"single",
+    "artwork":"assets/images/jew.png"
+  },{
+    "title":"Toking Grannies",
+    "tracks":["Toking Grannies (Gaz Three Dubplate)","Toking Grannies"],
+    "discType":"single",
+    "artwork":"assets/images/grannies.png"
+  },{
+    "title":"Your Dog's a Wanker",
+    "tracks":["Your Dog's a Wanker","I Have  No Arms"],
+    "discType":"single",
+    "artwork":"assets/images/dog.png"
+  },{
+    "title":"Because Pandas Are Dying",
+    "tracks":["Because Panda's are Dying","Because Panda's are Tasty"],
+    "discType":"single",
+    "artwork":"assets/images/pandas.jpg"
+  },{
+    "title":"Heiroglypic Session",
+    "tracks":["Maximum Charge  - feat Tha Bortley Kru","Die-Fi - feat  L'homme Collection Chesta","Off Me Nut - feat Gaz Three",
+      "Spray Away From Face - feat Clitoral Disturbance ","Fireball - Feat Ginga Gold"],
+    "discType":"ep",
+    "artwork":"assets/images/hs.jpg"
+  },{
+    "title":"Hello",
+    "tracks":["Hello? Is it E your looking for? - feat Lionel Richie","Crawling on the Ceilling","Wrecked to the Deck"],
+    "discType":"ep",
+    "artwork":"assets/images/hello.png"
+  },{
+    "title":"Gaz Three - Off Me Nut",
+    "tracks":[],
+    "discType":"other",
+    "artwork":"assets/images/offmenut.png"
+  },{
+    "title":"Gaz Three - Mixing with Da Prez",
+    "tracks":[],
+    "discType":"other",
+    "artwork":"assets/images/mwdp.png"
   }],
+
+
   "biographies":[{
     "name":"MC Donalds",
     "text":"<p>Some example text</p> <p>Some more stuff</p>",

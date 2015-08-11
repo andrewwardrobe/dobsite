@@ -9,6 +9,7 @@ insert into "discography" values (7,'Is Yer Looking At Me Milk Moosetasche',0,'i
 insert into "discography" values (8,'We Are Not Animals',0,'images/weare.jpg');
 insert into "discography" values (9,'Back in The Shack',0,'images/shack.png');
 insert into "discography" values (10,'Singles Collection',0,'images/singles.png');
+
 insert into "discography" values (11,'24 Stunden Deoderant',1,'images/24sd.png');
 insert into "discography" values (12,'Folks',1,'images/folks.png');
 insert into "discography" values (13,'Replacement Hip Hop',1,'images/rhh.png');
