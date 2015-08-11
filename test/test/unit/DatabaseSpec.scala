@@ -1,13 +1,14 @@
 package test.unit
 
 import com.daoostinboyeez.git.GitRepo
-import data.{Content}
+import data.{UserProfiles, Content}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.Logger
 
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
+import reactivemongo.bson.BSONObjectID
 import test.helpers.{UserAccountHelper, ContentHelper}
 import play.api.db.DB
 import scala.slick.jdbc.JdbcBackend._
@@ -29,26 +30,14 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite with ScalaFutures{
 
     }
     //Todo rewrite this for mongo
-    /*
+
     "Be able to save and retrieve user profile" in {
-      database.withSession{ implicit session =>
-        val user = UserAccountHelper.createUser("Contributor","Contributor","Contributor")
-        val profile = UserAccountHelper.createProfile(user._id,"some text","assests/images/crew/donalds_bw.jpg")
-        val retrievedProfile  = Profiles.get(profile.id)
-        retrievedProfile mustEqual retrievedProfile
-      }
+        val profile = UserAccountHelper.createProfile(BSONObjectID.generate,"some text","assests/images/crew/donalds_bw.jpg")
+        val retrievedProfile  = UserProfiles.getById(profile.id)
+        retrievedProfile.futureValue must contain (profile)
     }
 
 
-    "Be able to save and retrieve user profile as an option" in {
-      database.withSession{ implicit session =>
-        val user = UserAccountHelper.createUser("Contributor","Contributor","Contributor")
-        val profile = UserAccountHelper.createProfile(user._id,"some text","assests/images/crew/donalds_bw.jpg")
-        val retrievedProfile  = Profiles.getAsOption(profile.id)
-        retrievedProfile must not be None
-      }
-    }
 
-*/
   }
 }
