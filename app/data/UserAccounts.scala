@@ -42,7 +42,7 @@ object UserAccounts extends DAOBase[UserAccount]("users") {
     }
   }
 
-  //Todo Change role
+
 
   def changeRole(user: UserAccount, roleType :String) = {
     update(user._id.stringify,user.copy(role = roleType))

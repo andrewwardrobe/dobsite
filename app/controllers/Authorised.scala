@@ -169,7 +169,7 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
       }
   }
 
-  //TODO: Reactor this to use the save from content
+
   def submitBlogUpdate = AsyncStack(AuthorityKey -> Contributor) { implicit request =>
 
     //Todo Do jsoup white listing on the content and title before saving

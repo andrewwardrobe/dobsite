@@ -17,7 +17,7 @@ object Content extends DAOBase[MongoPost]("posts"){
     find(Json.obj("postType" -> typeId ))
   }
 
-  //Todo write this
+
   def create(post : MongoPost, repo :GitRepo) = {
     Logger.info("create" +post.id)
     val ed = post.extraData match {

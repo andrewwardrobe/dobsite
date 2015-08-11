@@ -36,7 +36,6 @@ object Forms {
     )(Profile.apply)(Profile.unapply _)
   }
 
-  //Todo do use mapper. transotrm
 
   val blogForm: Form[MongoPost] = Form {
     mapping (

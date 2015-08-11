@@ -6,7 +6,7 @@ package test
 
 import java.io.File
 
-import de.flapdoodle.embed.mongo.config.{Net, MongodConfigBuilder}
+import de.flapdoodle.embed.mongo.config.{RuntimeConfigBuilder, Net, MongodConfigBuilder}
 
 import de.flapdoodle.embed.mongo._
 import de.flapdoodle.embed.mongo.distribution.Version
@@ -21,7 +21,9 @@ object EmbedMongoGlobal extends GlobalSettings {
   override def onStart(app: Application) {
     val mongoPort = Play.configuration.getInt("mongoembed.port").getOrElse(12345)
     Logger.info(s"Test Application Started - Mongo port $mongoPort")
-    val starter = MongodStarter.getDefaultInstance()
+
+    val rtconfig = new RuntimeConfigBuilder().defaults(Command.MongoD).build()
+    val starter = MongodStarter.getInstance(rtconfig)
     val config = new MongodConfigBuilder()
       .version(Version.Main.PRODUCTION)
       .net(new Net(mongoPort, Network.localhostIsIPv6()))
@@ -38,7 +40,7 @@ object EmbedMongoGlobal extends GlobalSettings {
     val file = new File(repoDir.substring(0,repoDir.lastIndexOf("/.git")))
     //Logger.info("Deleting file "+file.getAbsolutePath());
     file.delete()
-    reactivemongo.api.command
+    ReactiveMongoPlugin.driver.system.shutdown()
     //Logger.info("Application stopped")
     _mongodExe.stop()
   }

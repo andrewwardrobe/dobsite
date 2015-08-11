@@ -10,6 +10,7 @@ import play.api.db.DB
 import play.api.libs.json.Json
 import play.api.test.Helpers._
 import play.api.test.{FakeApplication, FakeHeaders, FakeRequest}
+import reactivemongo.core.protocol.QueryFlags
 import test.helpers.UserAccountHelper
 import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
 import jp.t2v.lab.play2.auth.test.Helpers._
@@ -43,8 +44,10 @@ class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAft
         """.stripMargin
       val result = route(FakeRequest(POST, controllers.routes.AdminJsonApi.insertDiscographies().url,FakeHeaders(),Json.parse(json)).withLoggedIn(config)("Administrator")).get
       status(result) mustBe OK
+      //Wait for the upload to finish
+      result.futureValue
+        Content.count(Json.obj()).futureValue must equal(1)
 
-      Content.count(Json.obj( )).futureValue must equal(1)
 
     }
 
@@ -60,7 +63,10 @@ class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAft
         """.stripMargin
       val result = route(FakeRequest(POST, controllers.routes.AdminJsonApi.insertDiscographies().url,FakeHeaders(),Json.parse(json)).withLoggedIn(config)("Administrator")).get
       status(result) mustBe OK
-      Content.count().futureValue must equal(1)
+      //Wait for the upload to finish
+      info(result.futureValue.toString())
+      Content.count(Json.obj()).futureValue must equal(1)
+
     }
 
   }

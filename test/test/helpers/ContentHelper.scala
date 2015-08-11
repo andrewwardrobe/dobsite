@@ -35,7 +35,7 @@ object ContentHelper {
 
   def createPostWithTags(title:String, content :String, typ: Int,tags :String,userId:Option[BSONObjectID]) :MongoPost = {
 
-      //Todo fix this
+
       val tagList = tags match {
         case "" => None
         case _ => Some(tags.split(",").toList)
