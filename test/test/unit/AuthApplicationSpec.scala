@@ -41,21 +41,21 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
 
     "Allow Contributors to create news posts" in {
 
-      val post = new Post(BSONObjectID.generate,"title",1,new Date,"Andrew","Content","",false,None,None)
+      val post = new Post(BSONObjectID.generate,"title",1,new Date,"Andrew","Content",None,false,None,None)
       val json = Json.toJson(post)
       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitPost().url,FakeHeaders(),json).withLoggedIn(config)("Contributor")).get
       status(result) mustBe OK
     }
 
     "Not Allow normal users to create news posts" in {
-      val post = new Post(BSONObjectID.generate,"title",1,new Date,"Andrew","Content","",false,None,None)
+      val post = new Post(BSONObjectID.generate,"title",1,new Date,"Andrew","Content",None,false,None,None)
       val json = Json.toJson(post)
       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitPost().url,FakeHeaders(),json).withLoggedIn(config)("NormalUser")).get
       status(result) mustBe FORBIDDEN
     }
 
     "Not Allow contributors to create biography posts" in {
-      val post = new Post(BSONObjectID.generate,"title",ContentTypeMap("Biography"),new Date,"Andrew","Content","",false,None,None)
+      val post = new Post(BSONObjectID.generate,"title",ContentTypeMap("Biography"),new Date,"Andrew","Content",None,false,None,None)
       val json = Json.toJson(post)
       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitPost().url,FakeHeaders(),json).withLoggedIn(config)("Contributor")).get
       status(result) mustBe UNAUTHORIZED
@@ -80,7 +80,7 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
     }
 
     "Allow TrustedContributors to create biography posts" in {
-      val post = new Post(BSONObjectID.generate,"title",ContentTypeMap("Biography"),new Date,"Andrew","Content","",false,Some(user._id),None)
+      val post = new Post(BSONObjectID.generate,"title",ContentTypeMap("Biography"),new Date,"Andrew","Content",None,false,Some(user._id),None)
       val json = Json.toJson(post)
       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitPost().url,FakeHeaders(),json).withLoggedIn(config)("TrustedContributor")).get
       status(result) mustBe OK

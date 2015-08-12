@@ -20,11 +20,8 @@ object Content extends DAOBase[Post]("posts"){
 
   def create(post : Post, repo :GitRepo) = {
     Logger.info("create" +post.id)
-    val ed = post.extraData match {
-      case "" => ""
-      case _ => post.extraDataToJson
-    }
-    insert(post.copy(extraData = ed)).map { res =>
+
+    insert(post).map { res =>
       res.ok match {
         case true =>
           repo.newFile(post._id.stringify, post.content, ContentMeta.makeCommitMsg("Created", post))
@@ -37,11 +34,8 @@ object Content extends DAOBase[Post]("posts"){
   }
 
   def save(post: Post, repo: GitRepo) = {
-    val ed = post.extraData match {
-      case "" => ""
-      case _ => post.extraDataToJson
-    }
-    update(post._id.stringify,post.copy(extraData = ed)).map { res =>
+
+    update(post._id.stringify,post).map { res =>
       res.ok match {
         case true =>
           repo.updateFile (post._id.stringify, post.content, ContentMeta.makeCommitMsg ("Updated", post) )

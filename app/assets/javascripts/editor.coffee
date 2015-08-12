@@ -156,7 +156,7 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
     $(d).text "Saved"
     $(d).attr {'class':'alert alert-success','role':'alert','id':'res-success'}
     $("#result").html ""
-    $("#postId").val data.id
+    $("#postId").val data._id.$oid
     $("#saveButton").hide()
     $("#btnSuccessful").show()
     $("#save").attr {'class': 'fa fa-check-circle btnSuccessful'}
@@ -176,7 +176,6 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
     $(d).attr { 'class':'alert alert-danger','role':'alert','id':'res-fail' }
     $("#result").html ""
     $("#result").append d
-    $("#postId").val err
     $("#saveButton").hide()
     $("#btnFailure").show()
     $("#save").attr {'class': 'fa fa-times-circle btnFailure'}

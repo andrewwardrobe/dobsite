@@ -3,19 +3,19 @@ define ['common','utilities'],(common,utils) ->
         makeDiscographyTables:(data) ->
             $.each data, (index, disc) ->
                 newCell = $ "<td>"
-                newCell.attr 'id', "disc" + disc.id
-                extraData = $.parseJSON(disc.extraData)
+                newCell.attr 'id', "disc" + disc._id.$oid
+                extraData = disc.extraData
                 image = $ "<img>"
                 image.attr 'src', extraData.thumb
                 image.attr 'class','discoThumb'
                 image.attr 'data-toggle','modal'
-                image.attr 'data-target', '#RelIDmodal' + disc.id
+                image.attr 'data-target', '#RelIDmodal' + disc._id.$oid
                 newCell.append image
                 newCell.append $("<br>")
                 link = $ "<a>"
                 link.text disc.title
                 link.attr 'data-toggle','modal'
-                link.attr 'data-target', '#RelIDmodal' + disc.id
+                link.attr 'data-target', '#RelIDmodal' + disc._id.$oid
                 newCell.append link
                 newCell.attr 'class', 'discoCell'
                 table
@@ -53,17 +53,17 @@ define ['common','utilities'],(common,utils) ->
 
         doListFormating:(data) ->
             $.each data, (index, disc) ->
-                utils.listToTable("trackList#{disc.id}","trackDiv#{disc.id}",7,2)
+                utils.listToTable("trackList#{disc._id.$oid}","trackDiv#{disc._id.$oid}",7,2)
 
         makeDiscographyModals:(data) ->
             $.each data, (index, disc) ->
-                extraData = $.parseJSON(disc.extraData)
+                extraData = disc.extraData
                 outer = $("<div>")
                 outer.attr 'class', 'modal fade'
-                outer.attr 'id', 'RelIDmodal' + disc.id
+                outer.attr 'id', 'RelIDmodal' + disc._id.$oid
                 outer.attr 'tabindex', '-1'
                 outer.attr 'role', 'dialog'
-                outer.attr 'aria-labelledby', 'relID' + disc.id + 'Title'
+                outer.attr 'aria-labelledby', 'relID' + disc._id.$oid + 'Title'
                 outer.attr 'aria-hidden', 'true'
                 dialog = $("<div>")
                 dialog.attr 'class', 'modal-dialog'
@@ -98,13 +98,13 @@ define ['common','utilities'],(common,utils) ->
                 body.append newDiv
                 $('#modals').append outer
                 tracksDiv = $("<div>")
-                tracksDiv.attr 'id','trackDiv'+disc.id
+                tracksDiv.attr 'id','trackDiv'+disc._id.$oid
                 temp = disc.content.replace /<\/?div>/g, ""
-                temp = temp.replace /<ol>/, "<ol id=\"trackList#{disc.id}\">"
+                temp = temp.replace /<ol>/, "<ol id=\"trackList#{disc._id.$oid}\">"
                 temp = temp.trim()
                 tracks = $.parseHTML temp
                 tracksDiv.append tracks
                 list = $(tracks).children(':first')
-                list.attr 'id', 'trackList' + disc.id
+                list.attr 'id', 'trackList' + disc._id.$oid
                 content.append tracksDiv
     }

@@ -6,6 +6,8 @@ import play.api.data.format.Formatter
 import reactivemongo.bson.BSONObjectID
 import play.api.data.format.Formats._
 import play.modules.reactivemongo.json.BSONFormats._
+import scala.collection.mutable
+
 import scala.util.{Failure, Success}
 
 
@@ -37,6 +39,7 @@ object Forms {
   }
 
 
+
   val blogForm: Form[Post] = Form {
     mapping (
       "id" -> text.transform[BSONObjectID]({ s => bsonMapper(s)},{b => b.stringify}),
@@ -45,7 +48,7 @@ object Forms {
       "dateCreated" -> date("yyyyMMddHHmmss"),
       "author" ->text,
       "content" -> text,
-      "extraData" -> text,
+      "extraData" -> text.transform[Option[Map[String,String]]]({s => Post.stringToMap(s)}, {m => Post.mapToString(m)}),
       "isDraft" -> boolean,
       "userId" -> optional(text.transform[BSONObjectID]({ s => bsonMapper(s)},{b => b.stringify})),
       "tags" -> optional(seq(text))

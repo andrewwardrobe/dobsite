@@ -101,11 +101,17 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
           else
             Some(data("tags")(0).split(",").toList)
 
+          //Todo sort this
+          val extraData = data("extraData")(0) match {
+            case "" => None
+            case x:String => Post.stringToMap(x)
+          }
+
           val postType = data("postType")(0).toInt
           val df = new SimpleDateFormat("yyyyMMddHHmmss")
           val date = df.parse(data("dateCreated")(0))
           val post = new Post(BSONObjectID(data("_id")(0)), data("title")(0), postType, date, data("author")(0), data("content")(0),
-          data("extraData")(0), data("isDraft")(0).toBoolean, userId, tags)
+          extraData, data("isDraft")(0).toBoolean, userId, tags)
           canEditPost(user,post).flatMap { perm =>
             perm match {
               case true =>
@@ -211,11 +217,16 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
           else
             Some(data("tags")(0).split(",").toList)
 
+          val extraData = data("extraData")(0) match {
+            case "" => None
+            case x:String => Post.stringToMap(x)
+          }
+
           val postType = data("postType")(0).toInt
           val df = new SimpleDateFormat("yyyyMMddHHmmss")
           val date = df.parse(data("dateCreated")(0))
           val post = new Post(BSONObjectID(data("_id")(0)), data("title")(0), postType, date, data("author")(0), data("content")(0),
-            data("extraData")(0), data("isDraft")(0).toBoolean, userId, tags)
+           extraData, data("isDraft")(0).toBoolean, userId, tags)
           canEditPost(user,post).flatMap { perm =>
             perm match {
               case true =>

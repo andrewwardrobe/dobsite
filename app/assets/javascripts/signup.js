@@ -97,7 +97,7 @@ function checkName(){
        return;
     }
 
-     if(name.match(/^[A-Za-z0-9_]+$/)){
+     if(name.match(/^[A-Za-z0-9_ ]+[A-Za-z0-9_]$/)){
         var json = {
             success: function(data){
                 if(data=="0"){

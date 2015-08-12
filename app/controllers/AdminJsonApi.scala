@@ -49,8 +49,13 @@ object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig 
 
   def processBiographies(bios: Seq[Biography]) = {
     bios.foreach { bio: Biography =>
+      val ed = new scala.collection.mutable.HashMap[String,String]()
+      ed.put("thumb",bio.thumbnail)
+      ed.put("crew",bio.crew)
+      val exData =  new scala.collection.immutable.HashMap[String,String]() ++ ed
       val extraData = s"thumb=${bio.thumbnail}\n,crew=${bio.crew}"
-      val post = new Post(BSONObjectID.generate, bio.name, ContentTypeMap("Discography"), new Date(), defaultAuthor, bio.text, extraData, false, None, None)
+
+      val post = new Post(BSONObjectID.generate, bio.name, ContentTypeMap("Discography"), new Date(), defaultAuthor, bio.text, Some(exData), false, None, None)
       Content.create(post, GitRepo.apply())
     }
     bios.length
@@ -66,7 +71,11 @@ object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig 
       str.append("</ol></div>")
       val content = str.toString
       val extraData = s"thumb=${disc.artwork}\ndiscType=${disc.discType}"
-      val post = new Post(BSONObjectID.generate, disc.title, ContentTypeMap("Discography"), new Date(), defaultAuthor, content, extraData, false, None, None)
+      val ed = new scala.collection.mutable.HashMap[String,String]()
+      ed.put("thumb",disc.artwork)
+      ed.put("discType",disc.discType)
+      val exData =  new scala.collection.immutable.HashMap[String,String]() ++ ed
+      val post = new Post(BSONObjectID.generate, disc.title, ContentTypeMap("Discography"), new Date(), defaultAuthor, content, Some(exData), false, None, None)
       Content.create(post, GitRepo.apply())
     }
     discs.length

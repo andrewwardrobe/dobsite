@@ -172,10 +172,13 @@ define ['common', 'helpers/date'], (common) -> {
             $("#bioSuccess"+bio._id.$oid).hide()
 
     extraDataJs2KeyVal : (js) ->
-        data = $.parseJSON(js)
+        console.log "extraData 2 Key Val"
+        data = js
+        console.log "js + #{js}"
         dataStr = ""
         $.each data, (key, val) ->
             dataStr += key + "=" + val + "\n"
+        console.log(dataStr)
         dataStr
 
     doTextAndImage : (bio, target) ->
@@ -183,9 +186,9 @@ define ['common', 'helpers/date'], (common) -> {
         bsRow2.attr 'class','col-sm-5'
         imageDiv = $("<div>")
         $(target).append bsRow2
-        if bio.extraData != ""
+        if bio.extraData != undefined
             console.log "Extra Data = |#{bio.extraData}|"
-            extraData = $.parseJSON(bio.extraData)
+            extraData = bio.extraData
             image = $("<img>")
             image.attr 'src', extraData.thumb
             image.attr 'class','bioThumb pull-left'
@@ -217,8 +220,8 @@ define ['common', 'helpers/date'], (common) -> {
         bioExtra = $("<input>")
         bioExtra.attr 'id', 'bioExtra' + bio._id.$oid
         bioExtra.attr 'type', 'hidden'
-        console.log "Extra Data #{bio.extraData}"
-        if bio.extraData != ""
+        #console.log "Extra Data #{bio.extraData}"
+        if bio.extraData != undefined
             bioExtra.attr 'value', this.extraDataJs2KeyVal bio.extraData
         textDiv.append bioExtra
         d = new Date(bio.dateCreated)

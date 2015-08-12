@@ -4,9 +4,12 @@ import java.util.Date
 
 import com.daoostinboyeez.git.GitRepo
 import org.eclipse.jgit.errors.RevisionSyntaxException
+import play.api.libs.json.Json
 import reactivemongo.bson.BSONObjectID
 import org.jsoup._
 import org.jsoup.safety.Whitelist
+
+import scala.collection.mutable
 
 /**
  *
@@ -14,7 +17,7 @@ import org.jsoup.safety.Whitelist
  *
  */
 case class Post(_id: BSONObjectID, title:String, postType: Int, dateCreated :Date,author:String,
-                     content: String, extraData: String, isDraft: Boolean, userId:Option[BSONObjectID], tags: Option[Seq[String]]){
+                     content: String, extraData: Option[Map[String,String]], isDraft: Boolean, userId:Option[BSONObjectID], tags: Option[Seq[String]]){
 
   def revision(revision :String, repo : GitRepo) ={
     //Todo populate this from json commit message or store
@@ -27,18 +30,7 @@ case class Post(_id: BSONObjectID, title:String, postType: Int, dateCreated :Dat
   }
 
   def extraDataToJson  = {
-    val str : StringBuilder = new StringBuilder
-    str.append("{")
-    extraData.split("\n").foreach{
-      s =>
-        val parts = s.split("=")
-        if(parts.length > 1) {
-          str.append("\"" + parts(0) + "\":"+"\""+parts(1)+"\",")
-        }
-    }
-    str.append("}")
-    val json = str.toString().replace(",}", "}")
-    json
+    Json.toJson(extraData)
   }
 
   def getCleanContent = {
@@ -48,6 +40,37 @@ case class Post(_id: BSONObjectID, title:String, postType: Int, dateCreated :Dat
 
   def id = _id.stringify
 
+}
+
+object Post {
+  def stringToMap(data:String) = {
+    if (data == "")
+      None
+    else {
+      val map = new mutable.HashMap[String, String]()
+      data.split("\n").foreach { line =>
+        val parts = line.split("=")
+        if (parts.length > 1)
+          map.put(parts(0), parts(1))
+        else if(parts.length == 1)
+          map.put(parts(0), "")
+      }
+      val returnMap = new scala.collection.immutable.HashMap[String, String]() ++ map
+      Some(returnMap)
+    }
+  }
+
+  def mapToString(mapOpt: Option[Map[String,String]]) = {
+    mapOpt match {
+      case None => ""
+      case Some(map) =>
+        val str = new StringBuilder()
+        map.foreach { (tuple) =>
+          str.append(s"${tuple._1}=${tuple._2}\n")
+        }
+        str.toString()
+    }
+  }
 }
 
 

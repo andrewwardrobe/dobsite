@@ -53,7 +53,10 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
     Content.findById(id).map { posts =>
       posts.headOption match {
         case Some(post) =>{
-          val extraData = Try(Json.parse(post.extraData).as[Map[String,String]]).getOrElse(Map())
+          val extraData = post.extraData match {
+            case Some(x) => x
+            case None => Map[String,String]()
+          }
           Ok(views.html.post(post, extraData, maybeUser))
         }
         case None => NotFound("Could Not Find Post") //Todo custom page for 404 and bad request

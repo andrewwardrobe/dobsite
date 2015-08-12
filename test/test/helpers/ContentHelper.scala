@@ -48,7 +48,7 @@ object ContentHelper {
   }
 
   def createPost(title:String, author:String, content :String, typ: Int, extraData :String, date: Date,userId:Option[BSONObjectID],tags : Option[Seq[String]] = None):Post = {
-    val post = new Post(BSONObjectID.generate, title, typ, date, author, content, extraData, false, userId, tags)
+    val post = new Post(BSONObjectID.generate, title, typ, date, author, content, Post.stringToMap(extraData), false, userId, tags)
     Await.result(Content.create(post, repo), 10 seconds)
   }
 
@@ -58,12 +58,12 @@ object ContentHelper {
   }
 
   def createBiography(name:String, text :String, thumb :String,userId:Option[BSONObjectID]) = {
-    val post = new Post(BSONObjectID.generate, name, ContentTypeMap("Biography"), new Date(), "", text, s"thumb=$thumb", false, userId, None)
+    val post = new Post(BSONObjectID.generate, name, ContentTypeMap("Biography"), new Date(), "", text, Post.stringToMap(s"thumb=$thumb"), false, userId, None)
     Await.result(Content.create(post, repo), 10 seconds)
   }
 
   def createDiscographyItem(name:String, text :String, thumb :String, albumType :String,userId:Option[BSONObjectID]) = {
-    val post = new Post(BSONObjectID.generate, name, ContentTypeMap("Discography"), new Date(), "", text, s"thumb=$thumb\ndiscType=$albumType", false, userId,None)
+    val post = new Post(BSONObjectID.generate, name, ContentTypeMap("Discography"), new Date(), "", text, Post.stringToMap(s"thumb=$thumb\ndiscType=$albumType"), false, userId,None)
     Await.result(Content.create(post, repo), 10 seconds)
   }
 
@@ -81,7 +81,7 @@ object ContentHelper {
   }
 
   def createDraft(title:String, author:String, content :String, typ: Int, extraData :String, date: Date,userId:Option[BSONObjectID]):Post = {
-    val post = new Post(BSONObjectID.generate, title, typ, date, author, content, extraData, true, userId,None)
+    val post = new Post(BSONObjectID.generate, title, typ, date, author, content, Post.stringToMap(extraData), true, userId,None)
     Await.result(Content.create(post, repo),10 seconds)
   }
 
