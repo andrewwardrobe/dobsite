@@ -110,8 +110,9 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
           val postType = data("postType")(0).toInt
           val df = new SimpleDateFormat("yyyyMMddHHmmss")
           val date = df.parse(data("dateCreated")(0))
-          val post = new Post(BSONObjectID(data("_id")(0)), data("title")(0), postType, date, data("author")(0), data("content")(0),
+          val temp = new Post(BSONObjectID(data("_id")(0)), data("title")(0), postType, date, data("author")(0), data("content")(0),
           extraData, data("isDraft")(0).toBoolean, userId, tags)
+          val post = temp.copy( content = temp.getCleanContent)
           canEditPost(user,post).flatMap { perm =>
             perm match {
               case true =>
@@ -131,7 +132,8 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
       case json: AnyContentAsJson =>
 
         request.body.asJson.map({js => fromJson[Post](js) match {
-          case JsSuccess(post, _) => {
+          case JsSuccess(temp, _) => {
+            val post = temp.copy( content = temp.getCleanContent)
             canEditPost(user,post).flatMap { perm =>
               perm match {
                 case true =>
@@ -225,8 +227,9 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
           val postType = data("postType")(0).toInt
           val df = new SimpleDateFormat("yyyyMMddHHmmss")
           val date = df.parse(data("dateCreated")(0))
-          val post = new Post(BSONObjectID(data("_id")(0)), data("title")(0), postType, date, data("author")(0), data("content")(0),
+          val temp = new Post(BSONObjectID(data("_id")(0)), data("title")(0), postType, date, data("author")(0), data("content")(0),
            extraData, data("isDraft")(0).toBoolean, userId, tags)
+          val post = temp.copy( content = temp.getCleanContent)
           canEditPost(user,post).flatMap { perm =>
             perm match {
               case true =>
@@ -245,8 +248,10 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
 
       case json: AnyContentAsJson =>
         request.body.asJson.map(js => fromJson[Post](js) match {
-          case JsSuccess(post, _) => {
+          case JsSuccess(temp, _) => {
+            val post = temp.copy( content = temp.getCleanContent)
             canEditPost(user,post).flatMap { perm =>
+
               perm match {
                 case true =>
                   Content.save(post, repo).map { res =>

@@ -35,7 +35,13 @@ case class Post(_id: BSONObjectID, title:String, postType: Int, dateCreated :Dat
 
   def getCleanContent = {
     //Todo Jsoup cleaning
-    content
+
+    Jsoup.clean(content,Whitelist.basicWithImages()
+      .preserveRelativeLinks(true)
+      .addAttributes("img","class")
+      .addAttributes("p","class")
+      .addAttributes("div","align"))
+
   }
 
   def id = _id.stringify

@@ -56,7 +56,7 @@ GET         /bulkupload                                               controller
 
 POST        /json/admin/discographies/fromjson                        controllers.AdminJsonApi.insertDiscographies()
 
-GET         /json/news                                                controllers.JsonApi.getNews()
+GET         /json/blog                                                controllers.JsonApi.getBlogs()
 GET         /json/content/tags/:id                                    controllers.JsonApi.getContentTags(id: String)
 GET         /json/content/random/:typ/:max                            controllers.JsonApi.getRandomPosts(typ:Int, max:Int)
 GET         /json/content/:id                                         controllers.JsonApi.getPostById(id: String)

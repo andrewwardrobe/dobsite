@@ -31,7 +31,7 @@ object JsonApi extends Controller {
   val repo = GitRepo.apply()
 
 
-  def getNews = Action.async { implicit response => //Todo change name to get Blogs
+  def getBlogs = Action.async { implicit response => //Todo change name to get Blogs
     Content.findByType(ContentTypeMap("Blog")).map { articles =>
       Ok(toJson(articles))
     }

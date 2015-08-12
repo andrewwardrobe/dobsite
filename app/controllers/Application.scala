@@ -112,6 +112,16 @@ object Application extends Controller  with OptionalAuthElement with StandardAut
     }
   }
 
+  def news = AsyncStack { implicit request =>
+    val maybeUser: Option[User] = loggedIn
+
+    val query = ContentQueries.byType(ContentTypeMap("News"))
+
+    Content.find(query,Json.obj("dateCreated" -> -1 )).map { posts =>
+      Ok(views.html.blog("all", maybeUser, posts))
+    }
+  }
+
   def author(author: String) = AsyncStack { implicit request =>
     val maybeUser: Option[User] = loggedIn
     val query = ContentQueries.liveContentByAuthorBeforeDate(author, ContentTypeMap("Blog"), new Date())
