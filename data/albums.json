@@ -52,17 +52,18 @@
     "discType":"album",
     "artwork":"assets/images/weare.jpg"
   },{
-    "title":"Back in The Shack",
-    "tracks":["24 Stunden Deororant","Folks","Replacement Hip Hop","Misuse May Result In Sudden Death","Good Shitizen",
-      "There Only One Thing I Hate More Than Creamed Corn","Put The Seat Down After You","N.T.I.G","E=MC<sup>2</sup>","Mit Jesus",
-      "A Half Cut Above The Rest","oUCH mY sTRAPP?","Fuckwitz","Help Spasticz","Jew-Bellie",
-      "Toking Grannies","Best After","Your Dog's a Wanker","Because Pandas are Dying"],
+    "title":"Tribes of Oostin",
+    "tracks":["Tribal Oostin","A Trip into the mind","Chasing The Train","Da Oostin Streets","Arressted","Da Oostin Ballroom",
+      "I Watched What You Did Last Winter", "You Stole My Trousers","Our New Song", "its Nice","Oostin Tribes 2"],
     "discType":"album",
     "artwork":"assets/images/shack.png"
   },{
     "title":"Singles Collection",
-    "tracks":["Tribal Oostin","A Trip into the mind","Chasing The Train","Da Oostin Streets","Arressted","Da Oostin Ballroom",
-      "I Watched What You Did Last Winter", "You Stole My Trousers","Our New Song", "its Nice","Oostin Tribes 2"],
+
+    "tracks":["24 Stunden Deororant","Folks","Replacement Hip Hop","Misuse May Result In Sudden Death","Good Shitizen",
+      "There Only One Thing I Hate More Than Creamed Corn","Put The Seat Down After You","N.T.I.G","E=MC<sup>2</sup>","Mit Jesus",
+      "A Half Cut Above The Rest","oUCH mY sTRAPP?","Fuckwitz","Help Spasticz","Jew-Bellie",
+      "Toking Grannies","Best After","Your Dog's a Wanker","Because Pandas are Dying"],
     "discType":"album",
     "artwork":"assets/images/singles.png"
   },{
