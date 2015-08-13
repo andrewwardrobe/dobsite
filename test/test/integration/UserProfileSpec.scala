@@ -158,6 +158,12 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
     }
 
+    "Show the added alias when successful" in {
+      go to profilePage
+      addAlias("Jimbo Jambo")
+      eventually { aliasList must contain("Jimbo Jambo") }
+    }
+
   }
 
   def dataSetup() = {

@@ -35,25 +35,31 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
     return undefined
 
   getRevisions:(id) ->
+    console.log "Getting Revisions id = #{id}"
     self = this
     result = Q.when jsRoutes.controllers.JsonApi.getRevisionsWithDates(id).ajax({})
     result.then (data) ->
-      count = 1
-      revisions = $("#revisions")
-      revisions.html ""
-      $.each data, (idx,rev) ->
-        dte = new Date(rev.commitDate.replace("BST", ""))
-        revItem = $("<li>")
-        revItem.attr 'id', "revId#{count}"
-        link = $("<a>")
-        link.attr {'id': "revLink#{count}", 'href':"#"}
-        link.text dte.DTString()
-        revItem.append link
-        revisions.append revItem
-        revItem.on 'click', ()->
-          self.loadContentPost $("#postId").val(), rev.commitId
-          $("#editAlertRevision").show()
-        count++
+      if data != "None"
+        console.log "Found Revisions= #{JSON.stringify data}"
+        count = 1
+        revisions = $("#revisions")
+        revisions.html ""
+        $.each data, (idx,rev) ->
+          dte = new Date(rev.commitDate.replace("BST", ""))
+          console.log "leek"
+          revItem = $("<li>")
+          revItem.attr 'id', "revId#{count}"
+          link = $("<a>")
+          link.attr {'id': "revLink#{count}", 'href':"#"}
+          link.text dte.DTString()
+          revItem.append link
+          revisions.append revItem
+          revItem.on 'click', ()->
+            self.loadContentPost $("#postId").val(), rev.commitId
+            $("#editAlertRevision").show()
+          count++
+      else
+        console.log "No Revisions"
     ,(err) ->
       console.log "Could not receive list of revisions #{err}"
     result
@@ -106,7 +112,7 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
           $("#editAlertLive").show()
           $("#draft").val false
           $("#draftBtn").attr {class: "fa fa-power-off isDraftOff"}
-        extraData = JSON.parse data.extraData
+        extraData = data.extraData
         text = ""
         for key in extraData
           if extraData.hasOwnProperty key
@@ -147,7 +153,6 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
         "tags": tags,
         "userId": userId
       },
-      success:() ->
     }
     json
 
@@ -162,13 +167,43 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
     $("#save").attr {'class': 'fa fa-check-circle btnSuccessful'}
     $("*[id*='editAlert']").hide()
     $("#draft").val data.isDraft
-    $("#userId").val data.userId
+    $("#userId").val data.userId.$oid
     $("#newPost").val "false"
+    console.log("Saved")
     if data.isDraft != false
       $("#editAlertDraft").show()
     else
      $("#editAlertLive").show()
-    this.getRevisions(data._id)
+    console.log data._id.$oid
+    jsRoutes.controllers.JsonApi.getRevisionsWithDates(data._id.$oid).ajax({
+      success:(data) ->
+        console.log "Leeeeeeeeeeeeeeeek"
+        if data != "None"
+          console.log "Found Revisions= #{JSON.stringify data}"
+          count = 1
+          revisions = $("#revisions")
+          revisions.html ""
+          $.each data, (idx,rev) ->
+            dte = new Date(rev.commitDate.replace("BST", ""))
+            console.log "leek"
+            revItem = $("<li>")
+            revItem.attr 'id', "revId#{count}"
+            link = $("<a>")
+            link.attr {'id': "revLink#{count}", 'href':"#"}
+            link.text dte.DTString()
+            revItem.append link
+            revisions.append revItem
+            revItem.on 'click', ()->
+              self.loadContentPost $("#postId").val(), rev.commitId
+              $("#editAlertRevision").show()
+            count++
+        else
+          console.log "Failed to get revisions"
+      error:(err) ->
+        console.log "Fucking Hell #{err}"
+    })
+    console.log "Done Saving"
+
 
   saveFailedHandler:(err) ->
     d = $ '<div>'
@@ -181,16 +216,24 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
     $("#save").attr {'class': 'fa fa-times-circle btnFailure'}
 
   save: () ->
+    self = this
     postData = this.getContentData()
-    console.log postData._id
     data = postData.data
     newPost = $("#newPost").val()
     if newPost == "true"
       result = Q.when jsRoutes.controllers.Authorised.submitPost().ajax postData
-      result.then this.saveSucessfulHandler , this.saveFailedHandler
+      result.then (data)->
+        self.saveSucessfulHandler(data)
+
+
+        self.getRevisions(postData._id.$oid)
+      ,(err) ->
+        this.saveFailedHandler (data)
     else
       result = Q.when jsRoutes.controllers.Authorised.submitBlogUpdate().ajax postData
-      result.then this.saveSucessfulHandler , this.saveFailedHandler
+      next = result.then this.saveSucessfulHandler , this.saveFailedHandler
+      next.then (data) ->
+        self.getRevisions(postData._id.$oid)
 
 
 

@@ -163,18 +163,28 @@ object Authorised extends Controller with AuthElement with StandardAuthConfig {
   def addAlias(alias: String) = AsyncStack(AuthorityKey -> Contributor) { implicit request =>
     val user = loggedIn
       try {
-        Profiles.findByUserId(user._id).flatMap{ profile =>
-          val aliasLimit = user.userRole.aliasLimit
-          val aliasCount = profile.head.aliases.getOrElse(Nil).length
-          aliasCount match {
-            case x if x < aliasLimit =>
-              Profiles.addAlias(profile.head, alias).map { result =>
-                result.ok match {
-                  case true => Ok(alias)
-                  case false => BadRequest("Could not  add Alias")
+        Profiles.findByUserId(user._id).flatMap { profile =>
+          Users.aliasAvailable(alias: String).flatMap { available =>
+            if (available) {
+              val aliasLimit = user.userRole.aliasLimit
+              val aliasCount = profile.head.aliases.getOrElse(Nil).length
+              aliasCount match {
+                case x if x < aliasLimit =>
+                  Profiles.addAlias(profile.head, alias).map { result =>
+                    result.ok match {
+                      case true => Ok(alias)
+                      case false => BadRequest("Could not  add Alias")
+                    }
+                  }
+                case _ => Future {
+                  BadRequest("Alias Limit Reached")
                 }
               }
-            case _ => Future { BadRequest("Alias Limit Reached") }
+            }else{
+              Future {
+                BadRequest("Alias Taken")
+              }
+            }
           }
         }
       } catch {

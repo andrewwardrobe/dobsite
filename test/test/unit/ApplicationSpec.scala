@@ -44,15 +44,15 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite{
     }
   }
   //Todo: do this in order
-  "Make a soundcloud player feature on editor" in pending
-  "Code section in editor" in pending
+  //Todo "Make a soundcloud player feature on editor" in pending
+  //Todo "Code section in editor" in pending
 
 
-  "Sort out the font spacing etc" in pending
+  //Todo "Sort out the font spacing etc" in pending
 
 
-  "Make a music page based on a music tag filter + user filter" in pending
-  "Facility to restore/migrate user accounts, store this in the git repo some how" in pending
+  //Todo "Make a music page based on a music tag filter + user filter" in pending
+  //"Facility to restore/migrate user accounts, store this in the git repo some how" in pending
 
 
 }

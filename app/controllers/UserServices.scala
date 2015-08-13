@@ -116,7 +116,7 @@ def signedout = StackAction { implicit request =>
   val userNameIsAvailable: Constraint[String] = Constraint("constraints.nameavailable")({
     name =>
 
-        val available = Await.result(Profiles.aliasAvailable(name), 10 seconds)
+      val available = Await.result(aliasAvailable(name), 10 seconds)
       val errors = if (available) {
           Nil
         } else {
@@ -131,6 +131,15 @@ def signedout = StackAction { implicit request =>
   })
 
 
+  def aliasAvailable(alias:String) = {
+    Users.getUserNameCount(alias).flatMap { count =>
+      if (count > 0 ){
+        Future(false)
+      }else{
+        Profiles.aliasAvailable(alias)
+      }
+    }
+  }
 
   val signUpForm: Form[UserAccount] = Form {
     mapping(

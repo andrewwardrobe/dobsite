@@ -6,6 +6,7 @@ import data.{ContentReloader, Users}
 import jp.t2v.lab.play2.auth.AuthElement
 import models.{UserRole, UserAccount}
 import models.UserRole.{InvalidUser, Administrator}
+import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc.Controller
@@ -35,8 +36,8 @@ object Admin extends Controller with AuthElement with StandardAuthConfig{
   }
 
   def changeRole(name: String,role:String) = AsyncStack(AuthorityKey -> Administrator) {  implicit request =>
-
-    Users.findByEmail(name).map { users =>
+    Logger.info(s"User Name = ${name}")
+    Users.findByName(name).map { users =>
       users.headOption match {
         case None => BadRequest("Unknown User")
         case Some(user) => {

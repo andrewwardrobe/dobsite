@@ -6,6 +6,7 @@ import play.api.Logger
 import play.api.db.DB
 import play.api.Play.current
 
+import scala.concurrent.Await
 
 
 /**
@@ -24,10 +25,11 @@ class ContentReloader(repo: GitRepo){
   }
 
   def loadFromCommitMsg(file: String) : Unit = {
+    import scala.concurrent.duration.DurationInt
     val commitMsg = repo.getLastCommitMsg(file)
     val post = ContentMeta.toPost(commitMsg)
-      if(post != null) {
-          Content.insert(post)
-      }
+    if(post != null) {
+          Await.result(Content.insert(post),10 seconds)
+    }
   }
 }

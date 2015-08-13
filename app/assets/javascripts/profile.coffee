@@ -12,6 +12,7 @@ define ['common','utilities','q'],(common,utils,Q) ->
                     self.editModeOn selector
                 else
                     self.editModeOff selector
+
         addAliasHandler: ()->
             $("#addAlias").on 'click', ()->
                 console.log "click"
@@ -20,6 +21,7 @@ define ['common','utilities','q'],(common,utils,Q) ->
                 if alias != ""
                     result = Q.when jsRoutes.controllers.Authorised.addAlias(alias).ajax({})
                     result.then (data) ->
+                        console.log "Aliias Added"
                         $("#aliasList").append("#{data},")
                     , (err) ->
                         console.log(JSON.stringify(err))

@@ -22,6 +22,7 @@ GET         /login                                                    controller
 POST        /login                                                    controllers.UserServices.authenticate
 
 GET         /blog                                                     controllers.Application.blog
+GET         /news                                                     controllers.Application.news
 GET         /blog/:author                                             controllers.Application.author(author:String)
 GET         /editor                                                   controllers.Authorised.blogInput
 GET         /editor/new/:contentType                                  controllers.Authorised.newContent(contentType: String)

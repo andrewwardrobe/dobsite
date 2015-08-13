@@ -189,9 +189,6 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
       posts must (contain (draftPost) and contain noneOf(authorPost,nonAuthorPost))
     }
 
-    "Clean up user inputted html" in pending
-
-    "Tidy this up" in pending
   }
 
 

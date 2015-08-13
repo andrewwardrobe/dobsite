@@ -28,7 +28,7 @@ class ReloaderSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter w
       val reloader = new ContentReloader(repo)
       reloader.reload
 
-        Content.count.futureValue must equal(2)
+      Content.count.futureValue must equal(2)
 
     }
 
@@ -36,8 +36,8 @@ class ReloaderSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter w
       import scala.concurrent.duration.DurationInt
         repo.refresh
         ContentHelper.createPost("Post 1", "MC Donalds", "Some Example Content", 1, "", None)
-        ContentHelper.createPost("Post 2", "MC Donalds", "Some Example Content", 1, "", None)
-      Await.ready(Content.deleteAll,10 seconds)
+        ContentHelper.createPost("Post 2", "MC Donalds", "Some Example More Content", 1, "", None)
+        Await.ready(Content.deleteAll,10 seconds)
 
 
     }

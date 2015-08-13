@@ -89,11 +89,15 @@
     }
     </div>
     <div id="typeDrop" style="display : none" >
-        <select id="postType" class="dob-control small-select" style="display : inline-block">
-        @for(typ <- user.get.userRole.roles) {
-            <option value="@models.ContentTypeMap(typ)" @if(models.ContentTypeMap(typ) == postType) {selected}>@typ </option>
+        @if(user.get.role == "Administrator" ) {
+            <select id="postType" class="dob-control small-select" style="display : inline-block">
+            @for(typ <- user.get.userRole.roles) {
+                <option value="@models.ContentTypeMap(typ)" @if(models.ContentTypeMap(typ) == postType) {selected}>@typ </option>
+            }
+            </select>
+        }else {
+            <input type="hidden" id="postType" value="@postType" />
         }
-        </select>
     </div>
 
 </div><!-- /.row -->

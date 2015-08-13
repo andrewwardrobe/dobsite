@@ -1,5 +1,6 @@
 package test.unit
 
+import java.util
 import java.util.{Date, UUID}
 
 import com.daoostinboyeez.git.GitRepo
@@ -16,6 +17,7 @@ import play.api.db.DB
 import reactivemongo.bson.BSONObjectID
 import test.helpers.{ContentHelper, UserAccountHelper}
 import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
+import scala.collection.immutable.HashMap
 import scala.concurrent.Await
 
 import jp.t2v.lab.play2.auth.test.Helpers._
@@ -39,22 +41,24 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
   "Auth Application" should {
 
 
-    "Allow Contributors to create news posts" in {
-
-      val post = new Post(BSONObjectID.generate,"title",1,new Date,"Andrew","Content",None,false,None,None)
+    "Allow Contributors to create blog posts" in {
+      val leek = HashMap[String,String]("thumb" -> "cum")
+      val post = new Post(BSONObjectID.generate,"title",ContentTypeMap("Blog"),new Date,"Andrew","Content",Some(leek),false,None,None)
       val json = Json.toJson(post)
       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitPost().url,FakeHeaders(),json).withLoggedIn(config)("Contributor")).get
       status(result) mustBe OK
     }
 
     "Not Allow normal users to create news posts" in {
-      val post = new Post(BSONObjectID.generate,"title",1,new Date,"Andrew","Content",None,false,None,None)
+      val leek = HashMap[String,String]("thumb" -> "cum")
+      val post = new Post(BSONObjectID.generate,"title",ContentTypeMap("Blog"),new Date,"Andrew","Content",Some(leek),false,None,None)
       val json = Json.toJson(post)
       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitPost().url,FakeHeaders(),json).withLoggedIn(config)("NormalUser")).get
       status(result) mustBe FORBIDDEN
     }
 
     "Not Allow contributors to create biography posts" in {
+      val leek = HashMap[String,String]("thumb" -> "cum")
       val post = new Post(BSONObjectID.generate,"title",ContentTypeMap("Biography"),new Date,"Andrew","Content",None,false,None,None)
       val json = Json.toJson(post)
       val result = route(FakeRequest(POST, controllers.routes.Authorised.submitPost().url,FakeHeaders(),json).withLoggedIn(config)("Contributor")).get
@@ -110,6 +114,16 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
       status(result) mustBe OK
     }
 
+    "Prevent adding alias if it is some ones user name" in {
+      val result = route(FakeRequest(POST, controllers.routes.Authorised.addAlias("Contributor").url, FakeHeaders(), "").withLoggedIn(config)("TrustedContributor")).get
+      status(result) mustBe BAD_REQUEST
+    }
+
+    "Prevent adding alias if some one already has it" in {
+      val result = route(FakeRequest(POST, controllers.routes.Authorised.addAlias("Jimmy Tee").url, FakeHeaders(), "").withLoggedIn(config)("TrustedContributor")).get
+      status(result) mustBe BAD_REQUEST
+    }
+
     "Thorw a meaningful error message when on the alias limit" in {
 
         for (i <- 0 to user.getAliasLimit - 1) {
@@ -136,6 +150,7 @@ class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
     user = UserAccountHelper.createUser("TrustedContributor","TrustedContributor","TrustedContributor")
     userProfile = UserAccountHelper.createProfile(user._id,"A fine oostin boyee","assets/images/leek.png")
     normal = UserAccountHelper.createUser("NormalUser","NormalUser","NormalUser")
+    normal = UserAccountHelper.createUserWithAlias("BigPete","BigPete@daoostinboyeez.com","BigPete","TrustedContributor","Jimmy Tee")
 
   }
 

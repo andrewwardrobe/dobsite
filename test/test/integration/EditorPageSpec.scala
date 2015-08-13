@@ -165,7 +165,8 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
     }
 
-    "Warn when switching revisions if there is unsaved changes" in pending
+    //Todo "Warn when switching revisions if there is unsaved changes" in pending
+
     "Warn when viewing a revision" in {
       goTo (editorPage.post(post1.id))
       click on id("editorMenu")
@@ -184,7 +185,7 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     }
 
 
-    "Warn when making changes to revisions" in pending
+    //Todo "Warn when making changes to revisions" in pending
 
   }
 
@@ -218,7 +219,12 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
       }
     }
 
-
+    "Add Revision to menu when saved" in {
+      go to (editorPage)
+      addContent("Some Example Content")
+      save
+      eventually{editorPage.revisionLinks must not be empty }
+    }
 
   }
 

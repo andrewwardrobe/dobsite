@@ -38,7 +38,7 @@ define ['common','q'], (common , Q)-> {
                 $("#roleErrs").text "Role updated"
                 $("#roleErrs").attr 'class','alert alert-success skinnyAlert'
                ,(errs) ->
-                    console.log "Fail "
+                    console.log "Fail :#{JSON.stringify errs}"
                     for err in errs
                         console.log errs
     setupEmailButton:()->
@@ -51,7 +51,7 @@ define ['common','q'], (common , Q)-> {
                $("#emailErrs").text "Email updated"
                $("#emailErrs").attr 'class','alert alert-success skinnyAlert'
             ,(errs)->
-               console.log "Fail "
+               console.log "Fail :#{errs}"
                for err in errs
                    console.log errs
 

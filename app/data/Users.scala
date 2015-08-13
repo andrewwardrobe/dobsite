@@ -79,7 +79,8 @@ object Users extends DAOBase[UserAccount]("users") {
   }
 
   def getUserNameCount(name:String) = {
-    count(Json.obj("name" -> name ))
+    val nameRegex = "^" + name + "$"
+    count(Json.obj("name" -> Json.obj("$regex" -> nameRegex , "$options" -> "-i") ))
   }
 
   def getEmailCount(email:String) = {
@@ -88,6 +89,16 @@ object Users extends DAOBase[UserAccount]("users") {
 
   def getUsersLike(name :String) ={
     find(Json.obj( "name" -> Json.obj("$regex" -> s"^${name}.*")))
+  }
+
+  def aliasAvailable(alias:String) = {
+    getUserNameCount(alias).flatMap { count =>
+      if (count > 0 ){
+        Future(false)
+      }else{
+        Profiles.aliasAvailable(alias)
+      }
+    }
   }
 }
 

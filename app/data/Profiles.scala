@@ -44,7 +44,8 @@ object Profiles extends DAOBase[Profile]("profiles"){
   }
 
   def aliasAvailable(alias: String) = {
-    count(Json.obj("aliases" -> alias )).map { result =>
+    val aliasRegex = "^" + alias + "$"
+    count(Json.obj("aliases" -> Json.obj("$regex" -> aliasRegex , "$options" -> "-i" ))).map { result =>
       result match {
         case 0 => true
         case _ => false
