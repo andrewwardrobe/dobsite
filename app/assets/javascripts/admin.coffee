@@ -1,18 +1,23 @@
 define ['common','q'], (common , Q)-> {
     setupUserSearch:()->
         $("#userName").on 'keyup', (e) ->
+
             code = (e.keyCode or e.which)
             # do nothing if it's an arrow key
             if code == 37 or code == 38 or code == 39 or code == 40
                return
+            console.log "KeyPress"
             name = $("#userName").val()
-            result = Q.when jsRoutes.controllers.AdminJsonApi.getUsersLike(name).ajax({})
-            result.then ()->
-                dataList = $("#userNameList")
-                $(dataList).html ""
-                for  item  in data
-                  opt = $("<option>")
-                  $(opt).html item
+            if name.length > 4
+              result = Q.when jsRoutes.controllers.AdminJsonApi.getUsers(name).ajax({})
+              result.then (data)->
+                  console.log "Tw@"
+                  dataList = $("#userNameList")
+                  $(dataList).html ""
+                  for  item  in data
+                    console.log(item)
+                    opt = $("<option>")
+                    $(opt).text item.name
                   $(dataList).append opt
 
     setupLoadUserButton:()->
