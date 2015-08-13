@@ -25,7 +25,7 @@
     "title":"oUCH mY sTrapp?",
     "tracks":["oUCH mY sTRAPP?","Oww Miene Belt (Wellsy Re-mix)","Song A","Michael Barryless"],
     "discType":"album",
-    "artwork":"assets/"
+    "artwork":"assets/images/oms.jpg"
   },{
     "title":"Wo Ist",
     "tracks":["Leeek","Grab Them While Ther'ye Hot","oUCH mY sTRAPP?","A Half Cut Above The Rest","U-PVC Boxerz","Good Shitizen","NTIG","Christmas Part Specieal","Oww Miene Belt (Wellsy Re-mix)","Prefur Blue","Pick Up Da Table"],
@@ -181,7 +181,163 @@
 
   "biographies":[{
     "name":"MC Donalds",
-    "text":"<p>Some example text</p> <p>Some more stuff</p>",
-    "thumbnail":"assets/images/crew/donalds_col.jpg"
+    "thumbnail":"assets/images/crew/donalds_col.png",
+    "crew":"Da Oostin Boyeez",
+    "text":"No Biography for MC Donalds"
+  },{
+    "name":"MC 2 Fresh",
+    "thumbnail":"assets/images/crew/2fresh_col.png",
+    "crew":"Da Oostin Boyeez",
+    "text":"No Biography for MC 2 Fresh"
+  },{
+    "name":"DJ D-Lux",
+    "thumbnail":"assets/images/crew/dlux_col.png",
+    "crew":"Da Oostin Boyeez",
+    "text":"No Biography for DJ D-Lux"
+  },{
+    "name":"T-Bag",
+    "thumbnail":"assets/images/crew/tbag_col.png",
+    "crew":"Da Oostin Boyeez",
+    "text":"No Biography for T-Bag"
+  },{
+    "name":"Pope Frost",
+    "thumbnail":"assets/images/crew/popefrost_col.png",
+    "crew":"Da Oostin Boyeez",
+    "text":"No Biography for Pope Frost"
+  },{
+    "name":"Jean Jemonge",
+    "thumbnail":"assets/images/crew/jeanjemonge_col.png",
+    "crew":"Da Oostin Boyeez",
+    "text":"No Biography for Jean Jemonge"
+  },{
+    "name":"D-T-R",
+    "thumbnail":"assets/images/crew/dtr_col.png",
+    "crew":"Da Oostin Boyeez",
+    "text":"No Biography for D-T-R"
+  },{
+    "name":"Maxiam Baud Laveine",
+    "thumbnail":"assets/images/crew/mbl_col.png",
+    "crew":"Da Oostin Boyeez",
+    "text":"No Biography for Maxiam Baud Laveine"
+  },{
+    "name":"Moist Conditioner",
+    "thumbnail":"assets/images/crew/moist_col.png",
+    "crew":"Da Oostin Boyeez",
+    "text":"No Biography for Moist Conditioner"
+  },{
+    "name":"Josep Jorg",
+    "thumbnail":"assets/images/crew/jorg_col.png",
+    "crew":"Da Oostin Boyeez",
+    "text":"No Biography for Josep Jorg"
+  },{
+    "name":"Hans Pettersonn",
+    "thumbnail":"assets/images/crew/hans_col.png",
+    "crew":"Da Oostin Boyeez",
+    "text":"No Biography for Hans Pettersonn"
+  },{
+    "name":"Gaz Three",
+    "thumbnail":"assets/images/crew/gazthree_col.png",
+    "crew":"Mango Kru",
+    "text":"No Biography for Gaz Three"
+  },{
+    "name":"Gaz",
+    "thumbnail":"assets/images/crew/gaz_col.png",
+    "crew":"Mango Kru",
+    "text":"No Biography for Gaz"
+  },{
+    "name":"Gaz Tee",
+    "thumbnail":"assets/images/crew/gaztee_col.png",
+    "crew":"Mango Kru",
+    "text":"No Biography for Gaz Tee"
+  },{
+    "name":"General Giblet",
+    "thumbnail":"assets/images/crew/giblet_col.png",
+    "crew":"Mango Kru",
+    "text":"No Biography for General Giblet"
+  },{
+    "name":"Gwelarg Robson",
+    "thumbnail":"assets/images/crew/gwelarg_col.png",
+    "crew":"Mango Kru",
+    "text":"No Biography for Gwelarg Robson"
+  },{
+    "name":"King Prawn",
+    "thumbnail":"assets/images/crew/kingprawn_col.png",
+    "crew":"Mango Kru",
+    "text":"No Biography for King Prawn"
+  },{
+    "name":"Frau Kuntoonar",
+    "thumbnail":"assets/images/crew/kuntoonar_col.png",
+    "crew":"Mango Kru",
+    "text":"No Biography for Frau Kuntoonar"
+  },{
+    "name":"Miffy Blossomwell",
+    "thumbnail":"assets/images/crew/miffy_col.png",
+    "crew":"Mango Kru",
+    "text":"No Biography for Miffy Blossomwell"
+  },{
+    "name":"Obese Bob",
+    "thumbnail":"assets/images/crew/miffy_col.png",
+    "crew":"Mango Kru",
+    "text":"No Biography for Obese Bob"
+  },{
+    "name":"Gavin Tripod",
+    "thumbnail":"assets/images/crew/tripod_col.png",
+    "crew":"Mango Kru",
+    "text":"Offical Da Oostin Boyeez Photographer"
+  },{
+    "name":"Otis Spunkmeare",
+    "thumbnail":"assets/images/crew/otis_col.png",
+    "crew":"Mango Kru",
+    "text":"Da Oostin Boyeez Manager"
+  },{
+    "name":"Quango Smith",
+    "thumbnail":"assets/images/crew/quango.png",
+    "crew":"Mango Kru",
+    "text":"No Biography for Quango Smith"
+  },{
+    "name":"Peter Quaniel",
+    "thumbnail":"assets/images/crew/quaniel_col.png",
+    "crew":"Mango Kru",
+    "text":"No Biography for Peter Quaniel"
+  },{
+    "name":"The Fixer",
+    "thumbnail":"assets/images/crew/unnamed_col.png",
+    "crew":"Mango Kru",
+    "text":"No Biography for The Fixer"
+  },{
+    "name":"Jamie Dodger",
+    "thumbnail":"assets/images/crew/jamiedodger.png",
+    "crew":"Die Urpeff Ladz",
+    "text":"No Biography for Jamie Dodger"
+  },{
+    "name":"Billy Hillium",
+    "thumbnail":"assets/images/crew/billyhillium.png",
+    "crew":"Die Urpeff Ladz",
+    "text":"No Biography for Billy Hillium"
+  },{
+    "name":"Mick Lumbum",
+    "thumbnail":"assets/images/crew/lumbum_col.png",
+    "crew":"Die Urpeff Ladz",
+    "text":"No Biography for Mick Lumbum"
+  },{
+    "name":"Philipa McCrack",
+    "thumbnail":"assets/images/crew/philipamccrack_col.png",
+    "crew":"Die Urpeff Ladz",
+    "text":"No Biography for Philipa McCrack"
+  },{
+    "name":"Gary Hitler",
+    "thumbnail":"assets/images/crew/hitler_col.png",
+    "crew":"Enemies of DoB",
+    "text":"Gary Hitler is a naughty man"
+  },{
+    "name":"John Kevson",
+    "thumbnail":"assets/images/crew/jonkevson.png",
+    "crew":"Enemies of DoB",
+    "text":"No Biography for John Kevson"
+  },{
+    "name":"Mr Bean Laden",
+    "thumbnail":"assets/images/crew/binladen_col.png",
+    "crew":"Enemies of DoB",
+    "text":"No Biography for John Kevson"
   }]
 }

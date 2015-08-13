@@ -55,7 +55,7 @@ object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig 
       val exData =  new scala.collection.immutable.HashMap[String,String]() ++ ed
       val extraData = s"thumb=${bio.thumbnail}\n,crew=${bio.crew}"
 
-      val post = new Post(BSONObjectID.generate, bio.name, ContentTypeMap("Discography"), new Date(), defaultAuthor, bio.text, Some(exData), false, None, None)
+      val post = new Post(BSONObjectID.generate, bio.name, ContentTypeMap("Biography"), new Date(), defaultAuthor, bio.text, Some(exData), false, None, None)
       Content.create(post, GitRepo.apply())
     }
     bios.length
