@@ -97,6 +97,7 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
         #$("#postId").val data._id.stringify
         $("#postTitle").text data.title
         $("#author").val data.author
+        $("#userId").val data.userId.$oid
         dt = data.dateCreated
         if typeof dt == "String"
           dt = dt.replace "BST", ""
