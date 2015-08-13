@@ -6,7 +6,7 @@ define ['common','q'], (common , Q)-> {
             if code == 37 or code == 38 or code == 39 or code == 40
                return
             name = $("#userName").val()
-            result = Q.when jsRoutes.controllers.AdminJsonApi.getUsers(name).ajax({})
+            result = Q.when jsRoutes.controllers.AdminJsonApi.getUsersLike(name).ajax({})
             result.then ()->
                 dataList = $("#userNameList")
                 $(dataList).html ""
