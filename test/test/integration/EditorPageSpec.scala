@@ -184,7 +184,11 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
       postPage.tagList must contain allOf ("Leek","Sheek")
     }
 
-
+    "List Extra Data" in {
+      val bio = ContentHelper.createBiography("Leek","Test post leek","shclum.png",None)
+      go to editorPage.post(bio.id)
+      eventually { extraData must include ("thumb=shclum.png") }
+    }
     //Todo "Warn when making changes to revisions" in pending
 
   }
@@ -225,6 +229,7 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
       save
       eventually{editorPage.revisionLinks must not be empty }
     }
+
 
   }
 

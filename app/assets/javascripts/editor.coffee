@@ -2,7 +2,7 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
   imageCount:1
   # http://stackoverflow.com/questions/6690752/insert-html-at-caret-in-a-contenteditable-div
   pasteHtmlAtCaret: (html) ->
-    console.log "in func"
+    #console.log "in func"
     sel = undefined
     range = undefined
     if window.getSelection
@@ -35,18 +35,18 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
     return undefined
 
   getRevisions:(id) ->
-    console.log "Getting Revisions id = #{id}"
+    #console.log "Getting Revisions id = #{id}"
     self = this
     result = Q.when jsRoutes.controllers.JsonApi.getRevisionsWithDates(id).ajax({})
     result.then (data) ->
       if data != "None"
-        console.log "Found Revisions= #{JSON.stringify data}"
+        #console.log "Found Revisions= #{JSON.stringify data}"
         count = 1
         revisions = $("#revisions")
         revisions.html ""
         $.each data, (idx,rev) ->
           dte = new Date(rev.commitDate.replace("BST", ""))
-          console.log "leek"
+          #console.log "leek"
           revItem = $("<li>")
           revItem.attr 'id', "revId#{count}"
           link = $("<a>")
@@ -59,9 +59,9 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
             $("#editAlertRevision").show()
           count++
       else
-        console.log "No Revisions"
+        #console.log "No Revisions"
     ,(err) ->
-      console.log "Could not receive list of revisions #{err}"
+      #console.log "Could not receive list of revisions #{err}"
     result
 
 
@@ -88,23 +88,26 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
   loadContentPost:(id,revisionId) ->
     newPost = $("#newPost").val()
     if newPost != "true"
-      console.log "id  #{id}"
+      #console.log "id  #{id}"
       result = Q.when jsRoutes.controllers.JsonApi.getPostRevisionById(id,revisionId).ajax({})
       result.then (data) ->
         console.log "loading... "
-        console.log "data = #{JSON.stringify data} "
+        #console.log "data = #{JSON.stringify data} "
         $("#editor").html data.content
         #$("#postId").val data._id.stringify
         $("#postTitle").text data.title
         $("#author").val data.author
-        $("#userId").val data.userId.$oid
+        if data.userId != undefined
+          $("#userId").val data.userId.$oid
+        console.log("Date shit")
         dt = data.dateCreated
         if typeof dt == "String"
           dt = dt.replace "BST", ""
 
+
         dte = new Date dt
         $("#dateCreated").val dte.yyyymmdd()
-
+        console.log("done date stuff")
         if data.isDraft != false
           $("#editAlertDraft").show()
           $("#draft").val true
@@ -115,7 +118,9 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
           $("#draftBtn").attr {class: "fa fa-power-off isDraftOff"}
         extraData = data.extraData
         text = ""
-        for key in extraData
+        console.log("expanding extra data")
+        for key in Object.keys(extraData)
+          console.log("Key = key")
           if extraData.hasOwnProperty key
             text += "#{key}=#{extraData[key]}"
         text.replace "\n$", ""
@@ -125,7 +130,7 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
             event.stopPropagation()
           hljs.highlightBlock blk
       ,(err) ->
-        console.log err
+        #console.log err
     else
       $("#editAlertNew").show()
 
@@ -170,23 +175,23 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
     $("#draft").val data.isDraft
     $("#userId").val data.userId.$oid
     $("#newPost").val "false"
-    console.log("Saved")
+    #console.log("Saved")
     if data.isDraft != false
       $("#editAlertDraft").show()
     else
      $("#editAlertLive").show()
-    console.log data._id.$oid
+    #console.log data._id.$oid
     jsRoutes.controllers.JsonApi.getRevisionsWithDates(data._id.$oid).ajax({
       success:(data) ->
-        console.log "Leeeeeeeeeeeeeeeek"
+        #console.log "Leeeeeeeeeeeeeeeek"
         if data != "None"
-          console.log "Found Revisions= #{JSON.stringify data}"
+          #console.log "Found Revisions= #{JSON.stringify data}"
           count = 1
           revisions = $("#revisions")
           revisions.html ""
           $.each data, (idx,rev) ->
             dte = new Date(rev.commitDate.replace("BST", ""))
-            console.log "leek"
+            #console.log "leek"
             revItem = $("<li>")
             revItem.attr 'id', "revId#{count}"
             link = $("<a>")
@@ -199,11 +204,11 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
               $("#editAlertRevision").show()
             count++
         else
-          console.log "Failed to get revisions"
+          #console.log "Failed to get revisions"
       error:(err) ->
-        console.log "Fucking Hell #{err}"
+        #console.log "Fucking Hell #{err}"
     })
-    console.log "Done Saving"
+    #console.log "Done Saving"
 
 
   saveFailedHandler:(err) ->
@@ -340,7 +345,7 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
     i = 0
     self = this
     f = undefined
-    console.log target
+    #console.log target
     while f = files[i]
       imageReader = new FileReader
       imageReader.onload = ((aFile) ->
@@ -368,9 +373,9 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
 
 # chang this to manipulate the br to \ns
   stripSpan:(html)->
-    console.log "HTML = #{html}"
+    #console.log "HTML = #{html}"
     elem = $(html)
-    console.log "Elem = #{elem}"
+    #console.log "Elem = #{elem}"
     # make this br and the use
     elem.find("br").each () ->
       $(this).replaceWith("\n")
@@ -378,7 +383,7 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
 
   codeBlock: ()->
     self = this
-    console.log "hello"
+    #console.log "hello"
     id = "leek1"
     sel = window.getSelection()
     if $(sel.anchorNode).parents("pre code").length == 0
@@ -395,18 +400,18 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
       $(code).on 'click', (event) ->
         event.stopPropagation();
     else
-      console.log "has parents"
+      #console.log "has parents"
       node = $(sel.anchorNode).parents("pre code")[0]
-      console.log node.parentNode
+      #console.log node.parentNode
       html = self.stripSpan($(node.parentNode).html())
       $(node.parentNode).replaceWith "<br/>" + html.replace(/\n/g,"<br/>")
 
   loadTags:(id)->
     promise = Q.when jsRoutes.controllers.JsonApi.getContentTags(id).ajax({})
     promise.then (data) ->
-      console.log "leek #{JSON.stringify(data)}"
+      #console.log "leek #{JSON.stringify(data)}"
       $.each data, (key,val) ->
-        console.log "Loop #{val}"
+        #console.log "Loop #{val}"
         text = $("#tagBox").val()
         text = text + val
         text = text + ", "

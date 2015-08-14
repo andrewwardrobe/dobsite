@@ -103,4 +103,8 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
     actions.moveToElement(tagName("body").webElement, loc.x, loc.y).clickAndHold().moveByOffset(size.width,size.height).release().perform
   }
 
+  def extraData = {
+    id("extraDataValues").findElement.get.attribute("value").get
+  }
+
 }
