@@ -3,7 +3,7 @@ define ['common', 'helpers/date'], (common) -> {
         count = 1
         i = 0
         f = undefined
-        console.log target
+        #console.log target
         while f = files[i]
           imageReader = new FileReader
 
@@ -137,7 +137,7 @@ define ['common', 'helpers/date'], (common) -> {
             userId =  $("#bioUser" +bio._id.$oid).text()
             $("#bioSuccess"+bio._id.$oid).hide()
             $("#bioFailure"+bio._id.$oid).hide()
-            console.log event.target.id
+            #console.log event.target.id
             json = {
                 data:
                     "_id":bio._id.$oid,
@@ -154,13 +154,13 @@ define ['common', 'helpers/date'], (common) -> {
                 success: (data) ->
                     $("#bioSuccess"+bio._id.$oid).show()
                     $("#bioSave"+bio._id.$oid).hide()
-                    console.log("Success")
+                    #console.log("Success")
                 error: (data) ->
                     $("#bioFailure"+bio._id.$oid).show()
-                    console.log("Error")
+                    #console.log("Error")
             }
             jsRoutes.controllers.Authorised.submitBlogUpdate().ajax(json);
-            console.log("Buuton Clicked: " +JSON.stringify(json))
+            #console.log("Buuton Clicked: " +JSON.stringify(json))
         btnsDiv.append editBtn
         btnsDiv.append saveBtn
         btnsDiv.append saveSuccess
@@ -172,13 +172,13 @@ define ['common', 'helpers/date'], (common) -> {
             $("#bioSuccess"+bio._id.$oid).hide()
 
     extraDataJs2KeyVal : (js) ->
-        console.log "extraData 2 Key Val"
+        #console.log "extraData 2 Key Val"
         data = js
-        console.log "js + #{js}"
+        #console.log "js + #{js}"
         dataStr = ""
         $.each data, (key, val) ->
             dataStr += key + "=" + val + "\n"
-        console.log(dataStr)
+        #console.log(dataStr)
         dataStr
 
     doTextAndImage : (bio, target) ->
@@ -187,7 +187,7 @@ define ['common', 'helpers/date'], (common) -> {
         imageDiv = $("<div>")
         $(target).append bsRow2
         if bio.extraData != undefined
-            console.log "Extra Data = |#{bio.extraData}|"
+            #console.log "Extra Data = |#{bio.extraData}|"
             extraData = bio.extraData
             image = $("<img>")
             image.attr 'src', extraData.thumb
@@ -220,7 +220,7 @@ define ['common', 'helpers/date'], (common) -> {
         bioExtra = $("<input>")
         bioExtra.attr 'id', 'bioExtra' + bio._id.$oid
         bioExtra.attr 'type', 'hidden'
-        #console.log "Extra Data #{bio.extraData}"
+        ##console.log "Extra Data #{bio.extraData}"
         if bio.extraData != undefined
             bioExtra.attr 'value', this.extraDataJs2KeyVal bio.extraData
         textDiv.append bioExtra
@@ -256,27 +256,44 @@ define ['common', 'helpers/date'], (common) -> {
     doBioDivsFromPost : (target) ->
          self = this
          $.get "/json/content/bytype/" + '4', (data) ->
-            bsRow = $("<div>")
-            bsRow.attr 'class','row'
-            $(target).append bsRow
-            editMode = $(target).attr 'edit-mode'
-            counter = 0
-            $.each data, (index, bio) ->
-                self.doTextAndImage(bio,bsRow)
+           $.each data, (index, bio) ->
+                if bio.extraData == undefined or bio.extraData
+                    target = $("#otherDiv")
+                if bio.extraData.crew == "Da Oostin Boyeez"
+                    target = $("#dobDiv")
+                else if bio.extraData.crew == "Mango Kru"
+                    target = $("#mangoDiv")
+                else
+                    target = $("#otherDiv")
+
+                rows =  $(target).children('div.row').length
+                if rows == 0
+                    bsRow = $("<div>")
+                    bsRow.attr 'class','row'
+                    $(target).append bsRow
+
+                row = $(target).children('div.row').last()
+
+                editMode = $(target).attr 'edit-mode'
+                console.log "Children = " + $(target).children('div').length
+                bios = $(row).children('div.col-sm-5').length
+
+
+                self.doTextAndImage(bio,row)
                 self.doExpander(bio)
 
                 if editMode == "1"
                     self.doEditMode(bio)
-                counter++
 
-                if counter == 2
+
+                if bios == 1
                     bsRow = $("<div>")
                     bsRow.attr 'class','row'
                     $(target).append bsRow
                     bsRow = $("<div>")
                     bsRow.attr 'class','row'
                     $(target).append bsRow
-                    counter = 0
+
 
     emptyDiv : (target) ->
             bsRow = $("<div>")
