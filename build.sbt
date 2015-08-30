@@ -1,5 +1,6 @@
 import com.github.play2war.plugin._
 import play.PlayImport.PlayKeys._
+import NativePackagerKeys._
 
 
 name := """dobsite"""
@@ -54,6 +55,15 @@ libraryDependencies ++= Seq(
   "com.github.simplyscala" %% "scalatest-embedmongo" % "0.2.2" % "test",
   "com.foursquare" % "fongo" % "1.0.7"
 )
+
+maintainer := "Andrew Wardrobe"
+
+// exposing the play ports
+dockerExposedPorts in Docker := Seq(9000)
+
+dockerBaseImage := "java:latest"
+
+dockerRepository := Some("andrewwardrobe")
 
 Keys.fork in Test := true
 

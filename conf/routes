@@ -13,6 +13,9 @@ POST        /profile                                                  controller
 GET         /checkname/:name                                          controllers.UserServices.checkName(name :String)
 GET         /checkemail/:email                                        controllers.UserServices.checkEmail(email :String)
 
+GET         /wstest                                                   controllers.WebSocketJsonApi.wsTest
+GET         /qtest                                                    controllers.WebSocketJsonApi.queryTest
+
 GET         /biography                                                controllers.Application.biography
 
 GET         /post/:id                                                 controllers.Application.post(id:String)
