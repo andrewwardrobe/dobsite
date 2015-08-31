@@ -1,8 +1,9 @@
 resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
 
 // The Play plugin
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.4.0")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.4.2")
 
+libraryDependencies += "org.webjars" % "webjars-locator-core" % "0.26"
 // Use sbt web plugins
 addSbtPlugin("com.typesafe.sbt" % "sbt-web" % "1.2.2")
 // web plugins

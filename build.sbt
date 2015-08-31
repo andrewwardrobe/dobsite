@@ -5,9 +5,9 @@ name := """dobsite"""
 
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala,SbtWeb)
+lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.11.6"
+scalaVersion := "2.11.7"
 
 libraryDependencies ++= Seq(
   jdbc,
@@ -25,9 +25,11 @@ copy_node_modules := {
   IO.copyDirectory(node_modules,target,true, true)
 }
 
+libraryDependencies += "org.webjars" % "webjars-locator-core" % "0.26"
+
 libraryDependencies ++= Seq(
   "org.webjars" %% "webjars-play" % "2.4.0-1",
-  "org.webjars" % "bootstrap" % "3.1.1-2",
+  "org.webjars" % "bootstrap" % "3.3.5" exclude("org.webjars", "jquery"),
   "org.webjars" % "q" % "1.1.2",
   "org.seleniumhq.selenium" % "selenium-server" % "2.46.0",
   "org.seleniumhq.selenium" % "selenium-java" % "2.46.0",
