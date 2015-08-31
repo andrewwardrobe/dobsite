@@ -1,7 +1,6 @@
 package controllers
 
 import com.daoostinboyeez.git.GitRepo
-import controllers.Authorised._
 import data.{ContentReloader, Users}
 import jp.t2v.lab.play2.auth.AuthElement
 import models.{UserRole, UserAccount}
@@ -17,7 +16,7 @@ import scala.concurrent.Future
 /**
  * Created by andrew on 25/01/15.
  */
-object Admin extends Controller with AuthElement with StandardAuthConfig{
+class Admin extends Controller with AuthElement with StandardAuthConfig{
 
   def reloadFromRepo = StackAction(AuthorityKey -> Administrator) {  implicit request =>
     val reloader = new ContentReloader(GitRepo.apply())

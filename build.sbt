@@ -1,4 +1,4 @@
-import play.sbt.PlayImport._
+import play.sbt.PlayImport.PlayKeys._
 
 
 name := """dobsite"""
@@ -7,14 +7,15 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala,SbtWeb)
 
-scalaVersion := "2.11.2"
+scalaVersion := "2.11.6"
 
 libraryDependencies ++= Seq(
   jdbc,
-  anorm,
   cache,
   ws
 )
+
+routesGenerator := InjectedRoutesGenerator
 
 lazy val copy_node_modules = taskKey[Unit]("Copys the node_module to the test target dir")
 
@@ -25,13 +26,13 @@ copy_node_modules := {
 }
 
 libraryDependencies ++= Seq(
-  "org.webjars" %% "webjars-play" % "2.3.0-3",
+  "org.webjars" %% "webjars-play" % "2.4.0-1",
   "org.webjars" % "bootstrap" % "3.1.1-2",
   "org.webjars" % "q" % "1.1.2",
   "org.seleniumhq.selenium" % "selenium-server" % "2.46.0",
   "org.seleniumhq.selenium" % "selenium-java" % "2.46.0",
   "org.scalatest" % "scalatest_2.11" % "2.2.1" % "test",
-  "org.scalatestplus" %% "play" % "1.2.0" % "test",
+  "org.scalatestplus" %% "play" % "1.4.0-M3" % "test",
   "org.jsoup" % "jsoup" % "1.7.2",
   "jp.t2v" %% "play2-auth"      % "0.13.0",
   "jp.t2v" %% "play2-auth-test" % "0.13.0" % "test",
@@ -45,7 +46,7 @@ libraryDependencies ++= Seq(
   "net.sf.flexjson" % "flexjson" % "3.1",
   "org.webjars" % "should.js" % "5.0.0",
   "org.webjars" % "rjs" % "2.1.11-1-trireme" % "test",
-  "org.reactivemongo" %% "play2-reactivemongo" % "0.11.4.play23",
+  "org.reactivemongo" %% "play2-reactivemongo" % "0.11.2.play24",
   "com.github.simplyscala" %% "scalatest-embedmongo" % "0.2.2" % "test",
   "com.foursquare" % "fongo" % "1.0.7"
 )

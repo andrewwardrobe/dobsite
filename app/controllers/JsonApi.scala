@@ -23,7 +23,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 /**
  * Created by andrew on 07/09/14.
  */
-object JsonApi extends Controller {
+class JsonApi extends Controller {
 
  import models.JsonFormats._
   //implicit val tagFormat = Json.format[ContentTag]

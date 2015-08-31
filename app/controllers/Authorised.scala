@@ -5,7 +5,7 @@ import java.util.{UUID, Date}
 
 import com.daoostinboyeez.git.{GitRepo}
 import com.daoostinboyeez.site.exceptions.AliasLimitReachedException
-import controllers.Application._
+
 import data._
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
@@ -16,6 +16,7 @@ import org.openqa.jetty.http.SecurityConstraint.Nobody
 import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.i18n.MessagesApi
 import play.api.libs.json.{JsError, JsSuccess, JsObject, Json}
 import play.api.libs.json.Json._
 import play.api.mvc.{AnyContentAsFormUrlEncoded, AnyContentAsJson, Controller}
@@ -27,15 +28,18 @@ import reactivemongo.bson.BSONObjectID
 import scala.concurrent.Future
 
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-
+import javax.inject.Inject
+import play.api.i18n.I18nSupport
 
 /**
  * Created by andrew on 23/12/14.
  */
-object Authorised extends Controller with AuthElement with StandardAuthConfig {
+class Authorised @Inject()(val messagesApi: MessagesApi) extends Controller
+                      with AuthElement with StandardAuthConfig with I18nSupport {
 
  import models.JsonFormats._
  import models.Forms._
+  import play.api.i18n.Messages.Implicits._
 
   val repo = GitRepo.apply()
 
