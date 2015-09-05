@@ -11,7 +11,7 @@ import play.api.db.DB
 import play.api.libs.json.Json
 import play.api.test.Helpers._
 import play.api.test.{FakeApplication, FakeHeaders, FakeRequest}
-import test.helpers.UserAccountHelper
+import test.helpers.{ReactiveMongoApp, UserAccountHelper}
 import test.{EmbedMongoGlobal, TestConfig, TestGlobal}
 import scala.concurrent.duration.DurationInt
 
@@ -21,9 +21,12 @@ import scala.concurrent.Await
 /**
  * Created by andrew on 14/09/14.
  */
-class AdminControllerSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
+class AdminControllerSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ReactiveMongoApp {
 
+  import scala.concurrent.duration.DurationInt
+
+
+  implicit override lazy val app = buildApp
 
   object config extends StandardAuthConfig
 

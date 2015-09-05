@@ -10,10 +10,11 @@ import de.flapdoodle.embed.mongo.config.{RuntimeConfigBuilder, Net, MongodConfig
 
 import de.flapdoodle.embed.mongo._
 import de.flapdoodle.embed.mongo.distribution.Version
+import de.flapdoodle.embed.process.config.io.ProcessOutput
 import de.flapdoodle.embed.process.runtime.Network
 import play.api.Play.current
 import play.api._
-import play.modules.reactivemongo.{ReactiveMongoHelper, ReactiveMongoPlugin}
+import play.modules.reactivemongo.{ReactiveMongoApi, ReactiveMongoHelper, ReactiveMongoPlugin}
 
 object EmbedMongoGlobal extends GlobalSettings {
 
@@ -22,7 +23,7 @@ object EmbedMongoGlobal extends GlobalSettings {
     val mongoPort = Play.configuration.getInt("mongoembed.port").getOrElse(12345)
     Logger.info(s"Test Application Started - Mongo port $mongoPort")
 
-    val rtconfig = new RuntimeConfigBuilder().defaults(Command.MongoD).build()
+    val rtconfig = new RuntimeConfigBuilder().defaults(Command.MongoD).processOutput(ProcessOutput.getDefaultInstanceSilent).build()
     val starter = MongodStarter.getInstance(rtconfig)
     val config = new MongodConfigBuilder()
       .version(Version.Main.PRODUCTION)
@@ -40,7 +41,9 @@ object EmbedMongoGlobal extends GlobalSettings {
     val file = new File(repoDir.substring(0,repoDir.lastIndexOf("/.git")))
     //Logger.info("Deleting file "+file.getAbsolutePath());
     file.delete()
-    ReactiveMongoPlugin.driver.system.shutdown()
+    Logger.info("Shuting down")
+    val reactiveMongoApi = current.injector.instanceOf[ReactiveMongoApi]
+    reactiveMongoApi.driver.system shutdown()
     //Logger.info("Application stopped")
     _mongodExe.stop()
   }

@@ -14,14 +14,18 @@ import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
-import test.helpers.{UserAccountHelper, ContentHelper}
+import test.helpers.{ReactiveMongoApp, UserAccountHelper, ContentHelper}
 
 
-class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures{
+class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures with ReactiveMongoApp {
+
+  import scala.concurrent.duration.DurationInt
+
+
+  implicit override lazy val app = buildApp
+
 
   import models.JsonFormats._
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-
   "Content Post" must {
 
 

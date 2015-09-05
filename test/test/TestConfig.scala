@@ -30,7 +30,7 @@ object TestConfig {
 
   def withEmbbededMongo = {
     val random = new Random()
-    val portnum = 12345 //30000 + random.nextInt(500) //Really simple port randomisation
+    val portnum = 28000 + random.nextInt(500) //Really simple port randomisation
 
 
     val embedPort = portnum

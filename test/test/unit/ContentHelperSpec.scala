@@ -11,12 +11,15 @@ import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
-import test.helpers.ContentHelper
+import test.helpers.{ReactiveMongoApp, ContentHelper}
 
 
-class ContentHelperSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures{
+class ContentHelperSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures with ReactiveMongoApp {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo , withGlobal = Some(EmbedMongoGlobal))
+  import scala.concurrent.duration.DurationInt
+
+
+  implicit override lazy val app = buildApp
 
 
   "Content Helper" must {

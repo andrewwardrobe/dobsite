@@ -14,20 +14,24 @@ import org.scalatest.BeforeAndAfter
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.db.DB
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
+import play.modules.reactivemongo.ReactiveMongoModule
 import test._
-import test.helpers.UserAccountHelper
+import test.helpers.{ReactiveMongoApp, UserAccountHelper}
 
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 
-class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures  {
+class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures with ReactiveMongoApp {
 
   import scala.concurrent.duration.DurationInt
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
 
-  
+
+  implicit override lazy val app = buildApp
+
+
   "User Account" must {
 
       "Have associated user profiles" in {

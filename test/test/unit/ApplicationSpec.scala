@@ -3,14 +3,19 @@ package test.unit
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.test.{FakeApplication, FakeRequest}
 import play.api.test.Helpers._
+import test.helpers.ReactiveMongoApp
 import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
 
 /**
  * Created by andrew on 14/09/14.
  */
-class ApplicationSpec extends PlaySpec with OneServerPerSuite{
+class ApplicationSpec extends PlaySpec with OneServerPerSuite with ReactiveMongoApp {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
+import scala.concurrent.duration.DurationInt
+
+
+implicit override lazy val app = buildApp
+
   "Application" should {
 
     "send 404 on a bad request" in {

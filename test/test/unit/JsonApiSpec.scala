@@ -6,7 +6,7 @@ import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll}
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.test.{FakeApplication, FakeRequest}
 import play.api.test.Helpers._
-import test.helpers.{UserAccountHelper, ContentHelper}
+import test.helpers.{ReactiveMongoApp, UserAccountHelper, ContentHelper}
 import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
 
 /**
@@ -14,12 +14,13 @@ import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
  */
 
 
-class JsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter{
+class JsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ReactiveMongoApp {
+
+    import scala.concurrent.duration.DurationInt
 
 
-
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-  var post: Post = _
+    implicit override lazy val app = buildApp
+    var post: Post = _
 
    before {
     post = ContentHelper.createPost("Leek","andrew","jimmy",ContentTypeMap.get("Blog"),None)
