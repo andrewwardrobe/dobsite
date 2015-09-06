@@ -26,7 +26,7 @@ class AdminControllerSpec extends PlaySpec with OneServerPerSuite with BeforeAnd
   import scala.concurrent.duration.DurationInt
 
 
-  implicit override lazy val app = buildApp
+  implicit override lazy val app = buildAppEmbed
 
   object config extends StandardAuthConfig
 

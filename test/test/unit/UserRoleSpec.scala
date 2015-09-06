@@ -18,7 +18,7 @@ class UserRoleSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter w
   import scala.concurrent.duration.DurationInt
 
 
-  implicit override lazy val app = buildApp
+  implicit override lazy val app = buildAppEmbed
 
 
   "User Role" must {

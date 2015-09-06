@@ -9,7 +9,7 @@ import play.api.db.DB
 import play.api.test.Helpers._
 import play.api.test._
 import reactivemongo.bson.BSONObjectID
-import test.helpers.{UserAccountHelper, ContentHelper}
+import test.helpers.{ReactiveMongoApp, UserAccountHelper, ContentHelper}
 import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
 import test.integration.pages.{SignInPage, SignUpPage, BiographyPage}
 
@@ -18,10 +18,9 @@ import test.integration.pages.{SignInPage, SignUpPage, BiographyPage}
 
 
 
-class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
+class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll with ReactiveMongoApp {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-
+  implicit override lazy val app = buildAppEmbed
 
   lazy val repo = GitRepo.apply()
 

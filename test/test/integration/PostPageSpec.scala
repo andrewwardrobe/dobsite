@@ -10,17 +10,16 @@ import org.scalatestplus.play.{FirefoxFactory, OneBrowserPerSuite, OneServerPerS
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
-import test.helpers.{ContentHelper, UserAccountHelper}
+import test.helpers.{ReactiveMongoApp, ContentHelper, UserAccountHelper}
 import test.integration.pages.PostPage
 
 
 /**
  * Created by andrew on 01/03/15.
  */
-class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with MongoEmbedDatabase {
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
+class PostPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with ReactiveMongoApp {
 
-
+implicit override lazy val app = buildAppEmbed
 
 
   lazy val repo = GitRepo.apply()

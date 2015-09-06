@@ -18,7 +18,7 @@ class DatabaseSpec extends PlaySpec with OneServerPerSuite with ScalaFutures wit
   import scala.concurrent.duration.DurationInt
   import models.JsonFormats._
 
-  implicit override lazy val app = buildApp
+  implicit override lazy val app = buildAppEmbed
 
 
   "Database" must {

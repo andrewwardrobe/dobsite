@@ -22,7 +22,8 @@ class ContentPostSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
   import scala.concurrent.duration.DurationInt
 
 
-  implicit override lazy val app = buildApp
+  implicit override lazy val app = buildAppEmbed
+
 
 
   import models.JsonFormats._

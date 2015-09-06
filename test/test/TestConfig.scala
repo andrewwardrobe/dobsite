@@ -39,4 +39,15 @@ object TestConfig {
       "mongodb.uri" -> s"mongodb://localhost:${embedPort}/test${embedPort}"
     )
   }
+
+  def withTestMongo = {
+    val random = new Random()
+    val portnum = 28000 + random.nextInt(500) //Really simple port randomisation
+
+
+    val embedPort = portnum
+    Map(
+      "mongodb.uri" -> s"mongodb://localhost:27017/test"
+    )
+  }
 }

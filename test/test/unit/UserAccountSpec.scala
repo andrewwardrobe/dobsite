@@ -28,8 +28,9 @@ class UserAccountSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfte
 
   import scala.concurrent.duration.DurationInt
 
+  implicit override lazy val app = buildAppEmbed
 
-  implicit override lazy val app = buildApp
+
 
 
   "User Account" must {

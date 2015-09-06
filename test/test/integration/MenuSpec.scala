@@ -10,7 +10,7 @@ import org.scalatestplus.play._
 import play.api.db.DB
 import play.api.test.Helpers._
 import play.api.test._
-import test.helpers.UserAccountHelper
+import test.helpers.{ReactiveMongoApp, UserAccountHelper}
 import test.integration.pages.{EditorPage, MenuBar, SignInPage}
 import test.{EmbedMongoGlobal, TestConfig, TestGlobal}
 
@@ -18,10 +18,9 @@ import scala.concurrent.Await
 
 
 
-class MenuSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  with ScalaFutures with MongoEmbedDatabase  {
+class MenuSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  with ScalaFutures with ReactiveMongoApp {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo  ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-
+  implicit override lazy val app = buildAppEmbed
   val signInPage = new SignInPage(port)
   val menuBar = new MenuBar(port)
   val editorPage = new EditorPage(port)

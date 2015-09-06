@@ -28,7 +28,7 @@ import scala.concurrent.Future
  */
 
 class DAOBase[T](val collectionName : String) {
-  lazy val reactiveMongoApi = current.injector.instanceOf[ReactiveMongoApi]
+  def reactiveMongoApi = current.injector.instanceOf[ReactiveMongoApi]
 
   protected def collection = reactiveMongoApi.db.collection[JSONCollection](collectionName)
 

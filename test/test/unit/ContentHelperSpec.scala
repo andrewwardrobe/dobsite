@@ -19,7 +19,7 @@ class ContentHelperSpec extends PlaySpec with OneServerPerSuite with BeforeAndAf
   import scala.concurrent.duration.DurationInt
 
 
-  implicit override lazy val app = buildApp
+  implicit override lazy val app = buildAppEmbed
 
 
   "Content Helper" must {

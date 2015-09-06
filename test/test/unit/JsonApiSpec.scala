@@ -19,7 +19,7 @@ class JsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter wi
     import scala.concurrent.duration.DurationInt
 
 
-    implicit override lazy val app = buildApp
+    implicit override lazy val app = buildAppEmbed
     var post: Post = _
 
    before {

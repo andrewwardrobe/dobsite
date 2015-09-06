@@ -14,7 +14,7 @@ class ApplicationSpec extends PlaySpec with OneServerPerSuite with ReactiveMongo
 import scala.concurrent.duration.DurationInt
 
 
-implicit override lazy val app = buildApp
+implicit override lazy val app = buildAppEmbed
 
   "Application" should {
 

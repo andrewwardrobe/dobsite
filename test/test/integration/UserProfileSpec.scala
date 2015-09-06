@@ -8,7 +8,7 @@ import org.scalatestplus.play._
 
 import play.api.test.Helpers._
 import play.api.test._
-import test.helpers.{ContentHelper, UserAccountHelper}
+import test.helpers.{ReactiveMongoApp, ContentHelper, UserAccountHelper}
 import test.integration.pages.{ProfilePage, BiographyPage, SignInPage}
 import test.{EmbedMongoGlobal, TestConfig, TestGlobal}
 
@@ -16,10 +16,9 @@ import scala.concurrent.Await
 
 
 
-class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
+class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  with ReactiveMongoApp {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo  ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-
+  implicit override lazy val app = buildAppEmbed
 
   lazy val repo = GitRepo.apply()
 
