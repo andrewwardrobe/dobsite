@@ -88,6 +88,9 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
       signIn.signin("TrustedContributor", "TrustedContributor")
       //val biographyPage = new BiographyPage(port)
       go to biographyPage
+      eventually {
+        clickOnEditButton(bio)
+      }
       updateBio(bio,"MC Donalds is leek leek leek")
       eventually{
         saveButtons must not be empty
@@ -130,7 +133,9 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
       signIn.signin("TrustedContributor", "TrustedContributor")
 
       go to biographyPage
-      clickOnEditButton(bio)
+      eventually {
+        clickOnEditButton(bio)
+      }
       updateBio(bio,"MC Donalds is leek leek leek")
       saveBio(bio)
       eventually{

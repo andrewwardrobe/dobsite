@@ -255,6 +255,7 @@ define ['common', 'helpers/date'], (common) -> {
 
     doBioDivsFromPost : (target) ->
          self = this
+         console.log "Leek 1"
          $.get "/json/content/bytype/" + '4', (data) ->
            $.each data, (index, bio) ->
                 if bio.extraData == undefined or bio.extraData

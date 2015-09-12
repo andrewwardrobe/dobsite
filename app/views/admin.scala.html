@@ -39,7 +39,7 @@
 }
 
 @scripts = {
-    <script src='@routes.Assets.at("javascripts/require.js").url'
+    <script src='@routes.WebJarAssets.at(WebJarAssets.locate("require.js")).url'
     data-main='@routes.Assets.at("javascripts/admin-main.js").url'></script>
 }
 @main("Da Oostin Boyeez",content, scripts,Some(user))

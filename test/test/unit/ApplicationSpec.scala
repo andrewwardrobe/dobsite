@@ -1,5 +1,6 @@
 package test.unit
 
+import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.test.{FakeApplication, FakeRequest}
 import play.api.test.Helpers._
@@ -9,7 +10,7 @@ import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
 /**
  * Created by andrew on 14/09/14.
  */
-class ApplicationSpec extends PlaySpec with OneServerPerSuite with ReactiveMongoApp {
+class ApplicationSpec extends PlaySpec with OneServerPerSuite with ReactiveMongoApp with ScalaFutures {
 
 import scala.concurrent.duration.DurationInt
 
@@ -18,9 +19,6 @@ implicit override lazy val app = buildAppEmbed
 
   "Application" should {
 
-    "send 404 on a bad request" in {
-      route(FakeRequest(GET, "/boum/lle")) mustBe None
-    }
 
     "render the index page" in{
       val home = route(FakeRequest(GET, "/")).get

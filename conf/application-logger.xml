@@ -18,11 +18,23 @@
 
     </appender>
 
+
+
     <logger name="play" level="SEVERE" />
     <logger name="application" level="SEVERE" />
     <!-- Set logging for all Akka library classes to INFO -->
     <logger name="akka" level="OFF" />
-    <root level="WARN">
+    <logger name="reactivemongo.core.actors" level="WARN" />
+    <logger name="reactivemongo.core.actors" level="WARN" />
+
+    <!-- These logger are annyoing -->
+    <logger name="org.apache.commons.httpclient">
+        <level value="fatal"/>
+    </logger>
+    <logger name="httpclient.wire.header" level="OFF" />
+    <logger name="org.apache.http.wire" level="WARN" />
+    <logger name="play.api.mvc.Cookies" level="OFF" />
+    <root level="INFO">
         <appender-ref ref="FILE" />
         <appender-ref ref="STDOUT" />
     </root>

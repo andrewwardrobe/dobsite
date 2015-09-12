@@ -19,7 +19,6 @@ object Content extends DAOBase[Post]("posts"){
 
 
   def create(post : Post, repo :GitRepo) = {
-    Logger.info("create" +post.id)
 
     insert(post).map { res =>
       res.ok match {

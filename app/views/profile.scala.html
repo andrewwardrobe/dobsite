@@ -1,6 +1,6 @@
 @(message: String,user: UserAccount, profile:Option[Profile])(implicit session : Session)
 @scripts = {
-<script src='@routes.Assets.at("javascripts/require.js").url'
+    <script src='@routes.WebJarAssets.at(WebJarAssets.locate("require.js")).url'
         data-main='@routes.Assets.at("javascripts/profile-main.js").url'></script>
 }
 

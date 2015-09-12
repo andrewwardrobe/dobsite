@@ -1,7 +1,7 @@
 @(user: Option[UserAccount])
 
 @scripts = {
-    <script src='@routes.Assets.at("javascripts/require.js").url'
+<script src='@routes.WebJarAssets.at(WebJarAssets.locate("require.js")).url'
     data-main='@routes.Assets.at("javascripts/index-main.js").url'></script>
 }
 

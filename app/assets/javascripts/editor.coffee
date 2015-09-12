@@ -67,12 +67,6 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
 
 
 
-  setupEditorLeek: ()->
-    require ['jquery.hotkeys'],() ->
-      require ['bootstrap-wysiwyg'], () ->
-        $("#editor").wysiwyg { activeToolbarClass:"btn-dob-toolbar",dragAndDropImages: false }
-    this.addEditorMenu()
-
   addEditorMenu:()->
     edFuncLink = $ "<a>"
     $(edFuncLink).attr { 'id':"editorMenu", 'href':'#','class':"dropdown-toggle",'data-toggle':"dropdown" }
@@ -425,121 +419,122 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
 
   setupEditor: ()->
     self = this
-    $("#editor").wysiwyg {
-      toolbar: 'top-selection'
+    require ['wysiwyg', 'wysiwyg-editor',],() ->
+      $("#editor").wysiwyg {
+        toolbar: 'top-selection'
 
-      buttons: {
-        draft: {
-          image: '<span id="draftBtn" class="fa fa-power-off isDraftOn"></span>'
-          showselection: false
-          click: ()->
-            self.draftModeToggle()
-        },
-        save: {
-          image: '<span id="save" class="fa fa-save"></span>',
-          showstatic: true,
-          click: () ->
-            self.save()
-        },
-        undo:{
-          title: "undo",
-          image: '<span class="fa fa-undo"></span>',
-          click: ()->
-            document.execCommand "undo"
-        },
-        redo:{
-          title: "redo",
-          image: '<span class="fa fa-repeat"></span>',
-          click: ()->
-            document.execCommand "redo"
-        },
-        bold: {
-          title: "bold",
-          image: '<span class="fa fa-bold"></span>',
-          showselection: true
-        },
-        italic: {
-          title: "italic",
-          image: '<span class="fa fa-italic"></span>',
-          showselection: true
-        },
-        underline: {
-          title: "underline",
-          image: '<span class="fa fa-underline"></span>',
-          showselection: true
-        },
-        strikethrough: {
-          title: "strikethrough",
-          image: '<span class="fa fa-strikethrough"></span>',
-          showselection: true
-        },
-        unorderedList: {
-          title: "numbered list",
-          image: '<span class="fa fa-list-ul"></span>',
-          showselection: true
-        },
-        orderedList: {
-          title: "bullet list",
-          image: '<span class="fa fa-list-ol"></span>',
-          showselection: true
-        },
-        indent: {
-          title: "indent",
-          image: '<span class="fa fa-indent"></span>',
-          showselection: true
-        },
-        outdent: {
-          title: "outdent",
-          image: '<span class="fa fa-outdent"></span>',
-          showselection: true
-        },
-        alignleft: {
-          title: "align left",
-          image: '<span class="fa fa-align-left"></span>',
-          showselection: true
-        },
-        aligncenter: {
-          title: "align center",
-          image: '<span class="fa fa-align-center"></span>',
-          showselection: true
-        },
-        alignright: {
-          title: "align right",
-          image: '<span class="fa fa-align-right"></span>',
-          showselection: true
-        },
-        alignjustify: {
-          title: "align justify",
-          image: '<span class="fa fa-align-justify"></span>',
-          showselection: true
-        },
-        insertlink: {
-          title: "link",
-          image: '<span class="fa fa-link"></span >',
-          showselection: true,
-          showstatic: true
-        },
-        code: {
-          title: "code",
-          image: '<span class="fa fa-code"></span >',
-          click: () ->
-            self.codeBlock()
-        },
-        alias: {
-          html: $('#aliasDrop').html()
-          showselection: false
-        },
-        postType: {
-          html: $('#typeDrop').html()
-          showselection: false
+        buttons: {
+          draft: {
+            image: '<span id="draftBtn" class="fa fa-power-off isDraftOn"></span>'
+            showselection: false
+            click: ()->
+              self.draftModeToggle()
+          },
+          save: {
+            image: '<span id="save" class="fa fa-save"></span>',
+            showstatic: true,
+            click: () ->
+              self.save()
+          },
+          undo:{
+            title: "undo",
+            image: '<span class="fa fa-undo"></span>',
+            click: ()->
+              document.execCommand "undo"
+          },
+          redo:{
+            title: "redo",
+            image: '<span class="fa fa-repeat"></span>',
+            click: ()->
+              document.execCommand "redo"
+          },
+          bold: {
+            title: "bold",
+            image: '<span class="fa fa-bold"></span>',
+            showselection: true
+          },
+          italic: {
+            title: "italic",
+            image: '<span class="fa fa-italic"></span>',
+            showselection: true
+          },
+          underline: {
+            title: "underline",
+            image: '<span class="fa fa-underline"></span>',
+            showselection: true
+          },
+          strikethrough: {
+            title: "strikethrough",
+            image: '<span class="fa fa-strikethrough"></span>',
+            showselection: true
+          },
+          unorderedList: {
+            title: "numbered list",
+            image: '<span class="fa fa-list-ul"></span>',
+            showselection: true
+          },
+          orderedList: {
+            title: "bullet list",
+            image: '<span class="fa fa-list-ol"></span>',
+            showselection: true
+          },
+          indent: {
+            title: "indent",
+            image: '<span class="fa fa-indent"></span>',
+            showselection: true
+          },
+          outdent: {
+            title: "outdent",
+            image: '<span class="fa fa-outdent"></span>',
+            showselection: true
+          },
+          alignleft: {
+            title: "align left",
+            image: '<span class="fa fa-align-left"></span>',
+            showselection: true
+          },
+          aligncenter: {
+            title: "align center",
+            image: '<span class="fa fa-align-center"></span>',
+            showselection: true
+          },
+          alignright: {
+            title: "align right",
+            image: '<span class="fa fa-align-right"></span>',
+            showselection: true
+          },
+          alignjustify: {
+            title: "align justify",
+            image: '<span class="fa fa-align-justify"></span>',
+            showselection: true
+          },
+          insertlink: {
+            title: "link",
+            image: '<span class="fa fa-link"></span >',
+            showselection: true,
+            showstatic: true
+          },
+          code: {
+            title: "code",
+            image: '<span class="fa fa-code"></span >',
+            click: () ->
+              self.codeBlock()
+          },
+          alias: {
+            html: $('#aliasDrop').html()
+            showselection: false
+          },
+          postType: {
+            html: $('#typeDrop').html()
+            showselection: false
+          }
+
+
         }
-
-
+        submit: {
+          title: 'Submit',
+          image: '\uf00c'
+        }
       }
-      submit: {
-        title: 'Submit',
-        image: '\uf00c'
-      }
-    }
-    this.addEditorMenu()
+      this.addEditorMenu()
 }

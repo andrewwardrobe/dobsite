@@ -1,6 +1,9 @@
 @(message: String,editable: Int, user :Option[UserAccount])(implicit session : Session)
 @scripts = {
-<script src='@routes.Assets.at("javascripts/require.js").url'
+    <script>
+        @Html(org.webjars.RequireJS.getSetupJavaScript(routes.WebJarAssets.at("").url))
+    </script>
+<script src='@routes.WebJarAssets.at(WebJarAssets.locate("require.js")).url'
         data-main='@routes.Assets.at("javascripts/bio-main.js").url'></script>
 }
 

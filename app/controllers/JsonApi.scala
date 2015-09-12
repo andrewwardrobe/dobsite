@@ -31,18 +31,18 @@ class JsonApi extends Controller {
   val repo = GitRepo.apply()
 
 
-  def getBlogs = Action.async { implicit response => //Todo change name to get Blogs
+  def getBlogs = Action.async { implicit request => //Todo change name to get Blogs
     Content.findByType(ContentTypeMap("Blog")).map { articles =>
       Ok(toJson(articles))
     }
   }
 
-  def getContentByType(contentType: Int) = Action.async { implicit response =>
+  def getContentByType(contentType: Int) = Action.async { implicit request =>
     Content.findByType(contentType).map { articles =>
       Ok(toJson(articles))
     }
   }
-  def getPostById(id: String) = Action.async { implicit response =>
+  def getPostById(id: String) = Action.async { implicit request =>
     val regex = "^[0-9a-fA-F]{24}$".r
      id match {
       case regex() => {
@@ -69,7 +69,7 @@ class JsonApi extends Controller {
   }
 
   //Todo delete this function
-  def getContentTags(id:String) = Action.async { implicit response =>
+  def getContentTags(id:String) = Action.async { implicit request =>
     Content.findById(id).map { posts =>
       posts.headOption match {
         case Some(post) => post.tags match {
@@ -81,7 +81,7 @@ class JsonApi extends Controller {
     }
   }
 
-  def getPostRevisionById(id: String, revId : String) = Action.async { implicit response =>
+  def getPostRevisionById(id: String, revId : String) = Action.async { implicit request =>
     Content.findById(id).map { posts =>
       posts.headOption match {
         case Some(post) => Ok(toJson(post.revision(revId,repo)))
@@ -91,7 +91,7 @@ class JsonApi extends Controller {
   }
 
   //Todo should this be a future??
-  def getRevisions(id: String) =  Action { implicit response =>
+  def getRevisions(id: String) =  Action { implicit request =>
     val revisions = repo.findRevDates(id)
     revisions.isEmpty match {
       case false => {
@@ -103,7 +103,7 @@ class JsonApi extends Controller {
     }
   }
   //Todo should this be a future??
-  def getRevisionsWithDates(id: String) =  Action { implicit response =>
+  def getRevisionsWithDates(id: String) =  Action { implicit request =>
     val revisions = repo.findWithDate(id)
         revisions.isEmpty match {
           case false => {
@@ -118,7 +118,7 @@ class JsonApi extends Controller {
   }
 
 
-  def getContentByDate(typ: Int)  = Action.async { implicit response =>
+  def getContentByDate(typ: Int)  = Action.async { implicit request =>
     val query = ContentQueries.byType(typ)
     Content.find(query,Json.obj("dateCreated" -> -1 )).map { posts =>
       Ok(toJson(posts))
@@ -127,11 +127,8 @@ class JsonApi extends Controller {
 
 
   def getDraftsByUserLatestFirst(id:String) = Action.async { implicit response=>
-    val query = Json.obj(
-      "userId" -> Json.obj("$oid" -> id),
-      "isDraft" -> true
-    )
-    Content.find(query,Json.obj("dateCreated" -> -1 )).map { posts =>
+    val query = ContentQueries.draftContentByUserLatestFirst(id)
+    Content.find(query).map { posts =>
       Ok(toJson(posts))
     }
   }
@@ -146,13 +143,13 @@ class JsonApi extends Controller {
     }
   }
 
-  def getRandomPosts(typ:Int, max : Int) = Action.async { implicit response =>
+  def getRandomPosts(typ:Int, max : Int) = Action.async { implicit request =>
     Content.findByType(typ).map { articles =>
       Ok(toJson(articles))
     }
   }
 
-  def getContentByDateStart(typ: Int,startDate: String,max :Int)  = Action.async { implicit response =>
+  def getContentByDateStart(typ: Int,startDate: String,max :Int)  = Action.async { implicit request =>
     val date = startDate match {
       case s if s.isEmpty() || s == "" => {
         new Date()
@@ -170,7 +167,7 @@ class JsonApi extends Controller {
     }
   }
 
-  def getContentByAuthorDateStart(author: String, typ: Int, startDate: String, max: Int) = Action.async { implicit response =>
+  def getContentByAuthorDateStart(author: String, typ: Int, startDate: String, max: Int) = Action.async { implicit request =>
     val date = startDate match {
       case s if s.isEmpty() || s == "" => {
         new Date()

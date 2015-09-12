@@ -113,12 +113,18 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
     "Display a notification when a post is moving from live to draft on next save" in {
       goTo (editorPage.post(post2.id))
-      toggleDraftMode
-      eventually{liveToDraftAlertVisible mustEqual true}
+      eventually {
+        toggleDraftMode
+      }
+      eventually{
+        liveToDraftAlertVisible mustEqual true
+      }
     }
     "Display a notification when a post is moving from draft to live on next save" in {
       goTo (editorPage.post(post4.id))
-      toggleDraftMode
+      eventually {
+        toggleDraftMode
+      }
       eventually{draftToLiveAlertVisible mustEqual true}
     }
 
@@ -129,21 +135,27 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
     "Be able to toggle draft mode" in {
       go to editorPage
-      toggleDraftMode
+      eventually {
+        toggleDraftMode
+      }
       draftMode mustEqual false
     }
 
     "Be able to save a post" in {
       goTo (editorPage)
       editorPage.addContent("some data")
-      editorPage.save
+      eventually {
+        save
+      }
       eventually{ editorPage.saveSuccessful mustEqual true }
     }
 
     "Be able to update a post" in {
       goTo (editorPage.post(post2.id))
       editorPage.addContent("leek")
-      editorPage.save
+      eventually {
+        save
+      }
       eventually{ editorPage.saveSuccessful mustEqual (true) }
     }
 
@@ -179,7 +191,9 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
       val postPage = new PostPage(port)
       go to post(post3.id)
       addTags("Leek,Sheek")
-      save
+      eventually {
+        save
+      }
       go to postPage.post(post3.id)
       postPage.tagList must contain allOf ("Leek","Sheek")
     }
@@ -226,7 +240,9 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     "Add Revision to menu when saved" in {
       go to (editorPage)
       addContent("Some Example Content")
-      save
+      eventually {
+        save
+      }
       eventually{editorPage.revisionLinks must not be empty }
     }
 

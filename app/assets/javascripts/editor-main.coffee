@@ -1,6 +1,6 @@
 require ['common'], (common) ->
     require ['editor','jquery'], (editor,$) ->
-        editor.setupEditor()
+
         editor.setupEditorBox()
         postId = $("#postId").val()
         console.log postId
@@ -10,3 +10,4 @@ require ['common'], (common) ->
 
         editor.applyToolbarHandlers()
         editor.warningBoxHandlers()
+        editor.setupEditor()

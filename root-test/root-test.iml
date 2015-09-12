@@ -211,7 +211,5 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="SBT: org.scalatestplus:play_2.11:1.2.0:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.scalatest:scalatest_2.11:2.2.1:jar" level="project" />
   </component>
 </module>

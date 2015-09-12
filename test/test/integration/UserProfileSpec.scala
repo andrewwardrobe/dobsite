@@ -102,9 +102,11 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
     "Display a save button when changes have been made to the profile" in {
       signin("TrustedContributor","TrustedContributor")
       go to profilePage
-      toogleEditMode
-      updateAbout("New about text")
-      saveButton mustBe 'displayed
+      eventually {
+        toogleEditMode
+        updateAbout("New about text")
+        saveButton mustBe 'displayed
+      }
     }
 
     "Save changes to the profile" in {
@@ -142,7 +144,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       signin("TrustedContributor","TrustedContributor")
       go to profilePage
 
-      editLinks must not be empty
+      eventually { editLinks must not be empty }
 
     }
 
@@ -153,7 +155,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       signin("TrustedContributor","TrustedContributor")
       go to profilePage
 
-      draftLinks must not be empty
+      eventually { draftLinks must not be empty }
 
     }
 

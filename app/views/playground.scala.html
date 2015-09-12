@@ -100,7 +100,7 @@
                 <span class="sr-only">Next</span>
             </a>
         </div>
-         @helper.requireJs(core = routes.Assets.at("javascripts/require.js").url,
+         @helper.requireJs(core = routes.WebJarAssets.at(WebJarAssets.locate("require.js")).url,
         module = routes.Assets.at("javascripts/entry").url)
     </div><!-- /.dob-main -->
 
