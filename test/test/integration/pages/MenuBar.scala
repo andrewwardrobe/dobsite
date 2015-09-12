@@ -26,8 +26,8 @@ class MenuBar(val port: Int)(implicit driver:WebDriver) extends org.scalatest.se
 
     def editLinks = {
         val links = new ListBuffer[String]
-        cssSelector("*[id*='editLink']").findAllElements.toList.foreach { element =>
-            links += element.text
+        cssSelector("*[id*='editLink']").findAllElements.foreach { element =>
+            links += element.attribute("text").get
         }
         links.toList
     }

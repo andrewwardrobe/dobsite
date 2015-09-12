@@ -56,10 +56,7 @@ class MenuSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite w
 
     "Provide Links to The type of content editible by the user" in {
       signin("Administrator","Administrator")
-
-      clickEditLink("Biography")
-      editorPage.postType mustEqual("Biography")
-
+      editLinks must contain ("Biography")
     }
 
     "Provide a link to the user profile page" in {
