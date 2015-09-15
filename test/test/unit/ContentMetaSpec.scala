@@ -12,16 +12,18 @@ import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import reactivemongo.bson.BSONObjectID
 import test._
-import test.helpers.ContentHelper
+import test.helpers.{ReactiveMongoApp, ContentHelper}
 
 /**
  * Created by andrew on 21/02/15.
  */
-class ContentMetaSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
+class ContentMetaSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ReactiveMongoApp {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
+  import scala.concurrent.duration.DurationInt
 
-  
+
+  implicit override lazy val app = buildAppEmbed
+
   "Content Meta Spec" must {
 
     "Be able to convert a post to a meta data string " +

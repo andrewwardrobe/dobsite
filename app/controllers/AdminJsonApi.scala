@@ -6,7 +6,7 @@ package controllers
 import java.util.{Date, UUID}
 
 import com.daoostinboyeez.git.GitRepo
-import controllers.Application._
+
 import data.{Content, Users}
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
@@ -24,7 +24,7 @@ import play.api.libs.json._
 import play.api.libs.json.Json._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
-object AdminJsonApi extends Controller with AuthElement with StandardAuthConfig {
+class AdminJsonApi extends Controller with AuthElement with StandardAuthConfig {
 
   import models.JsonFormats._
 

@@ -30,7 +30,7 @@ import scala.util.Try
 import play.api.libs.json.Json._
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
-object Application extends Controller  with OptionalAuthElement with StandardAuthConfig{
+class Application extends Controller  with OptionalAuthElement with StandardAuthConfig{
 
   import models.JsonFormats._
   lazy val numPosts = Play.configuration.getInt("blogroll.numposts").getOrElse(5)

@@ -8,12 +8,12 @@ import models.UserRole.TrustedContributor
 import org.openqa.selenium.By
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.scalatest.{ShouldMatchers, BeforeAndAfter, BeforeAndAfterAll}
-import org.scalatestplus.play.{FirefoxFactory, OneBrowserPerSuite, OneServerPerSuite, PlaySpec}
+import org.scalatestplus.play._
 import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
-import test.helpers.{UserAccountHelper, ContentHelper}
+import test.helpers.{ReactiveMongoApp, UserAccountHelper, ContentHelper}
 import test.integration.pages._
 
 import scala.concurrent.Await
@@ -22,9 +22,9 @@ import scala.concurrent.Await
 /**
  * Created by andrew on 01/03/15.
  */
-class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
+class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  with ReactiveMongoApp {
 
+  implicit override lazy val app = buildAppEmbed
 
   lazy val repo = GitRepo.apply()
   var post1: Post = null
@@ -107,49 +107,61 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     }
     "Display a notification when a post has unsaved changes" in {
       go to editorPage
-      addContent("some data")
+      eventually { addContent("some data") }
       eventually {unsavedAlertVisible mustEqual true }
     }
 
     "Display a notification when a post is moving from live to draft on next save" in {
       goTo (editorPage.post(post2.id))
-      toggleDraftMode
-      eventually{liveToDraftAlertVisible mustEqual true}
+      eventually {
+        toggleDraftMode
+      }
+      eventually{
+        liveToDraftAlertVisible mustEqual true
+      }
     }
     "Display a notification when a post is moving from draft to live on next save" in {
       goTo (editorPage.post(post4.id))
-      toggleDraftMode
+      eventually {
+        toggleDraftMode
+      }
       eventually{draftToLiveAlertVisible mustEqual true}
     }
 
     "Be in draft mode by default" in {
       go to editorPage
-      draftMode mustEqual true
+      eventually{draftMode mustEqual true}
     }
 
     "Be able to toggle draft mode" in {
       go to editorPage
-      toggleDraftMode
+      eventually {
+        toggleDraftMode
+      }
       draftMode mustEqual false
     }
 
     "Be able to save a post" in {
       goTo (editorPage)
       editorPage.addContent("some data")
-      editorPage.save
+      eventually {
+        save
+      }
       eventually{ editorPage.saveSuccessful mustEqual true }
     }
 
     "Be able to update a post" in {
       goTo (editorPage.post(post2.id))
       editorPage.addContent("leek")
-      editorPage.save
+      eventually {
+        save
+      }
       eventually{ editorPage.saveSuccessful mustEqual (true) }
     }
 
     "Be able to open on a particular post type" in {
       go to editorPage.posttype("Biography")
-      editorPage.postType mustEqual("Biography")
+      eventually { editorPage.postType mustEqual("Biography") }
     }
 
     "Be able to load a post" in {
@@ -169,17 +181,20 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
     "Warn when viewing a revision" in {
       goTo (editorPage.post(post1.id))
-      click on id("editorMenu")
-      click on id(editorPage.revisionLinks(1).attribute("id").get)
-      revisionAlertVisible mustEqual true
-
+      eventually {
+        click on id("editorMenu")
+        click on id(editorPage.revisionLinks(1).attribute("id").get)
+        revisionAlertVisible mustEqual true
+      }
     }
 
     "Be able to save tags" in { //Seems to be broken here
       val postPage = new PostPage(port)
       go to post(post3.id)
       addTags("Leek,Sheek")
-      save
+      eventually {
+        save
+      }
       go to postPage.post(post3.id)
       postPage.tagList must contain allOf ("Leek","Sheek")
     }
@@ -216,8 +231,10 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
 
     "load the specified revision when the link is clicked" in {
       goTo (editorPage.post(post1.id))
-      click on id("editorMenu")
-      click on id(editorPage.revisionLinks(1).attribute("id").get)
+      eventually {
+        click on id("editorMenu")
+        click on id(editorPage.revisionLinks(1).attribute("id").get)
+      }
       eventually{
         editorPage.editorBoxText must include ("ah ah blah")
       }
@@ -226,7 +243,9 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     "Add Revision to menu when saved" in {
       go to (editorPage)
       addContent("Some Example Content")
-      save
+      eventually {
+        save
+      }
       eventually{editorPage.revisionLinks must not be empty }
     }
 

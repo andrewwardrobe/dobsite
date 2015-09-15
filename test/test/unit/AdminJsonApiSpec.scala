@@ -11,7 +11,7 @@ import play.api.libs.json.Json
 import play.api.test.Helpers._
 import play.api.test.{FakeApplication, FakeHeaders, FakeRequest}
 import reactivemongo.core.protocol.QueryFlags
-import test.helpers.UserAccountHelper
+import test.helpers.{ReactiveMongoApp, UserAccountHelper}
 import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
 import jp.t2v.lab.play2.auth.test.Helpers._
 import scala.concurrent.duration.DurationInt
@@ -22,8 +22,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /**
  * Created by andrew on 14/09/14.
  */
-class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures {
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
+class AdminJsonApiSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures with ReactiveMongoApp {
+
+import scala.concurrent.duration.DurationInt
+
+
+  implicit override lazy val app = buildAppEmbed
   object config extends StandardAuthConfig
 
   "Authorises Json API" should {

@@ -1,4 +1,4 @@
-@(message: String, form: Form[Post], postId: String, postType:Int = -1,user:Option[UserAccount],profile: Option[Profile], newPost : Boolean)
+@(message: String, form: Form[Post], postId: String, postType:Int = -1,user:Option[UserAccount],profile: Option[Profile], newPost : Boolean)(implicit messages: Messages)
 
 @content = {
 
@@ -105,9 +105,10 @@
 }
 
 @scripts = {
+
     <script src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery-ui.min.js"))' type="text/javascript"></script>
     <script src='@routes.Assets.at("javascripts/jquery.hotkeys.js")' type="text/javascript"></script>
-    <script src='@routes.Assets.at("javascripts/require.js").url' data-main='@routes.Assets.at("javascripts/editor-main.js").url'></script>
+    <script src='@routes.WebJarAssets.at(WebJarAssets.locate("require.js")).url' data-main='@routes.Assets.at("javascripts/editor-main.js").url'></script>
 
 }
 @main("Da Oostin Boyeez",content, scripts,user)

@@ -9,7 +9,7 @@ import java.util.{NoSuchElementException, Date}
 import play.api.libs.json._
 import play.api.libs.json.Json._
 import play.modules.reactivemongo.json.collection.JSONCollection
-import play.modules.reactivemongo.{ReactiveMongoPlugin, ReactiveMongoHelper}
+import play.modules.reactivemongo.{ReactiveMongoApi, ReactiveMongoPlugin, ReactiveMongoHelper}
 import play.modules.reactivemongo.json._
 import play.modules.reactivemongo.json.ImplicitBSONHandlers
 import play.modules.reactivemongo.json.BSONFormats._
@@ -28,8 +28,9 @@ import scala.concurrent.Future
  */
 
 class DAOBase[T](val collectionName : String) {
+  def reactiveMongoApi = current.injector.instanceOf[ReactiveMongoApi]
 
-  protected def collection = ReactiveMongoPlugin.db.collection[JSONCollection](collectionName)
+  protected def collection = reactiveMongoApi.db.collection[JSONCollection](collectionName)
 
 
 

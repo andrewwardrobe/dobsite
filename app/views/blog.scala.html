@@ -1,6 +1,6 @@
 @(mode: String, user: Option[UserAccount], posts: Seq[Post])(implicit session: Session)
 @scripts = {
-<script src='@routes.Assets.at("javascripts/require.js").url'
+    <script src='@routes.WebJarAssets.at(WebJarAssets.locate("require.js")).url'
         data-main='@routes.Assets.at("javascripts/news-main.js").url'></script>
 }
 

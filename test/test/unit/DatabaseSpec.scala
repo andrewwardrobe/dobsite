@@ -9,14 +9,17 @@ import play.api.Logger
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import reactivemongo.bson.BSONObjectID
-import test.helpers.{UserAccountHelper, ContentHelper}
+import test.helpers.{ReactiveMongoApp, UserAccountHelper, ContentHelper}
 
 
 import test._
-class DatabaseSpec extends PlaySpec with OneServerPerSuite with ScalaFutures{
+class DatabaseSpec extends PlaySpec with OneServerPerSuite with ScalaFutures with ReactiveMongoApp {
 
+  import scala.concurrent.duration.DurationInt
   import models.JsonFormats._
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
+
+  implicit override lazy val app = buildAppEmbed
+
 
   "Database" must {
 

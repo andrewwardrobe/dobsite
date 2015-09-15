@@ -1,4 +1,4 @@
-define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.pack'], (common, Q) -> {
+define ['common', 'q', 'helpers/date','highlight.pack','wysiwyg','wysiwyg-editor'], (common, Q) -> {
   imageCount:1
   # http://stackoverflow.com/questions/6690752/insert-html-at-caret-in-a-contenteditable-div
   pasteHtmlAtCaret: (html) ->
@@ -66,12 +66,6 @@ define ['common', 'q', 'helpers/date', 'wysiwyg', 'wysiwyg-editor', 'highlight.p
 
 
 
-
-  setupEditorLeek: ()->
-    require ['jquery.hotkeys'],() ->
-      require ['bootstrap-wysiwyg'], () ->
-        $("#editor").wysiwyg { activeToolbarClass:"btn-dob-toolbar",dragAndDropImages: false }
-    this.addEditorMenu()
 
   addEditorMenu:()->
     edFuncLink = $ "<a>"

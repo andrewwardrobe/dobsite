@@ -7,16 +7,16 @@ import org.scalatestplus.play._
 import play.api.db.DB
 import play.api.test.Helpers._
 import play.api.test._
-import test.helpers.ContentHelper
+import test.helpers.{ReactiveMongoApp, ContentHelper}
 import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
 import test.integration.pages.DiscographyPage
 
 import scala.concurrent.Await
 import models.JsonFormats._
 
-class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
+class DiscographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  with ReactiveMongoApp {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo  ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
+  implicit override lazy val app = buildAppEmbed
   val discography = new DiscographyPage(port)
 
   var bio : Post = null

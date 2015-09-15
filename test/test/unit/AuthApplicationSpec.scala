@@ -15,7 +15,7 @@ import play.api.test.{FakeRequest, FakeApplication, FakeHeaders}
 import play.api.test.Helpers._
 import play.api.db.DB
 import reactivemongo.bson.BSONObjectID
-import test.helpers.{ContentHelper, UserAccountHelper}
+import test.helpers.{ReactiveMongoApp, ContentHelper, UserAccountHelper}
 import test.{EmbedMongoGlobal, TestGlobal, TestConfig}
 import scala.collection.immutable.HashMap
 import scala.concurrent.Await
@@ -25,13 +25,15 @@ import jp.t2v.lab.play2.auth.test.Helpers._
 /**
  * Created by andrew on 14/09/14.
  */
-class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures{
-  import models.JsonFormats._
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
+class AuthApplicationSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures with ReactiveMongoApp {
+
+import scala.concurrent.duration.DurationInt
 
 
+implicit override lazy val app = buildAppEmbed
 
-  object config extends StandardAuthConfig
+
+object config extends StandardAuthConfig
 
   import models.JsonFormats._
 

@@ -1,11 +1,9 @@
 package controllers
 
-import controllers.Application._
 import data.{Profiles, Users}
 import jp.t2v.lab.play2.auth.{OptionalAuthElement, LoginLogout}
-import models.UserRole.InActiveUser
-import models.{Profile, UserProfile, UserRoleMapping, UserAccount}
-import play.api.data.Form
+import models.{Profile, UserRoleMapping, UserAccount}
+
 import play.api.data.validation.{Invalid, Valid, ValidationError, Constraint}
 import play.api.mvc.{Security, Action, Controller}
 import play.api.data.Form
@@ -14,16 +12,16 @@ import reactivemongo.bson.BSONObjectID
 
 import scala.concurrent.{Await, Future}
 
-
-
-
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import scala.concurrent.duration.DurationInt
+import javax.inject.Inject
+import play.api.i18n.{MessagesApi, I18nSupport}
 
 /**
  * Created by andrew on 21/12/14.
  */
-object UserServices extends Controller with LoginLogout with OptionalAuthElement with StandardAuthConfig {
+class UserServices @Inject()(val messagesApi: MessagesApi) extends Controller with LoginLogout
+          with OptionalAuthElement with StandardAuthConfig with I18nSupport{
 
   import models.JsonFormats._
 

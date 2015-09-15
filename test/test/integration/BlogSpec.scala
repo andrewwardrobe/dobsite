@@ -6,7 +6,7 @@ import org.scalatestplus.play._
 import play.api.db.DB
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
-import test.helpers.ContentHelper
+import test.helpers.{ReactiveMongoApp, ContentHelper}
 import test.integration.pages.BlogPage
 import test.{EmbedMongoGlobal, TestConfig, TestGlobal}
 
@@ -14,10 +14,9 @@ import test.{EmbedMongoGlobal, TestConfig, TestGlobal}
 /**
  * Created by andrew on 11/10/14.
  */
-class BlogSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll  {
+class BlogSpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSuite with FirefoxFactory with BeforeAndAfter with BeforeAndAfterAll with ReactiveMongoApp {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
-
+  implicit override lazy val app = buildAppEmbed
 
   var setupDone = false
 

@@ -8,15 +8,19 @@ import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
+import test.helpers.ReactiveMongoApp
 
 /**
  * Created by andrew on 21/02/15.
  */
-class UserRoleSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter {
+class UserRoleSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ReactiveMongoApp {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
+  import scala.concurrent.duration.DurationInt
 
-  
+
+  implicit override lazy val app = buildAppEmbed
+
+
   "User Role" must {
 
       "Be able to load primary roles" in {

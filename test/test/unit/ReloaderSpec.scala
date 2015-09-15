@@ -8,7 +8,7 @@ import org.scalatestplus.play.{OneServerPerSuite, PlaySpec}
 import play.api.test.FakeApplication
 import play.api.test.Helpers._
 import test._
-import test.helpers.ContentHelper
+import test.helpers.{ReactiveMongoApp, ContentHelper}
 import data.{Users, Profiles, ContentReloader, Content}
 
 import scala.concurrent.Await
@@ -17,9 +17,9 @@ import scala.concurrent.Await
 /**
  * Created by andrew on 21/02/15.
  */
-class ReloaderSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures {
+class ReloaderSpec extends PlaySpec with OneServerPerSuite with BeforeAndAfter with ScalaFutures with ReactiveMongoApp{
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo, withGlobal = Some(EmbedMongoGlobal))
+  implicit override lazy val app = buildAppEmbed
   lazy val repo = GitRepo.apply()
 
   "Reloader" must {

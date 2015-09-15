@@ -1,7 +1,7 @@
 package controllers
 
 import _root_.data.Users
-import jp.t2v.lab.play2.auth.AuthConfig
+import jp.t2v.lab.play2.auth.{CookieTokenAccessor, AuthConfig}
 import models.UserRole._
 import models.{UserRole, UserAccount}
 
@@ -56,7 +56,7 @@ trait StandardAuthConfig extends AuthConfig {
   }
 
 
-  def authorizationFailed(request: RequestHeader)(implicit ctx: ExecutionContext): Future[Result] = {
+  def authorizationFailed(request: RequestHeader,user: User, authority: Option[Authority])(implicit ctx: ExecutionContext): Future[Result] = {
     Future.successful(Forbidden("They are no one"))
   }
 
@@ -64,9 +64,14 @@ trait StandardAuthConfig extends AuthConfig {
     UserRole.roleHasAuthority(user.userRole,authority)
   }
 
-  override lazy val cookieSecureOption: Boolean = play.api.Play.isProd(play.api.Play.current)
+  override lazy val tokenAccessor = new CookieTokenAccessor(
+    /*
+     * Whether use the secure option or not use it in the cookie.
+     * Following code is default.
+     */
+    cookieSecureOption = play.api.Play.isProd(play.api.Play.current),
+    cookieMaxAge       = Some(sessionTimeoutInSeconds)
+  )
 
-
-  override lazy val isTransientCookie: Boolean = false
 
 }

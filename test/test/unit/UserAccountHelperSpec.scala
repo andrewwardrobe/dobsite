@@ -13,16 +13,19 @@ import play.api.test.Helpers._
 import play.modules.reactivemongo.ReactiveMongoPlugin
 import play.modules.reactivemongo.ReactiveMongoHelper
 import test._
-import test.helpers.{UserAccountHelper, ContentHelper}
+import test.helpers.{ReactiveMongoApp, UserAccountHelper, ContentHelper}
 
 import scala.concurrent.Await
 
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite with ScalaFutures with BeforeAndAfter{
+class UserAccountHelperSpec extends PlaySpec with OneServerPerSuite with ScalaFutures with BeforeAndAfter with ReactiveMongoApp {
 
-  implicit override lazy val app = FakeApplication(additionalConfiguration = inMemoryDatabase() ++ TestConfig.withTempGitRepo ++ TestConfig.withEmbbededMongo,withGlobal = Some(EmbedMongoGlobal))
+  import scala.concurrent.duration.DurationInt
+
+
+  implicit override lazy val app = buildAppEmbed
 
 
 
