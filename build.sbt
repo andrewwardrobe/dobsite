@@ -1,7 +1,4 @@
 import play.sbt.PlayImport.PlayKeys._
-import com.github.play2war.plugin._
-import play.PlayImport.PlayKeys._
-import NativePackagerKeys._
 
 
 name := """dobsite"""

@@ -13,7 +13,7 @@ import play.api.libs.json.Json._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.WebSocket.FrameFormatter
 import play.api.mvc._
-import play.modules.reactivemongo.ReactiveMongoPlugin
+import play.modules.reactivemongo.{ReactiveMongoApi, ReactiveMongoPlugin}
 import play.modules.reactivemongo.json.collection.JSONCollection
 import play.modules.reactivemongo.json._
 import reactivemongo.api.QueryOpts
@@ -26,7 +26,7 @@ import scala.concurrent.Future
 /**
  * Created by andrew on 07/09/14.
  */
-object WebSocketJsonApi extends Controller {
+class WebSocketJsonApi extends Controller {
 
  import models.JsonFormats._
   //implicit val tagFormat = Json.format[ContentTag]
@@ -44,7 +44,9 @@ object WebSocketJsonApi extends Controller {
     }
     (in,out)
   }
-  val collection = ReactiveMongoPlugin.db.collection[JSONCollection]("leek")
+  def reactiveMongoApi = current.injector.instanceOf[ReactiveMongoApi]
+
+  protected def collection = reactiveMongoApi.db.collection[JSONCollection]("leek")
 
 
   case class Leek(_id:Option[BSONObjectID],leek :String)
