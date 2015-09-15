@@ -3,6 +3,7 @@
 
     requirejs.config({
         baseUrl : "/assets/javascripts",
+        waitSeconds : 0,
         shim : {
             "jquery" : {
                 exports : "$"
@@ -12,8 +13,12 @@
             },
             "Q": {
                 exports: "Q"
-            }
+            },
+            "bootstrap" : { "deps" :['jquery'] },
+            "wysiwyg" : {"deps":['jquery']},
+            "wysiwyg-editor" : {"deps":['jquery','wysiwyg']}
         },
+
         paths : {
             "math" : "lib/math",
             // Map the dependencies to CDNs or WebJars directly

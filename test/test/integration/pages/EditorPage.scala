@@ -69,6 +69,7 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
 
   def draftMode = {
     val elemClass = id("draftBtn").webElement.getAttribute("class")
+    Logger.info(elemClass)
     elemClass.contains("isDraftOn")
   }
 

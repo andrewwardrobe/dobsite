@@ -114,7 +114,7 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       go to profilePage
       toogleEditMode
       updateAbout("New about text")
-      save
+      eventually {save }
       saveSuccess mustBe 'displayed
     }
 

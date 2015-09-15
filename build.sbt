@@ -5,7 +5,7 @@ name := """dobsite"""
 
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val root = (project in file(".")).enablePlugins(PlayScala,SbtWeb)
 
 scalaVersion := "2.11.7"
 
@@ -57,6 +57,8 @@ Keys.fork in Test := true
 pipelineStages := Seq(rjs, digest)
 
 MochaKeys.requires += "./Setup"
+
+RjsKeys.paths += ("jsRoutes" -> ("/jsroutes" -> "empty:"))
 
 JsEngineKeys.engineType := JsEngineKeys.EngineType.Node
 
