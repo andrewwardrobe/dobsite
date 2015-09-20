@@ -16,8 +16,8 @@ import play.api.mvc._
 import play.modules.reactivemongo.{ReactiveMongoApi, ReactiveMongoPlugin}
 import play.modules.reactivemongo.json.collection.JSONCollection
 import play.modules.reactivemongo.json._
-import reactivemongo.api.QueryOpts
-import reactivemongo.bson.BSONObjectID
+import reactivemongo.api.{ReadPreference, QueryOpts}
+import reactivemongo.bson.{BSONDocument, BSONObjectID}
 import play.api.Play.current
 
 import scala.collection.mutable.ListBuffer
@@ -55,7 +55,7 @@ class WebSocketJsonApi extends Controller {
   implicit val frameFormatter = FrameFormatter.jsonFrame[Leek]
 
   def queryTest = WebSocket.using[Leek] { request =>
-    val cursor = collection.find(Json.obj()).options(QueryOpts().batchSize(4)).cursor[Leek]
+    val cursor = collection.genericQueryBuilder.options(QueryOpts().batchSize(10)).query(BSONDocument()).cursor[Leek](ReadPreference.nearest)
 
     val (leek,chan) = Concurrent.broadcast[Leek]
 

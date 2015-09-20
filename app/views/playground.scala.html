@@ -54,8 +54,6 @@
         </div>
 
 
-        @helper.requireJs(core = routes.WebJarAssets.at(WebJarAssets.locate("require.js")).url,
-        module = routes.Assets.at("javascripts/entry").url)
     </div><!-- /.dob-main -->
 
 </div><!-- /.row -->
@@ -63,7 +61,7 @@
 
 }
 @scripts = {
-
+    <script src='@routes.WebJarAssets.at(WebJarAssets.locate("require.js")).url' data-main='@routes.Assets.at("javascripts/entry-main.js").url'></script>
 }
 
 
