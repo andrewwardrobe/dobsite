@@ -17,6 +17,7 @@ GET         /biography                                                controller
 
 GET         /post/:id                                                 controllers.Application.post(id:String)
 GET         /test                                                     controllers.Application.playground
+GET         /email                                                     controllers.EmailController.sendMail
 POST        /signup                                                   controllers.UserServices.register
 GET         /login                                                    controllers.UserServices.login
 POST        /login                                                    controllers.UserServices.authenticate
