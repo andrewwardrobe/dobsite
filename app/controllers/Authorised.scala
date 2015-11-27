@@ -1,7 +1,9 @@
 package controllers
 
+import java.io.{File, FileInputStream, BufferedInputStream}
+import java.net.URLConnection
 import java.text.SimpleDateFormat
-import java.util.{UUID, Date}
+import java.util.{Calendar, UUID, Date}
 
 import com.daoostinboyeez.git.{GitRepo}
 import com.daoostinboyeez.site.exceptions.AliasLimitReachedException
@@ -319,6 +321,26 @@ class Authorised @Inject()(val messagesApi: MessagesApi) extends Controller
           BadRequest
         })
     }
+  }
+
+
+  def upload = StackAction(parse.temporaryFile,AuthorityKey -> Contributor) { request =>
+    val req = request.body
+    val baseDir = "public/images/uploaded"
+    val dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS")
+    val df = dateFormat.format(Calendar.getInstance().getTime())
+
+    val is = new BufferedInputStream(new FileInputStream(request.body.file))
+    val mimetype = URLConnection.guessContentTypeFromStream(is)
+
+    is.close()
+
+
+
+    val filename = baseDir + "/upload-"+ df + "." + mimetype.split("/")(1)
+    request.body.moveTo(new File(filename))
+
+    Ok(filename.replace("public","assets"))
   }
 
 

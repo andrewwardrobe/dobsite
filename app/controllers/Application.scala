@@ -84,23 +84,6 @@ class Application extends Controller  with OptionalAuthElement with StandardAuth
 
   }
 
-  def upload = Action(parse.temporaryFile) { request =>
-
-    val baseDir = "public/images/uploaded"
-
-    val is = new BufferedInputStream(new FileInputStream(request.body.file))
-    val mimetype = URLConnection.guessContentTypeFromStream(is)
-
-    is.close()
-
-    val dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS")
-    val df = dateFormat.format(Calendar.getInstance().getTime())
-
-    val filename = baseDir + "/upload-"+ df + "." + mimetype.split("/")(1)
-    request.body.moveTo(new File(filename))
-
-    Ok(filename.replace("public","assets"))
-  }
 
   def blog = AsyncStack { implicit request =>
     val maybeUser: Option[User] = loggedIn

@@ -30,7 +30,7 @@ GET         /editor/:id                                               controller
 
 POST        /blog                                                     controllers.Authorised.submitPost
 PUT         /blog                                                     controllers.Authorised.submitBlogUpdate
-POST        /upload                                                   controllers.Application.upload()
+POST        /upload                                                   controllers.Authorised.upload()
 
 
 GET         /discography                                              controllers.Application.discography
