@@ -11,6 +11,7 @@ import com.daoostinboyeez.site.exceptions.AliasLimitReachedException
 import data._
 import jp.t2v.lab.play2.auth._
 import jp.t2v.lab.play2.auth.AuthElement
+import jp.t2v.lab.play2.stackc.RequestWithAttributes
 import models._
 
 import models.UserRole.{InActiveUser, Administrator, Contributor, NormalUser}
@@ -19,9 +20,10 @@ import play.api.Logger
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.MessagesApi
+import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.{JsError, JsSuccess, JsObject, Json}
 import play.api.libs.json.Json._
-import play.api.mvc.{AnyContentAsFormUrlEncoded, AnyContentAsJson, Controller}
+import play.api.mvc._
 import play.api.db.DB
 
 
@@ -323,24 +325,26 @@ class Authorised @Inject()(val messagesApi: MessagesApi) extends Controller
     }
   }
 
-
-  def upload = StackAction(parse.temporaryFile,AuthorityKey -> Contributor) { request =>
-    val req = request.body
+  def doUpload(request: Request[MultipartFormData[TemporaryFile]]): Future[Result] = {
+    val file = request.body.files(0)
     val baseDir = "public/images/uploaded"
     val dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS")
     val df = dateFormat.format(Calendar.getInstance().getTime())
 
-    val is = new BufferedInputStream(new FileInputStream(request.body.file))
-    val mimetype = URLConnection.guessContentTypeFromStream(is)
-
-    is.close()
+    val mimetype = file.contentType.getOrElse("")
 
 
+    val filename = baseDir + "/upload-" + df + "." + mimetype.split("/")(1)
+    file.ref.moveTo(new File(filename))
+    Future {
+      Ok(filename.replace("public", "assets"))
+    }
+  }
+  //Todo: make this upload only images and change the route to upload image
+  def uploadImage = AsyncStack(parse.multipartFormData, AuthorityKey -> Contributor) {
 
-    val filename = baseDir + "/upload-"+ df + "." + mimetype.split("/")(1)
-    request.body.moveTo(new File(filename))
-
-    Ok(filename.replace("public","assets"))
+    request =>
+    doUpload(request)
   }
 
 

@@ -344,6 +344,8 @@ define ['common', 'q', 'helpers/date','highlight.pack','wysiwyg','wysiwyg-editor
       imageReader = new FileReader
       imageReader.onload = ((aFile) ->
         (e) ->
+          formData = new FormData()
+          formData.append("file",aFile)
           img = $ "<img>"
           imageId = "imageName" + self.imageCount
           self.imageCount++
@@ -354,7 +356,7 @@ define ['common', 'q', 'helpers/date','highlight.pack','wysiwyg','wysiwyg-editor
             type: 'POST',
             processData: false,
             contentType: false,
-            data: aFile
+            data: formData
             })
           result.then (data) ->
             $("#result").html(data)
