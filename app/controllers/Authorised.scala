@@ -138,7 +138,6 @@ class Authorised @Inject()(val messagesApi: MessagesApi) extends Controller
         })
 
       case json: AnyContentAsJson =>
-
         request.body.asJson.map({js => fromJson[Post](js) match {
           case JsSuccess(temp, _) => {
             val post = temp.copy( content = temp.getCleanContent)
@@ -330,10 +329,7 @@ class Authorised @Inject()(val messagesApi: MessagesApi) extends Controller
     val baseDir = "public/images/uploaded"
     val dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS")
     val df = dateFormat.format(Calendar.getInstance().getTime())
-
     val mimetype = file.contentType.getOrElse("")
-
-
     val filename = baseDir + "/upload-" + df + "." + mimetype.split("/")(1)
     file.ref.moveTo(new File(filename))
     Future {
@@ -341,9 +337,7 @@ class Authorised @Inject()(val messagesApi: MessagesApi) extends Controller
     }
   }
   //Todo: make this upload only images and change the route to upload image
-  def uploadImage = AsyncStack(parse.multipartFormData, AuthorityKey -> Contributor) {
-
-    request =>
+  def uploadImage = AsyncStack(parse.multipartFormData, AuthorityKey -> Contributor) { request =>
     doUpload(request)
   }
 

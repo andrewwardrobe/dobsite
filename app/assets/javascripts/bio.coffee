@@ -9,13 +9,15 @@ define ['common', 'helpers/date'], (common) -> {
 
           imageReader.onload = ((aFile) ->
             (e) ->
+                formData = new FormData()
+                formData.append("file",aFile)
                 $("#"+target).attr 'src', e.target.result
                 $.ajax
                     url: "/upload",
                     type: 'POST',
                     processData: false,
                     contentType: false,
-                    data: aFile,
+                    data: formData
                     success: (data) ->
                         $("#"+target).attr('src',data);
                         saveBtn = target.replace "Image", "Save"
