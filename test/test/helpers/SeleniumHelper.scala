@@ -3,6 +3,7 @@ package test.helpers
 import java.io.File
 
 import org.openqa.selenium.{WebDriver, By, JavascriptExecutor}
+import play.api.Logger
 
 import scala.util.Random
 
@@ -12,7 +13,9 @@ import scala.util.Random
 object SeleniumHelper {
   def fileUpload(file: File, target: String)(implicit driver: WebDriver): AnyRef = {
     val jsDriver = driver.asInstanceOf[JavascriptExecutor]
-    val rand = new Random()
+    if (!file.exists()){
+      Logger.warn(s"File : ${file.getAbsolutePath} does not exist")
+    }
     val inputId = target + "FileUpload" //+ rand.nextInt()
     //Not a fan of using  this method
     jsDriver.executeScript("var element =  document.getElementById(\""+inputId+"\"); if (element != null ) {element.parentElement.removeChild(element);}")

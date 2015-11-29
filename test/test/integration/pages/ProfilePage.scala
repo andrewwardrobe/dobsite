@@ -1,8 +1,11 @@
 package test.integration.pages
 
+import java.io.File
+
 import org.openqa.selenium.{WebElement, WebDriver}
 import org.scalatest.selenium.{Page, WebBrowser}
 import play.api.Logger
+import test.helpers.SeleniumHelper
 
 /**
  * Created by andrew on 17/12/14.
@@ -15,6 +18,14 @@ class ProfilePage(val port: Int)(implicit driver:WebDriver) extends Page with We
     userName.text
   }
 
+  def uploadAvatar(file:String) = {
+    val target = "avatar"
+    SeleniumHelper.fileUpload(new File(file),target)
+  }
+
+  def avatarLocation = {
+    cssSelector("#avatar").findElement.get.attribute("src").getOrElse("")
+  }
   def toogleEditMode =  click on cssSelector("#editBtn")
 
   def aboutText = {

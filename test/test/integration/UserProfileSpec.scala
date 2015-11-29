@@ -81,7 +81,15 @@ class UserProfileSpec extends PlaySpec with OneServerPerSuite with OneBrowserPer
       signin("TrustedContributor","TrustedContributor")
       go to profilePage
       eventually {toogleEditMode}
-      avatarEditable mustBe true
+      eventually {avatarEditable mustBe true}
+    }
+
+    "Allow the user to upload an avatar" in {
+      signin("TrustedContributor","TrustedContributor")
+      go to profilePage
+      eventually {toogleEditMode}
+      uploadAvatar("public/images/skull.png")
+      eventually{ avatarLocation must include regex "images/uploaded" }
     }
 
     "List aliases" in {

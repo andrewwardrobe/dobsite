@@ -57,14 +57,16 @@ define ['common','utilities','q'],(common,utils,Q) ->
               imageReader = new FileReader
               imageReader.onload = ((aFile) ->
                 (e) ->
+                    formData = new FormData()
+                    formData.append("file",aFile)
                     $("#"+target).attr 'src', e.target.result
                     avatarImage = aFile
-                    self.uploadImage aFile, onSuccess
+                    self.uploadImage formData, onSuccess
 
               )(f)
               imageReader.readAsDataURL(f)
               i++
-
+        #Todo extract image code to it's own module
         uploadImage:(imageData,onSuccess) ->
             $.ajax
                 url: "/upload",
@@ -94,13 +96,14 @@ define ['common','utilities','q'],(common,utils,Q) ->
 
         dropEventHandler: (e) ->
             self = this
-            event = e.originalEvent
-            target = event.target or event.srcElement
-            console.log target.id
-            if target.id == ""
-                id =  target.parentElement.id
+            e.dataTransfer = e.originalEvent.dataTransfer
+            event = e
+            dropTarget = event.target or event.srcElement
+            console.log dropTarget.id
+            if dropTarget.id == ""
+                id =  dropTarget.parentElement.id
             else
-                id =  target.id
+                id =  dropTarget.id
 
             profile.loadImage event.dataTransfer.files, id, (data) ->
                 $("##{id}").attr 'src', data
