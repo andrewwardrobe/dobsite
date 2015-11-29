@@ -3,15 +3,19 @@ define ['common', 'helpers/date'], (common) -> {
         count = 1
         i = 0
         f = undefined
-        #console.log target
+
+        newTarget = target.replace "Div", ""
+
+
         while f = files[i]
           imageReader = new FileReader
 
           imageReader.onload = ((aFile) ->
             (e) ->
+
                 formData = new FormData()
                 formData.append("file",aFile)
-                $("#"+target).attr 'src', e.target.result
+                $("#"+newTarget).attr 'src', e.target.result
                 $.ajax
                     url: "/upload",
                     type: 'POST',
@@ -19,9 +23,9 @@ define ['common', 'helpers/date'], (common) -> {
                     contentType: false,
                     data: formData
                     success: (data) ->
-                        $("#"+target).attr('src',data);
-                        saveBtn = target.replace "Image", "Save"
-                        extra = target.replace "Image", "Extra"
+                        $("#"+newTarget).attr('src',data);
+                        saveBtn = newTarget.replace "Image", "Save"
+                        extra = newTarget.replace "Image", "Extra"
                         $("#"+saveBtn).show()
                         extraData = $("#"+extra ).val()
                         extraData = extraData.replace("thumb=.*\n","")
@@ -36,10 +40,12 @@ define ['common', 'helpers/date'], (common) -> {
 
         if target.id == ""
             id =  target.parentElement.id
+
         else
             id =  target.id
+            e.dataTransfer = e.originalEvent.dataTransfer
 
-        imageDropped e.dataTransfer.files, id
+        this.imageDropped e.dataTransfer.files, id
         e.stopPropagation()
         e.preventDefault()
 
@@ -62,11 +68,13 @@ define ['common', 'helpers/date'], (common) -> {
         bioText = $("#bioText" +id)
         nameDiv = $("#bioName" +id)
         imageDiv = $("#bioImageDiv"+ id)
+        bioImage = $("#bioImage"+ id)
         textDiv = $("#bioDiv" + id)
         bioText.attr 'contenteditable','true'
         nameDiv.attr 'contenteditable','true'
         imageDiv.attr 'contenteditable','true'
-        imageDiv.attr 'ondrop', 'dropper(event)'
+        imageDiv.on 'drop', (event) ->
+            self.dropper(event)
         imageDiv.attr 'ondragenter', 'return false'
         imageDiv.attr 'ondragover', 'return false'
         editBtn.attr 'class', 'editBtnOn'
@@ -139,7 +147,6 @@ define ['common', 'helpers/date'], (common) -> {
             userId =  $("#bioUser" +bio._id.$oid).text()
             $("#bioSuccess"+bio._id.$oid).hide()
             $("#bioFailure"+bio._id.$oid).hide()
-            #console.log event.target.id
             json = {
                 data:
                     "_id":bio._id.$oid,
@@ -156,13 +163,13 @@ define ['common', 'helpers/date'], (common) -> {
                 success: (data) ->
                     $("#bioSuccess"+bio._id.$oid).show()
                     $("#bioSave"+bio._id.$oid).hide()
-                    #console.log("Success")
+
                 error: (data) ->
                     $("#bioFailure"+bio._id.$oid).show()
-                    #console.log("Error")
+
             }
             jsRoutes.controllers.Authorised.submitBlogUpdate().ajax(json);
-            #console.log("Buuton Clicked: " +JSON.stringify(json))
+
         btnsDiv.append editBtn
         btnsDiv.append saveBtn
         btnsDiv.append saveSuccess
@@ -174,13 +181,11 @@ define ['common', 'helpers/date'], (common) -> {
             $("#bioSuccess"+bio._id.$oid).hide()
 
     extraDataJs2KeyVal : (js) ->
-        #console.log "extraData 2 Key Val"
         data = js
-        #console.log "js + #{js}"
         dataStr = ""
         $.each data, (key, val) ->
             dataStr += key + "=" + val + "\n"
-        #console.log(dataStr)
+
         dataStr
 
     doTextAndImage : (bio, target) ->
@@ -189,7 +194,6 @@ define ['common', 'helpers/date'], (common) -> {
         imageDiv = $("<div>")
         $(target).append bsRow2
         if bio.extraData != undefined
-            #console.log "Extra Data = |#{bio.extraData}|"
             extraData = bio.extraData
             image = $("<img>")
             image.attr 'src', extraData.thumb
@@ -222,7 +226,7 @@ define ['common', 'helpers/date'], (common) -> {
         bioExtra = $("<input>")
         bioExtra.attr 'id', 'bioExtra' + bio._id.$oid
         bioExtra.attr 'type', 'hidden'
-        ##console.log "Extra Data #{bio.extraData}"
+
         if bio.extraData != undefined
             bioExtra.attr 'value', this.extraDataJs2KeyVal bio.extraData
         textDiv.append bioExtra
@@ -257,7 +261,7 @@ define ['common', 'helpers/date'], (common) -> {
 
     doBioDivsFromPost : (target) ->
          self = this
-         console.log "Leek 1"
+
          $.get "/json/content/bytype/" + '4', (data) ->
            $.each data, (index, bio) ->
                 if bio.extraData == undefined or bio.extraData
@@ -278,7 +282,7 @@ define ['common', 'helpers/date'], (common) -> {
                 row = $(target).children('div.row').last()
 
                 editMode = $(target).attr 'edit-mode'
-                console.log "Children = " + $(target).children('div').length
+
                 bios = $(row).children('div.col-sm-5').length
 
 

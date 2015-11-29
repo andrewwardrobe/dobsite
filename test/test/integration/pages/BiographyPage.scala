@@ -1,7 +1,10 @@
 package test.integration.pages
 
+import java.io.File
+
 import org.openqa.selenium.WebDriver
 import org.scalatest.selenium.{Page, WebBrowser}
+import test.helpers.SeleniumHelper
 
 /**
  * Created by andrew on 17/12/14.
@@ -15,6 +18,7 @@ class BiographyPage(val port: Int)(implicit driver:WebDriver) extends Page with 
 
   def biographyImages = cssSelector("*[id*='bioImage']").findAllElements
 
+  def biographyImage(id:String) = cssSelector(s"#bioImage${id}").findElement.get
 
   def biographyDetails(id: String) = {
     cssSelector("#bioText" + id).findElement.get.text
@@ -29,6 +33,13 @@ class BiographyPage(val port: Int)(implicit driver:WebDriver) extends Page with 
   def updateBio(id: String, text: String) = {
     val textBox = cssSelector("#bioText" + id).findElement.get
     textBox.underlying.sendKeys(text)
+  }
+
+
+
+  def updateImage(bioId:String, file: String) = {
+    val imageId = s"bioImageDiv${bioId}"
+    SeleniumHelper.fileUpload(new java.io.File(file),imageId)
   }
 
   def saveBio(id: String) = {

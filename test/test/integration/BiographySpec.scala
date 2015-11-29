@@ -144,6 +144,22 @@ class BiographySpec extends PlaySpec with OneServerPerSuite with OneBrowserPerSu
       signIn.signout
     }
 
+    "Allow a drag and drop change to the bio image when edit mode is on " in {
+      signIn.signin("TrustedContributor", "TrustedContributor")
+
+      go to biographyPage
+      eventually {
+        clickOnEditButton(bio)
+
+      }
+      eventually{
+        updateImage(bio,"public/images/skull.png")
+      }
+      eventually{
+        info (biographyImage(bio).attribute("src").getOrElse(""))
+        biographyImage(bio).attribute("src").getOrElse("")  must include regex "images/uploaded"
+      }
+    }
   }
 
   def dataSetup() = {
