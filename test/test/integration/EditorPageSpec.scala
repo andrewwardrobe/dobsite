@@ -206,12 +206,19 @@ class EditorPageSpec  extends PlaySpec with OneServerPerSuite with OneBrowserPer
     }
     //Todo "Warn when making changes to revisions" in pending
 
+
+    "Allow users to upload images" in {
+      go to editorPage
+      editorPage.uploadImage(new java.io.File("public/images/skull.png"))
+      eventually{
+        editorPage.uploadedImages.head.attribute("src").getOrElse("") must include regex "images/uploaded"
+      }
+    }
   }
 
   "Revision List" must {
     "Display a list of revisions when there is some" in {
       goTo (editorPage.post(post1.id))
-
       eventually{editorPage.revisionListText.size must be (2)}
     }
 

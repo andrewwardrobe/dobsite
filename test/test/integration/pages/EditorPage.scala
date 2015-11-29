@@ -1,10 +1,13 @@
 package test.integration.pages
 
-import org.openqa.selenium.WebDriver
+import java.io.File
+
+import org.openqa.selenium.{By, JavascriptExecutor, WebDriver}
 import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.support.ui.Select
 import org.scalatest.selenium.WebBrowser
 import play.api.Logger
+import test.helpers.SeleniumHelper
 
 import scala.collection.mutable.ListBuffer
 
@@ -31,6 +34,16 @@ class EditorPage(val port: Int)(implicit driver:WebDriver) extends org.scalatest
   def addTags(tags:String) = { val tagBox = id("tagBox").element
     tagBox.underlying.sendKeys(tags)
   }
+
+  def uploadedImages = {
+    cssSelector("img[id*='imageName']").findAllElements.toList
+  }
+
+  def uploadImage( file :File) = {
+    val target:String = "editor"
+    SeleniumHelper.fileUpload(file, target)
+  }
+
 
 
   def revisionListText = {
