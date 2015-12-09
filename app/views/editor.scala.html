@@ -41,9 +41,12 @@
 
             <!--@helper.inputText(field = form("author"), args = 'class -> "form-control",'_label -> "Author") -->
             <div  class="col-md-12  dob-main">
-              <input type="hidden" name="content" id="content" />
 
-                <div id="editor" >
+                <input type="hidden" name="content" id="content" />
+                <div id="thumbnail" contenteditable="true">
+                    <img id="bioImage" alt="Drop Biography Image here" src="" style="height: 200px; width: 300px;border :3px;"/>
+                </div>
+                <div id="editor"  >
                     Start Typing your post content here
                 </div>
 

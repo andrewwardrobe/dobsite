@@ -1,4 +1,4 @@
-define ['common', 'q', 'helpers/date','highlight.pack','wysiwyg','wysiwyg-editor'], (common, Q) -> {
+define ['common', 'q', 'utilities','helpers/date','highlight.pack','wysiwyg','wysiwyg-editor'], (common, Q, utils ) -> {
   imageCount:1
   # http://stackoverflow.com/questions/6690752/insert-html-at-caret-in-a-contenteditable-div
   pasteHtmlAtCaret: (html) ->
@@ -538,4 +538,15 @@ define ['common', 'q', 'helpers/date','highlight.pack','wysiwyg','wysiwyg-editor
       }
     }
     this.addEditorMenu()
+
+  addImageDropZone: (target) ->
+
+    utils.createImageDropzone target, (imgdata) ->
+      formData = new FormData()
+      formData.append("file",imgdata)
+      utils.uploadImage formData, (data) ->
+        $(target).attr 'src', "/"+ data
+        text = $("#extraDataValues").text
+        text = "thumb=#{data}"
+        $("#extraDataValues").text text
 }
