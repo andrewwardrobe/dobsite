@@ -105,7 +105,7 @@ define ['common','utilities','q'],(common,utils,Q) ->
             else
                 id =  dropTarget.id
 
-            profile.loadImage event.dataTransfer.files, id, (data) ->
+            self.loadImage event.dataTransfer.files, id, (data) ->
                 $("##{id}").attr 'src', data
                 $("#saveBtn").show()
 
