@@ -117,7 +117,7 @@ define ['common', 'q', 'utilities','helpers/date','highlight.pack','wysiwyg','wy
         for key in Object.keys(extraData)
           console.log("Key = key")
           if extraData.hasOwnProperty key
-            text += "#{key}=#{extraData[key]}"
+            text += "#{key}=#{extraData[key]}\n"
             if key == "thumb"
               $("#bioImage").attr 'src', "/#{extraData[key]}"
         text.replace "\n$", ""
@@ -554,7 +554,9 @@ define ['common', 'q', 'utilities','helpers/date','highlight.pack','wysiwyg','wy
       formData.append("file",imgdata)
       utils.uploadImage formData, (data) ->
         $("##{target}").attr 'src', "/"+ data
-        text = $("#extraDataValues").text
-        text = "thumb=#{data}"
-        $("#extraDataValues").text text
+        text = $("#extraDataValues").val()
+        if text.match /thumb=/
+          alert "leek"
+        text = text.replace /thumb=.*/ , "thumb=#{data}"
+        $("#extraDataValues").val text
 }
