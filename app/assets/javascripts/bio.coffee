@@ -207,8 +207,9 @@ define ['common', 'helpers/date'], (common) -> {
         textDiv.attr 'class', 'col-xs-12 col-sm-12 bioDiv'
         textDiv.append imageDiv
         nameDiv = $("<div>")
-        nameDiv.text bio.title
-        nameDiv.attr 'id','bioName' + bio._id.$oid
+        link = $("<a>").text bio.title
+        link.attr 'href', "/" + bio._id.$oid
+        nameDiv.append link
         bioText = $("<div>")
         bioText.attr 'class','bioText'
         bioText.attr 'id','bioText' + bio._id.$oid

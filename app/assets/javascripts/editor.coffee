@@ -1,5 +1,6 @@
 define ['common', 'q', 'utilities','helpers/date','highlight.pack','wysiwyg','wysiwyg-editor'], (common, Q, utils ) -> {
   imageCount:1
+
   # http://stackoverflow.com/questions/6690752/insert-html-at-caret-in-a-contenteditable-div
   pasteHtmlAtCaret: (html) ->
     #console.log "in func"
@@ -117,6 +118,8 @@ define ['common', 'q', 'utilities','helpers/date','highlight.pack','wysiwyg','wy
           console.log("Key = key")
           if extraData.hasOwnProperty key
             text += "#{key}=#{extraData[key]}"
+            if key == "thumb"
+              $("#bioImage").attr 'src', "/#{extraData[key]}"
         text.replace "\n$", ""
         $("#extraDataValues").val text
         $("pre code").each (i, blk) ->
@@ -540,12 +543,17 @@ define ['common', 'q', 'utilities','helpers/date','highlight.pack','wysiwyg','wy
     this.addEditorMenu()
 
   addImageDropZone: (target) ->
-
-    utils.createImageDropzone target, (imgdata) ->
+    thumb = $ "<div>"
+    thumb.attr {'id':'thumbnail', 'contenteditable':true , 'class':'pull-left albumImage' }
+    img = $ "<img>"
+    img.attr {'id': target ,'alt':"Drop Biography Image here" , 'src':"" , 'class':"albumImage"}
+    thumb.append img
+    thumb.insertBefore "#editor"
+    utils.createImageDropzone "##{target}", (imgdata) ->
       formData = new FormData()
       formData.append("file",imgdata)
       utils.uploadImage formData, (data) ->
-        $(target).attr 'src', "/"+ data
+        $("##{target}").attr 'src', "/"+ data
         text = $("#extraDataValues").text
         text = "thumb=#{data}"
         $("#extraDataValues").text text
